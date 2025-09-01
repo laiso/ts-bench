@@ -103,7 +103,7 @@ jobs:
           echo "Installing CLI for agent: $agent"
           case "$agent" in
             claude)
-              npm install -g @anthropic-ai/claude-code
+              npm install -g @anthropic-ai/claude-code@1.0.24
               mkdir -p "$HOME/.claude"
               ;;
             codex)
