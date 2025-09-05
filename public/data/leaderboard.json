@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-05T15:37:23.629Z",
+  "lastUpdated": "2025-09-05T16:38:33.471Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -2405,6 +2405,282 @@
           "agentDuration": 300226,
           "testDuration": 9653,
           "totalDuration": 309891
+        }
+      ]
+    },
+    "claude-kimi-k2-0905-preview": {
+      "metadata": {
+        "agent": "claude",
+        "model": "kimi-k2-0905-preview",
+        "provider": "moonshot",
+        "version": "1.0.107",
+        "timestamp": "2025-09-05T16:27:48.113Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.0.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/17496153363",
+        "runId": "17496153363",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 32,
+        "totalDuration": 6900378,
+        "avgDuration": 276015.1,
+        "successCount": 8,
+        "totalCount": 25,
+        "agentSuccessCount": 8,
+        "testSuccessCount": 18,
+        "testFailedCount": 7
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 237630,
+          "testDuration": 7081,
+          "totalDuration": 244857
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 238703,
+          "testDuration": 7260,
+          "totalDuration": 245974
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "agentDuration": 300245,
+          "testDuration": 7739,
+          "totalDuration": 307999
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "",
+          "agentDuration": 253816,
+          "testDuration": 7190,
+          "totalDuration": 261017
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 269784,
+          "testDuration": 7175,
+          "totalDuration": 276970
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-bowling\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp8a986\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300241,
+          "testDuration": 7345,
+          "totalDuration": 307597
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-complex-numbers\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mpe65d4\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300250,
+          "testDuration": 7221,
+          "totalDuration": 307482
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-connect\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp8d446\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300398,
+          "testDuration": 7357,
+          "totalDuration": 307766
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "",
+          "agentDuration": 250736,
+          "testDuration": 7256,
+          "totalDuration": 258002
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "",
+          "agentDuration": 140561,
+          "testDuration": 7257,
+          "totalDuration": 147828
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 230817,
+          "testDuration": 7315,
+          "totalDuration": 238142
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-flatten-array\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mpec691\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nflatten-array.test.ts(12,25): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(12,28): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(12,31): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(12,34): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(12,37): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(12,40): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(17,36): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(17,39): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(17,44): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(22,25): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(22,30): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(22,47): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(22,50): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(28,31): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(28,36): error TS2322: Type 'number' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(28,43): error TS2322: Type 'undefined' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(28,56): error TS2322: Type 'undefined' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(37,12): error TS2322: Type 'undefined' is not assignable to type 'NestedArray'.\nflatten-array.test.ts(40,34): error TS2322: Type 'undefined' is not assignable to type 'NestedArray'.\nflatten-array.ts(9,23): error TS2345: Argument of type 'NestedArray[]' is not assignable to parameter of type 'NestedArray'.\n  Type 'NestedArray' is not assignable to type 'number | NestedArray[] | null | undefined'.\n    Type '(number | NestedArray[] | null | undefined)[]' is not assignable to type 'NestedArray[]'.\n      Type 'number | NestedArray[] | null | undefined' is not assignable to type 'NestedArray'.\n        Type 'undefined' is not assignable to type '(number | NestedArray[] | null | undefined)[]'.\n\nSTDERR: ",
+          "agentDuration": 300234,
+          "testDuration": 4675,
+          "totalDuration": 304920
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 285011,
+          "testDuration": 7260,
+          "totalDuration": 292282
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 264807,
+          "testDuration": 7420,
+          "totalDuration": 272237
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "",
+          "agentDuration": 146958,
+          "testDuration": 7371,
+          "totalDuration": 154339
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "agentDuration": 300247,
+          "testDuration": 7372,
+          "totalDuration": 307629
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-react\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp31db9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m \u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.38.1\u001b[39m must be built because it never has been before or the last one failed\n\u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.44.0\u001b[39m must be built because it never has been before or the last one failed\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300243,
+          "testDuration": 9675,
+          "totalDuration": 309929
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "",
+          "agentDuration": 212835,
+          "testDuration": 7399,
+          "totalDuration": 220246
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "agentDuration": 300314,
+          "testDuration": 7427,
+          "totalDuration": 307752
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-robot-name\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp2c5cf\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300226,
+          "testDuration": 35426,
+          "totalDuration": 335663
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 261905,
+          "testDuration": 7375,
+          "totalDuration": 269291
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "agentDuration": 300233,
+          "testDuration": 7465,
+          "totalDuration": 307709
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "agentDuration": 300245,
+          "testDuration": 7601,
+          "totalDuration": 307857
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 291496,
+          "testDuration": 7436,
+          "totalDuration": 298943
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-wordy\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp666b9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300302,
+          "testDuration": 7634,
+          "totalDuration": 307947
         }
       ]
     }
