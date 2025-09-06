@@ -2,8 +2,11 @@ import type { TestResult, BenchmarkConfig } from '../config/types';
 import { formatDuration } from '../utils/duration';
 import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
+import { ResultPusher, type PushConfig, type PushSummary } from '../utils/result-pusher';
 
 export class BenchmarkReporter {
+    private pushSummary: PushSummary | null = null;
+
     printResults(results: TestResult[]): void {
         const successCount = results.filter(r => r.overallSuccess).length;
         const totalCount = results.length;
@@ -122,7 +125,7 @@ export class BenchmarkReporter {
 
 
     // Save benchmark result to file with metadata
-    async saveResult(results: TestResult[], config: BenchmarkConfig, outputPath: string, resultName?: string): Promise<void> {
+    async saveResult(results: TestResult[], config: BenchmarkConfig, outputPath: string, resultName?: string, pushConfig?: PushConfig): Promise<void> {
         const timestamp = new Date().toISOString();
         const fileName = resultName || `${config.agent}-${config.model}-${config.provider}-${timestamp.replace(/[:.]/g, '-').slice(0, -5)}`;
         const fullPath = join(outputPath, `${fileName}.json`);
@@ -151,6 +154,22 @@ export class BenchmarkReporter {
         
         console.log(`💾 Results saved to: ${fullPath}`);
         console.log(`🔗 Latest results updated: ${latestPath}`);
+
+        // Push results if configured
+        if (pushConfig?.pushResults) {
+            console.log('🚀 Pushing results to exercism-typescript repository...');
+            const resultPusher = new ResultPusher(config, pushConfig);
+            this.pushSummary = await resultPusher.pushResults(results);
+            
+            if (this.pushSummary.success) {
+                console.log(`✅ Successfully pushed ${this.pushSummary.pushedCount} solutions`);
+                if (this.pushSummary.compareUrl) {
+                    console.log(`🔗 Compare URL: ${this.pushSummary.compareUrl}`);
+                }
+            } else {
+                console.error(`❌ Failed to push results: ${this.pushSummary.error}`);
+            }
+        }
     }
     
     private generateSummaryData(results: TestResult[]) {
@@ -182,5 +201,18 @@ export class BenchmarkReporter {
         } catch (error) {
             // Directory already exists or other error
         }
+    }
+
+    getPushSummary(): PushSummary | null {
+        return this.pushSummary;
+    }
+
+    generatePushSummaryMarkdown(): string {
+        if (!this.pushSummary || !this.pushSummary.success) {
+            return '';
+        }
+
+        const resultPusher = new ResultPusher({} as BenchmarkConfig, {} as PushConfig);
+        return resultPusher.generateSummaryMarkdown(this.pushSummary);
     }
 }

@@ -70,6 +70,7 @@ export interface CLIArgs {
     printInstructions?: boolean;
     customInstruction?: string;
     timeout?: number; // seconds
+    pushResults?: boolean;
 }
 
 

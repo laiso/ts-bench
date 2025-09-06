@@ -4,6 +4,7 @@ import { ExerciseRunner } from '../runners/exercise';
 import { BenchmarkReporter } from './reporter';
 import { LeaderboardGenerator } from '../utils/leaderboard-generator';
 import { VersionDetector } from '../utils/version-detector';
+import type { PushConfig } from '../utils/result-pusher';
 
 export class BenchmarkRunner {
     constructor(
@@ -79,7 +80,16 @@ export class BenchmarkRunner {
         // Save result if requested
         if (args.saveResult) {
             const resultDir = args.resultDir || './data/results';
-            await this.reporter.saveResult(results, config, resultDir, args.resultName);
+            
+            // Push configuration
+            const pushConfig: PushConfig | undefined = args.pushResults ? {
+                pushResults: args.pushResults,
+                githubToken: process.env.GITHUB_TOKEN,
+                runId: process.env.GITHUB_RUN_ID || 'local',
+                outputDir: args.outputDir || './results'
+            } : undefined;
+            
+            await this.reporter.saveResult(results, config, resultDir, args.resultName, pushConfig);
             
             // Update leaderboard if requested (and not already handled above)
             if (args.updateLeaderboard) {

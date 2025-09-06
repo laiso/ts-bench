@@ -57,7 +57,7 @@ on:
         default: false
         type: boolean
       push_results:
-        description: 'If set to true, all solutions (successful and failed) will be pushed to a new branch in the exercism-typescript repository'
+        description: 'Push results to exercism-typescript repository'
         required: false
         default: false
         type: boolean
@@ -254,6 +254,11 @@ jobs:
             CMD+=(--custom-instruction "${CUSTOM_INSTRUCTION}")
           fi
 
+          # Push results option
+          if [ "${{ github.event.inputs.push_results }}" = "true" ]; then
+            CMD+=(--push-results)
+          fi
+
           echo "Running: ${CMD[*]}"
           "${CMD[@]}" | tee benchmark-summary.txt
 
@@ -312,6 +317,21 @@ jobs:
                   + " "
                   + (((.totalDuration/1000*10)|round)/10|tostring) + "s"
                 ' "${{ github.event.inputs.result_dir }}/latest.json" || true
+
+                # Add push results summary if enabled
+                if [ "${{ github.event.inputs.push_results }}" = "true" ]; then
+                  echo
+                  echo "### 成果物の比較"
+                  echo
+                  echo "生成されたコードの差分は、以下のリンクから確認できます。"
+                  echo
+                  # Extract push summary from benchmark output if available
+                  if [ -f "benchmark-summary.txt" ]; then
+                    grep -A 10 "成果物の比較" benchmark-summary.txt || echo "- Push results summary not available"
+                  else
+                    echo "- Push results summary not available"
+                  fi
+                fi
               fi
             fi
             echo
