@@ -86,7 +86,7 @@ class GenericLogCollector implements LogCollector {
  * TODO: Class for collecting Aider logs. For now, it's the same as GenericLogCollector.
  */
 class AiderLogCollector extends GenericLogCollector {}
-english
+
 export class AgentLoggerFactory {
     static create(agent: AgentType): LogCollector {
         switch (agent) {
