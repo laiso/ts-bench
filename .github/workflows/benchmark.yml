@@ -336,27 +336,38 @@ jobs:
       - name: Push Results to Submodule
         if: ${{ github.event.inputs.publish == 'true' }}
         run: |
-          set -euo pipefail
+          set -euo pipefail # エラー時に即座にスクリプトを停止させる
           
-          # サブモジュールディレクトリに移動
           cd exercism-typescript
           
-          # PATを使ってリモートURLを設定
-          git remote set-url origin https://x-access-token:${{ secrets.EXERCISM_PUSH_TOKEN }}@github.com/laiso/exercism-typescript.git
-          
-          # Gitのユーザー情報を設定
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          # ブランチの作成とコミット、Push
+          # 1. 変更があるか最初に確認する
+          # `git add .` を実行する前に差分を確認することが重要
+          git add .
+          if git diff --cached --quiet; then
+            echo "✅ No changes to commit. Nothing to push."
+            exit 0
+          fi
+          
+          # 2. 新しいブランチを作成してコミット
           BRANCH_NAME="results/${{ github.event.inputs.agent }}-${{ github.event.inputs.model }}/${{ github.run_id }}"
           git checkout -b "$BRANCH_NAME"
-          git add .
-          git commit -m "feat(results): Add solutions from ${{ github.event.inputs.agent }}/${{ github.event.inputs.model }} (Run ${{ github.run_id }})" || echo "No changes to commit"
-          git push origin "$BRANCH_NAME"
+          # addした内容をコミット
+          git commit -m "feat(results): Add solutions from ${{ github.event.inputs.agent }}/${{ github.event.inputs.model }} (Run ${{ github.run_id }})"
           
-          echo "Results pushed to branch: $BRANCH_NAME"
-          echo "View changes: https://github.com/laiso/exercism-typescript/compare/$BRANCH_NAME"
+          # 3. PATで認証する新しいリモートを追加し、そこにPushする
+          git remote add authed_origin https://x-access-token:${{ secrets.EXERCISM_PUSH_TOKEN }}@github.com/laiso/exercism-typescript.git
+          git push authed_origin "$BRANCH_NAME"
+          
+          echo "🚀 Results pushed to branch: $BRANCH_NAME"
+          
+          # 4. Job SummaryにCompare URLを出力
+          echo "### 成果物の比較" >> $GITHUB_STEP_SUMMARY
+          echo "生成されたコードの差分は、以下のリンクから確認できます。" >> $GITHUB_STEP_SUMMARY
+          echo "- **[Compare Changes](https://github.com/laiso/exercism-typescript/compare/main...$BRANCH_NAME)**" >> $GITHUB_STEP_SUMMARY
+
 
       - name: Upload artifacts (results + console)
         if: ${{ github.event.inputs.publish == 'true' }}
