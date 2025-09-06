@@ -1,6 +1,7 @@
 import type { TestResult, BenchmarkConfig } from '../config/types';
 import type { AgentType } from '../config/types';
 import { VersionDetector } from './version-detector';
+import { getPackageVersion } from './package-version';
 import { readdir, readFile, writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { existsSync } from 'fs';
@@ -242,11 +243,13 @@ export class LeaderboardGenerator {
         // Generate exercise breakdown
         const exerciseBreakdown = this.generateExerciseBreakdown(results);
         
+        const benchmarkVersion = await getPackageVersion();
+        
         return {
             metadata: {
                 timestamp: new Date().toISOString(),
                 totalExercises: results.length > 0 ? results[0]!.summary.totalCount : 0,
-                benchmarkVersion: "1.0.0",
+                benchmarkVersion,
                 generatedBy: "ts-bench"
             },
             leaderboard: leaderboardEntries,

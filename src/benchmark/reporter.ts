@@ -1,5 +1,6 @@
 import type { TestResult, BenchmarkConfig } from '../config/types';
 import { formatDuration } from '../utils/duration';
+import { getPackageVersion } from '../utils/package-version';
 import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 
@@ -57,7 +58,7 @@ export class BenchmarkReporter {
 
     // JSON export functionality
     async exportToJSON(results: TestResult[], config: BenchmarkConfig, outputPath: string): Promise<void> {
-        const data = this.generateBasicJSONData(results, config);
+        const data = await this.generateBasicJSONData(results, config);
         await this.ensureDirectoryExists(outputPath);
         await writeFile(outputPath, JSON.stringify(data, null, 2), 'utf-8');
         console.log(`📄 Results exported to: ${outputPath}`);
@@ -85,7 +86,7 @@ export class BenchmarkReporter {
     }
 
 
-    private generateBasicJSONData(results: TestResult[], config: BenchmarkConfig) {
+    private async generateBasicJSONData(results: TestResult[], config: BenchmarkConfig) {
         const successCount = results.filter(r => r.overallSuccess).length;
         const totalCount = results.length;
         const successRate = (successCount / totalCount) * 100;
@@ -95,6 +96,8 @@ export class BenchmarkReporter {
         const testSuccessCount = results.filter(r => r.testSuccess).length;
         const testFailedCount = totalCount - testSuccessCount;
 
+        const benchmarkVersion = await getPackageVersion();
+
         return {
             metadata: {
                 timestamp: new Date().toISOString(),
@@ -103,7 +106,7 @@ export class BenchmarkReporter {
                 provider: config.provider,
                 version: config.version,
                 totalExercises: totalCount,
-                benchmarkVersion: "1.0.0"
+                benchmarkVersion
             },
             summary: {
                 successRate: Number(successRate.toFixed(1)),
@@ -127,6 +130,8 @@ export class BenchmarkReporter {
         const fileName = resultName || `${config.agent}-${config.model}-${config.provider}-${timestamp.replace(/[:.]/g, '-').slice(0, -5)}`;
         const fullPath = join(outputPath, `${fileName}.json`);
         
+        const benchmarkVersion = await getPackageVersion();
+        
         const data = {
             metadata: {
                 agent: config.agent,
@@ -135,7 +140,7 @@ export class BenchmarkReporter {
                 version: config.version,
                 timestamp,
                 exerciseCount: results.length,
-                benchmarkVersion: "1.0.0",
+                benchmarkVersion,
                 generatedBy: "ts-bench"
             },
             summary: this.generateSummaryData(results),
