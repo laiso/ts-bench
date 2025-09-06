@@ -1,16 +1,1 @@
-{
-  "name": "ts-bench",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "test": "bun test ./src",
-    "typecheck": "bunx --bun tsc -p . --noEmit"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  }
-}
+{"name": "ts-bench","module": "index.ts","type": "module","private": true,"benchmarkVersion": "1.0.0","scripts": {"test": "bun test ./src","typecheck": "bunx --bun tsc -p . --noEmit"},"devDependencies": {"@types/bun": "latest"},"peerDependencies": {"typescript": "^5"}}
