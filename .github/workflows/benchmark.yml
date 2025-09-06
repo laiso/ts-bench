@@ -71,7 +71,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          token: ${{ secrets.EXERCISM_PUSH_TOKEN }}
+          submodules: 'recursive'
+          repository: laiso/ts-bench
 
       - name: Setup Node (for corepack/yarn)
         uses: actions/setup-node@v4
