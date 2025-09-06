@@ -221,22 +221,24 @@ jobs:
           ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
         run: |
           set -euo pipefail
-          mkdir -p "${{ github.event.inputs.result_dir }}"
+          
+          # Only create directories if save_result is enabled
+          if [ "${{ github.event.inputs.save_result }}" = "true" ]; then
+            mkdir -p "./data/results"
+          fi
 
           CMD=(bun src/index.ts \
             --agent "${{ github.event.inputs.agent }}" \
             --model "${{ github.event.inputs.model }}" \
             --provider "${{ github.event.inputs.provider }}" \
-            --output-dir "${{ github.event.inputs.output_dir }}")
+            --output-dir "./results")
 
-          # Docker toggle
-          if [ "${{ github.event.inputs.use_docker }}" = "true" ]; then
-            CMD+=(--docker)
-          fi
+          # Docker toggle (default: false)
+          CMD+=(--docker)
 
           # Save result JSON if requested
           if [ "${{ github.event.inputs.save_result }}" = "true" ]; then
-            CMD+=(--save-result --result-dir "${{ github.event.inputs.result_dir }}")
+            CMD+=(--save-result --result-dir "./data/results")
           fi
 
           # Exercise selection (number, comma list, or name)
@@ -281,13 +283,13 @@ jobs:
             fi
 
             # If latest.json exists, print a compact summary
-            if [ -f "${{ github.event.inputs.result_dir }}/latest.json" ]; then
+            if [ -f "./data/results/latest.json" ]; then
               if command -v jq >/dev/null 2>&1; then
-                TOTAL=$(jq -r '.summary.totalCount' "${{ github.event.inputs.result_dir }}/latest.json" 2>/dev/null || echo "")
-                SUCCESS=$(jq -r '.summary.successCount' "${{ github.event.inputs.result_dir }}/latest.json" 2>/dev/null || echo "")
-                RATE=$(jq -r '.summary.successRate' "${{ github.event.inputs.result_dir }}/latest.json" 2>/dev/null || echo "")
-                TDUR_MS=$(jq -r '.summary.totalDuration' "${{ github.event.inputs.result_dir }}/latest.json" 2>/dev/null || echo "")
-                ADUR_MS=$(jq -r '.summary.avgDuration' "${{ github.event.inputs.result_dir }}/latest.json" 2>/dev/null || echo "")
+                TOTAL=$(jq -r '.summary.totalCount' "./data/results/latest.json" 2>/dev/null || echo "")
+                SUCCESS=$(jq -r '.summary.successCount' "./data/results/latest.json" 2>/dev/null || echo "")
+                RATE=$(jq -r '.summary.successRate' "./data/results/latest.json" 2>/dev/null || echo "")
+                TDUR_MS=$(jq -r '.summary.totalDuration' "./data/results/latest.json" 2>/dev/null || echo "")
+                ADUR_MS=$(jq -r '.summary.avgDuration' "./data/results/latest.json" 2>/dev/null || echo "")
                 # Pretty seconds (1 decimal if needed)
                 if [ -n "$TDUR_MS" ] && [ "$TDUR_MS" != "null" ]; then
                   TDUR_S=$(jq -nr --argjson ms "$TDUR_MS" '((($ms/1000)*10)|round)/10')
@@ -316,7 +318,7 @@ jobs:
                   + (if .overallSuccess then "✅" else "❌" end)
                   + " "
                   + (((.totalDuration/1000*10)|round)/10|tostring) + "s"
-                ' "${{ github.event.inputs.result_dir }}/latest.json" || true
+                ' "./data/results/latest.json" || true
 
                 # Add push results summary if enabled
                 if [ "${{ github.event.inputs.push_results }}" = "true" ]; then
@@ -346,8 +348,8 @@ jobs:
         with:
           name: benchmark-results
           path: |
-            ${{ github.event.inputs.result_dir }}/
-            ${{ github.event.inputs.output_dir }}/${{ github.event.inputs.agent }}/logs/
+            ./data/results/
+            ./results/${{ github.event.inputs.agent }}/logs/
             benchmark-summary.txt
           if-no-files-found: warn
           retention-days: 14

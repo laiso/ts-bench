@@ -71,8 +71,8 @@ export class BenchmarkRunner {
             this.reporter.printResults(results);
         }
 
-        // JSON output
-        if (args.outputFormat === 'json') {
+        // JSON output - only if save_result is enabled to avoid creating directories unnecessarily
+        if (args.outputFormat === 'json' && args.saveResult) {
             const outputPath = this.generateOutputPath(args, 'json');
             await this.reporter.exportToJSON(results, config, outputPath);
         }
