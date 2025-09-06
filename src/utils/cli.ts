@@ -39,7 +39,6 @@ Result Saving:
   --save-result          Save benchmark results to file
   --result-name <name>   Custom name for result file (auto-generated if not specified)
   --result-dir <dir>     Directory to save results [default: ./data/results]
-  --push-results         Push all solutions (successful and failed) to exercism-typescript repository
 
 Leaderboard:
   --generate-leaderboard Generate leaderboard from data/results/ files
@@ -142,7 +141,6 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
 
     const generateLeaderboard = process.argv.includes('--generate-leaderboard');
     const updateLeaderboard = process.argv.includes('--update-leaderboard');
-    const pushResults = process.argv.includes('--push-results');
 
     const versionIndex = process.argv.indexOf('--version');
     const version = versionIndex !== -1 && versionIndex + 1 < process.argv.length
@@ -214,7 +212,6 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         printInstructions,
         customInstruction,
         timeout,
-        pushResults
     };
     return result;
 }

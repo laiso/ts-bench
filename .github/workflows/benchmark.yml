@@ -89,6 +89,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Install agent CLI (local mode)
+        if: ${{ github.event.inputs.use_docker == 'false' }}
         run: |
           set -euo pipefail
           agent="${{ github.event.inputs.agent }}"
@@ -161,6 +162,7 @@ jobs:
           EOF
 
       - name: Check local agent availability
+        if: ${{ github.event.inputs.use_docker == 'false' }}
         run: |
           set -euo pipefail
           agent="${{ github.event.inputs.agent }}"
@@ -190,7 +192,7 @@ jobs:
           fi
 
           if [ "$ok" -ne 1 ]; then
-            echo "::warning::Agent CLI '$agent' not found for local mode. Install it in this workflow." >&2
+            echo "::warning::Agent CLI '$agent' not found for local mode. Install it in this workflow or set 'use_docker' to true." >&2
           else
             echo "Agent CLI '$agent' found."
           fi
@@ -212,6 +214,8 @@ jobs:
           CUSTOM_INSTRUCTION: ${{ github.event.inputs.custom_instruction }}
           MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
           ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+          EXERCISM_PUSH_TOKEN: ${{ secrets.EXERCISM_PUSH_TOKEN }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
           
@@ -226,8 +230,8 @@ jobs:
             --provider "${{ github.event.inputs.provider }}" \
             --output-dir "./results")
 
-          # Use local execution (no Docker)
-          CMD+=(--no-docker)
+          # Docker toggle (default: false)
+          CMD+=(--docker)
 
           # Save result JSON if requested
           if [ "${{ github.event.inputs.publish }}" = "true" ]; then
@@ -249,10 +253,7 @@ jobs:
             CMD+=(--custom-instruction "${CUSTOM_INSTRUCTION}")
           fi
 
-          # Push results option
-          if [ "${{ github.event.inputs.publish }}" = "true" ]; then
-            CMD+=(--push-results)
-          fi
+          # Note: Push results is handled by separate workflow step, not CLI option
 
           echo "Running: ${CMD[*]}"
           "${CMD[@]}" | tee benchmark-summary.txt
@@ -334,6 +335,31 @@ jobs:
             echo "- Methodology: [docs/METHODOLOGY.md](https://github.com/laiso/ts-bench/blob/main/docs/METHODOLOGY.md)"
             echo "- README: [README.md](https://github.com/laiso/ts-bench/)"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Push Results to Submodule
+        if: ${{ github.event.inputs.publish == 'true' }}
+        run: |
+          set -euo pipefail
+          
+          # サブモジュールディレクトリに移動
+          cd exercism-typescript
+          
+          # PATを使ってリモートURLを設定
+          git remote set-url origin https://x-access-token:${{ secrets.EXERCISM_PUSH_TOKEN }}@github.com/laiso/exercism-typescript.git
+          
+          # Gitのユーザー情報を設定
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # ブランチの作成とコミット、Push
+          BRANCH_NAME="results/${{ github.event.inputs.agent }}-${{ github.event.inputs.model }}/${{ github.run_id }}"
+          git checkout -b "$BRANCH_NAME"
+          git add .
+          git commit -m "feat(results): Add solutions from ${{ github.event.inputs.agent }}/${{ github.event.inputs.model }} (Run ${{ github.run_id }})" || echo "No changes to commit"
+          git push origin "$BRANCH_NAME"
+          
+          echo "Results pushed to branch: $BRANCH_NAME"
+          echo "View changes: https://github.com/laiso/exercism-typescript/compare/$BRANCH_NAME"
 
       - name: Upload artifacts (results + console)
         if: ${{ github.event.inputs.publish == 'true' }}

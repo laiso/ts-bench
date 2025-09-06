@@ -81,15 +81,7 @@ export class BenchmarkRunner {
         if (args.saveResult) {
             const resultDir = args.resultDir || './data/results';
             
-            // Push configuration
-            const pushConfig: PushConfig | undefined = args.pushResults ? {
-                pushResults: args.pushResults,
-                githubToken: process.env.GITHUB_TOKEN,
-                runId: process.env.GITHUB_RUN_ID || 'local',
-                outputDir: args.outputDir || './results'
-            } : undefined;
-            
-            await this.reporter.saveResult(results, config, resultDir, args.resultName, pushConfig);
+            await this.reporter.saveResult(results, config, resultDir, args.resultName);
             
             // Update leaderboard if requested (and not already handled above)
             if (args.updateLeaderboard) {
