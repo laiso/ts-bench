@@ -46,18 +46,13 @@ on:
         description: "Additional instruction text appended to the prompt"
         required: false
         default: ""
-      save_result:
-        description: Save result JSON
+      publish:
+        description: 'Save results, push to repository, and upload logs'
         required: false
         default: false
         type: boolean
       verbose:
         description: Verbose console output
-        required: false
-        default: false
-        type: boolean
-      push_results:
-        description: 'Push results to exercism-typescript repository'
         required: false
         default: false
         type: boolean
@@ -94,7 +89,6 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Install agent CLI (local mode)
-        if: ${{ github.event.inputs.use_docker == 'false' }}
         run: |
           set -euo pipefail
           agent="${{ github.event.inputs.agent }}"
@@ -167,7 +161,6 @@ jobs:
           EOF
 
       - name: Check local agent availability
-        if: ${{ github.event.inputs.use_docker == 'false' }}
         run: |
           set -euo pipefail
           agent="${{ github.event.inputs.agent }}"
@@ -197,7 +190,7 @@ jobs:
           fi
 
           if [ "$ok" -ne 1 ]; then
-            echo "::warning::Agent CLI '$agent' not found for local mode. Install it in this workflow or set 'use_docker' to true." >&2
+            echo "::warning::Agent CLI '$agent' not found for local mode. Install it in this workflow." >&2
           else
             echo "Agent CLI '$agent' found."
           fi
@@ -222,8 +215,8 @@ jobs:
         run: |
           set -euo pipefail
           
-          # Only create directories if save_result is enabled
-          if [ "${{ github.event.inputs.save_result }}" = "true" ]; then
+          # Only create directories if publish is enabled
+          if [ "${{ github.event.inputs.publish }}" = "true" ]; then
             mkdir -p "./data/results"
           fi
 
@@ -233,11 +226,11 @@ jobs:
             --provider "${{ github.event.inputs.provider }}" \
             --output-dir "./results")
 
-          # Docker toggle (default: false)
-          CMD+=(--docker)
+          # Use local execution (no Docker)
+          CMD+=(--no-docker)
 
           # Save result JSON if requested
-          if [ "${{ github.event.inputs.save_result }}" = "true" ]; then
+          if [ "${{ github.event.inputs.publish }}" = "true" ]; then
             CMD+=(--save-result --result-dir "./data/results")
           fi
 
@@ -257,7 +250,7 @@ jobs:
           fi
 
           # Push results option
-          if [ "${{ github.event.inputs.push_results }}" = "true" ]; then
+          if [ "${{ github.event.inputs.publish }}" = "true" ]; then
             CMD+=(--push-results)
           fi
 
@@ -321,7 +314,7 @@ jobs:
                 ' "./data/results/latest.json" || true
 
                 # Add push results summary if enabled
-                if [ "${{ github.event.inputs.push_results }}" = "true" ]; then
+                if [ "${{ github.event.inputs.publish }}" = "true" ]; then
                   echo
                   echo "### 成果物の比較"
                   echo
@@ -343,7 +336,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload artifacts (results + console)
-        if: always()
+        if: ${{ github.event.inputs.publish == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
