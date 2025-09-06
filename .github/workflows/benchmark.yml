@@ -89,7 +89,6 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Install agent CLI (local mode)
-        if: ${{ github.event.inputs.use_docker == 'false' }}
         run: |
           set -euo pipefail
           agent="${{ github.event.inputs.agent }}"
@@ -162,7 +161,6 @@ jobs:
           EOF
 
       - name: Check local agent availability
-        if: ${{ github.event.inputs.use_docker == 'false' }}
         run: |
           set -euo pipefail
           agent="${{ github.event.inputs.agent }}"
@@ -192,7 +190,8 @@ jobs:
           fi
 
           if [ "$ok" -ne 1 ]; then
-            echo "::warning::Agent CLI '$agent' not found for local mode. Install it in this workflow or set 'use_docker' to true." >&2
+            echo "::error::Agent CLI '$agent' not found for local mode. Install it in this workflow." >&2
+            exit 1
           else
             echo "Agent CLI '$agent' found."
           fi
@@ -230,9 +229,7 @@ jobs:
             --provider "${{ github.event.inputs.provider }}" \
             --output-dir "./results")
 
-          # Docker toggle (default: false)
-          CMD+=(--docker)
-
+          
           # Save result JSON if requested
           if [ "${{ github.event.inputs.publish }}" = "true" ]; then
             CMD+=(--save-result --result-dir "./data/results")
