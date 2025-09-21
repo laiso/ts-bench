@@ -22,7 +22,11 @@ describe('QwenAgentBuilder', () => {
         expect(command.env).toEqual({
             OPENAI_BASE_URL: 'https://api.openai.com/v1',
             OPENAI_API_KEY: 'openai-test-key',
-            OPENAI_MODEL: 'test-model'
+            OPENAI_MODEL: 'test-model',
+            GEMINI_API_KEY: '',
+            GOOGLE_API_KEY: '',
+            GOOGLE_GENAI_USE_GCA: '',
+            GOOGLE_GENAI_USE_VERTEXAI: ''
         });
 
         if (previousKey === undefined) {
@@ -42,7 +46,11 @@ describe('QwenAgentBuilder', () => {
         expect(command.env).toEqual({
             OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
             OPENAI_API_KEY: 'router-key',
-            OPENAI_MODEL: 'test-model'
+            OPENAI_MODEL: 'test-model',
+            GEMINI_API_KEY: '',
+            GOOGLE_API_KEY: '',
+            GOOGLE_GENAI_USE_GCA: '',
+            GOOGLE_GENAI_USE_VERTEXAI: ''
         });
 
         if (previousKey === undefined) {
