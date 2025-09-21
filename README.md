@@ -16,8 +16,11 @@
 | 7 | claude | glm-4.5 | **80.0%** | 20/25 | 172.3s | [#591219](https://github.com/laiso/ts-bench/actions/runs/17495591219) |
 | 8 | claude | claude-sonnet-4-20250514 | **72.0%** | 18/25 | 206.1s | [#732069](https://github.com/laiso/ts-bench/actions/runs/17344732069) |
 | 9 | qwen | qwen3-coder-plus | **64.0%** | 16/25 | 123.9s | [#246268](https://github.com/laiso/ts-bench/actions/runs/17356246268) |
-| 10 | aider | claude-sonnet-4-20250514 | **32.0%** | 8/25 | 40.5s | [#119174](https://github.com/laiso/ts-bench/actions/runs/17371119174) |
+| 10 | opencode | opencode/code-supernova | **60.0%** | 15/25 | 185.1s | [#799764](https://github.com/laiso/ts-bench/actions/runs/17894799764) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 

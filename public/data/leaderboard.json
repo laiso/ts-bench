@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-05T15:37:23.629Z",
+  "lastUpdated": "2025-09-21T15:38:18.378Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -2405,6 +2405,278 @@
           "agentDuration": 300226,
           "testDuration": 9653,
           "totalDuration": 309891
+        }
+      ]
+    },
+    "opencode-opencode/code-supernova": {
+      "metadata": {
+        "agent": "opencode",
+        "model": "opencode/code-supernova",
+        "provider": "openrouter",
+        "version": "0.11.1",
+        "timestamp": "2025-09-21T15:36:02.884Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.1.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/17894799764",
+        "runId": "17894799764",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 60,
+        "totalDuration": 4628047,
+        "avgDuration": 185121.9,
+        "successCount": 15,
+        "totalCount": 25,
+        "agentSuccessCount": 15,
+        "testSuccessCount": 15,
+        "testFailedCount": 10
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 81294,
+          "testDuration": 7199,
+          "totalDuration": 88642
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 60132,
+          "testDuration": 7361,
+          "totalDuration": 67505
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 137780,
+          "testDuration": 7535,
+          "totalDuration": 145326
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 54438,
+          "testDuration": 7405,
+          "totalDuration": 61853
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 146255,
+          "testDuration": 7315,
+          "totalDuration": 153580
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-bowling\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp8a986\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300048,
+          "testDuration": 7553,
+          "totalDuration": 307615
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 148904,
+          "testDuration": 7593,
+          "totalDuration": 156508
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-connect\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp8d446\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300046,
+          "testDuration": 7730,
+          "totalDuration": 307792
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 55803,
+          "testDuration": 7501,
+          "totalDuration": 63316
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 74962,
+          "testDuration": 7432,
+          "totalDuration": 82404
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 44052,
+          "testDuration": 7539,
+          "totalDuration": 51603
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 46507,
+          "testDuration": 7590,
+          "totalDuration": 54108
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-food-chain\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp8fc5f\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300045,
+          "testDuration": 7621,
+          "totalDuration": 307679
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-house\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp71b57\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300044,
+          "testDuration": 7787,
+          "totalDuration": 307845
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 68645,
+          "testDuration": 7589,
+          "totalDuration": 76247
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 114826,
+          "testDuration": 7526,
+          "totalDuration": 122362
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-react\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp31db9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300039,
+          "testDuration": 7772,
+          "totalDuration": 307826
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-rectangles\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp58fb9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n  console.log\n    Found 0 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: []\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (2,2)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 1 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [ [ 0, 0 ], [ 0, 2 ], [ 2, 0 ], [ 2, 2 ] ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,2) to (2,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,0) to (4,2)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 2 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [\n      [ 0, 2 ], [ 0, 4 ],\n      [ 2, 0 ], [ 2, 2 ],\n      [ 2, 4 ], [ 4, 0 ],\n      [ 4, 2 ]\n    ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,2) to (2,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,2) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,0) to (4,2)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,0) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,2) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 5 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [\n      [ 0, 2 ], [ 0, 4 ],\n      [ 2, 0 ], [ 2, 2 ],\n      [ 2, 4 ], [ 4, 0 ],\n      [ 4, 2 ], [ 4, 4 ]\n    ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (1,3)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 1 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [ [ 0, 0 ], [ 0, 3 ], [ 1, 0 ], [ 1, 3 ] ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (2,1)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 1 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [ [ 0, 0 ], [ 0, 1 ], [ 2, 0 ], [ 2, 1 ] ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (1,1)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 1 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [ [ 0, 0 ], [ 0, 1 ], [ 1, 0 ], [ 1, 1 ] ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (2,0) to (4,2)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,0) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,2) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 3 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [\n      [ 0, 2 ], [ 0, 4 ],\n      [ 2, 0 ], [ 2, 2 ],\n      [ 2, 4 ], [ 4, 0 ],\n      [ 4, 2 ], [ 4, 4 ]\n    ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (2,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,0) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 2 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [\n      [ 0, 0 ],  [ 0, 7 ],\n      [ 0, 12 ], [ 2, 0 ],\n      [ 2, 4 ],  [ 2, 7 ],\n      [ 4, 0 ],  [ 4, 4 ],\n      [ 4, 12 ]\n    ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (2,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 1 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [\n      [ 0, 0 ],  [ 0, 7 ],\n      [ 0, 12 ], [ 2, 0 ],\n      [ 2, 7 ],  [ 4, 0 ],\n      [ 4, 4 ],  [ 4, 12 ]\n    ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (2,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,0) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,0) to (5,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,4) to (1,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,4) to (1,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,4) to (2,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,4) to (3,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,4) to (4,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,4) to (5,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,7) to (1,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,7) to (3,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,7) to (4,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (1,4) to (2,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (1,4) to (3,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (1,4) to (4,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (1,4) to (5,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (1,7) to (3,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (1,7) to (4,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,0) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,0) to (5,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,4) to (3,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,4) to (4,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,4) to (5,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (3,4) to (4,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (3,4) to (4,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (3,4) to (5,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (3,7) to (4,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,0) to (5,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,0) to (5,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,0) to (5,10)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,0) to (5,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,4) to (5,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,4) to (5,10)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,4) to (5,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,7) to (5,10)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,7) to (5,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,10) to (5,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,10) to (7,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (5,0) to (6,7)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (5,10) to (7,12)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 40 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [\n      [ 0, 0 ],  [ 0, 4 ],  [ 0, 7 ],\n      [ 0, 12 ], [ 1, 4 ],  [ 1, 7 ],\n      [ 1, 12 ], [ 2, 0 ],  [ 2, 4 ],\n      [ 2, 7 ],  [ 3, 4 ],  [ 3, 7 ],\n      [ 3, 12 ], [ 4, 0 ],  [ 4, 4 ],\n      [ 4, 7 ],  [ 4, 10 ], [ 4, 12 ],\n      [ 5, 0 ],  [ 5, 4 ],  [ 5, 7 ],\n      [ 5, 10 ], [ 5, 12 ], [ 6, 0 ],\n      [ 6, 7 ],  [ 7, 10 ], [ 7, 12 ]\n    ]\n\n      at log (rectangles.ts:50:11)\n\n  console.log\n    Valid rectangle: (0,0) to (2,2)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (0,4) to (2,6)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (2,2) to (4,4)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,0) to (6,2)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Valid rectangle: (4,4) to (6,6)\n\n      at log (rectangles.ts:42:17)\n\n  console.log\n    Found 5 rectangles\n\n      at log (rectangles.ts:49:11)\n\n  console.log\n    Corners found: [\n      [ 0, 0 ], [ 0, 2 ],\n      [ 0, 4 ], [ 0, 6 ],\n      [ 2, 0 ], [ 2, 2 ],\n      [ 2, 4 ], [ 2, 6 ],\n      [ 4, 0 ], [ 4, 2 ],\n      [ 4, 4 ], [ 4, 6 ],\n      [ 6, 0 ], [ 6, 2 ],\n      [ 6, 4 ], [ 6, 6 ]\n    ]\n\n      at log (rectangles.ts:50:11)\n\n\nSTDERR: ",
+          "agentDuration": 300051,
+          "testDuration": 7983,
+          "totalDuration": 308047
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 210551,
+          "testDuration": 7438,
+          "totalDuration": 218000
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-robot-name\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp2c5cf\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300036,
+          "testDuration": 15210,
+          "totalDuration": 315259
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 71433,
+          "testDuration": 7300,
+          "totalDuration": 78743
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-transpose\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp77e24\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300033,
+          "testDuration": 7691,
+          "totalDuration": 307738
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 114969,
+          "testDuration": 7651,
+          "totalDuration": 122633
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-variable-length-quantity\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp877a6\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300045,
+          "testDuration": 7733,
+          "totalDuration": 307792
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-wordy\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp666b9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300045,
+          "testDuration": 7566,
+          "totalDuration": 307624
         }
       ]
     }
