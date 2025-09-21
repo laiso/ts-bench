@@ -6,6 +6,7 @@ import { LeaderboardGenerator } from '../utils/leaderboard-generator';
 import { VersionDetector } from '../utils/version-detector';
 import { getAgentScriptPath } from '../config/paths';
 import { TS_BENCH_CONTAINER } from '../config/constants';
+import { sanitizeFilenameSegment } from '../utils/file-name';
 
 export class BenchmarkRunner {
     constructor(
@@ -100,8 +101,11 @@ export class BenchmarkRunner {
 
     private generateOutputPath(args: CLIArgs, extension: string): string {
         const outputDir = args.outputDir || './results';
-        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-        const filename = `benchmark-${args.agent}-${args.model}-${timestamp}.${extension}`;
+        const safeAgent = sanitizeFilenameSegment(args.agent, 'agent');
+        const safeModel = sanitizeFilenameSegment(args.model, 'model');
+        const rawTimestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+        const safeTimestamp = sanitizeFilenameSegment(rawTimestamp, 'timestamp');
+        const filename = `benchmark-${safeAgent}-${safeModel}-${safeTimestamp}.${extension}`;
         return `${outputDir}/${filename}`;
     }
 

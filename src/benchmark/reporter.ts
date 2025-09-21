@@ -3,6 +3,7 @@ import { formatDuration } from '../utils/duration';
 import { getPackageVersion } from '../utils/package-version';
 import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
+import { sanitizeFilenameSegment } from '../utils/file-name';
 
 export class BenchmarkReporter {
     printResults(results: TestResult[]): void {
@@ -127,8 +128,21 @@ export class BenchmarkReporter {
     // Save benchmark result to file with metadata
     async saveResult(results: TestResult[], config: BenchmarkConfig, outputPath: string, resultName?: string): Promise<void> {
         const timestamp = new Date().toISOString();
-        const fileName = resultName || `${config.agent}-${config.model}-${config.provider}-${timestamp.replace(/[:.]/g, '-').slice(0, -5)}`;
-        const fullPath = join(outputPath, `${fileName}.json`);
+        const safeAgent = sanitizeFilenameSegment(config.agent, 'agent');
+        const safeModel = sanitizeFilenameSegment(config.model, 'model');
+        const safeProvider = sanitizeFilenameSegment(config.provider, 'provider');
+        const rawTimestamp = timestamp.replace(/[:.]/g, '-').replace(/Z$/, '');
+        const safeTimestamp = sanitizeFilenameSegment(rawTimestamp, 'timestamp');
+
+        const resolvedResultName = resultName && resultName.endsWith('.json')
+            ? resultName.slice(0, -5)
+            : resultName;
+
+        const baseName = resolvedResultName
+            ? sanitizeFilenameSegment(resolvedResultName, 'result')
+            : `${safeAgent}-${safeModel}-${safeProvider}-${safeTimestamp}`;
+
+        const fullPath = join(outputPath, `${baseName}.json`);
         
         const benchmarkVersion = await getPackageVersion();
         
