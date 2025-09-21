@@ -44,6 +44,9 @@ export class GooseAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
             case 'xai':
                 env.XAI_API_KEY = requireEnv('XAI_API_KEY', 'Missing XAI_API_KEY for Goose (xAI) provider');
                 break;
+            case 'openrouter':
+                env.OPENROUTER_API_KEY = requireEnv('OPENROUTER_API_KEY', 'Missing OPENROUTER_API_KEY for Goose (OpenRouter) provider');
+                break;
             default:
                 throw new Error(`Unsupported provider for Goose: ${provider}`);
         }
