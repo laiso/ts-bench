@@ -24,14 +24,17 @@ export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
         }
     }
 
-    protected getCoreArgs(instructions: string): string[] {
+    protected getCoreArgs(instructions: string, _fileList?: import('../types').FileList): string[] {
+        const provider = this.config.provider || 'openai';
+
         return [
             'bash',
             this.config.agentScriptPath,
-            'codex', 'exec',
+            'codex',
+            'exec',
             '-c', 'model_reasoning_effort=high',
-            '-c', `model_provider=${this.config.provider || 'openai'}`,
-            '--full-auto',
+            '-c', `model_provider=${provider}`,
+            '--yolo',
             '--skip-git-repo-check',
             '-m', this.config.model,
             instructions
