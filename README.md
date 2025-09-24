@@ -14,10 +14,13 @@
 | 5 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
 | 6 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
 | 7 | claude | glm-4.5 | **80.0%** | 20/25 | 172.3s | [#591219](https://github.com/laiso/ts-bench/actions/runs/17495591219) |
-| 8 | claude | claude-sonnet-4-20250514 | **72.0%** | 18/25 | 206.1s | [#732069](https://github.com/laiso/ts-bench/actions/runs/17344732069) |
-| 9 | qwen | qwen3-coder-plus | **64.0%** | 16/25 | 123.9s | [#246268](https://github.com/laiso/ts-bench/actions/runs/17356246268) |
-| 10 | aider | claude-sonnet-4-20250514 | **32.0%** | 8/25 | 40.5s | [#119174](https://github.com/laiso/ts-bench/actions/runs/17371119174) |
+| 8 | qwen | qwen3-coder-plus-2025-09-23 | **76.0%** | 19/25 | 185.8s | [#429442](https://github.com/laiso/ts-bench/actions/runs/17967429442) |
+| 9 | claude | claude-sonnet-4-20250514 | **72.0%** | 18/25 | 206.1s | [#732069](https://github.com/laiso/ts-bench/actions/runs/17344732069) |
+| 10 | qwen | qwen3-coder-plus | **64.0%** | 16/25 | 123.9s | [#246268](https://github.com/laiso/ts-bench/actions/runs/17356246268) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 
