@@ -76,7 +76,7 @@
 - `--exercise <name|N|a,b,c>`: Specify exercise (name / first N / multiple)
 - `--exercism-path <path>`: Exercism root (default: `exercism-typescript`)
 - `--test-only` / `--print-instructions`: Test only / show instructions
-- `--save-result --result-dir <dir>`: Save results
+- `--save-result --result-dir <dir>`: Save results and regenerate the local leaderboard dataset
 - `--timeout <sec>`: Timeout per exercise (default: 300)
 
 ---

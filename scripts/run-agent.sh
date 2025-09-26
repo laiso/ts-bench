@@ -67,6 +67,10 @@ case "$AGENT" in
     ensure_node_cli "qwen" "@qwen-code/qwen-code"
     exec qwen "$@"
     ;;
+  copilot)
+    ensure_node_cli "copilot" "@github/copilot"
+    exec copilot "$@"
+    ;;
   *)
     if command -v "$AGENT" >/dev/null 2>&1; then
       exec "$AGENT" "$@"

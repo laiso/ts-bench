@@ -17,6 +17,7 @@ on:
           - qwen
           - aider
           - cursor
+          - copilot
       provider:
         description: Provider (openai, anthropic, google, openrouter, etc.)
         required: true
@@ -125,6 +126,9 @@ jobs:
               curl -fsS https://cursor.com/install | bash
               echo "PATH=$HOME/.cursor/bin:$PATH" >> "$GITHUB_ENV"
               ;;
+            copilot)
+              npm install -g @github/copilot
+              ;;
             *)
               echo "No installer defined for agent: $agent" >&2
               ;;
@@ -180,6 +184,7 @@ jobs:
             opencode) cmd=opencode ;;
             qwen)     cmd=qwen ;;
             cursor)   cmd=cursor-agent ;;
+            copilot)  cmd="copilot --version" ;;
             *)        cmd="" ;;
           esac
 

@@ -85,6 +85,8 @@ export class VersionDetector {
                 return ['opencode', '--version'];
             case 'cursor':
                 return ['cursor-agent', '--version'];
+            case 'copilot':
+                return ['copilot', '--version'];
             default:
                 throw new Error(`Unknown agent: ${agent}`);
         }
@@ -128,6 +130,10 @@ export class VersionDetector {
                 // OpenCode output: "opencode 1.0.0" or "1.0.0"
                 const opencodeMatch = cleanOutput.match(/(?:opencode\s+)?(\d+\.\d+\.\d+)/i);
                 return opencodeMatch && opencodeMatch[1] ? opencodeMatch[1] : this.extractGenericVersion(cleanOutput);
+            case 'copilot':
+                // Copilot output: "copilot 1.0.0" or "1.0.0"
+                const copilotMatch = cleanOutput.match(/(?:copilot\s+)?(\d+\.\d+\.\d+)/i);
+                return copilotMatch && copilotMatch[1] ? copilotMatch[1] : this.extractGenericVersion(cleanOutput);
             case 'cursor':
                 // Cursor Agent output: generic semver or text containing version
                 return this.extractGenericVersion(cleanOutput);
