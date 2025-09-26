@@ -176,7 +176,7 @@ export class LeaderboardGenerator {
                 if (versionCache.has(agentKey)) {
                     version = versionCache.get(agentKey)!;
                 } else {
-                    version = await this.extractVersion(agentKey as AgentType, detector) || 'unknown';
+                    version = await this.extractVersion(agentKey as AgentType, detector);
                     versionCache.set(agentKey, version);
                 }
             }
@@ -292,21 +292,11 @@ export class LeaderboardGenerator {
     }
 
     private async extractVersion(agentName: AgentType, detector: VersionDetector): Promise<string> {
-        try {
-            return await detector.detectAgentVersion(agentName);
-        } catch {
-            // Fallbacks if detection fails
-            switch (agentName.toLowerCase()) {
-                case 'claude': return '1.0.0';
-                case 'aider': return '0.45.1';
-                case 'goose': return '1.2.0';
-                case 'codex': return '1.0.0';
-                case 'gemini': return '1.0.0';
-                case 'qwen': return '0.0.1';
-                case 'cursor': return '1.0.0';
-                default: return 'unknown';
-            }
+        const detected = await detector.detectAgentVersion(agentName);
+        if (!detected) {
+            throw new Error(`Version detection returned empty value for agent: ${agentName}`);
         }
+        return detected;
     }
 
     private capitalizeAgent(agent: string): string {
@@ -318,6 +308,7 @@ export class LeaderboardGenerator {
             case 'gemini': return 'Gemini CLI';
             case 'qwen': return 'Qwen Code';
             case 'cursor': return 'Cursor Agent';
+            case 'copilot': return 'GitHub Copilot CLI';
             default: return agent.charAt(0).toUpperCase() + agent.slice(1).toLowerCase();
         }
     }
@@ -328,6 +319,7 @@ export class LeaderboardGenerator {
             case 'anthropic': return 'Anthropic';
             case 'google': return 'Google';
             case 'openrouter': return 'OpenRouter';
+            case 'github': return 'GitHub';
             default: return provider.charAt(0).toUpperCase() + provider.slice(1).toLowerCase();
         }
     }

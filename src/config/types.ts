@@ -1,5 +1,5 @@
-export type AgentType = 'claude' | 'goose' | 'aider' | 'codex' | 'gemini' | 'opencode' | 'qwen' | 'cursor';
-export type ProviderType = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'dashscope' | 'xai' | 'deepseek';
+export type AgentType = 'claude' | 'goose' | 'aider' | 'codex' | 'copilot' | 'gemini' | 'opencode' | 'qwen' | 'cursor';
+export type ProviderType = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'dashscope' | 'xai' | 'deepseek' | 'github';
 
 export interface AgentResult {
     exercise: string;
@@ -62,8 +62,6 @@ export interface CLIArgs {
     saveResult?: boolean;
     resultName?: string;
     resultDir?: string;
-    generateLeaderboard?: boolean;
-    updateLeaderboard?: boolean;
     version?: string;
     showProgress?: boolean;
     testOnly?: boolean;

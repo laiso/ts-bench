@@ -4,6 +4,7 @@ import { CodexAgentBuilder } from '../codex';
 import { GeminiAgentBuilder } from '../gemini';
 import { GooseAgentBuilder } from '../goose';
 import { CursorAgentBuilder } from '../cursor';
+import { CopilotAgentBuilder } from '../copilot';
 import type { AgentBuilder } from '../../types';
 
 const SCRIPT_PATH = '/tmp/scripts/run-agent.sh';
@@ -67,6 +68,19 @@ describe('Agent builders invoke run-agent script', () => {
             builder: new CursorAgentBuilder(BASE_CONFIG),
             env: [['CURSOR_API_KEY', 'test-cursor-key'] as const],
             assertCommand: (command) => assertRunAgent(command, 'cursor-agent')
+        },
+        {
+            cli: 'copilot',
+            builder: new CopilotAgentBuilder(BASE_CONFIG),
+            env: [] as readonly (readonly [string, string])[],
+            assertCommand: (command) => {
+                assertRunAgent(command, 'copilot');
+                expect(command.args).toContain('--allow-all-tools');
+                expect(command.args).toContain('--add-dir');
+                expect(command.args).toContain('-p');
+                expect(command.env?.COPILOT_ALLOW_ALL).toBe('1');
+                expect(command.env?.COPILOT_MODEL).toBe('test-model');
+            }
         }
     ] as const;
 

@@ -8,9 +8,9 @@ Usage:
   bun src/index.ts [options]
 
 Basic Options:
-  --agent <agent>        Agent to use (claude, goose, aider, codex, gemini, opencode, qwen, cursor) [default: claude]
+  --agent <agent>        Agent to use (claude, goose, aider, codex, copilot, gemini, opencode, qwen, cursor) [default: claude]
   --model <model>        Model to use [default: sonnet]
-  --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek) [default: openai]
+  --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github) [default: openai]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
   --verbose              Show detailed output
   --list                 List available exercises
@@ -36,13 +36,9 @@ Output Options:
   --all-agents           Run benchmark for all agents (future feature)
 
 Result Saving:
-  --save-result          Save benchmark results to file
+  --save-result          Save benchmark results to file (automatically refreshes leaderboard)
   --result-name <name>   Custom name for result file (auto-generated if not specified)
   --result-dir <dir>     Directory to save results [default: ./data/results]
-
-Leaderboard:
-  --generate-leaderboard Generate leaderboard from data/results/ files
-  --update-leaderboard   Update leaderboard from data/results/ files (or after saving if used with --save-result)
 
 Batch Execution:
   --batch <number>       Run specific batch (1-5, for parallel execution)
@@ -56,9 +52,7 @@ Examples:
   bun src/index.ts --list
   bun src/index.ts --agent claude --model sonnet --save-result
   bun src/index.ts --agent goose --model gemini --save-result
-  bun src/index.ts --agent claude --model sonnet --version 1.2.3 --save-result --update-leaderboard
-  bun src/index.ts --update-leaderboard
-  bun src/index.ts --generate-leaderboard
+  bun src/index.ts --agent claude --model sonnet --version 1.2.3 --save-result
   bun src/index.ts --print-instructions --   acronym      # Show instructions for specific exercise
 
 Help:
@@ -139,9 +133,6 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         ? process.argv[resultDirIndex + 1]!
         : undefined;
 
-    const generateLeaderboard = process.argv.includes('--generate-leaderboard');
-    const updateLeaderboard = process.argv.includes('--update-leaderboard');
-
     const versionIndex = process.argv.indexOf('--version');
     const version = versionIndex !== -1 && versionIndex + 1 < process.argv.length
         ? process.argv[versionIndex + 1]!
@@ -204,8 +195,6 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         saveResult,
         resultName,
         resultDir,
-        generateLeaderboard,
-        updateLeaderboard,
         version,
         showProgress,
         testOnly,

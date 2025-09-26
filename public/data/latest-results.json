@@ -1,0 +1,835 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-26T03:24:01.463Z",
+    "totalExercises": 1,
+    "benchmarkVersion": "1.1.0",
+    "generatedBy": "ts-bench"
+  },
+  "leaderboard": [
+    {
+      "id": 1,
+      "agent": "GitHub Copilot CLI",
+      "version": "0.0.327",
+      "model": "gpt-5",
+      "provider": "OpenAI",
+      "successRate": 100,
+      "avgExecutionTime": 0.42,
+      "totalExecutionTime": 0.42,
+      "problemsSolved": 1,
+      "totalProblems": 1,
+      "rank": 1,
+      "lastUpdated": "2025-09-26"
+    },
+    {
+      "id": 2,
+      "agent": "Codex CLI",
+      "version": "0.40.0",
+      "model": "gpt-5-codex",
+      "provider": "OpenAI",
+      "successRate": 100,
+      "avgExecutionTime": 0.75,
+      "totalExecutionTime": 0.75,
+      "problemsSolved": 1,
+      "totalProblems": 1,
+      "rank": 2,
+      "lastUpdated": "2025-09-24"
+    },
+    {
+      "id": 3,
+      "agent": "Codex CLI",
+      "version": "0.36.0",
+      "model": "gpt-5-nano",
+      "provider": "OpenAI",
+      "successRate": 100,
+      "avgExecutionTime": 1.15,
+      "totalExecutionTime": 1.15,
+      "problemsSolved": 1,
+      "totalProblems": 1,
+      "rank": 3,
+      "lastUpdated": "2025-09-16"
+    },
+    {
+      "id": 4,
+      "agent": "Qwen Code",
+      "version": "0.0.13",
+      "model": "qwen3-coder-plus-2025-09-23",
+      "provider": "Dashscope",
+      "successRate": 100,
+      "avgExecutionTime": 1.46,
+      "totalExecutionTime": 1.46,
+      "problemsSolved": 1,
+      "totalProblems": 1,
+      "rank": 4,
+      "lastUpdated": "2025-09-24"
+    },
+    {
+      "id": 5,
+      "agent": "GitHub Copilot CLI",
+      "version": "0.0.327",
+      "model": "sonnet",
+      "provider": "OpenAI",
+      "successRate": 84,
+      "avgExecutionTime": 4.01,
+      "totalExecutionTime": 84.21,
+      "problemsSolved": 21,
+      "totalProblems": 25,
+      "rank": 5,
+      "lastUpdated": "2025-09-26"
+    },
+    {
+      "id": 6,
+      "agent": "Codex CLI",
+      "version": "0.38.0",
+      "model": "gpt-oss-120b",
+      "provider": "Cerebras",
+      "successRate": 0,
+      "avgExecutionTime": 0.12,
+      "totalExecutionTime": 0,
+      "problemsSolved": 0,
+      "totalProblems": 1,
+      "rank": 6,
+      "lastUpdated": "2025-09-18"
+    },
+    {
+      "id": 7,
+      "agent": "Gemini CLI",
+      "version": "0.0.0",
+      "model": "gemini-2.5-flash",
+      "provider": "Google",
+      "successRate": 0,
+      "avgExecutionTime": 0.14,
+      "totalExecutionTime": 0,
+      "problemsSolved": 0,
+      "totalProblems": 1,
+      "rank": 7,
+      "lastUpdated": "2025-09-18"
+    }
+  ],
+  "detailedResults": {
+    "codex-gpt-5-codex": {
+      "metadata": {
+        "agentName": "codex",
+        "model": "gpt-5-codex",
+        "provider": "openai",
+        "timestamp": "2025-09-24T12:41:57.075Z",
+        "totalExercises": 1
+      },
+      "summary": {
+        "successRate": 100,
+        "avgDuration": 45074,
+        "solvedCount": 1,
+        "failedCount": 0
+      },
+      "exerciseResults": [
+        {
+          "exercise": "hello-world",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 40329,
+          "testDuration": 4697,
+          "totalDuration": 45074
+        }
+      ],
+      "categoryBreakdown": {
+        "general": {
+          "successRate": 100,
+          "avgDuration": 45074,
+          "exerciseCount": 1
+        }
+      }
+    },
+    "qwen-qwen3-coder-plus-2025-09-23": {
+      "metadata": {
+        "agentName": "qwen",
+        "model": "qwen3-coder-plus-2025-09-23",
+        "provider": "dashscope",
+        "timestamp": "2025-09-24T05:50:15.121Z",
+        "totalExercises": 1
+      },
+      "summary": {
+        "successRate": 100,
+        "avgDuration": 87551,
+        "solvedCount": 1,
+        "failedCount": 0
+      },
+      "exerciseResults": [
+        {
+          "exercise": "accumulate",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 83019,
+          "testDuration": 4484,
+          "totalDuration": 87551
+        }
+      ],
+      "categoryBreakdown": {
+        "general": {
+          "successRate": 100,
+          "avgDuration": 87551,
+          "exerciseCount": 1
+        }
+      }
+    },
+    "codex-gpt-oss-120b": {
+      "metadata": {
+        "agentName": "codex",
+        "model": "gpt-oss-120b",
+        "provider": "cerebras",
+        "timestamp": "2025-09-18T07:23:55.459Z",
+        "totalExercises": 1
+      },
+      "summary": {
+        "successRate": 0,
+        "avgDuration": 7463,
+        "solvedCount": 0,
+        "failedCount": 1
+      },
+      "exerciseResults": [
+        {
+          "exercise": "hello-world",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-hello-world@workspace:. doesn't provide @babel/core (p96e13), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.44.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 2195,
+          "testDuration": 5224,
+          "totalDuration": 7463
+        }
+      ],
+      "categoryBreakdown": {
+        "general": {
+          "successRate": 0,
+          "avgDuration": 7463,
+          "exerciseCount": 1
+        }
+      }
+    },
+    "gemini-gemini-2.5-flash": {
+      "metadata": {
+        "agentName": "gemini",
+        "model": "gemini-2.5-flash",
+        "provider": "google",
+        "timestamp": "2025-09-18T06:28:51.722Z",
+        "totalExercises": 1
+      },
+      "summary": {
+        "successRate": 0,
+        "avgDuration": 8196,
+        "solvedCount": 0,
+        "failedCount": 1
+      },
+      "exerciseResults": [
+        {
+          "exercise": "accumulate",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "",
+          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-accumulate@workspace:. doesn't provide @babel/core (pd2a57), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.43.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 3042,
+          "testDuration": 5114,
+          "totalDuration": 8196
+        }
+      ],
+      "categoryBreakdown": {
+        "general": {
+          "successRate": 0,
+          "avgDuration": 8196,
+          "exerciseCount": 1
+        }
+      }
+    },
+    "copilot-sonnet": {
+      "metadata": {
+        "agentName": "copilot",
+        "model": "sonnet",
+        "provider": "openai",
+        "timestamp": "2025-09-26T03:07:58.158Z",
+        "totalExercises": 25
+      },
+      "summary": {
+        "successRate": 84,
+        "avgDuration": 240497.4,
+        "solvedCount": 21,
+        "failedCount": 4
+      },
+      "exerciseResults": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 272338,
+          "testDuration": 5103,
+          "totalDuration": 277478
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 171591,
+          "testDuration": 4926,
+          "totalDuration": 176584
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 180730,
+          "testDuration": 4574,
+          "totalDuration": 185367
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 93654,
+          "testDuration": 4461,
+          "totalDuration": 98177
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 107001,
+          "testDuration": 4499,
+          "totalDuration": 111551
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 252014,
+          "testDuration": 4704,
+          "totalDuration": 256787
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-complex-numbers@workspace:. doesn't provide @babel/core (pe65d4), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300085,
+          "testDuration": 5667,
+          "totalDuration": 305804
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-connect@workspace:. doesn't provide @babel/core (p8d446), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0007: │ core-js@npm:3.38.1 must be built because it never has been before or the last one failed\n➤ YN0007: │ core-js@npm:3.44.0 must be built because it never has been before or the last one failed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 941456,
+          "testDuration": 7002,
+          "totalDuration": 948517
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 95348,
+          "testDuration": 4443,
+          "totalDuration": 99867
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 220291,
+          "testDuration": 4474,
+          "totalDuration": 224828
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 87045,
+          "testDuration": 4539,
+          "totalDuration": 91654
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 118273,
+          "testDuration": 4422,
+          "totalDuration": 122760
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 142858,
+          "testDuration": 4436,
+          "totalDuration": 147335
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 105485,
+          "testDuration": 4560,
+          "totalDuration": 110097
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 93895,
+          "testDuration": 4614,
+          "totalDuration": 98568
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 107774,
+          "testDuration": 4526,
+          "totalDuration": 112362
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-react@workspace:. doesn't provide @babel/core (p31db9), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.44.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nreact.ts(66,40): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Cell<unknown>'.\n  Type 'InputCell<T>' is not assignable to type 'Cell<unknown>'.\n    Types of property 'equalFn' are incompatible.\n      Type 'EqualFn<T> | undefined' is not assignable to type 'EqualFn<unknown> | undefined'.\n        Type 'EqualFn<T>' is not assignable to type 'EqualFn<unknown>'.\n          Type 'unknown' is not assignable to type 'T'.\n            'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.\nreact.ts(93,3): error TS2300: Duplicate identifier 'value'.\nreact.ts(93,3): error TS2416: Property 'value' in type 'ComputedCell<T>' is not assignable to the same property in base type 'Cell<T>'.\n  Type 'T | undefined' is not assignable to type 'T'.\n    'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.\nreact.ts(102,7): error TS2300: Duplicate identifier 'value'.\nreact.ts(102,7): error TS2416: Property 'value' in type 'ComputedCell<T>' is not assignable to the same property in base type 'Cell<T>'.\n  Type 'T | undefined' is not assignable to type 'T'.\n    'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.\nreact.ts(106,40): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Cell<unknown>'.\n  Type 'ComputedCell<T>' is not assignable to type 'Cell<unknown>'.\n    Property 'value' is optional in type 'ComputedCell<T>' but required in type 'Cell<unknown>'.\nreact.ts(123,28): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Observer<unknown>'.\n  Type 'ComputedCell<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(129,5): error TS2322: Type 'this' is not assignable to type 'Observer<unknown> | null'.\n  Type 'ComputedCell<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\n            Type 'this' is not assignable to type 'Observer<unknown>'.\n              Type 'ComputedCell<T>' is not assignable to type 'Observer<unknown>'.\n                Types of property 'updateFn' are incompatible.\n                  Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n                    Types of parameters 'value' and 'value' are incompatible.\n                      Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(164,28): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Observer<unknown>'.\n  Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(170,5): error TS2322: Type 'this' is not assignable to type 'Observer<unknown> | null'.\n  Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\n            Type 'this' is not assignable to type 'Observer<unknown>'.\n              Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n                Types of property 'updateFn' are incompatible.\n                  Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n                    Types of parameters 'value' and 'value' are incompatible.\n                      Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(181,28): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Observer<unknown>'.\n  Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(317,16): error TS2322: Type 'T | undefined' is not assignable to type 'T'.\n  'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.\n\nSTDERR: ",
+          "agentDuration": 384189,
+          "testDuration": 3498,
+          "totalDuration": 387735
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-rectangles@workspace:. doesn't provide @babel/core (p58fb9), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nrectangles.test.ts(7,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(13,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(19,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(25,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(31,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(37,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(43,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(49,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(55,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(61,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(67,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(79,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(91,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(106,26): error TS2554: Expected 0 arguments, but got 1.\n\nSTDERR: ",
+          "agentDuration": 943403,
+          "testDuration": 3263,
+          "totalDuration": 946724
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 280130,
+          "testDuration": 4458,
+          "totalDuration": 284631
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 101660,
+          "testDuration": 19527,
+          "totalDuration": 121238
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 129791,
+          "testDuration": 4532,
+          "totalDuration": 134369
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 165815,
+          "testDuration": 4423,
+          "totalDuration": 170290
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 258496,
+          "testDuration": 5033,
+          "totalDuration": 263572
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 133588,
+          "testDuration": 4775,
+          "totalDuration": 138414
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 192926,
+          "testDuration": 4746,
+          "totalDuration": 197726
+        }
+      ],
+      "categoryBreakdown": {
+        "general": {
+          "successRate": 84,
+          "avgDuration": 240497.4,
+          "exerciseCount": 25
+        }
+      }
+    },
+    "copilot-gpt-5": {
+      "metadata": {
+        "agentName": "copilot",
+        "model": "gpt-5",
+        "provider": "openai",
+        "timestamp": "2025-09-26T03:24:01.444Z",
+        "totalExercises": 1
+      },
+      "summary": {
+        "successRate": 100,
+        "avgDuration": 25373,
+        "solvedCount": 1,
+        "failedCount": 0
+      },
+      "exerciseResults": [
+        {
+          "exercise": "accumulate",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 20965,
+          "testDuration": 4382,
+          "totalDuration": 25373
+        }
+      ],
+      "categoryBreakdown": {
+        "general": {
+          "successRate": 100,
+          "avgDuration": 25373,
+          "exerciseCount": 1
+        }
+      }
+    },
+    "codex-gpt-5-nano": {
+      "metadata": {
+        "agentName": "codex",
+        "model": "gpt-5-nano",
+        "provider": "openai",
+        "timestamp": "2025-09-16T08:41:52.925Z",
+        "totalExercises": 1
+      },
+      "summary": {
+        "successRate": 100,
+        "avgDuration": 68722,
+        "solvedCount": 1,
+        "failedCount": 0
+      },
+      "exerciseResults": [
+        {
+          "exercise": "accumulate",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 62962,
+          "testDuration": 5732,
+          "totalDuration": 68722
+        }
+      ],
+      "categoryBreakdown": {
+        "general": {
+          "successRate": 100,
+          "avgDuration": 68722,
+          "exerciseCount": 1
+        }
+      }
+    }
+  },
+  "exerciseBreakdown": [
+    {
+      "exerciseName": "hello-world",
+      "agentResults": {
+        "codex-gpt-5-codex": {
+          "success": true,
+          "duration": 45074
+        },
+        "codex-gpt-oss-120b": {
+          "success": false,
+          "duration": 7463,
+          "error": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-hello-world@workspace:. doesn't provide @babel/core (p96e13), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.44.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: "
+        }
+      }
+    },
+    {
+      "exerciseName": "accumulate",
+      "agentResults": {
+        "qwen-qwen3-coder-plus-2025-09-23": {
+          "success": true,
+          "duration": 87551
+        },
+        "gemini-gemini-2.5-flash": {
+          "success": false,
+          "duration": 8196,
+          "error": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-accumulate@workspace:. doesn't provide @babel/core (pd2a57), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.43.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: "
+        },
+        "copilot-gpt-5": {
+          "success": true,
+          "duration": 25373
+        },
+        "codex-gpt-5-nano": {
+          "success": true,
+          "duration": 68722
+        }
+      }
+    },
+    {
+      "exerciseName": "acronym",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 277478
+        }
+      }
+    },
+    {
+      "exerciseName": "anagram",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 176584
+        }
+      }
+    },
+    {
+      "exerciseName": "bank-account",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 185367
+        }
+      }
+    },
+    {
+      "exerciseName": "binary-search",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 98177
+        }
+      }
+    },
+    {
+      "exerciseName": "binary-search-tree",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 111551
+        }
+      }
+    },
+    {
+      "exerciseName": "bowling",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 256787
+        }
+      }
+    },
+    {
+      "exerciseName": "complex-numbers",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": false,
+          "duration": 305804,
+          "error": "Execution timed out after 300 seconds"
+        }
+      }
+    },
+    {
+      "exerciseName": "connect",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": false,
+          "duration": 948517,
+          "error": "Execution timed out after 300 seconds"
+        }
+      }
+    },
+    {
+      "exerciseName": "crypto-square",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 99867
+        }
+      }
+    },
+    {
+      "exerciseName": "diamond",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 224828
+        }
+      }
+    },
+    {
+      "exerciseName": "dnd-character",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 91654
+        }
+      }
+    },
+    {
+      "exerciseName": "flatten-array",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 122760
+        }
+      }
+    },
+    {
+      "exerciseName": "food-chain",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 147335
+        }
+      }
+    },
+    {
+      "exerciseName": "house",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 110097
+        }
+      }
+    },
+    {
+      "exerciseName": "pascals-triangle",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 98568
+        }
+      }
+    },
+    {
+      "exerciseName": "rational-numbers",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 112362
+        }
+      }
+    },
+    {
+      "exerciseName": "react",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": false,
+          "duration": 387735,
+          "error": "Execution timed out after 300 seconds"
+        }
+      }
+    },
+    {
+      "exerciseName": "rectangles",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": false,
+          "duration": 946724,
+          "error": "Execution timed out after 300 seconds"
+        }
+      }
+    },
+    {
+      "exerciseName": "relative-distance",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 284631
+        }
+      }
+    },
+    {
+      "exerciseName": "robot-name",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 121238
+        }
+      }
+    },
+    {
+      "exerciseName": "spiral-matrix",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 134369
+        }
+      }
+    },
+    {
+      "exerciseName": "transpose",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 170290
+        }
+      }
+    },
+    {
+      "exerciseName": "two-bucket",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 263572
+        }
+      }
+    },
+    {
+      "exerciseName": "variable-length-quantity",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 138414
+        }
+      }
+    },
+    {
+      "exerciseName": "wordy",
+      "agentResults": {
+        "copilot-sonnet": {
+          "success": true,
+          "duration": 197726
+        }
+      }
+    }
+  ]
+}

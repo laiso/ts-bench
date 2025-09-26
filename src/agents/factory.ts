@@ -8,6 +8,7 @@ import { GeminiAgentBuilder } from './builders/gemini';
 import { OpenCodeAgentBuilder } from './builders/opencode';
 import { QwenAgentBuilder } from './builders/qwen';
 import { CursorAgentBuilder } from './builders/cursor';
+import { CopilotAgentBuilder } from './builders/copilot';
 
 export class AgentFactory {
     static create(config: BenchmarkConfig, containerName: string, agentScriptPath: string): AgentBuilder {
@@ -27,6 +28,8 @@ export class AgentFactory {
                 return new AiderAgentBuilder(agentConfig);
             case 'codex':
                 return new CodexAgentBuilder(agentConfig);
+            case 'copilot':
+                return new CopilotAgentBuilder(agentConfig);
             case 'gemini':
                 return new GeminiAgentBuilder(agentConfig);
             case 'opencode':

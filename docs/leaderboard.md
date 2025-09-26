@@ -7,6 +7,7 @@ This document summarizes the final design for publishing the leaderboard in ts-b
 - Single data source: Only the latest version is kept in `public/data/leaderboard.json` (key: `agent-model`).
 - README displays only the Top N entries, auto-generated (marker replacement). The Result column shows a Run link.
 - Raw result JSONs are not committed to the repository, but saved as GitHub Actions Artifacts.
+- Local runs with `--save-result` automatically regenerate `public/data/latest-results.json` to give an up-to-date preview before publishing.
 - Workflow separation:
   - Benchmark run (uploads result JSON as Artifact)
   - Update run (fetches Artifact from any run → merges into JSON → updates README → opens a PR with only 2 changed files)
@@ -135,6 +136,7 @@ Example (markers)
 
 1. Run the benchmark
 - Actions → Manual Benchmark Run → specify inputs → after completion, Artifact (`results-<agent>-<model>`) is generated on the Run page.
+- Local runs with `--save-result` refresh `public/data/latest-results.json` so you can review the leaderboard before publishing changes.
 
 2. Update the leaderboard (PR)
 - Actions → Propose Leaderboard Update from Artifact → specify `run_id` (from URL) and `artifact_name` → run.

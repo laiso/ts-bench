@@ -16,12 +16,6 @@ export class BenchmarkRunner {
     ) {}
 
     async run(args: CLIArgs): Promise<void> {
-        if (args.generateLeaderboard || args.updateLeaderboard) {
-            const generator = new LeaderboardGenerator();
-            await generator.generateLeaderboard();
-            return;
-        }
-        
         const allExercises = await this.exerciseReader.getExercises();
 
         if (args.listExercises) {
@@ -89,13 +83,11 @@ export class BenchmarkRunner {
         if (args.saveResult) {
             const resultDir = args.resultDir || './data/results';
             await this.reporter.saveResult(results, config, resultDir, args.resultName);
-            
-            // Update leaderboard if requested (and not already handled above)
-            if (args.updateLeaderboard) {
-                console.log('🔄 Updating leaderboard...');
-                const generator = new LeaderboardGenerator();
-                await generator.generateLeaderboard();
-            }
+
+            // Always refresh leaderboard after saving results.
+            console.log('🔄 Updating leaderboard...');
+            const generator = new LeaderboardGenerator();
+            await generator.generateLeaderboard();
         }
     }
 
