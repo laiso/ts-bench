@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-30T05:34:10.088Z",
+  "lastUpdated": "2025-09-30T15:14:52.077Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -3180,6 +3180,261 @@
           "agentDuration": 253251,
           "testDuration": 9559,
           "totalDuration": 262818
+        }
+      ]
+    },
+    "claude-glm-4.6": {
+      "metadata": {
+        "agent": "claude",
+        "model": "glm-4.6",
+        "provider": "zai",
+        "version": "2.0.1",
+        "timestamp": "2025-09-30T15:13:15.881Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.1.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/18133009680",
+        "runId": "18133009680",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 92,
+        "totalDuration": 3306390,
+        "avgDuration": 132255.6,
+        "successCount": 23,
+        "totalCount": 25,
+        "agentSuccessCount": 24,
+        "testSuccessCount": 23,
+        "testFailedCount": 2
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 182573,
+          "testDuration": 7197,
+          "totalDuration": 189913
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 71499,
+          "testDuration": 9346,
+          "totalDuration": 80853
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 69733,
+          "testDuration": 7275,
+          "totalDuration": 77016
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 58172,
+          "testDuration": 7299,
+          "totalDuration": 65479
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 128868,
+          "testDuration": 9213,
+          "totalDuration": 138089
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 186455,
+          "testDuration": 7813,
+          "totalDuration": 194276
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 188009,
+          "testDuration": 7366,
+          "totalDuration": 195383
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-connect\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp8d446\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nconnect.ts(7,5): error TS2322: Type 'string[]' is not assignable to type 'string[][]'.\n  Type 'string' is not assignable to type 'string[]'.\nconnect.ts(9,31): error TS2339: Property 'split' does not exist on type 'string[]'.\nconnect.ts(10,44): error TS2339: Property 'split' does not exist on type 'string[]'.\n\nSTDERR: ",
+          "agentDuration": 88246,
+          "testDuration": 4480,
+          "totalDuration": 92734
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 95109,
+          "testDuration": 7307,
+          "totalDuration": 102424
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 72670,
+          "testDuration": 7230,
+          "totalDuration": 79908
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 34188,
+          "testDuration": 7403,
+          "totalDuration": 41599
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 116146,
+          "testDuration": 9256,
+          "totalDuration": 125412
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 298719,
+          "testDuration": 9186,
+          "totalDuration": 307913
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 58474,
+          "testDuration": 9273,
+          "totalDuration": 67755
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 64951,
+          "testDuration": 7344,
+          "totalDuration": 72302
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 49870,
+          "testDuration": 9265,
+          "totalDuration": 59142
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n\u001b[94m➤\u001b[39m YN0085: │ \u001b[38;5;70m+\u001b[39m \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mbabel-preset-typescript\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:0.6.0\u001b[39m, \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173meslint-config-typescript\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:0.8.0\u001b[39m, \u001b[38;5;166m@jest/\u001b[39m\u001b[38;5;173mglobals\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:29.7.0\u001b[39m, \u001b[38;5;166m@types/\u001b[39m\u001b[38;5;173mnode\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:22.7.9\u001b[39m, and \u001b[38;5;220m625\u001b[39m more.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-react\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp31db9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n\u001b[91m➤\u001b[39m YN0028: │ The lockfile would have been modified by this install, which is explicitly forbidden.\n::endgroup::\n\u001b[91m➤\u001b[39m YN0028: The lockfile would have been modified by this install, which is explicitly forbidden.\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[91m➤\u001b[39m \nSTDERR: ",
+          "agentDuration": 300204,
+          "testDuration": 1873,
+          "totalDuration": 302085
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 41955,
+          "testDuration": 8069,
+          "totalDuration": 50032
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 107143,
+          "testDuration": 12670,
+          "totalDuration": 119826
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 123552,
+          "testDuration": 32361,
+          "totalDuration": 155921
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 75091,
+          "testDuration": 10540,
+          "totalDuration": 85639
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 178601,
+          "testDuration": 10501,
+          "totalDuration": 189110
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 114085,
+          "testDuration": 10534,
+          "totalDuration": 124631
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 86278,
+          "testDuration": 8373,
+          "totalDuration": 94659
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 283866,
+          "testDuration": 10415,
+          "totalDuration": 294289
         }
       ]
     }

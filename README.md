@@ -10,14 +10,17 @@
 | 1 | opencode | openai/gpt-5 | **96.0%** | 24/25 | 64.8s | [#415419](https://github.com/yukukotani/ts-bench/actions/runs/17366415419) |
 | 2 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
 | 3 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
-| 4 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
-| 5 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
-| 6 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
-| 7 | claude | claude-sonnet-4-5-20250929 | **88.0%** | 22/25 | 128.2s | [#779527](https://github.com/laiso/ts-bench/actions/runs/18118779527) |
-| 8 | gemini | gemini-2.5-flash-preview-09-2025 | **84.0%** | 21/25 | 73.0s | [#558475](https://github.com/laiso/ts-bench/actions/runs/18032558475) |
-| 9 | claude | glm-4.5 | **80.0%** | 20/25 | 172.3s | [#591219](https://github.com/laiso/ts-bench/actions/runs/17495591219) |
-| 10 | qwen | qwen3-coder-plus-2025-09-23 | **76.0%** | 19/25 | 185.8s | [#429442](https://github.com/laiso/ts-bench/actions/runs/17967429442) |
+| 4 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
+| 5 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
+| 6 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
+| 7 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
+| 8 | claude | claude-sonnet-4-5-20250929 | **88.0%** | 22/25 | 128.2s | [#779527](https://github.com/laiso/ts-bench/actions/runs/18118779527) |
+| 9 | gemini | gemini-2.5-flash-preview-09-2025 | **84.0%** | 21/25 | 73.0s | [#558475](https://github.com/laiso/ts-bench/actions/runs/18032558475) |
+| 10 | claude | glm-4.5 | **80.0%** | 20/25 | 172.3s | [#591219](https://github.com/laiso/ts-bench/actions/runs/17495591219) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 
