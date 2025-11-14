@@ -1,6 +1,6 @@
 import type { AgentBuilder, AgentConfig } from '../types';
 import { BaseAgentBuilder } from '../base';
-import { requireEnv } from '../../utils/env';
+import { requireAnyEnv, requireEnv } from '../../utils/env';
 
 export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
     constructor(agentConfig: AgentConfig) {
@@ -15,10 +15,15 @@ export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
                 return {
                     OPENROUTER_API_KEY: requireEnv('OPENROUTER_API_KEY', 'Missing OPENROUTER_API_KEY for Codex (OpenRouter) provider')
                 };
-            case 'openai':
+            case 'openai': {
+                const { value } = requireAnyEnv(
+                    ['CODEX_API_KEY', 'OPENAI_API_KEY'],
+                    'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider'
+                );
                 return {
-                    OPENAI_API_KEY: requireEnv('OPENAI_API_KEY', 'Missing OPENAI_API_KEY for Codex (OpenAI) provider')
+                    CODEX_API_KEY: value
                 };
+            }
             default:
                 throw new Error(`Unsupported provider for Codex: ${provider}`);
         }
