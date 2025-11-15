@@ -15,9 +15,12 @@
 | 6 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
 | 7 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
 | 8 | claude | claude-sonnet-4-5-20250929 | **88.0%** | 22/25 | 128.2s | [#779527](https://github.com/laiso/ts-bench/actions/runs/18118779527) |
-| 9 | gemini | gemini-2.5-flash-preview-09-2025 | **84.0%** | 21/25 | 73.0s | [#558475](https://github.com/laiso/ts-bench/actions/runs/18032558475) |
-| 10 | claude | glm-4.5 | **80.0%** | 20/25 | 172.3s | [#591219](https://github.com/laiso/ts-bench/actions/runs/17495591219) |
+| 9 | codex | gpt-5.1-codex | **88.0%** | 22/25 | 145.2s | [#317417](https://github.com/laiso/ts-bench/actions/runs/19351317417) |
+| 10 | gemini | gemini-2.5-flash-preview-09-2025 | **84.0%** | 21/25 | 73.0s | [#558475](https://github.com/laiso/ts-bench/actions/runs/18032558475) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 
