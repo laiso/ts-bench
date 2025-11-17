@@ -47,6 +47,10 @@ export class OpenCodeAgentBuilder extends BaseAgentBuilder implements AgentBuild
                 return {
                     DEEPSEEK_API_KEY: requireEnv('DEEPSEEK_API_KEY', 'Missing DEEPSEEK_API_KEY for OpenCode (DeepSeek) provider')
                 };
+            case 'cerebras':
+                return {
+                    CEREBRAS_API_KEY: requireEnv('CEREBRAS_API_KEY', 'Missing CEREBRAS_API_KEY for OpenCode (Cerebras) provider')
+                };
             default:
                 throw new Error(`Unsupported provider for OpenCode: ${provider}`);
         }
