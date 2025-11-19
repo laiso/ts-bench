@@ -8,16 +8,19 @@
 | Rank | Agent | Model | Success Rate | Solved | Avg Time | Result |
 |:----:|:------|:------|:--------------:|:------:|:----------:|:-----:|
 | 1 | opencode | openai/gpt-5 | **96.0%** | 24/25 | 64.8s | [#415419](https://github.com/yukukotani/ts-bench/actions/runs/17366415419) |
-| 2 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
-| 3 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
-| 4 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
-| 5 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
-| 6 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
-| 7 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
-| 8 | claude | claude-sonnet-4-5-20250929 | **88.0%** | 22/25 | 128.2s | [#779527](https://github.com/laiso/ts-bench/actions/runs/18118779527) |
-| 9 | codex | gpt-5.1-codex | **88.0%** | 22/25 | 145.2s | [#317417](https://github.com/laiso/ts-bench/actions/runs/19351317417) |
-| 10 | gemini | gemini-2.5-flash-preview-09-2025 | **84.0%** | 21/25 | 73.0s | [#558475](https://github.com/laiso/ts-bench/actions/runs/18032558475) |
+| 2 | gemini | gemini-3-pro-preview | **96.0%** | 24/25 | 188.1s | [#914072](https://github.com/laiso/ts-bench/actions/runs/19484914072) |
+| 3 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
+| 4 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
+| 5 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
+| 6 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
+| 7 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
+| 8 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
+| 9 | claude | claude-sonnet-4-5-20250929 | **88.0%** | 22/25 | 128.2s | [#779527](https://github.com/laiso/ts-bench/actions/runs/18118779527) |
+| 10 | codex | gpt-5.1-codex | **88.0%** | 22/25 | 145.2s | [#317417](https://github.com/laiso/ts-bench/actions/runs/19351317417) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 
