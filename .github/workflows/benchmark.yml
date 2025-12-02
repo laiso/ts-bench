@@ -105,7 +105,7 @@ jobs:
               echo "Solve this TypeScript exercise. Read the test file to understand requirements and implement the solution." > AGENTS.md
               ;;
             goose)
-              CONFIGURE=false curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | bash
+              curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash
               echo "HOME=$HOME" >> "$GITHUB_ENV"
               echo "PATH=$HOME/.local/bin:$PATH" >> "$GITHUB_ENV"
               ;;
