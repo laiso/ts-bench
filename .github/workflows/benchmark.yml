@@ -18,6 +18,7 @@ on:
           - aider
           - cursor
           - copilot
+          - vibe
       provider:
         description: Provider (openai, anthropic, google, openrouter, etc.)
         required: true
@@ -35,6 +36,7 @@ on:
           - deepseek
           - moonshot
           - zai
+          - mistral
       model:
         description: Model to use (e.g., claude-sonnet-4-20250514)
         required: true
@@ -129,6 +131,9 @@ jobs:
             copilot)
               npm install -g @github/copilot
               ;;
+            vibe)
+              pip install mistral-vibe
+              ;;
             *)
               echo "No installer defined for agent: $agent" >&2
               ;;
@@ -185,6 +190,7 @@ jobs:
             qwen)     cmd=qwen ;;
             cursor)   cmd=cursor-agent ;;
             copilot)  cmd="copilot --version" ;;
+            vibe)     cmd=vibe ;;
             *)        cmd="" ;;
           esac
 
@@ -223,6 +229,7 @@ jobs:
           CUSTOM_INSTRUCTION: ${{ github.event.inputs.custom_instruction }}
           MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
           ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
         run: |
           set -euo pipefail
           mkdir -p "${{ env.RESULT_DIR }}"
