@@ -9,6 +9,7 @@ import { OpenCodeAgentBuilder } from './builders/opencode';
 import { QwenAgentBuilder } from './builders/qwen';
 import { CursorAgentBuilder } from './builders/cursor';
 import { CopilotAgentBuilder } from './builders/copilot';
+import { VibeAgentBuilder } from './builders/vibe';
 
 export class AgentFactory {
     static create(config: BenchmarkConfig, containerName: string, agentScriptPath: string): AgentBuilder {
@@ -38,6 +39,8 @@ export class AgentFactory {
                 return new QwenAgentBuilder(agentConfig);
             case 'cursor':
                 return new CursorAgentBuilder(agentConfig);
+            case 'vibe':
+                return new VibeAgentBuilder(agentConfig);
             default:
                 throw new Error(`Unknown agent: ${config.agent}`);
         }

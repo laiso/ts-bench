@@ -87,6 +87,9 @@ export class VersionDetector {
                 return ['cursor-agent', '--version'];
             case 'copilot':
                 return ['copilot', '--version'];
+            case 'vibe':
+                // vibe doesn't support --version flag, use --help and parse or return default
+                return ['vibe', '--help'];
             default:
                 throw new Error(`Unknown agent: ${agent}`);
         }
@@ -134,6 +137,9 @@ export class VersionDetector {
                 // Copilot output: "copilot 1.0.0" or "1.0.0"
                 const copilotMatch = cleanOutput.match(/(?:copilot\s+)?(\d+\.\d+\.\d+)/i);
                 return copilotMatch && copilotMatch[1] ? copilotMatch[1] : this.extractGenericVersion(cleanOutput);
+            case 'vibe':
+                // vibe doesn't have version in --help output, use default
+                return this.extractGenericVersion(cleanOutput) || '0.1.0';
             case 'cursor':
                 // Cursor Agent output: generic semver or text containing version
                 return this.extractGenericVersion(cleanOutput);
