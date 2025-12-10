@@ -71,6 +71,13 @@ case "$AGENT" in
     ensure_node_cli "copilot" "@github/copilot"
     exec copilot "$@"
     ;;
+  vibe)
+    if ! command -v "vibe" >/dev/null 2>&1; then
+      echo "[run-agent] Installing mistral-vibe" >&2
+      pip install mistral-vibe
+    fi
+    exec vibe "$@"
+    ;;
   *)
     if command -v "$AGENT" >/dev/null 2>&1; then
       exec "$AGENT" "$@"
