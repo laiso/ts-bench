@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-19T01:51:50.750Z",
+  "lastUpdated": "2025-12-12T06:25:26.174Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -3944,6 +3944,261 @@
           "agentDuration": 142477,
           "testDuration": 7681,
           "totalDuration": 150167
+        }
+      ]
+    },
+    "codex-gpt-5.2": {
+      "metadata": {
+        "agent": "codex",
+        "model": "gpt-5.2",
+        "provider": "openai",
+        "version": "0.71.0",
+        "timestamp": "2025-12-12T06:23:52.488Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.1.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/20157260672",
+        "runId": "20157260672",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 92,
+        "totalDuration": 3509743,
+        "avgDuration": 140389.7,
+        "successCount": 23,
+        "totalCount": 25,
+        "agentSuccessCount": 23,
+        "testSuccessCount": 24,
+        "testFailedCount": 1
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 116670,
+          "testDuration": 7242,
+          "totalDuration": 124066
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 94090,
+          "testDuration": 7269,
+          "totalDuration": 101367
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 76568,
+          "testDuration": 7176,
+          "totalDuration": 83752
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 113294,
+          "testDuration": 7233,
+          "totalDuration": 120534
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 92517,
+          "testDuration": 7253,
+          "totalDuration": 99777
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 158055,
+          "testDuration": 7485,
+          "totalDuration": 165549
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "agentDuration": 300038,
+          "testDuration": 7239,
+          "totalDuration": 307285
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 142784,
+          "testDuration": 7346,
+          "totalDuration": 150137
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 129632,
+          "testDuration": 7362,
+          "totalDuration": 137003
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 86417,
+          "testDuration": 7268,
+          "totalDuration": 93692
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 77171,
+          "testDuration": 7423,
+          "totalDuration": 84602
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 65403,
+          "testDuration": 7383,
+          "totalDuration": 72794
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 99868,
+          "testDuration": 7409,
+          "totalDuration": 107285
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 194683,
+          "testDuration": 7390,
+          "totalDuration": 202080
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 88792,
+          "testDuration": 7733,
+          "totalDuration": 96534
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 156647,
+          "testDuration": 7490,
+          "totalDuration": 164146
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-react\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp31db9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m \u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.38.1\u001b[39m must be built because it never has been before or the last one failed\n\u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.44.0\u001b[39m must be built because it never has been before or the last one failed\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 300033,
+          "testDuration": 9415,
+          "totalDuration": 309456
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 124700,
+          "testDuration": 7457,
+          "totalDuration": 132164
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 79812,
+          "testDuration": 7477,
+          "totalDuration": 87297
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 258885,
+          "testDuration": 8925,
+          "totalDuration": 267817
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 61302,
+          "testDuration": 7392,
+          "totalDuration": 68702
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 149788,
+          "testDuration": 7512,
+          "totalDuration": 157308
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 142108,
+          "testDuration": 7613,
+          "totalDuration": 149728
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 117041,
+          "testDuration": 7565,
+          "totalDuration": 124614
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 94571,
+          "testDuration": 7475,
+          "totalDuration": 102054
         }
       ]
     }
