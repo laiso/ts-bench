@@ -12,12 +12,15 @@
 | 3 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
 | 4 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
 | 5 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
-| 6 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
-| 7 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
-| 8 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
-| 9 | claude | claude-sonnet-4-5-20250929 | **88.0%** | 22/25 | 128.2s | [#779527](https://github.com/laiso/ts-bench/actions/runs/18118779527) |
-| 10 | codex | gpt-5.1-codex | **88.0%** | 22/25 | 145.2s | [#317417](https://github.com/laiso/ts-bench/actions/runs/19351317417) |
+| 6 | codex | gpt-5.2 | **92.0%** | 23/25 | 140.4s | [#260672](https://github.com/laiso/ts-bench/actions/runs/20157260672) |
+| 7 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
+| 8 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
+| 9 | opencode | opencode/grok-code | **88.0%** | 22/25 | 97.0s | [#083421](https://github.com/laiso/ts-bench/actions/runs/17355083421) |
+| 10 | claude | claude-sonnet-4-5-20250929 | **88.0%** | 22/25 | 128.2s | [#779527](https://github.com/laiso/ts-bench/actions/runs/18118779527) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 
