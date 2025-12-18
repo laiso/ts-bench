@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-12T06:25:26.174Z",
+  "lastUpdated": "2025-12-18T05:17:47.680Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -4199,6 +4199,260 @@
           "agentDuration": 94571,
           "testDuration": 7475,
           "totalDuration": 102054
+        }
+      ]
+    },
+    "gemini-gemini-3-flash-preview": {
+      "metadata": {
+        "agent": "gemini",
+        "model": "gemini-3-flash-preview",
+        "provider": "google",
+        "version": "0.21.2",
+        "timestamp": "2025-12-18T05:12:03.665Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.1.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/20326081278",
+        "runId": "20326081278",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 92,
+        "totalDuration": 2493362,
+        "avgDuration": 99734.5,
+        "successCount": 23,
+        "totalCount": 25,
+        "agentSuccessCount": 23,
+        "testSuccessCount": 25,
+        "testFailedCount": 0
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 116377,
+          "testDuration": 7541,
+          "totalDuration": 124097
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 62593,
+          "testDuration": 7555,
+          "totalDuration": 70179
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 89942,
+          "testDuration": 7360,
+          "totalDuration": 97333
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 79447,
+          "testDuration": 7482,
+          "totalDuration": 86960
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 57245,
+          "testDuration": 7549,
+          "totalDuration": 64827
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 92351,
+          "testDuration": 7699,
+          "totalDuration": 100081
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 67774,
+          "testDuration": 7471,
+          "totalDuration": 75275
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "",
+          "agentDuration": 129651,
+          "testDuration": 7563,
+          "totalDuration": 137246
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 53933,
+          "testDuration": 7533,
+          "totalDuration": 61496
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 101919,
+          "testDuration": 7434,
+          "totalDuration": 109383
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 64573,
+          "testDuration": 7684,
+          "totalDuration": 72289
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 105332,
+          "testDuration": 7711,
+          "totalDuration": 113074
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 72442,
+          "testDuration": 7558,
+          "totalDuration": 80031
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 75120,
+          "testDuration": 7615,
+          "totalDuration": 82765
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 80322,
+          "testDuration": 7542,
+          "totalDuration": 87898
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 85874,
+          "testDuration": 7812,
+          "totalDuration": 93717
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": false,
+          "testSuccess": true,
+          "overallSuccess": false,
+          "agentError": "",
+          "agentDuration": 227465,
+          "testDuration": 7730,
+          "totalDuration": 235227
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 93910,
+          "testDuration": 7633,
+          "totalDuration": 101575
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 109377,
+          "testDuration": 7788,
+          "totalDuration": 117198
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 98829,
+          "testDuration": 11565,
+          "totalDuration": 110426
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 64869,
+          "testDuration": 7608,
+          "totalDuration": 72509
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 104964,
+          "testDuration": 7834,
+          "totalDuration": 112829
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 96241,
+          "testDuration": 7748,
+          "totalDuration": 104021
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 57176,
+          "testDuration": 7861,
+          "totalDuration": 65069
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 109941,
+          "testDuration": 7884,
+          "totalDuration": 117857
         }
       ]
     }
