@@ -40,6 +40,13 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
                 env.ANTHROPIC_BASE_URL = 'https://api.z.ai/api/anthropic';
                 break;
             }
+            case 'openrouter': {
+                const value = requireEnv('OPENROUTER_API_KEY', 'Missing OPENROUTER_API_KEY for Claude (OpenRouter) provider');
+                env.ANTHROPIC_API_KEY = '';
+                env.ANTHROPIC_AUTH_TOKEN = value;
+                env.ANTHROPIC_BASE_URL = process.env.ANTHROPIC_BASE_URL || 'https://openrouter.ai/api';
+                break;
+            }
             default: {
                 const { value } = requireAnyEnv(
                     ['ANTHROPIC_API_KEY', 'DASHSCOPE_API_KEY'],

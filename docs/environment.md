@@ -81,6 +81,21 @@
 
 ---
 
+## Claude (OpenRouter)
+
+- Required env: `OPENROUTER_API_KEY`
+- Optional env: `ANTHROPIC_BASE_URL` (default: `https://openrouter.ai/api`)
+- Claude Code auth token is derived from `OPENROUTER_API_KEY`; `ANTHROPIC_API_KEY` is forced to empty to avoid conflicts.
+
+Example:
+
+```
+export OPENROUTER_API_KEY=sk-or-...
+bun src/index.ts --agent claude --provider openrouter --model <openrouter-model-id> --exercise acronym --docker
+```
+
+---
+
 ## Directories and I/O
 
 - Exercise root: `exercism-typescript` (`EXERCISM_PRACTICE_PATH`)
