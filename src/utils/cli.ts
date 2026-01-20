@@ -9,6 +9,7 @@ Usage:
 
 Basic Options:
   --agent <agent>        Agent to use (claude, goose, aider, codex, copilot, gemini, opencode, qwen, cursor) [default: claude]
+  --dataset <v1|v2>      Dataset to use (v1: Exercism, v2: SWE-Lancer) [default: v1]
   --model <model>        Model to use [default: sonnet]
   --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github) [default: openai]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
@@ -70,6 +71,11 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
     const agent = (agentIndex !== -1 && agentIndex + 1 < process.argv.length
         ? process.argv[agentIndex + 1]!
         : 'claude') as AgentType;
+
+    const datasetIndex = process.argv.indexOf('--dataset');
+    const dataset = (datasetIndex !== -1 && datasetIndex + 1 < process.argv.length
+        ? process.argv[datasetIndex + 1]!
+        : 'v1') as import('../config/types').DatasetType;
 
     const providerIndex = process.argv.indexOf('--provider');
     const provider = (providerIndex !== -1 && providerIndex + 1 < process.argv.length
@@ -178,6 +184,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
     const result: CLIArgs = {
         model,
         agent,
+        dataset,
         provider,
         verbose,
         specificExercise,

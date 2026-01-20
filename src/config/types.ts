@@ -1,4 +1,5 @@
 export type AgentType = 'claude' | 'goose' | 'aider' | 'codex' | 'copilot' | 'gemini' | 'opencode' | 'qwen' | 'cursor' | 'vibe';
+export type DatasetType = 'v1' | 'v2'; // v1 = exercism, v2 = swelancer
 export type ProviderType = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'dashscope' | 'xai' | 'deepseek' | 'github' | 'cerebras' | 'mistral';
 
 export interface AgentResult {
@@ -36,6 +37,7 @@ export interface BenchmarkConfig {
     provider: ProviderType;
     verbose: boolean;
     useDocker?: boolean;
+    dataset?: DatasetType;
     version?: string;
     showProgress?: boolean;
     timeout?: number; // seconds
@@ -51,6 +53,7 @@ export interface CLIArgs {
     exerciseCount: number | null;
     exerciseList?: string[];
     listExercises: boolean;
+    dataset?: DatasetType;
     outputFormat?: 'console' | 'json';
     outputDir?: string;
     exportWeb?: boolean;
