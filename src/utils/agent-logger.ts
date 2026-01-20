@@ -36,8 +36,26 @@ class ClaudeLogCollector implements LogCollector {
         try {
             const claudeProjects = join(homedir(), '.claude', 'projects');
 
-            const absExercisePath = resolve(process.cwd(), exercisePath);
-            const candidateProject = join(claudeProjects, this.toProjectDirName(absExercisePath));
+            let candidateProject: string;
+            if (config.dataset === 'v2' && config.useDocker) {
+                // In V2 (Docker/Monolith), the agent runs in /app
+                // So the project name in logs is derived from /app -> -app
+                candidateProject = join(claudeProjects, '-app');
+            } else {
+                // For V1 OR Local V2
+                const absExercisePath = resolve(process.cwd(), exercisePath);
+                
+                // If it's Local V2, the exercisePath might be handled differently in strategy,
+                // but ExerciseRunner passes the "practice" path which doesn't exist for V2.
+                // We should use the actual CWD used in strategy.
+                let targetPath = absExercisePath;
+                if (config.dataset === 'v2' && !config.useDocker) {
+                    const { SWELANCER_REPO_PATH } = require('../config/constants');
+                    targetPath = resolve(SWELANCER_REPO_PATH.replace(/^~/, homedir()));
+                }
+                
+                candidateProject = join(claudeProjects, this.toProjectDirName(targetPath));
+            }
 
             const pickNewestJsonl = async (dir: string) => {
                 const entries = await readdir(dir);

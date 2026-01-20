@@ -1,3 +1,10 @@
 [submodule "exercism-typescript"]
-	path = exercism-typescript
+	path = repos/exercism-typescript
 	url = https://github.com/laiso/exercism-typescript
+[submodule "data/frontier-evals"]
+	path = repos/frontier-evals
+	url = https://github.com/openai/frontier-evals
+
+[submodule "expensify-app"]
+	path = repos/expensify-app
+	url = https://github.com/Expensify/App

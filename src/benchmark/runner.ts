@@ -1,5 +1,5 @@
 import type { TestResult, BenchmarkConfig, CLIArgs } from '../config/types';
-import { ExerciseReader } from '../exercises/reader';
+import type { DatasetReader } from '../datasets/types';
 import { ExerciseRunner } from '../runners/exercise';
 import { BenchmarkReporter } from './reporter';
 import { LeaderboardGenerator } from '../utils/leaderboard-generator';
@@ -10,24 +10,24 @@ import { sanitizeFilenameSegment } from '../utils/file-name';
 
 export class BenchmarkRunner {
     constructor(
-        private exerciseReader: ExerciseReader,
+        private datasetReader: DatasetReader,
         private exerciseRunner: ExerciseRunner,
         private reporter: BenchmarkReporter
-    ) {}
+    ) { }
 
     async run(args: CLIArgs): Promise<void> {
-        const allExercises = await this.exerciseReader.getExercises();
+        const allExercises = await this.datasetReader.getTasks();
 
         if (args.listExercises) {
             this.printExerciseList(allExercises);
             return;
         }
 
-        console.log("🚀 Starting Exercism TypeScript benchmark");
+        console.log(`🚀 Starting Benchmark (Dataset: ${args.dataset || 'v1'})`);
         console.log(`📋 Solving TypeScript problems with ${args.agent} agent (${args.model} model)\n`);
 
         const useDocker = args.useDocker ?? true;
-        const agentScriptPath = getAgentScriptPath(useDocker);
+        const agentScriptPath = getAgentScriptPath(useDocker, args.dataset);
         let agentVersion = args.version;
         if (!agentVersion) {
             console.log(`🔍 Detecting ${args.agent} version...`);
@@ -45,8 +45,28 @@ export class BenchmarkRunner {
         const exercises = this.selectExercises(args, allExercises);
         const results: TestResult[] = [];
 
+        // Display titles for selected exercises
+        if (exercises.length === 1 && exercises[0]) {
+            const metadata = await this.datasetReader.getTaskMetadata(exercises[0]);
+            if (metadata.title && metadata.title !== exercises[0]) {
+                console.log(`📝 Title: ${metadata.title}\n`);
+            }
+        }
+
+        let testCommand = 'corepack yarn && corepack yarn test';
+        if (args.dataset === 'v2') {
+            if (useDocker) {
+                // Run tests using the provided ansible playbook
+                // We need to set CI=true to avoid interactive prompts if any
+                testCommand = 'export CI=true && ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml';
+            } else {
+                // Native V2: Run Jest on changed files
+                testCommand = `npm rebuild canvas && npm test -- -o`;
+            }
+        }
+
         const config: BenchmarkConfig = {
-            testCommand: 'corepack yarn && corepack yarn test',
+            testCommand,
             agent: args.agent,
             model: args.model,
             provider: args.provider,
@@ -55,7 +75,8 @@ export class BenchmarkRunner {
             version: agentVersion,
             showProgress: args.showProgress,
             timeout: args.timeout,
-            outputDir: args.outputDir
+            outputDir: args.outputDir,
+            dataset: args.dataset
         };
 
         for (const exercise of exercises) {
@@ -102,7 +123,7 @@ export class BenchmarkRunner {
     }
 
     private printExerciseList(exercises: string[]): void {
-        console.log("📋 Available Exercism problems:");
+        console.log("📋 Available Tasks:");
         exercises.forEach((exercise, index) => {
             console.log(`  ${(index + 1).toString().padStart(3)}: ${exercise}`);
         });

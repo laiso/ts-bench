@@ -9,6 +9,7 @@ Usage:
 
 Basic Options:
   --agent <agent>        Agent to use (claude, goose, aider, codex, copilot, gemini, opencode, qwen, cursor, kimi) [default: claude]
+  --dataset <v1|v2>      Dataset to use (v1: Exercism, v2: SWE-Lancer) [default: v1]
   --model <model>        Model to use [default: sonnet]
   --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, moonshot) [default: openai; kimi defaults to moonshot]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
@@ -22,7 +23,7 @@ Exercise Selection:
   --exercism-path <path> Path to exercism practice directory [default: exercism/typescript]
 
 Execution Options:
-  --docker               Use Docker containers for agent execution [default: local execution]
+  --docker               Use Docker containers for agent execution [default: local execution; v2 defaults to Docker]
   --show-progress        Show real-time progress during agent execution
   --test-only            Run tests only on current code (skip agent execution)
   --print-instructions   Print instructions that would be sent to the agent (dry run)
@@ -72,6 +73,11 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         ? process.argv[agentIndex + 1]!
         : 'claude') as AgentType;
 
+    const datasetIndex = process.argv.indexOf('--dataset');
+    const dataset = (datasetIndex !== -1 && datasetIndex + 1 < process.argv.length
+        ? process.argv[datasetIndex + 1]!
+        : 'v1') as import('../config/types').DatasetType;
+
     const providerIndex = process.argv.indexOf('--provider');
     const provider = (providerIndex !== -1 && providerIndex + 1 < process.argv.length
         ? process.argv[providerIndex + 1]!
@@ -110,7 +116,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         ? process.argv[exercismPathIndex + 1]!
         : undefined;
 
-    const useDocker = process.argv.includes('--docker');
+    const useDocker = process.argv.includes('--docker') || dataset === 'v2';
     const showProgress = process.argv.includes('--show-progress');
     const testOnly = process.argv.includes('--test-only');
     const printInstructions = process.argv.includes('--print-instructions');
@@ -179,6 +185,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
     const result: CLIArgs = {
         model,
         agent,
+        dataset,
         provider,
         verbose,
         specificExercise,
