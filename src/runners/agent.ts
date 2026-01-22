@@ -1,19 +1,19 @@
 import type { AgentResult, BenchmarkConfig } from '../config/types';
 import { AgentFactory } from '../agents/factory';
 import { AgentLoggerFactory } from '../utils/agent-logger';
-import { ExerciseReader } from '../exercises/reader';
+import { getAgentScriptPath } from '../config/paths';
+import type { DatasetReader } from '../datasets/types';
 import type { CommandExecutor } from '../utils/shell';
 import type { Logger } from '../utils/logger';
 import { ProgressMonitor } from '../utils/progress-monitor';
 import { join } from 'path';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
 import { DockerExecutionStrategy } from '../execution/docker-strategy';
-import { getAgentScriptPath } from '../config/paths';
 
 export class AgentRunner {
     constructor(
         private executor: CommandExecutor,
-        private exerciseReader: ExerciseReader,
+        private datasetReader: DatasetReader,
         private logger: Logger,
         private containerName: string,
         private baseInstruction: string,
@@ -34,16 +34,37 @@ export class AgentRunner {
         }
 
         try {
-            const agentScriptPath = getAgentScriptPath(useDocker);
+            const agentScriptPath = getAgentScriptPath(useDocker, config.dataset);
             const agentBuilder = AgentFactory.create(config, this.containerName, agentScriptPath);
-            const instructions = await this.exerciseReader.getInstructions(exercise, this.baseInstruction, this.customInstruction);
-            const fileList = await this.exerciseReader.getFileList(exercise);
+            const instructions = await this.datasetReader.getInstructions(exercise, this.baseInstruction, this.customInstruction);
+            const fileList = await this.datasetReader.getTaskFiles(exercise);
             const coreCommand = await agentBuilder.buildCommand(instructions, fileList);
+
+            const metadata = await this.datasetReader.getTaskMetadata(exercise);
+
+            let generatePatchPath: string | undefined;
+            if (config.dataset === 'v2') {
+                const patchDir = join(process.cwd(), '.patches');
+                await import('fs/promises').then(fs => fs.mkdir(patchDir, { recursive: true }));
+                
+                if (useDocker) {
+                    generatePatchPath = `/patches/${exercise}.patch`;
+                } else {
+                    generatePatchPath = join(patchDir, `${exercise}.patch`);
+                }
+            }
 
             const strategy = useDocker
                 ? new DockerExecutionStrategy(this.containerName)
                 : new LocalExecutionStrategy();
-            const prepared = strategy.prepare(coreCommand, { exercisePath, testFiles: fileList.testFiles });
+            
+            const prepared = strategy.prepare(coreCommand, { 
+                exercisePath, 
+                testFiles: fileList.testFiles,
+                datasetType: config.dataset,
+                commitId: metadata.commitId,
+                generatePatchPath
+            });
 
             if (config.verbose) {
                 this.logger.logAgentCommand(prepared.command);
@@ -91,8 +112,6 @@ export class AgentRunner {
     }
 
     async getTestFiles(exercise: string): Promise<string[]> {
-        return await this.exerciseReader.getTestFiles(exercise);
+        return await this.datasetReader.getTestFiles(exercise);
     }
-
-    
 }

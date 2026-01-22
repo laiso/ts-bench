@@ -48,11 +48,12 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
                 break;
             }
             default: {
-                const { value } = requireAnyEnv(
-                    ['ANTHROPIC_API_KEY', 'DASHSCOPE_API_KEY'],
-                    'Missing ANTHROPIC_API_KEY or DASHSCOPE_API_KEY for Claude'
-                );
-                env.ANTHROPIC_API_KEY = value;
+                // API key is optional - Claude Code CLI may use OAuth or other auth
+                const apiKey = process.env.ANTHROPIC_API_KEY || process.env.DASHSCOPE_API_KEY;
+                if (apiKey) {
+                    env.ANTHROPIC_API_KEY = apiKey;
+                }
+                // If no API key, Claude Code CLI will use its own authentication
             }
         }
 
