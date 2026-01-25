@@ -102,7 +102,14 @@ async function runTestOnlyMode(
     datasetReader: DatasetReader,
     testOnlyRunner: TestOnlyRunner
 ): Promise<void> {
-    const testCommand = args.dataset === 'v2' ? 'npm test' : 'corepack yarn && corepack yarn test';
+    let testCommand = 'corepack yarn && corepack yarn test';
+    if (args.dataset === 'v2') {
+        if (args.useDocker) {
+            testCommand = 'export CI=true && /app/tests/run.sh & for i in {1..120}; do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml';
+        } else {
+            testCommand = 'npm rebuild canvas && npm test -- -o';
+        }
+    }
     const config = {
         testCommand,
         agent: args.agent,

@@ -33,6 +33,7 @@ export class TestRunner {
             const prepared = strategy.prepare(coreCommand, { 
                 exercisePath,
                 datasetType: context?.datasetType,
+                issueId: context?.datasetType === 'v2' ? exercise : undefined,
                 commitId: context?.commitId,
                 applyPatchPath: context?.applyPatchPath
             });

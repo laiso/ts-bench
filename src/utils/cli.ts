@@ -23,7 +23,7 @@ Exercise Selection:
   --exercism-path <path> Path to exercism practice directory [default: exercism/typescript]
 
 Execution Options:
-  --docker               Use Docker containers for agent execution [default: local execution]
+  --docker               Use Docker containers for agent execution [default: local execution, v2 defaults to Docker]
   --show-progress        Show real-time progress during agent execution
   --test-only            Run tests only on current code (skip agent execution)
   --print-instructions   Print instructions that would be sent to the agent (dry run)
@@ -115,7 +115,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         ? process.argv[exercismPathIndex + 1]!
         : undefined;
 
-    const useDocker = process.argv.includes('--docker');
+    const useDocker = process.argv.includes('--docker') || dataset === 'v2';
     const showProgress = process.argv.includes('--show-progress');
     const testOnly = process.argv.includes('--test-only');
     const printInstructions = process.argv.includes('--print-instructions');
