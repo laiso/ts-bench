@@ -52,7 +52,7 @@ async function main(): Promise<void> {
             exercismPath
         );
 
-        await runTestOnlyMode(args, exerciseReader, testOnlyRunner);
+        await runTestOnlyMode(args, datasetReader, testOnlyRunner);
     } else if (args.printInstructions) {
         // Print instructions mode: show instructions that would be sent to agent
         await runPrintInstructionsMode(args, datasetReader);
@@ -99,10 +99,10 @@ async function main(): Promise<void> {
 
 async function runTestOnlyMode(
     args: CLIArgs,
-    exerciseReader: ExerciseReader,
+    datasetReader: DatasetReader,
     testOnlyRunner: TestOnlyRunner
 ): Promise<void> {
-    const testCommand = 'corepack yarn && corepack yarn test';
+    const testCommand = args.dataset === 'v2' ? 'npm test' : 'corepack yarn && corepack yarn test';
     const config = {
         testCommand,
         agent: args.agent,
@@ -120,17 +120,18 @@ async function runTestOnlyMode(
     } else if (args.exerciseList) {
         exercises = args.exerciseList;
     } else if (args.exerciseCount) {
-        const allExercises = await exerciseReader.getExercises();
+        const allExercises = await datasetReader.getTasks();
         exercises = allExercises.slice(0, args.exerciseCount);
     } else {
-        exercises = await exerciseReader.getExercises();
+        exercises = await datasetReader.getTasks();
     }
 
     const results: TestOnlyResult[] = [];
     let totalPassed = 0;
 
     for (const exercise of exercises) {
-        const result = await testOnlyRunner.run(config, exercise);
+        const metadata = args.dataset === 'v2' ? await datasetReader.getTaskMetadata(exercise) : {};
+        const result = await testOnlyRunner.run(config, exercise, args.dataset, metadata.commitId);
         results.push(result);
         if (result.testSuccess) {
             totalPassed++;
