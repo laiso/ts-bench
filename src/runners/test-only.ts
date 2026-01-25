@@ -1,7 +1,8 @@
-import type { TestOnlyResult, BenchmarkConfig } from '../config/types';
+import type { TestOnlyResult, BenchmarkConfig, DatasetType } from '../config/types';
 import type { CommandExecutor } from '../utils/shell';
 import type { Logger } from '../utils/logger';
 import { join } from 'path';
+import { LocalExecutionStrategy } from '../execution/local-strategy';
 
 export class TestOnlyRunner {
     constructor(
@@ -10,21 +11,33 @@ export class TestOnlyRunner {
         private exerciseBasePath: string
     ) {}
 
-    async run(config: BenchmarkConfig, exercise: string): Promise<TestOnlyResult> {
+    async run(config: BenchmarkConfig, exercise: string, datasetType: DatasetType = 'v1', commitId?: string): Promise<TestOnlyResult> {
         const startTime = Date.now();
-        const exercisePath = join(this.exerciseBasePath, 'exercises', 'practice', exercise);
+        const exercisePath = datasetType === 'v2' 
+            ? '' 
+            : join(this.exerciseBasePath, 'exercises', 'practice', exercise);
 
         this.logger.logExerciseStart(exercise);
 
         try {
-            const testArgs = ["sh", "-c", config.testCommand];
+            const strategy = new LocalExecutionStrategy();
+            const coreCommand = {
+                args: ['bash', '-c', config.testCommand],
+                env: {}
+            };
+
+            const prepared = strategy.prepare(coreCommand, { 
+                exercisePath,
+                datasetType,
+                commitId
+            });
+
             if (config.verbose) {
-                this.logger.logTestCommand(testArgs);
+                this.logger.logTestCommand(prepared.command);
             }
 
-            const useDocker = config.useDocker ?? true;
-            const execOptions = { cwd: join(process.cwd(), exercisePath), timeout: config.timeout };
-            const result = await this.executor.execute(testArgs, execOptions);
+            const execOptions = { ...prepared.options, timeout: config.timeout };
+            const result = await this.executor.execute(prepared.command, execOptions);
             const duration = Date.now() - startTime;
 
             if (result.exitCode === 0) {
