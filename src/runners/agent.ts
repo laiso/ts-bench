@@ -62,6 +62,7 @@ export class AgentRunner {
                 exercisePath, 
                 testFiles: fileList.testFiles,
                 datasetType: config.dataset,
+                issueId: config.dataset === 'v2' ? exercise : undefined,
                 commitId: metadata.commitId,
                 generatePatchPath
             });

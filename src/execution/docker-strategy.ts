@@ -1,5 +1,6 @@
 import { DOCKER_BASE_ARGS, createCliCacheArgs, createEnvironmentArgs, createWorkspaceArgs } from '../utils/docker';
 import type { ExecutionStrategy, Command, PrepareContext, PreparedCommand } from './types';
+import { SWELANCER_ISSUES_PATH } from '../config/constants';
 import { join } from 'path';
 
 export class DockerExecutionStrategy implements ExecutionStrategy {
@@ -16,9 +17,10 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
       // Mount patches directory for write access
       const patchesMount = ['-v', `${join(process.cwd(), '.patches')}:/patches`];
+      const issuesMount = ['-v', `${join(process.cwd(), SWELANCER_ISSUES_PATH)}:/app/tests/issues:ro`];
 
-      // Extract ISSUE_ID from exercise path (basename)
-      const issueId = require('path').basename(ctx.exercisePath);
+      // Extract ISSUE_ID from context (fallback to exercise path basename)
+      const issueId = ctx.issueId ?? require('path').basename(ctx.exercisePath);
 
       // Use setup_expensify.yml for setup. This handles git checkout, dependencies, etc.
       // We explicitly set ISSUE_ID env var for the command
@@ -42,6 +44,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         ...hostMount,
         ...claudeMount,
         ...patchesMount,
+        ...issuesMount,
         "-w", "/app/expensify",
         this.containerName,
         "bash", "-c",

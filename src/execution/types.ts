@@ -8,6 +8,7 @@ export interface PrepareContext {
   // Optionally pass test files for read-only mounts in Docker
   testFiles?: string[];
   datasetType?: 'v1' | 'v2';
+  issueId?: string;
   commitId?: string;
   generatePatchPath?: string;
   applyPatchPath?: string;
@@ -21,4 +22,3 @@ export interface PreparedCommand {
 export interface ExecutionStrategy {
   prepare(core: Command, ctx: PrepareContext): PreparedCommand;
 }
-

@@ -3,6 +3,8 @@ import type { CommandExecutor } from '../utils/shell';
 import type { Logger } from '../utils/logger';
 import { join } from 'path';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
+import { DockerExecutionStrategy } from '../execution/docker-strategy';
+import { SWELANCER_IMAGE, TS_BENCH_CONTAINER } from '../config/constants';
 
 export class TestOnlyRunner {
     constructor(
@@ -20,7 +22,10 @@ export class TestOnlyRunner {
         this.logger.logExerciseStart(exercise);
 
         try {
-            const strategy = new LocalExecutionStrategy();
+            const containerName = datasetType === 'v2' ? SWELANCER_IMAGE : TS_BENCH_CONTAINER;
+            const strategy = config.useDocker
+                ? new DockerExecutionStrategy(containerName)
+                : new LocalExecutionStrategy();
             const coreCommand = {
                 args: ['bash', '-c', config.testCommand],
                 env: {}
@@ -29,6 +34,7 @@ export class TestOnlyRunner {
             const prepared = strategy.prepare(coreCommand, { 
                 exercisePath,
                 datasetType,
+                issueId: datasetType === 'v2' ? exercise : undefined,
                 commitId
             });
 

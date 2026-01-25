@@ -58,7 +58,7 @@ export class BenchmarkRunner {
             if (useDocker) {
                 // Run tests using the provided ansible playbook
                 // We need to set CI=true to avoid interactive prompts if any
-                testCommand = 'export CI=true && ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml';
+                testCommand = 'export CI=true && /app/tests/run.sh & for i in {1..120}; do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml';
             } else {
                 // Native V2: Run Jest on changed files
                 testCommand = `npm rebuild canvas && npm test -- -o`;
