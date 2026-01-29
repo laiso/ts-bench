@@ -23,7 +23,11 @@ export class TestOnlyRunner {
             }
 
             const useDocker = config.useDocker ?? true;
-            const execOptions = { cwd: join(process.cwd(), exercisePath), timeout: config.timeout };
+            const execOptions = {
+                cwd: join(process.cwd(), exercisePath),
+                timeout: config.timeout,
+                env: { ...process.env, ASSIGNMENT: exercise }
+            };
             const result = await this.executor.execute(testArgs, execOptions);
             const duration = Date.now() - startTime;
 
