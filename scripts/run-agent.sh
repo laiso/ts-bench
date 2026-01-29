@@ -71,6 +71,20 @@ case "$AGENT" in
     ensure_node_cli "copilot" "@github/copilot"
     exec copilot "$@"
     ;;
+  kimi)
+    if command -v "kimi" >/dev/null 2>&1; then
+      exec kimi "$@"
+    fi
+
+    if command -v "uv" >/dev/null 2>&1; then
+      uv tool install --python 3.13 kimi-cli
+      exec kimi "$@"
+    fi
+
+    echo "[run-agent] Installing Kimi CLI via official installer" >&2
+    curl -LsSf https://code.kimi.com/install.sh | bash
+    exec kimi "$@"
+    ;;
   vibe)
     if ! command -v "vibe" >/dev/null 2>&1; then
       echo "[run-agent] Installing mistral-vibe" >&2

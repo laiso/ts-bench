@@ -5,6 +5,7 @@ import { GeminiAgentBuilder } from '../gemini';
 import { GooseAgentBuilder } from '../goose';
 import { CursorAgentBuilder } from '../cursor';
 import { CopilotAgentBuilder } from '../copilot';
+import { KimiAgentBuilder } from '../kimi';
 import type { AgentBuilder } from '../../types';
 
 const SCRIPT_PATH = '/tmp/scripts/run-agent.sh';
@@ -80,6 +81,33 @@ describe('Agent builders invoke run-agent script', () => {
                 expect(command.args).toContain('-p');
                 expect(command.env?.COPILOT_ALLOW_ALL).toBe('1');
                 expect(command.env?.COPILOT_MODEL).toBe('test-model');
+            }
+        },
+        {
+            cli: 'kimi',
+            builder: new KimiAgentBuilder(BASE_CONFIG),
+            env: [['KIMI_API_KEY', 'test-kimi-key'] as const],
+            assertCommand: (command) => {
+                assertRunAgent(command, 'kimi');
+                expect(command.args).toContain('--print');
+                expect(command.args).toContain('--output-format');
+                expect(command.args).toContain('text');
+                expect(command.args).toContain('--model');
+                expect(command.args).toContain('test-model');
+                expect(command.args).toContain('-p');
+
+                const configIndex = command.args.indexOf('--config');
+                expect(configIndex).toBeGreaterThan(-1);
+                const configArg = command.args[configIndex + 1];
+                expect(configArg).toBeDefined();
+
+                const parsed = JSON.parse(configArg as string);
+                expect(parsed.default_model).toBe('test-model');
+                expect(parsed.providers.moonshot.type).toBe('kimi');
+                expect(parsed.providers.moonshot.base_url).toBe('https://api.moonshot.ai/v1');
+                expect(parsed.models['test-model'].provider).toBe('moonshot');
+                expect(parsed.models['test-model'].model).toBe('test-model');
+                expect(parsed.models['test-model'].max_context_size).toBe(262144);
             }
         }
     ] as const;

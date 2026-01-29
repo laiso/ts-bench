@@ -10,6 +10,7 @@ import { QwenAgentBuilder } from './builders/qwen';
 import { CursorAgentBuilder } from './builders/cursor';
 import { CopilotAgentBuilder } from './builders/copilot';
 import { VibeAgentBuilder } from './builders/vibe';
+import { KimiAgentBuilder } from './builders/kimi';
 
 export class AgentFactory {
     static create(config: BenchmarkConfig, containerName: string, agentScriptPath: string): AgentBuilder {
@@ -41,6 +42,8 @@ export class AgentFactory {
                 return new CursorAgentBuilder(agentConfig);
             case 'vibe':
                 return new VibeAgentBuilder(agentConfig);
+            case 'kimi':
+                return new KimiAgentBuilder(agentConfig);
             default:
                 throw new Error(`Unknown agent: ${config.agent}`);
         }

@@ -69,9 +69,9 @@
 
 ## Main CLI Options
 
-- `--agent <agent>`: Agent to use (claude/goose/aider/codex/gemini/opencode/qwen/cursor)
+- `--agent <agent>`: Agent to use (claude/goose/aider/codex/gemini/opencode/qwen/cursor/kimi)
 - `--model <model>`: Model to use
-- `--provider <provider>`: openai/anthropic/google/openrouter/dashscope/xai/deepseek
+- `--provider <provider>`: openai/anthropic/google/openrouter/dashscope/xai/deepseek/moonshot
 - `--docker`: Switch to Docker execution
 - `--exercise <name|N|a,b,c>`: Specify exercise (name / first N / multiple)
 - `--exercism-path <path>`: Exercism root (default: `exercism-typescript`)
@@ -92,6 +92,21 @@ Example:
 ```
 export OPENROUTER_API_KEY=sk-or-...
 bun src/index.ts --agent claude --provider openrouter --model <openrouter-model-id> --exercise acronym --docker
+```
+
+---
+
+## Kimi (Moonshot)
+
+- Required env: `KIMI_API_KEY`
+- Optional env: `KIMI_BASE_URL` (default: `https://api.moonshot.ai/v1`)
+- Default provider for `--agent kimi` is `moonshot`
+
+Example:
+
+```
+export KIMI_API_KEY=sk-...
+bun src/index.ts --agent kimi --provider moonshot --model kimi-k2.5 --exercise acronym --docker
 ```
 
 ---

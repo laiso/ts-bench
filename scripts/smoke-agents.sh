@@ -14,6 +14,7 @@ AGENTS=(
   aider
   goose
   cursor-agent
+  kimi
 )
 
 for agent in "${AGENTS[@]}"; do
