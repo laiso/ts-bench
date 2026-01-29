@@ -1,11 +1,48 @@
-import { readdir, readFile } from 'fs/promises';
+import { readdir, readFile, stat } from 'fs/promises';
 import { join } from 'path';
 
 export class ExerciseReader {
+    private resolvedBasePath?: string;
+
     constructor(private basePath: string) {}
 
+    private async pathExists(path: string): Promise<boolean> {
+        try {
+            await stat(path);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    private async resolveBasePath(): Promise<string> {
+        if (this.resolvedBasePath) {
+            return this.resolvedBasePath;
+        }
+
+        const defaultPath = join(process.cwd(), this.basePath);
+        const defaultEnvFile = join(defaultPath, 'CLAUDE.md');
+        if (await this.pathExists(defaultEnvFile)) {
+            this.resolvedBasePath = defaultPath;
+            return defaultPath;
+        }
+
+        if (this.basePath === 'exercism-typescript') {
+            const fallback = join(process.cwd(), 'repos', 'exercism-typescript');
+            const fallbackEnvFile = join(fallback, 'CLAUDE.md');
+            if (await this.pathExists(fallbackEnvFile)) {
+                this.resolvedBasePath = fallback;
+                return fallback;
+            }
+        }
+
+        this.resolvedBasePath = defaultPath;
+        return defaultPath;
+    }
+
     async getExercises(): Promise<string[]> {
-        const practiceDir = join(process.cwd(), this.basePath, 'exercises', 'practice');
+        const basePath = await this.resolveBasePath();
+        const practiceDir = join(basePath, 'exercises', 'practice');
         const entries = await readdir(practiceDir, { withFileTypes: true });
         
         return entries
@@ -16,7 +53,8 @@ export class ExerciseReader {
 
     async getTestFiles(exerciseName: string): Promise<string[]> {
         try {
-            const exerciseDir = join(process.cwd(), this.basePath, 'exercises', 'practice', exerciseName);
+            const basePath = await this.resolveBasePath();
+            const exerciseDir = join(basePath, 'exercises', 'practice', exerciseName);
             const entries = await readdir(exerciseDir);
             
             // Generic test file patterns
@@ -42,7 +80,8 @@ export class ExerciseReader {
 
     async getSourceFiles(exerciseName: string): Promise<string[]> {
         try {
-            const exerciseDir = join(process.cwd(), this.basePath, 'exercises', 'practice', exerciseName);
+            const basePath = await this.resolveBasePath();
+            const exerciseDir = join(basePath, 'exercises', 'practice', exerciseName);
             const entries = await readdir(exerciseDir);
             
             // Implementation file patterns (TypeScript focused)
@@ -82,8 +121,9 @@ export class ExerciseReader {
 
     async getInstructions(exerciseName: string, baseInstruction: string, customInstruction?: string): Promise<string> {
         try {
-            const environment = await readFile(join(process.cwd(), this.basePath, "CLAUDE.md"), "utf-8");
-            const instructionsPath = join(process.cwd(), this.basePath, 'exercises', 'practice', exerciseName, '.docs', 'instructions.md');
+            const basePath = await this.resolveBasePath();
+            const environment = await readFile(join(basePath, "CLAUDE.md"), "utf-8");
+            const instructionsPath = join(basePath, 'exercises', 'practice', exerciseName, '.docs', 'instructions.md');
             const exerciseInstructions = await readFile(instructionsPath, 'utf-8');
             
             let fullInstructions = `${baseInstruction}\n\n${exerciseInstructions}\n\n${environment}`;

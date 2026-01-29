@@ -35,6 +35,10 @@ export class OpenCodeAgentBuilder extends BaseAgentBuilder implements AgentBuild
                 return {
                     OPENROUTER_API_KEY: requireEnv('OPENROUTER_API_KEY', 'Missing OPENROUTER_API_KEY for OpenCode (OpenRouter) provider')
                 };
+            case 'moonshot':
+                return {
+                    MOONSHOT_API_KEY: requireEnv('MOONSHOT_API_KEY', 'Missing MOONSHOT_API_KEY for OpenCode (Moonshot) provider')
+                };
             case 'dashscope':
                 return {
                     DASHSCOPE_API_KEY: requireEnv('DASHSCOPE_API_KEY', 'Missing DASHSCOPE_API_KEY for OpenCode (DashScope) provider')

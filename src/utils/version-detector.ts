@@ -90,6 +90,8 @@ export class VersionDetector {
             case 'vibe':
                 // vibe doesn't support --version flag, use --help and parse or return default
                 return ['vibe', '--help'];
+            case 'kimi':
+                return ['kimi', '--version'];
             default:
                 throw new Error(`Unknown agent: ${agent}`);
         }
@@ -142,6 +144,8 @@ export class VersionDetector {
                 return this.extractGenericVersion(cleanOutput) || '0.1.0';
             case 'cursor':
                 // Cursor Agent output: generic semver or text containing version
+                return this.extractGenericVersion(cleanOutput);
+            case 'kimi':
                 return this.extractGenericVersion(cleanOutput);
             
             default:

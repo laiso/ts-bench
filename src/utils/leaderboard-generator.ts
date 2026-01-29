@@ -309,6 +309,7 @@ export class LeaderboardGenerator {
             case 'qwen': return 'Qwen Code';
             case 'cursor': return 'Cursor Agent';
             case 'copilot': return 'GitHub Copilot CLI';
+            case 'kimi': return 'Kimi Code CLI';
             default: return agent.charAt(0).toUpperCase() + agent.slice(1).toLowerCase();
         }
     }
@@ -320,6 +321,7 @@ export class LeaderboardGenerator {
             case 'google': return 'Google';
             case 'openrouter': return 'OpenRouter';
             case 'github': return 'GitHub';
+            case 'moonshot': return 'Moonshot';
             default: return provider.charAt(0).toUpperCase() + provider.slice(1).toLowerCase();
         }
     }

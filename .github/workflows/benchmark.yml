@@ -19,6 +19,7 @@ on:
           - cursor
           - copilot
           - vibe
+          - kimi
       provider:
         description: Provider (openai, anthropic, google, openrouter, etc.)
         required: true
@@ -134,6 +135,10 @@ jobs:
             vibe)
               pip install mistral-vibe
               ;;
+            kimi)
+              curl -LsSf https://code.kimi.com/install.sh | bash
+              echo "PATH=$HOME/.local/bin:$PATH" >> "$GITHUB_ENV"
+              ;;
             *)
               echo "No installer defined for agent: $agent" >&2
               ;;
@@ -191,6 +196,7 @@ jobs:
             cursor)   cmd=cursor-agent ;;
             copilot)  cmd="copilot --version" ;;
             vibe)     cmd=vibe ;;
+            kimi)     cmd="kimi --version" ;;
             *)        cmd="" ;;
           esac
 
@@ -228,6 +234,7 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           CUSTOM_INSTRUCTION: ${{ github.event.inputs.custom_instruction }}
           MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
+          KIMI_API_KEY: ${{ secrets.KIMI_API_KEY }}
           ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
         run: |

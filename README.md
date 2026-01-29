@@ -51,6 +51,7 @@ Currently supported agents:
 * [Goose CLI](https://block.github.io/goose/)
 * [Qwen Code](https://qwenlm.github.io/qwen-code-docs/)
 * [Aider](https://aider.chat/)
+* [Kimi Code CLI](https://www.kimi.com/code/)
 
 ## 📖 Vision & Principles
 
