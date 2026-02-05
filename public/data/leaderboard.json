@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-30T04:27:28.647Z",
+  "lastUpdated": "2026-02-05T09:28:26.708Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -4706,6 +4706,261 @@
           "agentDuration": 153889,
           "testDuration": 7095,
           "totalDuration": 160991
+        }
+      ]
+    },
+    "qwen-qwen/qwen3-coder-next": {
+      "metadata": {
+        "agent": "qwen",
+        "model": "qwen/qwen3-coder-next",
+        "provider": "openrouter",
+        "version": "0.9.1",
+        "timestamp": "2026-02-05T09:24:55.730Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.1.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/21704925437",
+        "runId": "21704925437",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 92,
+        "totalDuration": 2037801,
+        "avgDuration": 81512,
+        "successCount": 23,
+        "totalCount": 25,
+        "agentSuccessCount": 24,
+        "testSuccessCount": 23,
+        "testFailedCount": 2
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 54131,
+          "testDuration": 7286,
+          "totalDuration": 61563
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 35723,
+          "testDuration": 7539,
+          "totalDuration": 43270
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 22839,
+          "testDuration": 7331,
+          "totalDuration": 30178
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 21708,
+          "testDuration": 7318,
+          "totalDuration": 29034
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 46225,
+          "testDuration": 7427,
+          "totalDuration": 53660
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 39494,
+          "testDuration": 7836,
+          "totalDuration": 47338
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 43497,
+          "testDuration": 7630,
+          "totalDuration": 51135
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 50886,
+          "testDuration": 7674,
+          "totalDuration": 58568
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 19430,
+          "testDuration": 7527,
+          "totalDuration": 26965
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 21067,
+          "testDuration": 7506,
+          "totalDuration": 28582
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 25659,
+          "testDuration": 7758,
+          "totalDuration": 33425
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 33275,
+          "testDuration": 7766,
+          "totalDuration": 41050
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 22411,
+          "testDuration": 7806,
+          "totalDuration": 30226
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 49240,
+          "testDuration": 7508,
+          "totalDuration": 56757
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 20695,
+          "testDuration": 7489,
+          "totalDuration": 28192
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 37261,
+          "testDuration": 7674,
+          "totalDuration": 44944
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": false,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "agentError": "Execution timed out after 300 seconds",
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-react\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp31db9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+          "agentDuration": 1024160,
+          "testDuration": 7885,
+          "totalDuration": 1032053
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 33264,
+          "testDuration": 7544,
+          "totalDuration": 40816
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 22792,
+          "testDuration": 7685,
+          "totalDuration": 30485
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 54748,
+          "testDuration": 27862,
+          "totalDuration": 82618
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 27213,
+          "testDuration": 7424,
+          "totalDuration": 34645
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 33065,
+          "testDuration": 7501,
+          "totalDuration": 40574
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 33672,
+          "testDuration": 7640,
+          "totalDuration": 41320
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 20357,
+          "testDuration": 7626,
+          "totalDuration": 27991
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-wordy\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp666b9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nwordy.ts(33,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.\n  Type 'undefined' is not assignable to type 'number'.\nwordy.ts(65,18): error TS18048: 'result' is possibly 'undefined'.\nwordy.ts(67,18): error TS18048: 'result' is possibly 'undefined'.\nwordy.ts(69,18): error TS18048: 'result' is possibly 'undefined'.\nwordy.ts(71,18): error TS18048: 'result' is possibly 'undefined'.\nwordy.ts(86,3): error TS2322: Type 'number | undefined' is not assignable to type 'number'.\n  Type 'undefined' is not assignable to type 'number'.\n\nSTDERR: ",
+          "agentDuration": 37767,
+          "testDuration": 4637,
+          "totalDuration": 42412
         }
       ]
     }
