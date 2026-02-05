@@ -10,14 +10,17 @@
 | 1 | opencode | openai/gpt-5 | **96.0%** | 24/25 | 64.8s | [#415419](https://github.com/yukukotani/ts-bench/actions/runs/17366415419) |
 | 2 | kimi | kimi-k2.5 | **96.0%** | 24/25 | 78.7s | [#628525](https://github.com/laiso/ts-bench/actions/runs/21475628525) |
 | 3 | gemini | gemini-3-pro-preview | **96.0%** | 24/25 | 188.1s | [#914072](https://github.com/laiso/ts-bench/actions/runs/19484914072) |
-| 4 | gemini | gemini-3-flash-preview | **92.0%** | 23/25 | 99.7s | [#081278](https://github.com/laiso/ts-bench/actions/runs/20326081278) |
-| 5 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
-| 6 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
-| 7 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
-| 8 | codex | gpt-5.2 | **92.0%** | 23/25 | 140.4s | [#260672](https://github.com/laiso/ts-bench/actions/runs/20157260672) |
-| 9 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
-| 10 | codex | gpt-5 | **88.0%** | 22/25 | 91.7s | [#734992](https://github.com/laiso/ts-bench/actions/runs/17344734992) |
+| 4 | qwen | qwen/qwen3-coder-next | **92.0%** | 23/25 | 81.5s | [#925437](https://github.com/laiso/ts-bench/actions/runs/21704925437) |
+| 5 | gemini | gemini-3-flash-preview | **92.0%** | 23/25 | 99.7s | [#081278](https://github.com/laiso/ts-bench/actions/runs/20326081278) |
+| 6 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
+| 7 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
+| 8 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
+| 9 | codex | gpt-5.2 | **92.0%** | 23/25 | 140.4s | [#260672](https://github.com/laiso/ts-bench/actions/runs/20157260672) |
+| 10 | gemini | gemini-2.5-pro | **92.0%** | 23/25 | 168.5s | [#052819](https://github.com/laiso/ts-bench/actions/runs/17351052819) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 
