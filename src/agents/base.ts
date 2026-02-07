@@ -1,8 +1,8 @@
 import type { Command } from '../execution/types';
-import type { FileList } from './types';
+import type { FileList, AgentConfig } from './types';
 
 export abstract class BaseAgentBuilder {
-  constructor(protected config: { containerName: string; model: string; provider?: string; agentScriptPath: string }) {}
+  constructor(protected config: AgentConfig) {}
 
   async buildCommand(instructions: string, fileList?: FileList): Promise<Command> {
     return {

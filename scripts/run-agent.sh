@@ -15,8 +15,6 @@ fi
 
 CLI_PREFIX=${RUN_AGENT_CLI_PREFIX:-$DEFAULT_PREFIX}
 export PATH="${CLI_PREFIX}/bin:${PATH}"
-export npm_config_prefix="${CLI_PREFIX}"
-export NPM_CONFIG_PREFIX="${CLI_PREFIX}"
 
 AGENT=${1:-}
 if [[ -z "$AGENT" ]]; then
@@ -38,6 +36,10 @@ fi
 # Try to load nvm if available (common in swelancer images)
 export NVM_DIR="/root/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Set npm prefix after nvm is loaded to avoid nvm prefix guardrails
+export npm_config_prefix="${CLI_PREFIX}"
+export NPM_CONFIG_PREFIX="${CLI_PREFIX}"
 
 ensure_node_cli() {
   local bin_name="$1"

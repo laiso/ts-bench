@@ -1,4 +1,4 @@
-import { DOCKER_BASE_ARGS, createCliCacheArgs, createEnvironmentArgs, createWorkspaceArgs } from '../utils/docker';
+import { DOCKER_BASE_ARGS, createCliCacheArgs, createEnvironmentArgs, createNpmCacheArgs, createWorkspaceArgs, NPM_CACHE_CONTAINER_PATH } from '../utils/docker';
 import type { ExecutionStrategy, Command, PrepareContext, PreparedCommand } from './types';
 import { SWELANCER_ISSUES_PATH } from '../config/constants';
 import { join } from 'path';
@@ -18,6 +18,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       // Mount patches directory for write access
       const patchesMount = ['-v', `${join(process.cwd(), '.patches')}:/patches`];
       const issuesMount = ['-v', `${join(process.cwd(), SWELANCER_ISSUES_PATH)}:/app/tests/issues:ro`];
+      const npmCacheMount = createNpmCacheArgs();
 
       // Extract ISSUE_ID from context (fallback to exercise path basename)
       const issueId = ctx.issueId ?? require('path').basename(ctx.exercisePath);
@@ -25,8 +26,10 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       // Use setup_expensify.yml for setup. This handles git checkout, dependencies, etc.
       // We explicitly set ISSUE_ID env var for the command
       // Set CI=true and NPM_CONFIG_YES=true to prevent interactive prompts during build
-      const setupCmd = `export ISSUE_ID=${issueId} && export CI=true && export NPM_CONFIG_YES=true && ansible-playbook -i "localhost," --connection=local /app/tests/setup_expensify.yml && source /root/.nvm/nvm.sh && `;
-      const patchCmd = ctx.applyPatchPath ? `git apply ${ctx.applyPatchPath} && ` : '';
+      const setupCmd = `export ISSUE_ID=${issueId} && export CI=true && export NPM_CONFIG_YES=true && sed 's|source /root/.nvm/nvm.sh|unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX; source /root/.nvm/nvm.sh|g' /app/tests/setup_expensify.yml > /tmp/setup_expensify_unset.yml && ansible-playbook -i "localhost," --connection=local /tmp/setup_expensify_unset.yml && git add -A && git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "setup baseline" --no-gpg-sign --allow-empty && `;
+      const patchCmd = ctx.applyPatchPath
+        ? `if [ -s ${ctx.applyPatchPath} ]; then git apply ${ctx.applyPatchPath}; fi; `
+        : '';
 
       let postCmd = '';
       if (ctx.generatePatchPath) {
@@ -35,14 +38,20 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         postCmd = '';
       }
 
+      const env = {
+        ...(core.env || {}),
+        NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH
+      };
+
       const command = [
         ...DOCKER_BASE_ARGS,
         "--entrypoint", "/usr/bin/env",
         ...createCliCacheArgs(),
-        ...createEnvironmentArgs(core.env || {}),
+        ...createEnvironmentArgs(env),
         "--platform", "linux/amd64",
         ...hostMount,
         ...claudeMount,
+        ...npmCacheMount,
         ...patchesMount,
         ...issuesMount,
         "-w", "/app/expensify",

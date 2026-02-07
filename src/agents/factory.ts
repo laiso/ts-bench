@@ -17,7 +17,8 @@ export class AgentFactory {
             model: config.model,
             provider: config.provider,
             containerName,
-            agentScriptPath
+            agentScriptPath,
+            useDocker: config.useDocker
         };
 
         switch (config.agent) {

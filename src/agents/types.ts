@@ -14,4 +14,5 @@ export interface AgentConfig {
     provider?: string;
     containerName: string;
     agentScriptPath: string;
+    useDocker?: boolean;
 }
