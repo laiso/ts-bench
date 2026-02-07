@@ -56,6 +56,14 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
             }
         }
 
+        // Override model short names to prevent fallback to Anthropic API
+        if (provider !== 'anthropic') {
+            const model = this.config.model;
+            env.ANTHROPIC_DEFAULT_SONNET_MODEL = model;
+            env.ANTHROPIC_DEFAULT_OPUS_MODEL = model;
+            env.ANTHROPIC_DEFAULT_HAIKU_MODEL = model;
+        }
+
         return env;
     }
 
