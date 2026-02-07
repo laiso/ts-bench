@@ -2,6 +2,7 @@ import type { AgentType } from '../config/types';
 import { TS_BENCH_CONTAINER } from '../config/constants';
 import { BunCommandExecutor } from './shell';
 import { DOCKER_BASE_ARGS, createCliCacheArgs } from './docker';
+import { join } from 'path';
 
 interface DetectOptions {
     useDocker?: boolean;
@@ -38,9 +39,13 @@ export class VersionDetector {
 
         if (agentScriptPath) {
             if (useDocker && containerName) {
+                const hostMount = agentScriptPath.startsWith('/ts-bench-host/')
+                    ? ['-v', `${join(process.cwd())}:/ts-bench-host:ro`]
+                    : [];
                 return [
                     ...DOCKER_BASE_ARGS,
                     ...createCliCacheArgs(),
+                    ...hostMount,
                     containerName,
                     'bash',
                     agentScriptPath,

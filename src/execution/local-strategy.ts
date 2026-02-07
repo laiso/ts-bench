@@ -21,7 +21,9 @@ export class LocalExecutionStrategy implements ExecutionStrategy {
         // For simplicity, we assume the environment is already prepared or we do a basic reset.
         // Ideally we'd run a subset of setup_expensify.yml logic here.
         const setupCmd = ctx.commitId ? `git reset --hard ${ctx.commitId} && ` : '';
-        const patchCmd = ctx.applyPatchPath ? `git apply ${ctx.applyPatchPath} && ` : '';
+        const patchCmd = ctx.applyPatchPath
+            ? `if [ -s ${ctx.applyPatchPath} ]; then git apply ${ctx.applyPatchPath}; fi; `
+            : '';
         
         let postCmd = '';
         if (ctx.generatePatchPath) {
@@ -48,4 +50,3 @@ export class LocalExecutionStrategy implements ExecutionStrategy {
     };
   }
 }
-
