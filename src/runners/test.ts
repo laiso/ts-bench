@@ -1,4 +1,4 @@
-import type { AgentResult, BenchmarkConfig, DatasetType } from '../config/types';
+import type { AgentResult, BenchmarkConfig, DatasetType, LogLevel } from '../config/types';
 import type { CommandExecutor } from '../utils/shell';
 import { DockerCleanupManager } from '../utils/docker-cleanup';
 import type { Logger } from '../utils/logger';
@@ -9,6 +9,7 @@ export interface TestContext {
     commitId?: string;
     applyPatchPath?: string;
     datasetType?: DatasetType;
+    logLevel?: LogLevel;
 }
 
 export class TestRunner {
@@ -36,12 +37,13 @@ export class TestRunner {
                 env: {}
             };
 
-            const prepared = strategy.prepare(coreCommand, { 
+            const prepared = strategy.prepare(coreCommand, {
                 exercisePath,
                 datasetType: context?.datasetType,
                 issueId: context?.datasetType === 'v2' ? exercise : undefined,
                 commitId: context?.commitId,
-                applyPatchPath: context?.applyPatchPath
+                applyPatchPath: context?.applyPatchPath,
+                logLevel: context?.logLevel
             });
 
             if (config.verbose) {

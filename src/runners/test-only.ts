@@ -42,7 +42,8 @@ export class TestOnlyRunner {
                 exercisePath,
                 datasetType,
                 issueId: datasetType === 'v2' ? exercise : undefined,
-                commitId
+                commitId,
+                logLevel: config.logLevel
             });
 
             if (config.verbose) {

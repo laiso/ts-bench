@@ -1,6 +1,7 @@
 export type AgentType = 'claude' | 'goose' | 'aider' | 'codex' | 'copilot' | 'gemini' | 'opencode' | 'qwen' | 'cursor' | 'vibe';
 export type DatasetType = 'v1' | 'v2'; // v1 = exercism, v2 = swelancer
 export type ProviderType = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'dashscope' | 'xai' | 'deepseek' | 'github' | 'cerebras' | 'mistral';
+export type LogLevel = 'minimal' | 'normal' | 'verbose';
 
 export interface AgentResult {
     exercise: string;
@@ -42,6 +43,7 @@ export interface BenchmarkConfig {
     showProgress?: boolean;
     timeout?: number; // seconds
     outputDir?: string;
+    logLevel?: LogLevel; // minimal | normal | verbose, default: normal
 }
 
 export interface CLIArgs {
@@ -71,6 +73,7 @@ export interface CLIArgs {
     printInstructions?: boolean;
     customInstruction?: string;
     timeout?: number; // seconds
+    logLevel?: LogLevel; // minimal | normal | verbose
 }
 
 

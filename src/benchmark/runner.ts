@@ -76,7 +76,8 @@ export class BenchmarkRunner {
             showProgress: args.showProgress,
             timeout: args.timeout,
             outputDir: args.outputDir,
-            dataset: args.dataset
+            dataset: args.dataset,
+            logLevel: args.logLevel
         };
 
         for (const exercise of exercises) {

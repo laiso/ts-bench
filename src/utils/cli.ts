@@ -149,6 +149,11 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         ? process.argv[customInstructionIndex + 1]!
         : undefined;
 
+    const logLevelIndex = process.argv.indexOf('--log-level');
+    const logLevel = logLevelIndex !== -1 && logLevelIndex + 1 < process.argv.length
+        ? (process.argv[logLevelIndex + 1]! as 'minimal' | 'normal' | 'verbose')
+        : undefined;
+
     const exerciseIndex = process.argv.indexOf('--exercise');
     let specificExercise = exerciseIndex !== -1 && exerciseIndex + 1 < process.argv.length
         ? process.argv[exerciseIndex + 1]!
@@ -207,7 +212,8 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         testOnly,
         printInstructions,
         customInstruction,
-        timeout
+        timeout,
+        logLevel
     };
     return result;
 }

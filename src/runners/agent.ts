@@ -64,13 +64,14 @@ export class AgentRunner {
                 ? new DockerExecutionStrategy(this.containerName)
                 : new LocalExecutionStrategy();
             
-            const prepared = strategy.prepare(coreCommand, { 
-                exercisePath, 
+            const prepared = strategy.prepare(coreCommand, {
+                exercisePath,
                 testFiles: fileList.testFiles,
                 datasetType: config.dataset,
                 issueId: config.dataset === 'v2' ? exercise : undefined,
                 commitId: metadata.commitId,
-                generatePatchPath
+                generatePatchPath,
+                logLevel: config.logLevel
             });
 
             if (config.verbose) {
