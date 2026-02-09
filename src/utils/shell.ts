@@ -1,5 +1,16 @@
 import { spawn } from "bun";
 
+export async function cleanupSwelancerContainers(): Promise<void> {
+    try {
+        // Remove remaining swelancer containers before execution
+        const proc = spawn(['docker', 'rm', '-f', 'swelancer_x86_monolith']);
+        await proc.exited;
+        // Silently ignore if containers don't exist
+    } catch (_) {
+        // Ignore cleanup errors
+    }
+}
+
 export function escapeShellArg(str: string): string {
     return str.replace(/'/g, "'\"'\"'");
 }

@@ -1,5 +1,6 @@
 import type { AgentResult, BenchmarkConfig, DatasetType } from '../config/types';
 import type { CommandExecutor } from '../utils/shell';
+import { cleanupSwelancerContainers } from '../utils/shell';
 import type { Logger } from '../utils/logger';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
 import { DockerExecutionStrategy } from '../execution/docker-strategy';
@@ -21,6 +22,10 @@ export class TestRunner {
         const startTime = Date.now();
 
         try {
+            // Clean up any remaining swelancer containers before execution
+            if (useDocker && context?.datasetType === 'v2') {
+                await cleanupSwelancerContainers();
+            }
             const strategy = useDocker
                 ? new DockerExecutionStrategy(this.containerName)
                 : new LocalExecutionStrategy();
@@ -46,20 +51,30 @@ export class TestRunner {
             const result = await this.executor.execute(prepared.command, execOptions);
             const duration = Date.now() - startTime;
 
+            // Clean up after execution
+            if (useDocker && context?.datasetType === 'v2') {
+                await cleanupSwelancerContainers();
+            }
+
             if (result.exitCode === 0) {
                 this.logger.logTestSuccess(exercise, duration);
                 return { exercise, success: true, duration, output: result.stdout };
             } else {
                 this.logger.logTestFailure(exercise, duration, config.verbose, result);
-                return { 
-                    exercise, 
-                    success: false, 
-                    error: `STDOUT: ${result.stdout}\nSTDERR: ${result.stderr}`, 
-                    duration, 
-                    output: result.stdout 
+                return {
+                    exercise,
+                    success: false,
+                    error: `STDOUT: ${result.stdout}\nSTDERR: ${result.stderr}`,
+                    duration,
+                    output: result.stdout
                 };
             }
         } catch (error) {
+            // Clean up after error
+            if (useDocker && context?.datasetType === 'v2') {
+                await cleanupSwelancerContainers();
+            }
+
             const duration = Date.now() - startTime;
             const errorMsg = error instanceof Error ? error.message : String(error);
             this.logger.logTestError(exercise, duration, errorMsg);
