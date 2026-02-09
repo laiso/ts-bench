@@ -4,7 +4,7 @@ import { AgentLoggerFactory } from '../utils/agent-logger';
 import { getAgentScriptPath } from '../config/paths';
 import type { DatasetReader } from '../datasets/types';
 import type { CommandExecutor } from '../utils/shell';
-import { cleanupSwelancerContainers } from '../utils/shell';
+import { DockerCleanupManager } from '../utils/docker-cleanup';
 import type { Logger } from '../utils/logger';
 import { ProgressMonitor } from '../utils/progress-monitor';
 import { join } from 'path';
@@ -37,7 +37,8 @@ export class AgentRunner {
         try {
             // Clean up any remaining swelancer containers before execution
             if (useDocker && config.dataset === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
             }
             const agentScriptPath = getAgentScriptPath(useDocker, config.dataset);
             const agentBuilder = AgentFactory.create(config, this.containerName, agentScriptPath);
@@ -94,7 +95,8 @@ export class AgentRunner {
 
             // Clean up after execution for debugging purposes
             if (useDocker && config.dataset === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
             }
 
             if (result.exitCode === 0) {
@@ -114,7 +116,8 @@ export class AgentRunner {
 
             // Clean up after error
             if (useDocker && config.dataset === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupAfterError(this.containerName);
             }
 
             const duration = Date.now() - startTime;

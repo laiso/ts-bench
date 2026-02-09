@@ -1,6 +1,6 @@
 import type { AgentResult, BenchmarkConfig, DatasetType } from '../config/types';
 import type { CommandExecutor } from '../utils/shell';
-import { cleanupSwelancerContainers } from '../utils/shell';
+import { DockerCleanupManager } from '../utils/docker-cleanup';
 import type { Logger } from '../utils/logger';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
 import { DockerExecutionStrategy } from '../execution/docker-strategy';
@@ -24,7 +24,8 @@ export class TestRunner {
         try {
             // Clean up any remaining swelancer containers before execution
             if (useDocker && context?.datasetType === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
             }
             const strategy = useDocker
                 ? new DockerExecutionStrategy(this.containerName)
@@ -53,7 +54,8 @@ export class TestRunner {
 
             // Clean up after execution
             if (useDocker && context?.datasetType === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
             }
 
             if (result.exitCode === 0) {
@@ -72,7 +74,8 @@ export class TestRunner {
         } catch (error) {
             // Clean up after error
             if (useDocker && context?.datasetType === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupAfterError(this.containerName);
             }
 
             const duration = Date.now() - startTime;

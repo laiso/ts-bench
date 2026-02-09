@@ -1,6 +1,6 @@
 import type { TestOnlyResult, BenchmarkConfig, DatasetType } from '../config/types';
 import type { CommandExecutor } from '../utils/shell';
-import { cleanupSwelancerContainers } from '../utils/shell';
+import { DockerCleanupManager } from '../utils/docker-cleanup';
 import type { Logger } from '../utils/logger';
 import { join } from 'path';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
@@ -25,7 +25,8 @@ export class TestOnlyRunner {
         try {
             // Clean up any remaining swelancer containers before execution
             if (config.useDocker && datasetType === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
             }
 
             const containerName = datasetType === 'v2' ? SWELANCER_IMAGE : TS_BENCH_CONTAINER;
@@ -54,7 +55,8 @@ export class TestOnlyRunner {
 
             // Clean up after execution
             if (config.useDocker && datasetType === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
             }
 
             if (result.exitCode === 0) {
@@ -78,7 +80,9 @@ export class TestOnlyRunner {
         } catch (error) {
             // Clean up after error
             if (config.useDocker && datasetType === 'v2') {
-                await cleanupSwelancerContainers();
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                const containerName = SWELANCER_IMAGE;
+                await cleanupManager.cleanupAfterError(containerName);
             }
 
             const duration = Date.now() - startTime;
