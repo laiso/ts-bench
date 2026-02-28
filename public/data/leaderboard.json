@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-05T09:28:26.708Z",
+  "lastUpdated": "2026-02-28T07:55:55.310Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -4961,6 +4961,259 @@
           "agentDuration": 37767,
           "testDuration": 4637,
           "totalDuration": 42412
+        }
+      ]
+    },
+    "codex-gpt-5.3-codex": {
+      "metadata": {
+        "agent": "codex",
+        "model": "gpt-5.3-codex",
+        "provider": "openai",
+        "version": "0.106.0",
+        "timestamp": "2026-02-28T06:30:47.159Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.1.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/22514689122",
+        "runId": "22514689122",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 96,
+        "totalDuration": 2177447,
+        "avgDuration": 87097.9,
+        "successCount": 24,
+        "totalCount": 25,
+        "agentSuccessCount": 25,
+        "testSuccessCount": 24,
+        "testFailedCount": 1
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 56842,
+          "testDuration": 7489,
+          "totalDuration": 64496
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 46382,
+          "testDuration": 7606,
+          "totalDuration": 53998
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 51041,
+          "testDuration": 7461,
+          "totalDuration": 58510
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 46182,
+          "testDuration": 7757,
+          "totalDuration": 53947
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 53537,
+          "testDuration": 7577,
+          "totalDuration": 61122
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 231252,
+          "testDuration": 7861,
+          "totalDuration": 239123
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 80261,
+          "testDuration": 7755,
+          "totalDuration": 88024
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 92720,
+          "testDuration": 7657,
+          "totalDuration": 100386
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 60010,
+          "testDuration": 7439,
+          "totalDuration": 67457
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 50963,
+          "testDuration": 7419,
+          "totalDuration": 58390
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 66881,
+          "testDuration": 7627,
+          "totalDuration": 74516
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 57016,
+          "testDuration": 7621,
+          "totalDuration": 64646
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 64599,
+          "testDuration": 7430,
+          "totalDuration": 72037
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 44777,
+          "testDuration": 7543,
+          "totalDuration": 52329
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 44089,
+          "testDuration": 7491,
+          "totalDuration": 51589
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 87827,
+          "testDuration": 7777,
+          "totalDuration": 95612
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 218512,
+          "testDuration": 7705,
+          "totalDuration": 226225
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 52136,
+          "testDuration": 7597,
+          "totalDuration": 59742
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 81825,
+          "testDuration": 7671,
+          "totalDuration": 89504
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 75334,
+          "testDuration": 8467,
+          "totalDuration": 83809
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 42098,
+          "testDuration": 7568,
+          "totalDuration": 49674
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 111214,
+          "testDuration": 7720,
+          "totalDuration": 118942
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 105495,
+          "testDuration": 7756,
+          "totalDuration": 113260
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 73065,
+          "testDuration": 7759,
+          "totalDuration": 80833
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-wordy\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp666b9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nwordy.ts(94,13): error TS18047: 'parsedOperation' is possibly 'null'.\nwordy.ts(100,37): error TS18047: 'parsedOperation' is possibly 'null'.\n\nSTDERR: ",
+          "agentDuration": 94424,
+          "testDuration": 4844,
+          "totalDuration": 99276
         }
       ]
     }
