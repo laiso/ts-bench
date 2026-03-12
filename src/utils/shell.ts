@@ -92,8 +92,8 @@ export class BunCommandExecutor implements CommandExecutor {
                                 // ignore
                             }
                             // Force streams to close to prevent reading from hanging
-                            try { stdoutReader?.cancel(); } catch (_) {}
-                            try { stderrReader?.cancel(); } catch (_) {}
+                            try { stdoutReader?.cancel().catch(() => {}); } catch (_) {}
+                            try { stderrReader?.cancel().catch(() => {}); } catch (_) {}
                             resolve();
                         }, options.timeout! * 1000);
                     })
