@@ -21,7 +21,7 @@ describe('Agent builders invoke run-agent script', () => {
         builder: AgentBuilder;
         env: ReadonlyArray<readonly [string, string]>;
         fileList?: { sourceFiles: string[]; testFiles: string[] };
-        assertCommand: (command: { args: string[] }) => void;
+        assertCommand: (command: { args: string[], env?: Record<string, string> }) => void;
     };
 
     const assertRunAgent = (command: { args: string[] }, expectedCli: string) => {

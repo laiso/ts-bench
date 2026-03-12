@@ -26,7 +26,10 @@ export interface CommandResult {
 
 export class BunCommandExecutor implements CommandExecutor {
     async execute(args: string[], options?: ExecuteOptions): Promise<CommandResult> {
-        const spawnOptions: any = {};
+        const spawnOptions: any = {
+            stdout: "pipe",
+            stderr: "pipe"
+        };
         
         if (options?.cwd) {
             spawnOptions.cwd = options.cwd;
@@ -41,6 +44,41 @@ export class BunCommandExecutor implements CommandExecutor {
         let timeoutId: ReturnType<typeof setTimeout> | undefined;
         let timedOut = false;
 
+        let stdoutRaw = "";
+        let stderrRaw = "";
+        
+        let stdoutReader: any;
+        let stderrReader: any;
+
+        const readStream = async (stream: ReadableStream, isStdout: boolean) => {
+            const reader = stream.getReader();
+            if (isStdout) stdoutReader = reader;
+            else stderrReader = reader;
+            
+            const decoder = new TextDecoder();
+            try {
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    if (value) {
+                        const chunk = decoder.decode(value, { stream: true });
+                        if (isStdout) stdoutRaw += chunk;
+                        else stderrRaw += chunk;
+                    }
+                }
+            } catch (e) {
+                // Stream might be cancelled or errored
+            } finally {
+                const final = decoder.decode();
+                if (isStdout) stdoutRaw += final;
+                else stderrRaw += final;
+                reader.releaseLock();
+            }
+        };
+
+        const stdoutPromise = proc.stdout ? readStream(proc.stdout, true) : Promise.resolve();
+        const stderrPromise = proc.stderr ? readStream(proc.stderr, false) : Promise.resolve();
+
         try {
             if (options?.timeout && options.timeout > 0) {
                 await Promise.race([
@@ -49,10 +87,13 @@ export class BunCommandExecutor implements CommandExecutor {
                         timeoutId = setTimeout(() => {
                             timedOut = true;
                             try {
-                                proc.kill();
+                                proc.kill(9); // SIGKILL
                             } catch (_) {
                                 // ignore
                             }
+                            // Force streams to close to prevent reading from hanging
+                            try { stdoutReader?.cancel().catch(() => {}); } catch (_) {}
+                            try { stderrReader?.cancel().catch(() => {}); } catch (_) {}
                             resolve();
                         }, options.timeout! * 1000);
                     })
@@ -64,8 +105,7 @@ export class BunCommandExecutor implements CommandExecutor {
             if (timeoutId) clearTimeout(timeoutId);
         }
 
-        const stdoutRaw = await new Response(proc.stdout).text();
-        const stderrRaw = await new Response(proc.stderr).text();
+        await Promise.all([stdoutPromise, stderrPromise]);
 
         const stdout = this.filterYarnNoise(stdoutRaw);
         let stderr = this.filterYarnNoise(stderrRaw);
