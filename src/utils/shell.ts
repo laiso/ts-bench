@@ -46,9 +46,15 @@ export class BunCommandExecutor implements CommandExecutor {
 
         let stdoutRaw = "";
         let stderrRaw = "";
+        
+        let stdoutReader: any;
+        let stderrReader: any;
 
         const readStream = async (stream: ReadableStream, isStdout: boolean) => {
             const reader = stream.getReader();
+            if (isStdout) stdoutReader = reader;
+            else stderrReader = reader;
+            
             const decoder = new TextDecoder();
             try {
                 while (true) {
@@ -86,8 +92,8 @@ export class BunCommandExecutor implements CommandExecutor {
                                 // ignore
                             }
                             // Force streams to close to prevent reading from hanging
-                            try { (proc.stdout as any)?.cancel(); } catch (_) {}
-                            try { (proc.stderr as any)?.cancel(); } catch (_) {}
+                            try { stdoutReader?.cancel(); } catch (_) {}
+                            try { stderrReader?.cancel(); } catch (_) {}
                             resolve();
                         }, options.timeout! * 1000);
                     })
