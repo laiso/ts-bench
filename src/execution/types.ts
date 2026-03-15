@@ -12,6 +12,7 @@ export interface PrepareContext {
   commitId?: string;
   generatePatchPath?: string;
   applyPatchPath?: string;
+  logLevel?: 'minimal' | 'normal' | 'verbose'; // ansible and npm log control
 }
 
 export interface PreparedCommand {

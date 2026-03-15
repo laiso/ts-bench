@@ -1,5 +1,6 @@
 import type { TestOnlyResult, BenchmarkConfig, DatasetType } from '../config/types';
 import type { CommandExecutor } from '../utils/shell';
+import { DockerCleanupManager } from '../utils/docker-cleanup';
 import type { Logger } from '../utils/logger';
 import { join } from 'path';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
@@ -22,6 +23,12 @@ export class TestOnlyRunner {
         this.logger.logExerciseStart(exercise);
 
         try {
+            // Clean up any remaining swelancer containers before execution
+            if (config.useDocker && datasetType === 'v2') {
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
+            }
+
             const containerName = datasetType === 'v2' ? SWELANCER_IMAGE : TS_BENCH_CONTAINER;
             const strategy = config.useDocker
                 ? new DockerExecutionStrategy(containerName)
@@ -31,11 +38,12 @@ export class TestOnlyRunner {
                 env: {}
             };
 
-            const prepared = strategy.prepare(coreCommand, { 
+            const prepared = strategy.prepare(coreCommand, {
                 exercisePath,
                 datasetType,
                 issueId: datasetType === 'v2' ? exercise : undefined,
-                commitId
+                commitId,
+                logLevel: config.logLevel
             });
 
             if (config.verbose) {
@@ -46,33 +54,46 @@ export class TestOnlyRunner {
             const result = await this.executor.execute(prepared.command, execOptions);
             const duration = Date.now() - startTime;
 
+            // Clean up after execution
+            if (config.useDocker && datasetType === 'v2') {
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
+            }
+
             if (result.exitCode === 0) {
                 this.logger.logTestSuccess(exercise, duration);
-                return { 
-                    exercise, 
-                    testSuccess: true, 
-                    testDuration: duration, 
-                    output: result.stdout 
+                return {
+                    exercise,
+                    testSuccess: true,
+                    testDuration: duration,
+                    output: result.stdout
                 };
             } else {
                 this.logger.logTestFailure(exercise, duration, config.verbose, result);
-                return { 
-                    exercise, 
-                    testSuccess: false, 
-                    testError: `STDOUT: ${result.stdout}\nSTDERR: ${result.stderr}`, 
-                    testDuration: duration, 
-                    output: result.stdout 
+                return {
+                    exercise,
+                    testSuccess: false,
+                    testError: `STDOUT: ${result.stdout}\nSTDERR: ${result.stderr}`,
+                    testDuration: duration,
+                    output: result.stdout
                 };
             }
         } catch (error) {
+            // Clean up after error
+            if (config.useDocker && datasetType === 'v2') {
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                const containerName = SWELANCER_IMAGE;
+                await cleanupManager.cleanupAfterError(containerName);
+            }
+
             const duration = Date.now() - startTime;
             const errorMsg = error instanceof Error ? error.message : String(error);
             this.logger.logTestError(exercise, duration, errorMsg);
-            return { 
-                exercise, 
-                testSuccess: false, 
-                testError: errorMsg, 
-                testDuration: duration 
+            return {
+                exercise,
+                testSuccess: false,
+                testError: errorMsg,
+                testDuration: duration
             };
         }
     }

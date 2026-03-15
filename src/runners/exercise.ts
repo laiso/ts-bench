@@ -106,7 +106,8 @@ export class ExerciseRunner {
         const testContext: TestContext = {
             datasetType: config.dataset,
             commitId: commitId,
-            applyPatchPath: applyPatchPath
+            applyPatchPath: applyPatchPath,
+            logLevel: config.logLevel
         };
 
         // Phase 2: Run Tests (always run, even if agent failed)

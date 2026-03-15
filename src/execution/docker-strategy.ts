@@ -26,7 +26,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       // Use setup_expensify.yml for setup. This handles git checkout, dependencies, etc.
       // We explicitly set ISSUE_ID env var for the command
       // Set CI=true and NPM_CONFIG_YES=true to prevent interactive prompts during build
-      const setupCmd = `export ISSUE_ID=${issueId} && export CI=true && export NPM_CONFIG_YES=true && sed 's|source /root/.nvm/nvm.sh|unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX; source /root/.nvm/nvm.sh|g' /app/tests/setup_expensify.yml > /tmp/setup_expensify_unset.yml && ansible-playbook -i "localhost," --connection=local /tmp/setup_expensify_unset.yml && git add -A && git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "setup baseline" --no-gpg-sign --allow-empty && `;
+      const ansibleQuietFlag = ctx.logLevel === 'minimal' ? '-q' : '';
+      const setupCmd = `export ISSUE_ID=${issueId} && export CI=true && export NPM_CONFIG_YES=true && sed 's|source /root/.nvm/nvm.sh|unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX; source /root/.nvm/nvm.sh|g' /app/tests/setup_expensify.yml > /tmp/setup_expensify_unset.yml && ansible-playbook -i "localhost," --connection=local ${ansibleQuietFlag} /tmp/setup_expensify_unset.yml && git add -A && git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "setup baseline" --no-gpg-sign --allow-empty && `;
       const patchCmd = ctx.applyPatchPath
         ? `if [ -s ${ctx.applyPatchPath} ]; then git apply ${ctx.applyPatchPath}; fi; `
         : '';
@@ -40,7 +41,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
       const env = {
         ...(core.env || {}),
-        NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH
+        NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH,
+        npm_loglevel: ctx.logLevel === 'minimal' ? 'warn' : 'info'
       };
 
       const command = [

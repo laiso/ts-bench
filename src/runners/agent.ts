@@ -4,6 +4,7 @@ import { AgentLoggerFactory } from '../utils/agent-logger';
 import { getAgentScriptPath } from '../config/paths';
 import type { DatasetReader } from '../datasets/types';
 import type { CommandExecutor } from '../utils/shell';
+import { DockerCleanupManager } from '../utils/docker-cleanup';
 import type { Logger } from '../utils/logger';
 import { ProgressMonitor } from '../utils/progress-monitor';
 import { join } from 'path';
@@ -34,6 +35,11 @@ export class AgentRunner {
         }
 
         try {
+            // Clean up any remaining swelancer containers before execution
+            if (useDocker && config.dataset === 'v2') {
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
+            }
             const agentScriptPath = getAgentScriptPath(useDocker, config.dataset);
             const agentBuilder = AgentFactory.create(config, this.containerName, agentScriptPath);
             const instructions = await this.datasetReader.getInstructions(exercise, this.baseInstruction, this.customInstruction);
@@ -58,13 +64,14 @@ export class AgentRunner {
                 ? new DockerExecutionStrategy(this.containerName)
                 : new LocalExecutionStrategy();
             
-            const prepared = strategy.prepare(coreCommand, { 
-                exercisePath, 
+            const prepared = strategy.prepare(coreCommand, {
+                exercisePath,
                 testFiles: fileList.testFiles,
                 datasetType: config.dataset,
                 issueId: config.dataset === 'v2' ? exercise : undefined,
                 commitId: metadata.commitId,
-                generatePatchPath
+                generatePatchPath,
+                logLevel: config.logLevel
             });
 
             if (config.verbose) {
@@ -87,6 +94,12 @@ export class AgentRunner {
                 progressMonitor.stop();
             }
 
+            // Clean up after execution for debugging purposes
+            if (useDocker && config.dataset === 'v2') {
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupBefore();
+            }
+
             if (result.exitCode === 0) {
                 this.logger.logAgentSuccess(exercise, duration, config.verbose, result);
                 return { exercise, success: true, duration, output: result.stdout };
@@ -100,6 +113,12 @@ export class AgentRunner {
         } catch (error) {
             if (progressMonitor) {
                 progressMonitor.stop();
+            }
+
+            // Clean up after error
+            if (useDocker && config.dataset === 'v2') {
+                const cleanupManager = new DockerCleanupManager(this.logger);
+                await cleanupManager.cleanupAfterError(this.containerName);
             }
 
             const duration = Date.now() - startTime;
