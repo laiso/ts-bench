@@ -105,7 +105,7 @@ async function runTestOnlyMode(
     let testCommand = 'corepack yarn && corepack yarn test';
     if (args.dataset === 'v2') {
         if (args.useDocker) {
-            testCommand = 'export CI=true && /app/tests/run.sh & for i in {1..120}; do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml';
+            testCommand = 'export CI=true && /app/tests/run.sh & for i in {1..120}; do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml; EXIT_CODE=$(cat /app/tests/logs/$ISSUE_ID/pytest_exit_code 2>/dev/null || echo "1"); cat /app/tests/logs/$ISSUE_ID/pytest.log 2>/dev/null; exit $EXIT_CODE';
         } else {
             testCommand = 'npm rebuild canvas && npm test -- -o';
         }
