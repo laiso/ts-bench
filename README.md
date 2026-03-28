@@ -8,16 +8,19 @@
 | Rank | Agent | Model | Success Rate | Solved | Avg Time | Result |
 |:----:|:------|:------|:--------------:|:------:|:----------:|:-----:|
 | 1 | opencode | openai/gpt-5 | **96.0%** | 24/25 | 64.8s | [#415419](https://github.com/yukukotani/ts-bench/actions/runs/17366415419) |
-| 2 | kimi | kimi-k2.5 | **96.0%** | 24/25 | 78.7s | [#628525](https://github.com/laiso/ts-bench/actions/runs/21475628525) |
-| 3 | codex | gpt-5.3-codex | **96.0%** | 24/25 | 87.1s | [#689122](https://github.com/laiso/ts-bench/actions/runs/22514689122) |
-| 4 | gemini | gemini-3-pro-preview | **96.0%** | 24/25 | 188.1s | [#914072](https://github.com/laiso/ts-bench/actions/runs/19484914072) |
-| 5 | qwen | qwen/qwen3-coder-next | **92.0%** | 23/25 | 81.5s | [#925437](https://github.com/laiso/ts-bench/actions/runs/21704925437) |
-| 6 | gemini | gemini-3-flash-preview | **92.0%** | 23/25 | 99.7s | [#081278](https://github.com/laiso/ts-bench/actions/runs/20326081278) |
-| 7 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
-| 8 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
-| 9 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
-| 10 | codex | gpt-5.2 | **92.0%** | 23/25 | 140.4s | [#260672](https://github.com/laiso/ts-bench/actions/runs/20157260672) |
+| 2 | cursor | composer-2-fast | **96.0%** | 24/25 | 66.5s | [#686333](https://github.com/laiso/ts-bench/actions/runs/23684686333) |
+| 3 | kimi | kimi-k2.5 | **96.0%** | 24/25 | 78.7s | [#628525](https://github.com/laiso/ts-bench/actions/runs/21475628525) |
+| 4 | codex | gpt-5.3-codex | **96.0%** | 24/25 | 87.1s | [#689122](https://github.com/laiso/ts-bench/actions/runs/22514689122) |
+| 5 | gemini | gemini-3-pro-preview | **96.0%** | 24/25 | 188.1s | [#914072](https://github.com/laiso/ts-bench/actions/runs/19484914072) |
+| 6 | qwen | qwen/qwen3-coder-next | **92.0%** | 23/25 | 81.5s | [#925437](https://github.com/laiso/ts-bench/actions/runs/21704925437) |
+| 7 | gemini | gemini-3-flash-preview | **92.0%** | 23/25 | 99.7s | [#081278](https://github.com/laiso/ts-bench/actions/runs/20326081278) |
+| 8 | goose | claude-sonnet-4-20250514 | **92.0%** | 23/25 | 122.2s | [#186071](https://github.com/laiso/ts-bench/actions/runs/17373186071) |
+| 9 | opencode | anthropic/claude-sonnet-4-20250514 | **92.0%** | 23/25 | 127.8s | [#043809](https://github.com/laiso/ts-bench/actions/runs/17375043809) |
+| 10 | claude | glm-4.6 | **92.0%** | 23/25 | 132.3s | [#009680](https://github.com/laiso/ts-bench/actions/runs/18133009680) |
 <!-- END_LEADERBOARD -->
+
+
+
 
 
 

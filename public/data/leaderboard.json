@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-28T07:55:55.310Z",
+  "lastUpdated": "2026-03-28T13:17:54.996Z",
   "results": {
     "codex-gpt-5": {
       "metadata": {
@@ -5214,6 +5214,259 @@
           "agentDuration": 94424,
           "testDuration": 4844,
           "totalDuration": 99276
+        }
+      ]
+    },
+    "cursor-composer-2-fast": {
+      "metadata": {
+        "agent": "cursor",
+        "model": "composer-2-fast",
+        "provider": "moonshot",
+        "version": "2026.03.25",
+        "timestamp": "2026-03-28T12:24:36.413Z",
+        "exerciseCount": 25,
+        "benchmarkVersion": "1.1.0",
+        "generatedBy": "ts-bench",
+        "runUrl": "https://github.com/laiso/ts-bench/actions/runs/23684686333",
+        "runId": "23684686333",
+        "artifactName": "benchmark-results"
+      },
+      "summary": {
+        "successRate": 96,
+        "totalDuration": 1661450,
+        "avgDuration": 66458,
+        "successCount": 24,
+        "totalCount": 25,
+        "agentSuccessCount": 25,
+        "testSuccessCount": 24,
+        "testFailedCount": 1
+      },
+      "results": [
+        {
+          "exercise": "acronym",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 46185,
+          "testDuration": 7238,
+          "totalDuration": 53582
+        },
+        {
+          "exercise": "anagram",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 37031,
+          "testDuration": 7584,
+          "totalDuration": 44623
+        },
+        {
+          "exercise": "bank-account",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 22842,
+          "testDuration": 7381,
+          "totalDuration": 30231
+        },
+        {
+          "exercise": "binary-search",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 21424,
+          "testDuration": 9375,
+          "totalDuration": 30807
+        },
+        {
+          "exercise": "binary-search-tree",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-binary-search-tree\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mpa5dc1\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m \u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.38.1\u001b[39m must be built because it never has been before or the last one failed\n\u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.44.0\u001b[39m must be built because it never has been before or the last one failed\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nbinary-search-tree.ts(22,33): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.\nbinary-search-tree.ts(38,54): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.\n\nSTDERR: ",
+          "agentDuration": 40062,
+          "testDuration": 6589,
+          "totalDuration": 46659
+        },
+        {
+          "exercise": "bowling",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 39659,
+          "testDuration": 9669,
+          "totalDuration": 49336
+        },
+        {
+          "exercise": "complex-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 229304,
+          "testDuration": 9537,
+          "totalDuration": 238850
+        },
+        {
+          "exercise": "connect",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 44379,
+          "testDuration": 9496,
+          "totalDuration": 53883
+        },
+        {
+          "exercise": "crypto-square",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 63800,
+          "testDuration": 9536,
+          "totalDuration": 73344
+        },
+        {
+          "exercise": "diamond",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 36710,
+          "testDuration": 9373,
+          "totalDuration": 46090
+        },
+        {
+          "exercise": "dnd-character",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 34831,
+          "testDuration": 7455,
+          "totalDuration": 42294
+        },
+        {
+          "exercise": "flatten-array",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 28409,
+          "testDuration": 7518,
+          "totalDuration": 35935
+        },
+        {
+          "exercise": "food-chain",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 42309,
+          "testDuration": 9452,
+          "totalDuration": 51769
+        },
+        {
+          "exercise": "house",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 55477,
+          "testDuration": 9536,
+          "totalDuration": 65021
+        },
+        {
+          "exercise": "pascals-triangle",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 32157,
+          "testDuration": 9465,
+          "totalDuration": 41630
+        },
+        {
+          "exercise": "rational-numbers",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 41878,
+          "testDuration": 9527,
+          "totalDuration": 51414
+        },
+        {
+          "exercise": "react",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 128528,
+          "testDuration": 7612,
+          "totalDuration": 136148
+        },
+        {
+          "exercise": "rectangles",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 42141,
+          "testDuration": 7624,
+          "totalDuration": 49773
+        },
+        {
+          "exercise": "relative-distance",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 41428,
+          "testDuration": 7558,
+          "totalDuration": 48995
+        },
+        {
+          "exercise": "robot-name",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 119187,
+          "testDuration": 11730,
+          "totalDuration": 130925
+        },
+        {
+          "exercise": "spiral-matrix",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 42797,
+          "testDuration": 7469,
+          "totalDuration": 50275
+        },
+        {
+          "exercise": "transpose",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 87779,
+          "testDuration": 7538,
+          "totalDuration": 95326
+        },
+        {
+          "exercise": "two-bucket",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 42964,
+          "testDuration": 9747,
+          "totalDuration": 52719
+        },
+        {
+          "exercise": "variable-length-quantity",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 63620,
+          "testDuration": 9678,
+          "totalDuration": 73306
+        },
+        {
+          "exercise": "wordy",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 58911,
+          "testDuration": 9595,
+          "totalDuration": 68515
         }
       ]
     }
