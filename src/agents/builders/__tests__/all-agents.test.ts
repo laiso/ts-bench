@@ -68,7 +68,10 @@ describe('Agent builders invoke run-agent script', () => {
             cli: 'cursor-agent',
             builder: new CursorAgentBuilder(BASE_CONFIG),
             env: [['CURSOR_API_KEY', 'test-cursor-key'] as const],
-            assertCommand: (command) => assertRunAgent(command, 'cursor-agent')
+            assertCommand: (command) => {
+                assertRunAgent(command, 'cursor-agent');
+                expect(command.args).toContain('--yolo');
+            }
         },
         {
             cli: 'copilot',
