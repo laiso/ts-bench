@@ -5,7 +5,7 @@ import { BenchmarkReporter } from './reporter';
 import { LeaderboardGenerator } from '../utils/leaderboard-generator';
 import { VersionDetector } from '../utils/version-detector';
 import { getAgentScriptPath } from '../config/paths';
-import { TS_BENCH_CONTAINER } from '../config/constants';
+import { SWELANCER_IMAGE, TS_BENCH_CONTAINER } from '../config/constants';
 import { sanitizeFilenameSegment } from '../utils/file-name';
 
 export class BenchmarkRunner {
@@ -32,9 +32,10 @@ export class BenchmarkRunner {
         if (!agentVersion) {
             console.log(`🔍 Detecting ${args.agent} version...`);
             const versionDetector = new VersionDetector();
+            const versionContainer = args.dataset === 'v2' ? SWELANCER_IMAGE : TS_BENCH_CONTAINER;
             agentVersion = await versionDetector.detectAgentVersion(args.agent, {
                 useDocker,
-                containerName: TS_BENCH_CONTAINER,
+                containerName: versionContainer,
                 agentScriptPath
             });
             console.log(`📦 Detected ${args.agent} version: ${agentVersion}\n`);
@@ -58,12 +59,19 @@ export class BenchmarkRunner {
             if (useDocker) {
                 // Run tests using the provided ansible playbook
                 // We need to set CI=true to avoid interactive prompts if any
-                testCommand = 'export CI=true && /app/tests/run.sh & for i in {1..120}; do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml';
+                const setupWaitSec = parseInt(process.env.TS_BENCH_V2_SETUP_WAIT_SEC || '600', 10) || 600;
+                testCommand = `export CI=true && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml`;
             } else {
                 // Native V2: Run Jest on changed files
                 testCommand = `npm rebuild canvas && npm test -- -o`;
             }
         }
+
+        const requestedTimeout = args.timeout ?? 300;
+        const exerciseTimeout =
+            args.dataset === 'v2' && requestedTimeout === 300
+                ? 900
+                : requestedTimeout;
 
         const config: BenchmarkConfig = {
             testCommand,
@@ -74,7 +82,7 @@ export class BenchmarkRunner {
             useDocker,
             version: agentVersion,
             showProgress: args.showProgress,
-            timeout: args.timeout,
+            timeout: exerciseTimeout,
             outputDir: args.outputDir,
             dataset: args.dataset
         };

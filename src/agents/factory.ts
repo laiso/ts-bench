@@ -13,13 +13,20 @@ import { VibeAgentBuilder } from './builders/vibe';
 import { KimiAgentBuilder } from './builders/kimi';
 
 export class AgentFactory {
-    static create(config: BenchmarkConfig, containerName: string, agentScriptPath: string): AgentBuilder {
+    static create(
+        config: BenchmarkConfig,
+        containerName: string,
+        agentScriptPath: string,
+        exercise?: string
+    ): AgentBuilder {
         const agentConfig = {
             model: config.model,
             provider: config.provider,
             containerName,
             agentScriptPath,
-            useDocker: config.useDocker
+            useDocker: config.useDocker,
+            dataset: config.dataset,
+            exercise
         };
 
         switch (config.agent) {

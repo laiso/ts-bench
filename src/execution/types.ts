@@ -1,6 +1,9 @@
 export interface Command {
   args: string[];
   env?: Record<string, string>;
+  /** When set (v2 Docker + Cursor), mount this host file and expand prompt from file instead of inline -p */
+  promptFileHostPath?: string;
+  promptFileContainerPath?: string;
 }
 
 export interface PrepareContext {

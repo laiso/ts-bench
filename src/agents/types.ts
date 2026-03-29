@@ -1,4 +1,5 @@
 import type { Command } from '../execution/types';
+import type { DatasetType } from '../config/types';
 
 export interface AgentBuilder {
     buildCommand(instructions: string, fileList?: FileList): Promise<Command>;
@@ -15,4 +16,7 @@ export interface AgentConfig {
     containerName: string;
     agentScriptPath: string;
     useDocker?: boolean;
+    dataset?: DatasetType;
+    /** Current task id (e.g. v2 issue id); used for stable temp paths */
+    exercise?: string;
 }
