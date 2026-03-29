@@ -40,8 +40,15 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
       const env = {
         ...(core.env || {}),
-        NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH
+        NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH,
+        ...(issueId ? { ISSUE_ID: issueId } : {})
       };
+
+      // Inline the core command into a single bash -c string instead of using
+      // (exec "$@") which replaces the shell and kills background services.
+      const coreCommandStr = core.args.length >= 3 && core.args[0] === 'bash' && core.args[1] === '-c'
+        ? core.args[2]!
+        : core.args.join(' ');
 
       const command = [
         ...DOCKER_BASE_ARGS,
@@ -57,9 +64,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         "-w", "/app/expensify",
         this.containerName,
         "bash", "-c",
-        `${setupCmd}${patchCmd}(exec "$@")${postCmd}`,
-        "--",
-        ...core.args
+        `${setupCmd}${patchCmd}${coreCommandStr}${postCmd}`,
       ];
 
       return {

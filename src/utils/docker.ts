@@ -2,7 +2,7 @@ import { mkdirSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 
-export const DOCKER_BASE_ARGS = ["docker", "run", "--rm", "-i"] as const;
+export const DOCKER_BASE_ARGS = ["docker", "run", "--rm"] as const;
 const CLI_CACHE_ENV = 'TS_BENCH_CLI_CACHE';
 export const CLI_CACHE_CONTAINER_PATH = '/root/.local';
 const NPM_CACHE_ENV = 'TS_BENCH_NPM_CACHE';

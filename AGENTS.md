@@ -35,3 +35,15 @@ ts-bench is a TypeScript AI Agent Benchmark CLI tool built with **Bun**. See `RE
 - v2 tasks take 5+ minutes per exercise due to ansible setup + npm install inside the container.
 - Submodules needed: `repos/frontier-evals` and `repos/expensify-app`. Init with `git submodule update --init repos/frontier-evals repos/expensify-app`; also `mkdir -p .patches`.
 - v2 automatically enables `--docker` (see `src/utils/cli.ts` line 119).
+
+#### v2 test execution issues in Docker-in-Docker
+
+The `--test-only --dataset v2` CLI path has two known issues in this environment:
+
+1. **`run.sh` RUNTIME_SETUP timeout**: The monolith image has `RUNTIME_SETUP=true` baked in, causing `run.sh` to re-run the full `setup_expensify.yml` playbook (~5 min). The ts-bench test command waits only 120 seconds for `/setup_done.txt`, causing a timeout. The 2nd playbook also hangs because `Verify the flow file` installs mitmproxy via pip which conflicts with the nvm environment.
+
+2. **`run_tests.yml` nvm/bash issue**: The `Start npm server in the background` task uses `/bin/sh` (via `become: true`) which cannot `source /root/.nvm/nvm.sh`, so `npm run web` fails to start on port 8082.
+
+3. **Chrome missing**: The monolith image does not include Google Chrome, but Playwright tests require it. Install with `apt-get install -y /tmp/chrome.deb` from the Google Chrome .deb package.
+
+**Manual workaround**: Skip the `run.sh`-based flow. Instead, start services (Xvfb, pusher-fake, nginx) manually, run `setup_mitmproxy.yml`, start `npm run web` with nvm sourced, install Chrome, and then run `pytest` directly. See the debug logs in `/opt/cursor/artifacts/v2_test_chrome.log` for a working example.

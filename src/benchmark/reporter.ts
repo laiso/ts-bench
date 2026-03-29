@@ -48,10 +48,10 @@ export class BenchmarkReporter {
             failedResults.forEach(result => {
                 console.log(`  ❌ ${result.exercise}:`);
                 if (result.agentError) {
-                    console.log(`     🤖 Agent: ${result.agentError.slice(0, 500)}${result.agentError.length > 500 ? '...' : ''}`);
+                    console.log(`     🤖 Agent: ${result.agentError.slice(-3000)}`);
                 }
                 if (result.testError) {
-                    console.log(`     🧪 Test: ${result.testError.slice(0, 500)}${result.testError.length > 500 ? '...' : ''}`);
+                    console.log(`     🧪 Test: ${result.testError.slice(-3000)}`);
                 }
             });
         }

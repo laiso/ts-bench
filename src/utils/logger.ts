@@ -57,7 +57,7 @@ export class ConsoleLogger implements Logger {
         if (verbose && result) {
             if (result.stdout) {
                 const redacted = this.redact(result.stdout);
-                console.log(`  Agent Output Preview: ${redacted.slice(0, 300)}${redacted.length > 300 ? '...' : ''}`);
+                console.log(`  Agent Output Preview: ${redacted.slice(-3000)}`);
             }
         }
     }
@@ -65,9 +65,8 @@ export class ConsoleLogger implements Logger {
     logAgentFailure(exercise: string, duration: number, verbose: boolean, result: CommandResult): void {
         console.log(`🤖 ${exercise} - Agent Failed (${formatDuration(duration)})`);
         if (verbose) {
-            if (result.stdout) console.log(`  Agent STDOUT: ${result.stdout.slice(0, 500)}...`);
-            if (result.stdout) console.log(`  Agent STDOUT: ${this.redact(result.stdout).slice(0, 500)}...`);
-            if (result.stderr) console.log(`  Agent STDERR: ${this.redact(result.stderr).slice(0, 500)}...`);
+            if (result.stdout) console.log(`  Agent STDOUT: ${this.redact(result.stdout).slice(-3000)}`);
+            if (result.stderr) console.log(`  Agent STDERR: ${this.redact(result.stderr).slice(-3000)}`);
         }
     }
 
@@ -82,9 +81,8 @@ export class ConsoleLogger implements Logger {
     logTestFailure(exercise: string, duration: number, verbose: boolean, result: CommandResult): void {
         console.log(`🧪 ${exercise} - Test Failed (${formatDuration(duration)})`);
         if (verbose) {
-            if (result.stdout) console.log(`  Test STDOUT: ${result.stdout.slice(0, 500)}...`);
-            if (result.stdout) console.log(`  Test STDOUT: ${this.redact(result.stdout).slice(0, 500)}...`);
-            if (result.stderr) console.log(`  Test STDERR: ${this.redact(result.stderr).slice(0, 500)}...`);
+            if (result.stdout) console.log(`  Test STDOUT: ${this.redact(result.stdout).slice(-3000)}`);
+            if (result.stderr) console.log(`  Test STDERR: ${this.redact(result.stderr).slice(-3000)}`);
         }
     }
 
