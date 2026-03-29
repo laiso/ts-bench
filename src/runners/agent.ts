@@ -35,7 +35,7 @@ export class AgentRunner {
 
         try {
             const agentScriptPath = getAgentScriptPath(useDocker, config.dataset);
-            const agentBuilder = AgentFactory.create(config, this.containerName, agentScriptPath);
+            const agentBuilder = AgentFactory.create(config, this.containerName, agentScriptPath, exercise);
             const instructions = await this.datasetReader.getInstructions(exercise, this.baseInstruction, this.customInstruction);
             const fileList = await this.datasetReader.getTaskFiles(exercise);
             const coreCommand = await agentBuilder.buildCommand(instructions, fileList);

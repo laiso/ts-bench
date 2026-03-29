@@ -12,6 +12,11 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       // Mount ts-bench root to /ts-bench-host so we can access scripts
       const hostMount = ['-v', `${process.cwd()}:/ts-bench-host:ro`];
 
+      const promptMount: string[] =
+        core.promptFileHostPath && core.promptFileContainerPath
+          ? ['-v', `${core.promptFileHostPath}:${core.promptFileContainerPath}:ro`]
+          : [];
+
       // Mount local .claude directory to capture logs
       const claudeMount = ['-v', `${join(process.env.HOME || '/root', '.claude')}:/root/.claude`];
 
@@ -46,9 +51,20 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
       // Inline the core command into a single bash -c string instead of using
       // (exec "$@") which replaces the shell and kills background services.
-      const coreCommandStr = core.args.length >= 3 && core.args[0] === 'bash' && core.args[1] === '-c'
+      let coreCommandStr = core.args.length >= 3 && core.args[0] === 'bash' && core.args[1] === '-c'
         ? core.args[2]!
         : core.args.join(' ');
+
+      if (core.promptFileHostPath && core.promptFileContainerPath) {
+        const sq = (s: string) => `'${s.replace(/'/g, "'\\''")}'`;
+        const pIdx = core.args.indexOf('-p');
+        const promptPath = core.promptFileContainerPath;
+        if (pIdx !== -1 && pIdx + 1 < core.args.length) {
+          const before = core.args.slice(0, pIdx).map(sq);
+          const after = core.args.slice(pIdx + 2).map(sq);
+          coreCommandStr = [...before, '-p', `"$(cat ${promptPath})"`, ...after].join(' ');
+        }
+      }
 
       const command = [
         ...DOCKER_BASE_ARGS,
@@ -57,6 +73,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         ...createEnvironmentArgs(env),
         "--platform", "linux/amd64",
         ...hostMount,
+        ...promptMount,
         ...claudeMount,
         ...npmCacheMount,
         ...patchesMount,
