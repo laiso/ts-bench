@@ -24,3 +24,14 @@ ts-bench is a TypeScript AI Agent Benchmark CLI tool built with **Bun**. See `RE
 - Running actual benchmarks requires an AI agent CLI + API key (e.g. `ANTHROPIC_API_KEY`). Use `--test-only` or `--print-instructions` for dry-run validation without credentials.
 - Exercise test execution uses `corepack yarn` (Yarn v4). `corepack@0.29.4` must be installed globally and enabled: `npm install -g corepack@0.29.4 && corepack enable`.
 - The v2 dataset (SWE-Lancer) requires Docker and additional submodules — see `docs/environment.md`.
+
+### v2 (SWE-Lancer) Docker caveats in Cursor Cloud
+
+- Docker must be installed and `dockerd` started manually: `sudo dockerd &>/tmp/dockerd.log &`
+- Fix socket permissions after starting: `sudo chmod 666 /var/run/docker.sock`
+- The monolith image `swelancer/swelancer_x86_monolith:releasev1` is ~15 GB; first pull takes several minutes.
+- Docker requires `fuse-overlayfs` storage driver and `iptables-legacy` in this VM (see system prompt instructions for Docker-in-Docker setup).
+- v2 `--test-only` runs against unmodified Expensify code, so test failures are expected (no agent patch applied).
+- v2 tasks take 5+ minutes per exercise due to ansible setup + npm install inside the container.
+- Submodules needed: `repos/frontier-evals` and `repos/expensify-app`. Init with `git submodule update --init repos/frontier-evals repos/expensify-app`; also `mkdir -p .patches`.
+- v2 automatically enables `--docker` (see `src/utils/cli.ts` line 119).
