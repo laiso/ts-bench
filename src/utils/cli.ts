@@ -20,7 +20,7 @@ Exercise Selection:
   --exercise <name>      Run specific exercise
   --exercise <number>    Run first N exercises
   --exercise <list>      Run multiple exercises (comma-separated)
-  --exercism-path <path> Path to exercism practice directory [default: exercism/typescript]
+  --exercism-path <path> Path to exercism practice directory [default: exercism-typescript]
 
 Execution Options:
   --docker               Use Docker containers for agent execution [default: local execution; v2 defaults to Docker]

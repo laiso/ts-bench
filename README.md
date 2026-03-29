@@ -88,6 +88,8 @@ Each results page provides a formatted summary and downloadable artifacts contai
 For detailed documentation, see:
 
 - [Environment Setup](docs/environment.md): Details on setting up the local and Docker environments.
+- [V2 env trial plan](docs/v2-env-trial-plan.md): Phase 0–4 (Cursor Cloud → Codespaces → GCP → Hetzner → exe.dev).
+- [Phase 0: Cursor Cloud](docs/phase-0-cursor-cloud.md): Checklist for verifying Cursor Cloud before v2.
 - [Leaderboard Operation Design](docs/leaderboard.md): Explains how the leaderboard is updated and maintained.
 
 ## 🚀 Getting Started
@@ -97,6 +99,14 @@ For detailed documentation, see:
 ```bash
 bun install
 ```
+
+For **SWE-Lancer** runs (`--dataset v2`), initialize data **and** pull the monolith Docker image (v2 always uses Docker):
+
+```bash
+./scripts/setup-v2-env.sh
+```
+
+Or see [Environment Setup](docs/environment.md) (section **Docker execution (required for v2)**) for manual steps.
 
 ### Usage
 

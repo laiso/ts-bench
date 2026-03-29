@@ -119,6 +119,72 @@ bun src/index.ts --agent kimi --provider moonshot --model kimi-k2.5 --exercise a
 
 ---
 
+## SWE-Lancer dataset (`--dataset v2`)
+
+Benchmark v2 uses **two Git submodules** (paths are fixed in `src/config/constants.ts`):
+
+| Submodule | Path | Role |
+|-----------|------|------|
+| [openai/frontier-evals](https://github.com/openai/frontier-evals) | `repos/frontier-evals` | `project/swelancer/all_swelancer_tasks.csv` and per-task metadata under `project/swelancer/issues/<taskId>/` |
+| [Expensify/App](https://github.com/Expensify/App) | `repos/expensify-app` | Working tree for agent runs (`SWELANCER_REPO_PATH`) |
+
+**Initial setup**
+
+```bash
+git submodule update --init repos/frontier-evals repos/expensify-app
+```
+
+- **Git LFS**: `frontier-evals` may use LFS objects. Install [git-lfs](https://git-lfs.com/) (`brew install git-lfs` on macOS), then run `git lfs install` once per machine before checking out the submodule.
+- **Checkout conflicts**: If `repos/frontier-evals` was partially checked out or has local untracked files blocking the pinned commit, from that directory run `git clean -fdx && git checkout -f` then re-run `git submodule update --init repos/frontier-evals` from the repo root.
+- **Expensify clone size**: The App repo is large; first clone can take several minutes. If a fetch fails with pack/index errors, remove `repos/expensify-app` and `.git/modules/expensify-app`, then run `git submodule update --init repos/expensify-app` again.
+
+**Sanity check** (from repository root):
+
+```bash
+test -f repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv && echo "frontier-evals OK"
+test -d repos/expensify-app/.git && echo "expensify-app OK"
+```
+
+v1 (Exercism-only) runs use `repos/exercism-typescript` or the legacy `exercism-typescript` submodule; initialize those separately if needed.
+
+### Docker execution (required for v2)
+
+`--dataset v2` turns on Docker for both the agent and the test runner (`src/utils/cli.ts`). Runs use the **SWE-Lancer monolith image**, not the repo `Dockerfile` (that image is for v1-style `ts-bench-container`).
+
+| Item | Detail |
+|------|--------|
+| Image | `swelancer/swelancer_x86_monolith:releasev1` (`SWELANCER_IMAGE` in `src/config/constants.ts`) |
+| Platform | `linux/amd64` (benchmark passes `--platform linux/amd64`; Apple Silicon uses emulation) |
+| Host mounts | Repo root read-only at `/ts-bench-host`, frontier issues at `/app/tests/issues`, `.patches` at `/patches`, CLI cache, npm cache, optional `~/.claude` |
+| Inside container | Working dir `/app/expensify`; setup uses `ansible-playbook` from `setup_expensify.yml` with `ISSUE_ID` set to the task id |
+
+**One-shot setup** (from repository root):
+
+```bash
+./scripts/setup-v2-env.sh
+```
+
+This checks Docker is running, initializes the two submodules, creates `.patches`, and `docker pull`s the monolith image. The image is large; first pull may take a long time.
+
+**Manual pull** (equivalent to the script):
+
+```bash
+docker pull --platform linux/amd64 swelancer/swelancer_x86_monolith:releasev1
+```
+
+**Agent credentials** are read from your shell environment (same as v1). For Cursor: `CURSOR_API_KEY`. They are passed into the container via the agent wrapper / `run-agent.sh` as configured for each agent.
+
+**Smoke run** (one task id from the CSV, e.g. `16912_4`):
+
+```bash
+export CURSOR_API_KEY=...   # or rely on your existing shell / IDE injection
+bun src/index.ts --agent cursor --model sonnet --dataset v2 --exercise 16912_4 --verbose
+```
+
+**Without Docker (native v2)** you can pass an explicit flag only when you intentionally avoid the default: the CLI sets Docker on for v2; to experiment with host-side git checkout + patch in `repos/expensify-app`, you would need a workflow that disables Docker (advanced; not the default path).
+
+---
+
 ## Security / Reproducibility
 
 - Docker uses `--rm` to discard containers after each run (no state left).

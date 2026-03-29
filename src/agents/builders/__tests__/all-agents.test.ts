@@ -7,6 +7,7 @@ import { CursorAgentBuilder } from '../cursor';
 import { CopilotAgentBuilder } from '../copilot';
 import { KimiAgentBuilder } from '../kimi';
 import type { AgentBuilder } from '../../types';
+import type { Command } from '../../../execution/types';
 
 const SCRIPT_PATH = '/tmp/scripts/run-agent.sh';
 const BASE_CONFIG = {
@@ -21,10 +22,10 @@ describe('Agent builders invoke run-agent script', () => {
         builder: AgentBuilder;
         env: ReadonlyArray<readonly [string, string]>;
         fileList?: { sourceFiles: string[]; testFiles: string[] };
-        assertCommand: (command: { args: string[], env?: Record<string, string> }) => void;
+        assertCommand: (command: Command) => void;
     };
 
-    const assertRunAgent = (command: { args: string[] }, expectedCli: string) => {
+    const assertRunAgent = (command: Command, expectedCli: string) => {
         expect(command.args[0]).toBe('bash');
         expect(command.args[1]).toBe(SCRIPT_PATH);
         expect(command.args[2]).toBe(expectedCli);
