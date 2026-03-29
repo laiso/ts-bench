@@ -1,6 +1,6 @@
 import { DOCKER_BASE_ARGS, createCliCacheArgs, createEnvironmentArgs, createNpmCacheArgs, createWorkspaceArgs, NPM_CACHE_CONTAINER_PATH } from '../utils/docker';
 import type { ExecutionStrategy, Command, PrepareContext, PreparedCommand } from './types';
-import { SWELANCER_ISSUES_PATH } from '../config/constants';
+import { SWELANCER_ISSUES_PATH, SWELANCER_RUN_TESTS_HOST } from '../config/constants';
 import { join } from 'path';
 
 export class DockerExecutionStrategy implements ExecutionStrategy {
@@ -23,6 +23,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       // Mount patches directory for write access
       const patchesMount = ['-v', `${join(process.cwd(), '.patches')}:/patches`];
       const issuesMount = ['-v', `${join(process.cwd(), SWELANCER_ISSUES_PATH)}:/app/tests/issues:ro`];
+      const runTestsHost = join(process.cwd(), SWELANCER_RUN_TESTS_HOST);
+      const runTestsMount = ['-v', `${runTestsHost}:/app/tests/run_tests.yml:ro`];
       const npmCacheMount = createNpmCacheArgs();
 
       // Extract ISSUE_ID from context (fallback to exercise path basename)
@@ -78,6 +80,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         ...npmCacheMount,
         ...patchesMount,
         ...issuesMount,
+        ...runTestsMount,
         "-w", "/app/expensify",
         this.containerName,
         "bash", "-c",
