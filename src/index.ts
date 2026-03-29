@@ -105,7 +105,7 @@ async function runTestOnlyMode(
     let testCommand = 'corepack yarn && corepack yarn test';
     if (args.dataset === 'v2') {
         if (args.useDocker) {
-            testCommand = 'bash /patches/v2-test-runner.sh';
+            testCommand = 'bash /ts-bench-host/scripts/v2-test-runner.sh';
         } else {
             testCommand = 'npm rebuild canvas && npm test -- -o';
         }
