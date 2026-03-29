@@ -82,9 +82,8 @@ export class ConsoleLogger implements Logger {
     logTestFailure(exercise: string, duration: number, verbose: boolean, result: CommandResult): void {
         console.log(`🧪 ${exercise} - Test Failed (${formatDuration(duration)})`);
         if (verbose) {
-            if (result.stdout) console.log(`  Test STDOUT: ${result.stdout.slice(0, 500)}...`);
-            if (result.stdout) console.log(`  Test STDOUT: ${this.redact(result.stdout).slice(0, 500)}...`);
-            if (result.stderr) console.log(`  Test STDERR: ${this.redact(result.stderr).slice(0, 500)}...`);
+            if (result.stdout) console.log(`  Test STDOUT: ${this.redact(result.stdout).slice(-3000)}`);
+            if (result.stderr) console.log(`  Test STDERR: ${this.redact(result.stderr).slice(-3000)}`);
         }
     }
 

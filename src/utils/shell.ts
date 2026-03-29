@@ -27,6 +27,7 @@ export interface CommandResult {
 export class BunCommandExecutor implements CommandExecutor {
     async execute(args: string[], options?: ExecuteOptions): Promise<CommandResult> {
         const spawnOptions: any = {
+            stdin: "ignore",
             stdout: "pipe",
             stderr: "pipe"
         };
