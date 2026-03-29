@@ -11,7 +11,7 @@ Repository copy of the trial plan for cloud / offline use (see also `docs/phase-
 
 作業前提として **イメージ約 20GB + 作業領域約 50GB（合計約 70GB 規模）** を一度に確保したい、という要求に立つと:
 
-- **Cursor の標準クラウド VM（使い捨て環境）**は、公開情報・コミュニティ情報ベースでは **数十 GB 級の上限**があり、**増設オプションが個人プランで明示されていない**場合、**70GB 同時確保は構造的に厳しい**可能性が高い（**最新の Cursor 公式ヘルプで GB 上限を必ず確認**すること）。
+- **Cursor の標準クラウド VM（使い捨て環境）**は、公開情報では **数十 GB 級の上限**という見方もあるが、**2026-03 のプロジェクト実測セッション**ではルート **総容量約 126GB**、pull 前 **空き約 112GB**、pull 後 **空き約 100GB**（使用約 21GB）で、**70GB 級の同時利用は観測上問題なし**。一方 **Cloud Agent の Resource limits 説明にディスク GB の明示は見当たらず**、個人プランのストレージ増設の有無もそこからは特定できない（**ドキュメント改定で変わり得る**）。**必ずその場で `df -h` と最新公式を確認**すること。
 - **GitHub Codespaces**はマシンタイプを選べるが、**公式ドキュメントの「マシン一覧」ではコア数・メモリが目立ち、ディスク既定値は UI または `hostRequirements.storage`（devcontainer）で確認が必要**。調査時に **「128GB」が RAM 表記とストレージ表記を取り違えていないか**を要確認。要件 70GB を満たすなら **ストレージ列が 70GB 超**であるマシン、または **devcontainer で最小ストレージを明示**できるかを確認する。
 - **Self-hosted Cloud Agent**は実行先 VM のディスクを自分で決められるため、**70GB 超を明示的に確保したワーカー**なら要件に最も素直に合わせられる（インフラ負担は増える）。
 
@@ -56,6 +56,8 @@ Repository copy of the trial plan for cloud / offline use (see also `docs/phase-
 
 - **手順:** [docs/phase-0-cursor-cloud.md](phase-0-cursor-cloud.md)
 - **確認:** 利用中環境の **空きディスク**、**Docker**、**swelancer イメージの pull**。
+- **実測メモ（参考）:** ある環境では **Docker は最初から入っていなかった**。`docker.io` + `fuse-overlayfs` を apt 導入し、`daemon.json` で **`storage-driver: fuse-overlayfs`**、ネスト環境のため **`iptables: false`**（初回は iptables/nat で `dockerd` 失敗）のうえ手動で `dockerd` 起動後、`swelancer_x86_monolith:releasev1` の **pull は約 2 分弱で完了**（`docker images` 約 **11.7GB**）。**最低ライン（pull 完了）だけ見れば Pass**。**`bun install` / v2 スモークは未実施のセッションもある**ので、本番相当の確認は **同じ VM で Phase 0 残り（サブモジュール、Bun、1 タスク）**を追試すること。英語の**一行サマリ**は [docs/phase-0-cursor-cloud.md](phase-0-cursor-cloud.md) の *Example verdict*。*Observed behavior* / *Official Cursor docs* も参照。
+- **UI と実行コンテキスト:** 「Cursor Agent」「Composer」など**製品名・メニューはプランやクライアント版で異なる**場合がある。**エージェント用シェルとターミナル用シェルで PATH が違う**と、`docker` がある／ないが食い違うので、チェックリストは **ベンチを叩くのと同じ経路**で確認する。
 - **打ち切り例:** `no space left on device`、pull 未完了でセッション終了、Docker 不可。
 
 ### 1. Codespaces
