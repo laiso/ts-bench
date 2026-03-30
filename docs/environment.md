@@ -75,7 +75,7 @@
 - **Disk**: Hosted runners have limited disk; the workflow runs a best-effort cleanup before checkout. The monolith image is large; if the job fails with “no space left”, use a larger/self-hosted runner or a pre-warmed image cache.
 - **Timeouts**: Job `timeout-minutes` is **360**. Per-exercise timeout defaults to **3600** seconds (CLI also floors v2 at 3600s). Ansible waits for `/setup_done.txt` are controlled by **`TS_BENCH_V2_SETUP_WAIT_SEC`** (workflow input `v2_setup_wait_seconds`, default **900**).
 - **Secrets**: Same as v1 — set the keys your agent and provider need (e.g. `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `CURSOR_API_KEY`, `OPENROUTER_API_KEY`, …). Missing keys fail fast when the agent runs.
-- **Artifacts**: `data/results/`, `results/<agent>/logs/`, `benchmark-summary.txt`, and `.patches/` are uploaded after each run.
+- **Artifacts**: `data/results/`, `results/<agent>/logs/`, `benchmark-summary.txt`, `.patches/`, and **`.v2-test-logs/<taskId>/`** (pytest.log, npm/mitm/ffmpeg logs from the test container; previously only lived inside ephemeral `docker run --rm`).
 - **Expected runtime**: Often **well over** an hour for a single task (image pull, Expensify setup inside the container, agent, Playwright/pytest). Treat as a long-running manual job, not a PR gate.
 
 ---

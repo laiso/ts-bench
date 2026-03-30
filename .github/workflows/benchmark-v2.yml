@@ -215,5 +215,6 @@ jobs:
             ${{ env.OUTPUT_DIR }}/${{ github.event.inputs.agent }}/logs/
             benchmark-summary.txt
             .patches/
+            .v2-test-logs/
           if-no-files-found: warn
           retention-days: 14

@@ -13,6 +13,7 @@ import {
   SWELANCER_RUN_TESTS_HOST,
   SWELANCER_SETUP_MITMPROXY_HOST
 } from '../config/constants';
+import { mkdirSync } from 'node:fs';
 import { join } from 'path';
 
 export class DockerExecutionStrategy implements ExecutionStrategy {
@@ -43,6 +44,15 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
       // Extract ISSUE_ID from context (fallback to exercise path basename)
       const issueId = ctx.issueId ?? require('path').basename(ctx.exercisePath);
+
+      // Persist /app/tests/logs/<ISSUE_ID>/ (pytest.log, npm, mitm, etc.) on the host so
+      // `docker run --rm` does not discard them — needed for GHA artifacts and local debugging.
+      const hostV2LogsDir = join(process.cwd(), '.v2-test-logs', issueId);
+      mkdirSync(hostV2LogsDir, { recursive: true });
+      const v2TestLogsMount = [
+        '-v',
+        `${hostV2LogsDir}:/app/tests/logs/${issueId}`
+      ];
 
       // Use setup_expensify.yml for setup. This handles git checkout, dependencies, etc.
       // We explicitly set ISSUE_ID env var for the command
@@ -98,6 +108,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         ...issuesMount,
         ...runTestsMount,
         ...mitmMount,
+        ...v2TestLogsMount,
         "-w", "/app/expensify",
         this.containerName,
         "bash", "-c",
