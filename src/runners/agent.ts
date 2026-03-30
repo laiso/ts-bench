@@ -64,7 +64,8 @@ export class AgentRunner {
                 datasetType: config.dataset,
                 issueId: config.dataset === 'v2' ? exercise : undefined,
                 commitId: metadata.commitId,
-                generatePatchPath
+                generatePatchPath,
+                verbose: config.verbose
             });
 
             if (config.verbose) {

@@ -15,6 +15,8 @@ export interface PrepareContext {
   commitId?: string;
   generatePatchPath?: string;
   applyPatchPath?: string;
+  /** v2 Docker: mount extra debug dirs and set TRACE / playbook verbose flags */
+  verbose?: boolean;
 }
 
 export interface PreparedCommand {
