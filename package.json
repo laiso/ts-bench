@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "test": "bun test ./src",
-    "typecheck": "bunx --bun tsc -p . --noEmit"
+    "typecheck": "bunx --bun tsc -p . --noEmit",
+    "build:swelancer-pages": "bun scripts/build-swelancer-pages.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

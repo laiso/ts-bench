@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SWE-Lancer tasks (ts-bench)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>SWE-Lancer tasks</h1>
+    <p class="lede">
+      Browse <code>question_id</code>, titles, and metadata to choose <code>--exercise</code> for
+      <a href="https://github.com/laiso/ts-bench" rel="noopener">ts-bench</a> (dataset v2).
+    </p>
+  </header>
+
+  <section class="controls" aria-label="Search and filters">
+    <label class="field">
+      <span>Search</span>
+      <input type="search" id="search" placeholder="question_id, title, description…" autocomplete="off" />
+    </label>
+    <label class="field">
+      <span>Set</span>
+      <select id="filter-set">
+        <option value="">All sets</option>
+      </select>
+    </label>
+    <label class="field">
+      <span>Variant</span>
+      <select id="filter-variant">
+        <option value="">All variants</option>
+      </select>
+    </label>
+    <p class="count" id="result-count" aria-live="polite"></p>
+  </section>
+
+  <div class="table-wrap" role="region" aria-label="Task list">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Price</th>
+          <th scope="col">Set</th>
+          <th scope="col">Variant</th>
+          <th scope="col">Title</th>
+          <th scope="col">CLI</th>
+        </tr>
+      </thead>
+      <tbody id="task-body"></tbody>
+    </table>
+  </div>
+
+  <p class="load-error hidden" id="load-error" role="alert"></p>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
