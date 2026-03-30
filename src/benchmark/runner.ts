@@ -6,6 +6,7 @@ import { LeaderboardGenerator } from '../utils/leaderboard-generator';
 import { VersionDetector } from '../utils/version-detector';
 import { getAgentScriptPath } from '../config/paths';
 import { SWELANCER_IMAGE, TS_BENCH_CONTAINER } from '../config/constants';
+import { SWELANCER_CLI_CACHE_CONTAINER_PATH } from '../utils/docker';
 import { sanitizeFilenameSegment } from '../utils/file-name';
 
 export class BenchmarkRunner {
@@ -36,7 +37,10 @@ export class BenchmarkRunner {
             agentVersion = await versionDetector.detectAgentVersion(args.agent, {
                 useDocker,
                 containerName: versionContainer,
-                agentScriptPath
+                agentScriptPath,
+                ...(args.dataset === 'v2'
+                    ? { dockerCliCacheMount: SWELANCER_CLI_CACHE_CONTAINER_PATH }
+                    : {})
             });
             console.log(`📦 Detected ${args.agent} version: ${agentVersion}\n`);
         } else {

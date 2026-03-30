@@ -1,4 +1,12 @@
-import { DOCKER_BASE_ARGS, createCliCacheArgs, createEnvironmentArgs, createNpmCacheArgs, createWorkspaceArgs, NPM_CACHE_CONTAINER_PATH } from '../utils/docker';
+import {
+  DOCKER_BASE_ARGS,
+  createCliCacheArgs,
+  createEnvironmentArgs,
+  createNpmCacheArgs,
+  createWorkspaceArgs,
+  NPM_CACHE_CONTAINER_PATH,
+  SWELANCER_CLI_CACHE_CONTAINER_PATH
+} from '../utils/docker';
 import type { ExecutionStrategy, Command, PrepareContext, PreparedCommand } from './types';
 import {
   SWELANCER_ISSUES_PATH,
@@ -54,6 +62,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       const env = {
         ...(core.env || {}),
         NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH,
+        // Do not shadow image /root/.local (mitmdump, pipx); install agents under /opt/ts-bench-cli
+        RUN_AGENT_CLI_PREFIX: SWELANCER_CLI_CACHE_CONTAINER_PATH,
         ...(issueId ? { ISSUE_ID: issueId } : {})
       };
 
@@ -77,7 +87,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       const command = [
         ...DOCKER_BASE_ARGS,
         "--entrypoint", "/usr/bin/env",
-        ...createCliCacheArgs(),
+        ...createCliCacheArgs(SWELANCER_CLI_CACHE_CONTAINER_PATH),
         ...createEnvironmentArgs(env),
         "--platform", "linux/amd64",
         ...hostMount,
