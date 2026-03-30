@@ -8,6 +8,8 @@ interface DetectOptions {
     useDocker?: boolean;
     containerName?: string;
     agentScriptPath?: string;
+    /** When set, overrides CLI cache mount path inside the container (v2 needs /opt/ts-bench-cli) */
+    dockerCliCacheMount?: string;
 }
 
 export class VersionDetector {
@@ -35,7 +37,8 @@ export class VersionDetector {
     }
 
     private getVersionArgs(agent: AgentType, options: DetectOptions): string[] {
-        const { useDocker, containerName, agentScriptPath } = options;
+        const { useDocker, containerName, agentScriptPath, dockerCliCacheMount } = options;
+        const cliMount = dockerCliCacheMount ?? undefined;
 
         if (agentScriptPath) {
             if (useDocker && containerName) {
@@ -44,7 +47,7 @@ export class VersionDetector {
                     : [];
                 return [
                     ...DOCKER_BASE_ARGS,
-                    ...createCliCacheArgs(),
+                    ...createCliCacheArgs(cliMount),
                     ...hostMount,
                     containerName,
                     'bash',
@@ -63,7 +66,7 @@ export class VersionDetector {
             const container = containerName || TS_BENCH_CONTAINER;
             return [
                 ...DOCKER_BASE_ARGS,
-                ...createCliCacheArgs(),
+                ...createCliCacheArgs(cliMount),
                 container,
                 ...baseCommand
             ];

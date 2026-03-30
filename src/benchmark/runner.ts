@@ -6,6 +6,7 @@ import { LeaderboardGenerator } from '../utils/leaderboard-generator';
 import { VersionDetector } from '../utils/version-detector';
 import { getAgentScriptPath } from '../config/paths';
 import { SWELANCER_IMAGE, TS_BENCH_CONTAINER } from '../config/constants';
+import { SWELANCER_CLI_CACHE_CONTAINER_PATH } from '../utils/docker';
 import { sanitizeFilenameSegment } from '../utils/file-name';
 
 export class BenchmarkRunner {
@@ -36,7 +37,10 @@ export class BenchmarkRunner {
             agentVersion = await versionDetector.detectAgentVersion(args.agent, {
                 useDocker,
                 containerName: versionContainer,
-                agentScriptPath
+                agentScriptPath,
+                ...(args.dataset === 'v2'
+                    ? { dockerCliCacheMount: SWELANCER_CLI_CACHE_CONTAINER_PATH }
+                    : {})
             });
             console.log(`📦 Detected ${args.agent} version: ${agentVersion}\n`);
         } else {
@@ -60,7 +64,9 @@ export class BenchmarkRunner {
                 // Run tests using the provided ansible playbook
                 // We need to set CI=true to avoid interactive prompts if any
                 const setupWaitSec = parseInt(process.env.TS_BENCH_V2_SETUP_WAIT_SEC || '600', 10) || 600;
-                testCommand = `export CI=true && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml`;
+                // Image sets RUNTIME_SETUP; run.sh would re-run setup_expensify (~5+ min) after we already
+                // ran it above. Unset so run.sh only starts services + setup_mitmproxy + /setup_done.txt.
+                testCommand = `export CI=true && unset RUNTIME_SETUP && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml`;
             } else {
                 // Native V2: Run Jest on changed files
                 testCommand = `npm rebuild canvas && npm test -- -o`;
@@ -68,10 +74,9 @@ export class BenchmarkRunner {
         }
 
         const requestedTimeout = args.timeout ?? 300;
+        // v2 runs setup_expensify twice (agent + test container), run.sh services, webpack, dev server, pytest
         const exerciseTimeout =
-            args.dataset === 'v2' && requestedTimeout === 300
-                ? 900
-                : requestedTimeout;
+            args.dataset === 'v2' ? Math.max(requestedTimeout, 3600) : requestedTimeout;
 
         const config: BenchmarkConfig = {
             testCommand,

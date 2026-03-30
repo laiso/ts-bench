@@ -4,7 +4,10 @@ import { homedir } from 'os';
 
 export const DOCKER_BASE_ARGS = ["docker", "run", "--rm"] as const;
 const CLI_CACHE_ENV = 'TS_BENCH_CLI_CACHE';
+/** Default mount target (ts-bench-container, v1) */
 export const CLI_CACHE_CONTAINER_PATH = '/root/.local';
+/** SWE-Lancer image already uses /root/.local/bin for mitmdump etc.; mount CLI cache elsewhere */
+export const SWELANCER_CLI_CACHE_CONTAINER_PATH = '/opt/ts-bench-cli';
 const NPM_CACHE_ENV = 'TS_BENCH_NPM_CACHE';
 export const NPM_CACHE_CONTAINER_PATH = '/root/.npm';
 
@@ -30,9 +33,9 @@ export function createEnvironmentArgs(envVars: Record<string, string>): string[]
         .flatMap(([key, value]) => ["-e", `${key}=${value}`]);
 }
 
-export function createCliCacheArgs(): string[] {
+export function createCliCacheArgs(containerMountPath: string = CLI_CACHE_CONTAINER_PATH): string[] {
   const hostPath = resolveCliCachePath();
-  return ['-v', `${hostPath}:${CLI_CACHE_CONTAINER_PATH}`];
+  return ['-v', `${hostPath}:${containerMountPath}`];
 }
 
 function resolveCliCachePath(): string {

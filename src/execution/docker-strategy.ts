@@ -1,6 +1,18 @@
-import { DOCKER_BASE_ARGS, createCliCacheArgs, createEnvironmentArgs, createNpmCacheArgs, createWorkspaceArgs, NPM_CACHE_CONTAINER_PATH } from '../utils/docker';
+import {
+  DOCKER_BASE_ARGS,
+  createCliCacheArgs,
+  createEnvironmentArgs,
+  createNpmCacheArgs,
+  createWorkspaceArgs,
+  NPM_CACHE_CONTAINER_PATH,
+  SWELANCER_CLI_CACHE_CONTAINER_PATH
+} from '../utils/docker';
 import type { ExecutionStrategy, Command, PrepareContext, PreparedCommand } from './types';
-import { SWELANCER_ISSUES_PATH } from '../config/constants';
+import {
+  SWELANCER_ISSUES_PATH,
+  SWELANCER_RUN_TESTS_HOST,
+  SWELANCER_SETUP_MITMPROXY_HOST
+} from '../config/constants';
 import { join } from 'path';
 
 export class DockerExecutionStrategy implements ExecutionStrategy {
@@ -23,6 +35,10 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       // Mount patches directory for write access
       const patchesMount = ['-v', `${join(process.cwd(), '.patches')}:/patches`];
       const issuesMount = ['-v', `${join(process.cwd(), SWELANCER_ISSUES_PATH)}:/app/tests/issues:ro`];
+      const runTestsHost = join(process.cwd(), SWELANCER_RUN_TESTS_HOST);
+      const runTestsMount = ['-v', `${runTestsHost}:/app/tests/run_tests.yml:ro`];
+      const mitmHost = join(process.cwd(), SWELANCER_SETUP_MITMPROXY_HOST);
+      const mitmMount = ['-v', `${mitmHost}:/app/tests/setup_mitmproxy.yml:ro`];
       const npmCacheMount = createNpmCacheArgs();
 
       // Extract ISSUE_ID from context (fallback to exercise path basename)
@@ -46,6 +62,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       const env = {
         ...(core.env || {}),
         NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH,
+        // Do not shadow image /root/.local (mitmdump, pipx); install agents under /opt/ts-bench-cli
+        RUN_AGENT_CLI_PREFIX: SWELANCER_CLI_CACHE_CONTAINER_PATH,
         ...(issueId ? { ISSUE_ID: issueId } : {})
       };
 
@@ -69,7 +87,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       const command = [
         ...DOCKER_BASE_ARGS,
         "--entrypoint", "/usr/bin/env",
-        ...createCliCacheArgs(),
+        ...createCliCacheArgs(SWELANCER_CLI_CACHE_CONTAINER_PATH),
         ...createEnvironmentArgs(env),
         "--platform", "linux/amd64",
         ...hostMount,
@@ -78,6 +96,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         ...npmCacheMount,
         ...patchesMount,
         ...issuesMount,
+        ...runTestsMount,
+        ...mitmMount,
         "-w", "/app/expensify",
         this.containerName,
         "bash", "-c",

@@ -1,0 +1,104 @@
+---
+# Patched copy of frontier-evals setup_mitmproxy.yml for ts-bench v2 Docker.
+# Upstream transparent mode / async mitmdump can fail before CA files exist; we spawn
+# mitmdump in the same shell, wait for mitmproxy-ca-cert.pem, then kill the process.
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Modify /etc/hosts file to include dev.new.expensify.com
+      become: true
+      lineinfile:
+        path: /etc/hosts
+        line: '127.0.0.1 dev.new.expensify.com'
+        state: present
+        backup: no
+        unsafe_writes: yes
+    
+    - name: Create a new log directory for the ISSUE_ID
+      file:
+        path: "/app/tests/logs/{{ lookup('env', 'ISSUE_ID') }}"
+        state: directory
+        mode: '0755'
+
+    # Run mitmdump as a child of this shell until CA files exist, then stop it.
+    # Background/async ansible tasks were unreliable inside run.sh (proxy died before certs).
+    - name: Generate mitmproxy CA with a short-lived mitmdump
+      shell: |
+        set -euo pipefail
+        ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
+        MITMDUMP=/root/.local/bin/mitmdump
+        LOG=/app/tests/logs/$ISSUE_ID/mitmdump.log
+        if [ -f /root/.mitmproxy/mitmproxy-ca-cert.pem ]; then
+          exit 0
+        fi
+        rm -rf /root/.mitmproxy
+        mkdir -p /root/.mitmproxy
+        # Avoid port clashes if a stale mitmdump is still bound
+        PORT=18080
+        for try in 1 2 3 4 5; do
+          if ! ss -tln | grep -q ":$PORT "; then
+            break
+          fi
+          PORT=$((PORT + 1))
+        done
+        "$MITMDUMP" -p "$PORT" --ssl-insecure --set confdir=/root/.mitmproxy \
+          > "$LOG" 2>&1 &
+        MPID=$!
+        for _ in $(seq 1 120); do
+          if [ -f /root/.mitmproxy/mitmproxy-ca-cert.pem ]; then
+            break
+          fi
+          if ! kill -0 "$MPID" 2>/dev/null; then
+            echo "mitmdump exited early; log:" >&2
+            cat "$LOG" >&2 || true
+            exit 1
+          fi
+          sleep 1
+        done
+        kill "$MPID" 2>/dev/null || true
+        wait "$MPID" 2>/dev/null || true
+        test -f /root/.mitmproxy/mitmproxy-ca-cert.pem
+      args:
+        executable: /bin/bash
+    
+    - name: Ensure mitmproxy-ca-cert.pem is present
+      assert:
+        that:
+          - lookup('file', '/root/.mitmproxy/mitmproxy-ca-cert.pem') is not none
+        fail_msg: "mitmproxy-ca-cert.pem is not present."
+    
+    - name: Create directory for mitmproxy certificates
+      file:
+        path: /usr/local/share/ca-certificates/extra
+        state: directory
+        mode: '0755'
+    
+    - name: Install mitmproxy certificates to system's trusted certificates
+      shell: |
+        cp mitmproxy-ca-cert.pem /usr/local/share/ca-certificates/extra/mitmproxy-ca-cert.crt
+        update-ca-certificates
+      args:
+        chdir: /root/.mitmproxy/
+
+    - name: Ensure libnss3-tools is installed
+      apt:
+        name: libnss3-tools
+        state: present
+
+    - name: Initialize NSS database for headless browser trust store
+      shell: |
+        mkdir -p /root/.pki/nssdb
+        if [ ! -f /root/.pki/nssdb/cert9.db ]; then
+          certutil -N -d sql:/root/.pki/nssdb --empty-password
+        fi
+      args:
+        executable: /bin/bash
+
+    - name: Install mitmproxy generated certificates to browser's trusted certificates
+      shell: |
+        certfile="/root/.mitmproxy/mitmproxy-ca-cert.pem"
+        certname="mitmproxy-ca-cert"
+
+        certutil --empty-password -d sql:/root/.pki/nssdb -A -t "C,," -n $certname -i $certfile
+      args:
+        chdir: /root/.mitmproxy/
