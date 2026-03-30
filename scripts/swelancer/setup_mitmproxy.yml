@@ -1,7 +1,7 @@
 ---
 # Patched copy of frontier-evals setup_mitmproxy.yml for ts-bench v2 Docker.
-# Upstream uses `mitmdump --mode transparent` which can exit immediately in this image;
-# align with run_tests.yml: replay.py + --ssl-insecure from /app/tests/.
+# Upstream transparent mode / async mitmdump can fail before CA files exist; we spawn
+# mitmdump in the same shell, wait for mitmproxy-ca-cert.pem, then kill the process.
 - hosts: localhost
   become: true
   tasks:
@@ -20,27 +20,28 @@
         state: directory
         mode: '0755'
 
-    # Plain mitmdump (no replay.py): replay addon can exit immediately during this
-    # playbook; we only need the CA materialized under /root/.mitmproxy/.
-    # Use setsid so the proxy survives when the ansible shell task exits (avoids SIGHUP to the job).
-    - name: Start mitmdump in the background
+    # Run mitmdump as a child of this shell until CA files exist, then stop it.
+    # Background/async ansible tasks were unreliable inside run.sh (proxy died before certs).
+    - name: Generate mitmproxy CA with a short-lived mitmdump
       shell: |
         ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
         export PATH="${PATH}:/root/.local/bin"
-        setsid mitmdump -p 18080 --ssl-insecure --set confdir=/root/.mitmproxy \
-          > /app/tests/logs/$ISSUE_ID/mitmdump.log 2>&1 < /dev/null &
-        echo $! > /tmp/mitmdump.pid
+        rm -rf /root/.mitmproxy
+        mkdir -p /root/.mitmproxy
+        mitmdump -p 18080 --ssl-insecure --set confdir=/root/.mitmproxy \
+          > /app/tests/logs/$ISSUE_ID/mitmdump.log 2>&1 &
+        MPID=$!
+        for _ in $(seq 1 120); do
+          if [ -f /root/.mitmproxy/mitmproxy-ca-cert.pem ]; then
+            break
+          fi
+          sleep 1
+        done
+        kill "$MPID" 2>/dev/null || true
+        wait "$MPID" 2>/dev/null || true
+        test -f /root/.mitmproxy/mitmproxy-ca-cert.pem
       args:
         executable: /bin/bash
-
-    - name: Wait for mitmproxy CA certificate
-      ansible.builtin.wait_for:
-        path: /root/.mitmproxy/mitmproxy-ca-cert.pem
-        timeout: 120
-
-    - name: Stop mitmdump
-      shell: "kill `cat /tmp/mitmdump.pid`"
-      ignore_errors: yes
     
     - name: Ensure mitmproxy-ca-cert.pem is present
       assert:
