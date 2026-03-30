@@ -26,7 +26,7 @@
       shell: |
         set -euo pipefail
         ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
-        export PATH="${PATH}:/root/.local/bin"
+        MITMDUMP=/root/.local/bin/mitmdump
         LOG=/app/tests/logs/$ISSUE_ID/mitmdump.log
         if [ -f /root/.mitmproxy/mitmproxy-ca-cert.pem ]; then
           exit 0
@@ -41,7 +41,7 @@
           fi
           PORT=$((PORT + 1))
         done
-        mitmdump -p "$PORT" --ssl-insecure --set confdir=/root/.mitmproxy \
+        "$MITMDUMP" -p "$PORT" --ssl-insecure --set confdir=/root/.mitmproxy \
           > "$LOG" 2>&1 &
         MPID=$!
         for _ in $(seq 1 120); do

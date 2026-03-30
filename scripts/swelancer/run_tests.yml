@@ -81,9 +81,7 @@
     - name: Start mitmdump in the background
       shell: |
         ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
-        # Ensure pipx-installed binaries are on the PATH
-        export PATH="${PATH}:/root/.local/bin"
-        nohup mitmdump -s replay.py --ssl-insecure --quiet \
+        nohup /root/.local/bin/mitmdump -s replay.py --ssl-insecure --quiet \
           > /app/tests/logs/$ISSUE_ID/mitmdump.log 2>&1 & echo $! > /tmp/mitmdump.pid
       args:
         chdir: /app/tests/
