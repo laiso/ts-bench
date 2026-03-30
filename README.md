@@ -20,38 +20,6 @@
 <!-- END_LEADERBOARD -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 🤖 Supported Agents
 
 Currently supported agents:
@@ -85,6 +53,8 @@ All benchmark results are generated and published via GitHub Actions.
 Each results page provides a formatted summary and downloadable artifacts containing raw data (JSON).
 
 ## SWE-Lancer task browser (GitHub Pages)
+
+https://laiso.github.io/ts-bench/swelancer-tasks/
 
 After you enable **GitHub Pages** with **GitHub Actions** as the source (Settings → Pages), the searchable SWE-Lancer task list is published at **`https://<org>.github.io/<repo>/swelancer-tasks/`** (exact URL appears in the workflow run after deploy). Locally, run `bun run build:swelancer-pages`, then serve the `docs/` folder with any static file server and open `/swelancer-tasks/` (e.g. `bunx serve docs` and visit `http://localhost:3000/swelancer-tasks/`).
 
