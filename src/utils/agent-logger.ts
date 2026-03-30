@@ -1,15 +1,34 @@
-import { readdir, readFile, writeFile, mkdir, stat } from 'fs/promises';
-import { join, basename, resolve } from 'path';
+import { readdir, readFile, writeFile, mkdir, stat, appendFile } from 'fs/promises';
+import { join, resolve } from 'path';
 import { homedir } from 'os';
 import { ConsoleLogger } from './logger';
 import type { AgentType, BenchmarkConfig } from '../config/types';
 import type { CommandResult } from './shell';
+import { extractLastAgentMessageFromStdout, extractLastAssistantFromClaudeJsonl } from './agent-last-message';
 
 const logger = new ConsoleLogger();
 
 function getLogDir(config: BenchmarkConfig): string {
     const outputDir = config.outputDir || 'results';
     return join(outputDir, config.agent, 'logs');
+}
+
+async function appendAgentLastMessageToLog(logFile: string, result: CommandResult, claudeJsonlContent?: string): Promise<void> {
+    let message: string | null = null;
+    if (claudeJsonlContent) {
+        message = extractLastAssistantFromClaudeJsonl(claudeJsonlContent);
+    }
+    if (!message) {
+        message = extractLastAgentMessageFromStdout(result.stdout);
+    }
+    if (!message) {
+        return;
+    }
+    const redacted = logger.redact(message);
+    const footer =
+        `\n\n========== AGENT LAST MESSAGE (redacted) ==========\n${redacted}\n========== END AGENT LAST MESSAGE ==========\n`;
+    await appendFile(logFile, footer, 'utf-8');
+    logger.info(`Appended agent last message to ${logFile}`);
 }
 
 export interface LogCollector {
@@ -29,9 +48,10 @@ class ClaudeLogCollector implements LogCollector {
         return p;
     }
 
-    async collect(config: BenchmarkConfig, exercise: string, exercisePath: string, _result: CommandResult): Promise<void> {
+    async collect(config: BenchmarkConfig, exercise: string, exercisePath: string, result: CommandResult): Promise<void> {
         const logDir = getLogDir(config);
         await mkdir(logDir, { recursive: true });
+        const logFile = join(logDir, `${exercise}.log`);
 
         try {
             const claudeProjects = join(homedir(), '.claude', 'projects');
@@ -69,13 +89,17 @@ class ClaudeLogCollector implements LogCollector {
             const jsonlPath = await pickNewestJsonl(candidateProject);
             if (!jsonlPath) {
                 logger.info(`No Claude JSONL logs found for ${exercise}. Checked: ${candidateProject} (root and sessions).`);
+                const fallback = `STDOUT:\n${result.stdout}\n\nSTDERR:\n${result.stderr}`;
+                await writeFile(logFile, logger.redact(fallback));
+                await appendAgentLastMessageToLog(logFile, result);
+                logger.info(`Saved fallback agent log for ${exercise} to ${logFile}`);
                 return;
             }
 
             const logContent = await readFile(jsonlPath, 'utf-8');
             const redactedContent = logger.redact(logContent);
-            const logFile = join(logDir, `${exercise}.log`);
             await writeFile(logFile, redactedContent);
+            await appendAgentLastMessageToLog(logFile, result, logContent);
             logger.info(`Saved Claude log for ${exercise} to ${logFile}`);
         } catch (error) {
             logger.info(`ERROR: Failed to collect Claude logs for ${exercise}: ${error}`);
@@ -96,6 +120,7 @@ class GenericLogCollector implements LogCollector {
 
         const logFile = join(logDir, `${exercise}.log`);
         await writeFile(logFile, redactedContent);
+        await appendAgentLastMessageToLog(logFile, result);
         logger.info(`Saved generic log for ${exercise} to ${logFile}`);
     }
 }
