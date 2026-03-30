@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { ClaudeAgentBuilder } from '../claude';
+import { PROMPT_MOUNT_CONTAINER, PROMPT_PLACEHOLDER } from '../../prompt-files';
 
 describe('ClaudeAgentBuilder', () => {
     const config = {
@@ -43,5 +44,27 @@ describe('ClaudeAgentBuilder', () => {
         process.env.OPENROUTER_API_KEY = prevOpenRouterKey;
         process.env.ANTHROPIC_API_KEY = prevAnthropicKey;
         process.env.ANTHROPIC_BASE_URL = prevAnthropicBaseUrl;
+    });
+
+    it('v2 Docker uses prompt file mount instead of inline issue body', async () => {
+        const prev = process.env.ANTHROPIC_API_KEY;
+        process.env.ANTHROPIC_API_KEY = 'test-key';
+
+        const builder = new ClaudeAgentBuilder({
+            ...config,
+            dataset: 'v2',
+            useDocker: true,
+            exercise: '16912_4'
+        });
+        const longBody = '## Action Performed:\n\n1. Step (with parens)\n';
+        const cmd = await builder.buildCommand(longBody);
+
+        expect(cmd.promptFileHostPath).toMatch(/\.agent-prompts\/16912_4\.txt$/);
+        expect(cmd.promptFileContainerPath).toBe(PROMPT_MOUNT_CONTAINER);
+        const pIdx = cmd.args.indexOf('-p');
+        expect(pIdx).not.toBe(-1);
+        expect(cmd.args[pIdx + 1]).toBe(PROMPT_PLACEHOLDER);
+
+        process.env.ANTHROPIC_API_KEY = prev;
     });
 });

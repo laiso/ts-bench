@@ -88,7 +88,7 @@
 - `--provider <provider>`: openai/anthropic/google/openrouter/dashscope/xai/deepseek/moonshot
 - `--docker`: Switch to Docker execution
 - `--exercise <name|N|a,b,c>`: Specify exercise (name / first N / multiple)
-- `--exercism-path <path>`: Exercism root (default: `exercism-typescript`)
+- `--exercism-path <path>`: Exercism root (default: `repos/exercism-typescript`)
 - `--test-only` / `--print-instructions`: Test only / show instructions
 - `--save-result --result-dir <dir>`: Save results and regenerate the local leaderboard dataset
 - `--timeout <sec>`: Timeout per exercise (default: 300)
@@ -127,7 +127,7 @@ bun src/index.ts --agent kimi --provider moonshot --model kimi-k2.5 --exercise a
 
 ## Directories and I/O
 
-- Exercise root: `exercism-typescript` (`EXERCISM_PRACTICE_PATH`)
+- Exercise root: `repos/exercism-typescript` (`EXERCISM_PRACTICE_PATH`)
 - Exercise path: `exercises/practice/<exercise>`
 - Output (example): Use `--save-result --result-dir ./results` to export JSON
 
@@ -159,7 +159,7 @@ test -f repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv && echo "
 test -d repos/expensify-app/.git && echo "expensify-app OK"
 ```
 
-v1 (Exercism-only) runs use `repos/exercism-typescript` or the legacy `exercism-typescript` submodule; initialize those separately if needed.
+v1 (Exercism-only) runs use the `repos/exercism-typescript` submodule (`git submodule update --init repos/exercism-typescript`).
 
 ### Docker execution (required for v2)
 

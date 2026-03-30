@@ -40,3 +40,4 @@ yarn.lock
 .patches/
 .cursor-agent-prompts/
 .v2-test-logs/
+.agent-prompts/

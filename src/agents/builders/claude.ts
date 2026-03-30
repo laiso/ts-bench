@@ -1,4 +1,4 @@
-import type { AgentBuilder, AgentConfig } from '../types';
+import type { AgentBuilder, AgentConfig, FileList } from '../types';
 import { BaseAgentBuilder } from '../base';
 import { requireAnyEnv, requireEnv } from '../../utils/env';
 
@@ -67,7 +67,7 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
         return env;
     }
 
-    protected getCoreArgs(instructions: string): string[] {
+    protected getCoreArgs(instructions: string, _fileList?: FileList): string[] {
         const permissionArgs = this.config.useDocker ? [] : ['--dangerously-skip-permissions'];
         return [
             'bash',
