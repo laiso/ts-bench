@@ -220,6 +220,31 @@ bun src/index.ts --agent cursor --model sonnet --dataset v2 --exercise 16912_4 -
 
 ---
 
+## Verifying Docker execution (manual smoke)
+
+Use these when you want to confirm Docker wiring without a full agent benchmark (no API keys required for the v1 check).
+
+- **v1 (Exercism, ts-bench image):** Build the runtime image, then run tests only inside the container:
+
+```bash
+docker build -t ts-bench-container .
+bun src/index.ts --test-only --docker --exercise acronym --exercism-path repos/exercism-typescript
+```
+
+Placeholder solutions in the track may still fail Jest; the goal is to confirm `docker run ... ts-bench-container` and `corepack yarn test` complete inside the container.
+
+- **v2 (SWE-Lancer monolith):** After `./scripts/setup-v2-env.sh` or a manual `docker pull` of `swelancer/swelancer_x86_monolith:releasev1`:
+
+```bash
+docker run --rm --platform linux/amd64 --entrypoint /bin/bash swelancer/swelancer_x86_monolith:releasev1 -c 'test -d /app/expensify && echo monolith-ok'
+```
+
+A full v2 `--dataset v2` run starts Ansible setup inside the image and can take a long time; the command above only checks that the image runs.
+
+- **`permission denied` on `/var/run/docker.sock`:** The socket is created when the Docker daemon is running. If `chmod` fails with “No such file or directory”, start `dockerd` first. If the socket exists but your user cannot access it, adjust permissions or group membership after the daemon is up — see `AGENTS.md` (Cursor Cloud).
+
+---
+
 ## Troubleshooting
 
 - corepack not found: `npm i -g corepack@0.29.4 && corepack enable`
