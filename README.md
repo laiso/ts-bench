@@ -92,6 +92,11 @@ For detailed documentation, see:
 - [Phase 0: Cursor Cloud](docs/phase-0-cursor-cloud.md): Checklist for verifying Cursor Cloud before v2.
 - [Leaderboard Operation Design](docs/leaderboard.md): Explains how the leaderboard is updated and maintained.
 
+## Git branches
+
+- **`main`**: Default branch for development and pull requests. It includes v1 (Exercism) and opt-in v2 (SWE-Lancer); omitting `--dataset` still selects **v1** (see `AGENTS.md` and [Environment Setup](docs/environment.md)).
+- **`v2`**: Long-lived branch used for v2 integration work; when stable, it is merged into `main` (see [#72](https://github.com/laiso/ts-bench/issues/72)).
+
 ## 🚀 Getting Started
 
 ### Installation
