@@ -67,6 +67,19 @@
 
 ---
 
+## GitHub Actions (v2 SWE-Lancer)
+
+- Workflow: `.github/workflows/benchmark-v2.yml` (manual `workflow_dispatch`, **one task id per run**).
+- **Submodules**: Checkout uses `submodules: recursive` and **Git LFS** (`lfs: true` + `git lfs pull` in submodules) so `repos/frontier-evals` and `repos/expensify-app` are present.
+- **Docker**: The job pulls `swelancer/swelancer_x86_monolith:releasev1` (`linux/amd64`). Agent and tests run inside that image per the CLI (same as local v2).
+- **Disk**: Hosted runners have limited disk; the workflow runs a best-effort cleanup before checkout. The monolith image is large; if the job fails with “no space left”, use a larger/self-hosted runner or a pre-warmed image cache.
+- **Timeouts**: Job `timeout-minutes` is **360**. Per-exercise timeout defaults to **3600** seconds (CLI also floors v2 at 3600s). Ansible waits for `/setup_done.txt` are controlled by **`TS_BENCH_V2_SETUP_WAIT_SEC`** (workflow input `v2_setup_wait_seconds`, default **900**).
+- **Secrets**: Same as v1 — set the keys your agent and provider need (e.g. `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `CURSOR_API_KEY`, `OPENROUTER_API_KEY`, …). Missing keys fail fast when the agent runs.
+- **Artifacts**: `data/results/`, `results/<agent>/logs/`, `benchmark-summary.txt`, and `.patches/` are uploaded after each run.
+- **Expected runtime**: Often **well over** an hour for a single task (image pull, Expensify setup inside the container, agent, Playwright/pytest). Treat as a long-running manual job, not a PR gate.
+
+---
+
 ## Main CLI Options
 
 - `--agent <agent>`: Agent to use (claude/goose/aider/codex/gemini/opencode/qwen/cursor/kimi)

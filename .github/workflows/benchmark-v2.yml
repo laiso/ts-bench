@@ -1,0 +1,219 @@
+# Manual SWE-Lancer (v2) benchmark — one task per run (Docker + monolith image).
+# See docs/environment.md § GitHub Actions (v2) and AGENTS.md v2 caveats.
+
+name: Manual Benchmark Run (v2 SWE-Lancer)
+
+on:
+  workflow_dispatch:
+    inputs:
+      exercise:
+        description: "Single v2 task id (e.g. 16912_4). Use CSV/issue folder name, not Exercism slugs."
+        required: true
+        type: string
+        default: "16912_4"
+      agent:
+        description: Agent to run
+        required: true
+        default: claude
+        type: choice
+        options:
+          - claude
+          - codex
+          - gemini
+          - opencode
+          - goose
+          - qwen
+          - aider
+          - cursor
+          - copilot
+          - vibe
+          - kimi
+      provider:
+        description: Provider (openai, anthropic, google, openrouter, etc.)
+        required: true
+        default: anthropic
+        type: choice
+        options:
+          - openai
+          - groq
+          - cerebras
+          - anthropic
+          - google
+          - openrouter
+          - dashscope
+          - xai
+          - deepseek
+          - moonshot
+          - zai
+          - mistral
+      model:
+        description: Model to use (e.g. claude-sonnet-4-20250514)
+        required: true
+        default: claude-3-5-haiku-20241022
+      timeout_seconds:
+        description: Per-exercise timeout in seconds (v2 floor in CLI is 3600s)
+        required: false
+        default: "3600"
+        type: string
+      v2_setup_wait_seconds:
+        description: Max seconds to wait for /setup_done.txt inside the test container (TS_BENCH_V2_SETUP_WAIT_SEC)
+        required: false
+        default: "900"
+        type: string
+      custom_instruction:
+        description: "Additional instruction text appended to the prompt"
+        required: false
+        default: ""
+      verbose:
+        description: Verbose console output
+        required: false
+        default: false
+        type: boolean
+
+run-name: "v2 ${{ github.event.inputs.exercise }} — ${{ github.event.inputs.agent }} / ${{ github.event.inputs.model }}"
+
+concurrency:
+  group: benchmark-v2-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  run-benchmark-v2:
+    name: Run v2 benchmark (one task)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 360
+    env:
+      RESULT_DIR: ./data/results
+      OUTPUT_DIR: ./results
+
+    steps:
+      # Hosted runners are tight on disk; monolith image is large (~15 GB).
+      - name: Free disk space
+        run: |
+          sudo docker system prune -af || true
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          df -h
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Ensure Git LFS for submodules
+        run: |
+          set -euo pipefail
+          git lfs install
+          git submodule foreach --recursive 'git lfs pull || true'
+
+      - name: Create patches directory
+        run: mkdir -p .patches
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Pull SWE-Lancer monolith image
+        run: |
+          set -euo pipefail
+          docker pull --platform linux/amd64 swelancer/swelancer_x86_monolith:releasev1
+
+      - name: Run v2 benchmark
+        env:
+          TS_BENCH_V2_SETUP_WAIT_SEC: ${{ github.event.inputs.v2_setup_wait_seconds }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CUSTOM_INSTRUCTION: ${{ github.event.inputs.custom_instruction }}
+          MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
+          KIMI_API_KEY: ${{ secrets.KIMI_API_KEY }}
+          ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "${{ env.RESULT_DIR }}"
+          mkdir -p "${{ env.OUTPUT_DIR }}"
+
+          CMD=(
+            bun src/index.ts
+            --dataset v2
+            --docker
+            --agent "${{ github.event.inputs.agent }}"
+            --model "${{ github.event.inputs.model }}"
+            --provider "${{ github.event.inputs.provider }}"
+            --exercise "${{ github.event.inputs.exercise }}"
+            --timeout "${{ github.event.inputs.timeout_seconds }}"
+            --output-dir "${{ env.OUTPUT_DIR }}"
+            --save-result
+            --result-dir "${{ env.RESULT_DIR }}"
+          )
+
+          if [ "${{ github.event.inputs.verbose }}" = "true" ]; then
+            CMD+=(--verbose)
+          fi
+
+          if [ -n "${CUSTOM_INSTRUCTION:-}" ]; then
+            CMD+=(--custom-instruction "${CUSTOM_INSTRUCTION}")
+          fi
+
+          echo "Running: ${CMD[*]}"
+          "${CMD[@]}" | tee benchmark-summary.txt
+
+      - name: Write job summary
+        if: always()
+        run: |
+          {
+            echo "## v2 (SWE-Lancer) benchmark"
+            echo
+            echo "- Task id: ${{ github.event.inputs.exercise }}"
+            echo "- Agent: ${{ github.event.inputs.agent }}"
+            echo "- Model: ${{ github.event.inputs.model }}"
+            echo "- Provider: ${{ github.event.inputs.provider }}"
+            echo "- TS_BENCH_V2_SETUP_WAIT_SEC: ${{ github.event.inputs.v2_setup_wait_seconds }}"
+            if [ -f "${{ env.RESULT_DIR }}/latest.json" ] && command -v jq >/dev/null 2>&1; then
+              echo
+              echo "### Summary"
+              SR=$(jq -r '.summary.successRate // "n/a"' "${{ env.RESULT_DIR }}/latest.json")
+              SC=$(jq -r '.summary.successCount // "?"' "${{ env.RESULT_DIR }}/latest.json")
+              TC=$(jq -r '.summary.totalCount // "?"' "${{ env.RESULT_DIR }}/latest.json")
+              echo "- Success rate: ${SR}% (${SC}/${TC})"
+              jq -r '.results[]? | "- Task \(.exercise): " + (if .overallSuccess then "pass" else "fail" end) + " (" + ((.totalDuration/1000)|tostring) + "s)"' "${{ env.RESULT_DIR }}/latest.json" 2>/dev/null || true
+            fi
+            echo
+            echo "### Docs"
+            echo "- [docs/environment.md — v2 & GHA](https://github.com/${{ github.repository }}/blob/main/docs/environment.md)"
+            echo "- [AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f benchmark-summary.txt ]; then
+            node scripts/append-gh-summary.mjs
+          fi
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-v2-results-${{ github.event.inputs.exercise }}
+          path: |
+            ${{ env.RESULT_DIR }}/
+            ${{ env.OUTPUT_DIR }}/${{ github.event.inputs.agent }}/logs/
+            benchmark-summary.txt
+            .patches/
+          if-no-files-found: warn
+          retention-days: 14
