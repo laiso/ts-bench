@@ -24,16 +24,34 @@
     # Background/async ansible tasks were unreliable inside run.sh (proxy died before certs).
     - name: Generate mitmproxy CA with a short-lived mitmdump
       shell: |
+        set -euo pipefail
         ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
         export PATH="${PATH}:/root/.local/bin"
+        LOG=/app/tests/logs/$ISSUE_ID/mitmdump.log
+        if [ -f /root/.mitmproxy/mitmproxy-ca-cert.pem ]; then
+          exit 0
+        fi
         rm -rf /root/.mitmproxy
         mkdir -p /root/.mitmproxy
-        mitmdump -p 18080 --ssl-insecure --set confdir=/root/.mitmproxy \
-          > /app/tests/logs/$ISSUE_ID/mitmdump.log 2>&1 &
+        # Avoid port clashes if a stale mitmdump is still bound
+        PORT=18080
+        for try in 1 2 3 4 5; do
+          if ! ss -tln | grep -q ":$PORT "; then
+            break
+          fi
+          PORT=$((PORT + 1))
+        done
+        mitmdump -p "$PORT" --ssl-insecure --set confdir=/root/.mitmproxy \
+          > "$LOG" 2>&1 &
         MPID=$!
         for _ in $(seq 1 120); do
           if [ -f /root/.mitmproxy/mitmproxy-ca-cert.pem ]; then
             break
+          fi
+          if ! kill -0 "$MPID" 2>/dev/null; then
+            echo "mitmdump exited early; log:" >&2
+            cat "$LOG" >&2 || true
+            exit 1
           fi
           sleep 1
         done
