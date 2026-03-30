@@ -66,7 +66,8 @@ export class BenchmarkRunner {
                 const setupWaitSec = parseInt(process.env.TS_BENCH_V2_SETUP_WAIT_SEC || '600', 10) || 600;
                 // Image sets RUNTIME_SETUP; run.sh would re-run setup_expensify (~5+ min) after we already
                 // ran it above. Unset so run.sh only starts services + setup_mitmproxy + /setup_done.txt.
-                testCommand = `export CI=true && unset RUNTIME_SETUP && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml`;
+                const apFlags = args.verbose ? '-vv ' : '';
+                testCommand = `export CI=true && unset RUNTIME_SETUP && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook ${apFlags}-i "localhost," --connection=local /app/tests/run_tests.yml`;
             } else {
                 // Native V2: Run Jest on changed files
                 testCommand = `npm rebuild canvas && npm test -- -o`;

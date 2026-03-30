@@ -35,7 +35,8 @@ export class TestRunner {
                 datasetType: context?.datasetType,
                 issueId: context?.datasetType === 'v2' ? exercise : undefined,
                 commitId: context?.commitId,
-                applyPatchPath: context?.applyPatchPath
+                applyPatchPath: context?.applyPatchPath,
+                verbose: config.verbose
             });
 
             if (config.verbose) {

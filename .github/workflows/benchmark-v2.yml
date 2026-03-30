@@ -65,7 +65,7 @@ on:
         required: false
         default: ""
       verbose:
-        description: Verbose console output
+        description: "Verbose: full docker commands + v2 debug bundle (TRACE, -vv ansible/pytest, attempts video, rewrite task visible)"
         required: false
         default: false
         type: boolean

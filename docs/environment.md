@@ -76,6 +76,7 @@
 - **Timeouts**: Job `timeout-minutes` is **360**. Per-exercise timeout defaults to **3600** seconds (CLI also floors v2 at 3600s). Ansible waits for `/setup_done.txt` are controlled by **`TS_BENCH_V2_SETUP_WAIT_SEC`** (workflow input `v2_setup_wait_seconds`, default **900**).
 - **Secrets**: Same as v1 — set the keys your agent and provider need (e.g. `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `CURSOR_API_KEY`, `OPENROUTER_API_KEY`, …). Missing keys fail fast when the agent runs.
 - **Artifacts**: `data/results/`, `results/<agent>/logs/`, `benchmark-summary.txt`, `.patches/`, and **`.v2-test-logs/<taskId>/`** (pytest.log, npm/mitm/ffmpeg logs from the test container; previously only lived inside ephemeral `docker run --rm`).
+- **`--verbose` (v2 Docker)**: Sets `TRACE=true` for Playwright trace zips under `.v2-test-logs/<taskId>/user_tool/`, mounts **`.v2-test-logs/<taskId>/attempts/`** for ffmpeg `output.mp4`, passes **`TS_BENCH_RUN_TESTS_VERBOSE=1`** so Ansible shows rewrite-task output and pytest runs with `-vv`; both agent and test playbooks use **`ansible-playbook -vv`**. Trace zips and video can be large — use sparingly on GHA.
 - **Expected runtime**: Often **well over** an hour for a single task (image pull, Expensify setup inside the container, agent, Playwright/pytest). Treat as a long-running manual job, not a PR gate.
 
 ---

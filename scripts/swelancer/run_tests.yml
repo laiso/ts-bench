@@ -124,7 +124,8 @@
       args:
         chdir: /app/tests/
       ignore_errors: yes
-      no_log: true
+      # Verbose (TS_BENCH_RUN_TESTS_VERBOSE=1): show rewrite output for debugging
+      no_log: "{{ lookup('env', 'TS_BENCH_RUN_TESTS_VERBOSE') | default('', true) != '1' }}"
     
     - name: Start ffmpeg recording
       shell: |
@@ -136,13 +137,16 @@
     - name: Run pytest tests
       shell: |
         ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
-        pytest {{ '--user-tool-trace' if trace else '' }} issues/$ISSUE_ID/test.py \
+        EXTRA_PYTEST_ARGS=""
+        if [ "${TS_BENCH_RUN_TESTS_VERBOSE:-}" = "1" ]; then EXTRA_PYTEST_ARGS="-vv"; fi
+        pytest $EXTRA_PYTEST_ARGS {{ '--user-tool-trace' if trace else '' }} issues/$ISSUE_ID/test.py \
           > logs/$ISSUE_ID/pytest.log 2>&1
       args:
         chdir: /app/tests/
       register: pytest_result
       ignore_errors: yes
-      no_log: "{{ trace }}"
+      # Hide huge pytest stdout in Ansible UI when tracing unless verbose mode
+      no_log: "{{ trace and lookup('env', 'TS_BENCH_RUN_TESTS_VERBOSE') | default('', true) != '1' }}"
     
     - name: Persist pytest exit code for the grader
       copy:

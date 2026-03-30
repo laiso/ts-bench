@@ -54,10 +54,25 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         `${hostV2LogsDir}:/app/tests/logs/${issueId}`
       ];
 
+      const v2VerboseMounts: string[] = [];
+      if (ctx.verbose) {
+        const hostAttemptsDir = join(process.cwd(), '.v2-test-logs', issueId, 'attempts');
+        const hostUserToolDir = join(process.cwd(), '.v2-test-logs', issueId, 'user_tool');
+        mkdirSync(hostAttemptsDir, { recursive: true });
+        mkdirSync(hostUserToolDir, { recursive: true });
+        v2VerboseMounts.push(
+          '-v',
+          `${hostAttemptsDir}:/app/tests/attempts/${issueId}`,
+          '-v',
+          `${hostUserToolDir}:/app/expensify/user_tool`
+        );
+      }
+
       // Use setup_expensify.yml for setup. This handles git checkout, dependencies, etc.
       // We explicitly set ISSUE_ID env var for the command
       // Set CI=true and NPM_CONFIG_YES=true to prevent interactive prompts during build
-      const setupCmd = `export ISSUE_ID=${issueId} && export CI=true && export NPM_CONFIG_YES=true && sed 's|source /root/.nvm/nvm.sh|unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX; source /root/.nvm/nvm.sh|g' /app/tests/setup_expensify.yml > /tmp/setup_expensify_unset.yml && ansible-playbook -i "localhost," --connection=local /tmp/setup_expensify_unset.yml && git add -A && git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "setup baseline" --no-gpg-sign --allow-empty && `;
+      const setupApFlags = ctx.verbose ? '-vv ' : '';
+      const setupCmd = `export ISSUE_ID=${issueId} && export CI=true && export NPM_CONFIG_YES=true && sed 's|source /root/.nvm/nvm.sh|unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX; source /root/.nvm/nvm.sh|g' /app/tests/setup_expensify.yml > /tmp/setup_expensify_unset.yml && ansible-playbook ${setupApFlags}-i "localhost," --connection=local /tmp/setup_expensify_unset.yml && git add -A && git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "setup baseline" --no-gpg-sign --allow-empty && `;
       const patchCmd = ctx.applyPatchPath
         ? `if [ -s ${ctx.applyPatchPath} ]; then git apply ${ctx.applyPatchPath}; fi; `
         : '';
@@ -69,13 +84,17 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         postCmd = '';
       }
 
-      const env = {
+      const env: Record<string, string> = {
         ...(core.env || {}),
         NPM_CONFIG_CACHE: NPM_CACHE_CONTAINER_PATH,
         // Do not shadow image /root/.local (mitmdump, pipx); install agents under /opt/ts-bench-cli
         RUN_AGENT_CLI_PREFIX: SWELANCER_CLI_CACHE_CONTAINER_PATH,
         ...(issueId ? { ISSUE_ID: issueId } : {})
       };
+      if (ctx.verbose) {
+        env.TRACE = 'true';
+        env.TS_BENCH_RUN_TESTS_VERBOSE = '1';
+      }
 
       // Inline the core command into a single bash -c string instead of using
       // (exec "$@") which replaces the shell and kills background services.
@@ -109,6 +128,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         ...runTestsMount,
         ...mitmMount,
         ...v2TestLogsMount,
+        ...v2VerboseMounts,
         "-w", "/app/expensify",
         this.containerName,
         "bash", "-c",
