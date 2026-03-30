@@ -69,6 +69,15 @@
         name: libnss3-tools
         state: present
 
+    - name: Initialize NSS database for headless browser trust store
+      shell: |
+        mkdir -p /root/.pki/nssdb
+        if [ ! -f /root/.pki/nssdb/cert9.db ]; then
+          certutil -N -d sql:/root/.pki/nssdb --empty-password
+        fi
+      args:
+        executable: /bin/bash
+
     - name: Install mitmproxy generated certificates to browser's trusted certificates
       shell: |
         certfile="/root/.mitmproxy/mitmproxy-ca-cert.pem"
