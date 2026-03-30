@@ -27,6 +27,7 @@ export class ExerciseReader {
             return defaultPath;
         }
 
+        // Legacy CLI value: root-level submodule removed; use repos path.
         if (this.basePath === 'exercism-typescript') {
             const fallback = join(process.cwd(), 'repos', 'exercism-typescript');
             const fallbackEnvFile = join(fallback, 'CLAUDE.md');

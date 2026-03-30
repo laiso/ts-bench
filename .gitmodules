@@ -7,6 +7,3 @@
 [submodule "expensify-app"]
 	path = repos/expensify-app
 	url = https://github.com/Expensify/App
-[submodule "exercism-typescript-lagacy"]
-	path = exercism-typescript
-	url = https://github.com/laiso/exercism-typescript

@@ -24,6 +24,6 @@ RUN bun install --frozen-lockfile
 COPY . .
 
 RUN npm install -g corepack@0.29.4 && corepack enable
-RUN mkdir -p /app/exercism-typescript
+RUN mkdir -p /app/repos/exercism-typescript
 
 CMD ["bash"]
