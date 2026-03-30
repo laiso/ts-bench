@@ -38,5 +38,4 @@ commit-body.md
 .yarn
 yarn.lock
 .patches/
-.cursor-agent-prompts/
 .agent-prompts/

@@ -14,6 +14,7 @@ import {
   SWELANCER_SETUP_MITMPROXY_HOST
 } from '../config/constants';
 import { join } from 'path';
+import { PROMPT_PLACEHOLDER } from '../agents/prompt-files';
 
 export class DockerExecutionStrategy implements ExecutionStrategy {
   constructor(private containerName: string) { }
@@ -75,12 +76,20 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
       if (core.promptFileHostPath && core.promptFileContainerPath) {
         const sq = (s: string) => `'${s.replace(/'/g, "'\\''")}'`;
-        const pIdx = core.args.indexOf('-p');
         const promptPath = core.promptFileContainerPath;
-        if (pIdx !== -1 && pIdx + 1 < core.args.length) {
-          const before = core.args.slice(0, pIdx).map(sq);
-          const after = core.args.slice(pIdx + 2).map(sq);
-          coreCommandStr = [...before, '-p', `"$(cat ${promptPath})"`, ...after].join(' ');
+        const catArg = `"$(cat ${promptPath})"`;
+        const phIdx = core.args.indexOf(PROMPT_PLACEHOLDER);
+        if (phIdx !== -1) {
+          coreCommandStr = core.args
+            .map((a) => (a === PROMPT_PLACEHOLDER ? catArg : sq(a)))
+            .join(' ');
+        } else {
+          const pIdx = core.args.indexOf('-p');
+          if (pIdx !== -1 && pIdx + 1 < core.args.length) {
+            const before = core.args.slice(0, pIdx).map(sq);
+            const after = core.args.slice(pIdx + 2).map(sq);
+            coreCommandStr = [...before, '-p', catArg, ...after].join(' ');
+          }
         }
       }
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { ClaudeAgentBuilder } from '../claude';
+import { PROMPT_MOUNT_CONTAINER, PROMPT_PLACEHOLDER } from '../../prompt-files';
 
 describe('ClaudeAgentBuilder', () => {
     const config = {
@@ -59,11 +60,10 @@ describe('ClaudeAgentBuilder', () => {
         const cmd = await builder.buildCommand(longBody);
 
         expect(cmd.promptFileHostPath).toMatch(/\.agent-prompts\/16912_4\.txt$/);
-        expect(cmd.promptFileContainerPath).toBe('/tmp/ts-bench-claude-prompt.txt');
+        expect(cmd.promptFileContainerPath).toBe(PROMPT_MOUNT_CONTAINER);
         const pIdx = cmd.args.indexOf('-p');
         expect(pIdx).not.toBe(-1);
-        expect(cmd.args[pIdx + 1]).toContain('$(cat ');
-        expect(cmd.args[pIdx + 1]).not.toContain('Action Performed');
+        expect(cmd.args[pIdx + 1]).toBe(PROMPT_PLACEHOLDER);
 
         process.env.ANTHROPIC_API_KEY = prev;
     });
