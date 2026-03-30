@@ -86,7 +86,10 @@ Each results page provides a formatted summary and downloadable artifacts contai
 
 ## SWE-Lancer task browser (GitHub Pages)
 
-After you enable **GitHub Pages** with **GitHub Actions** as the source (Settings → Pages), the searchable SWE-Lancer task list is published at **`https://<org>.github.io/<repo>/swelancer-tasks/`** (exact URL appears in the workflow run after deploy). Locally, run `bun run build:swelancer-pages`, then serve the `docs/` folder with any static file server and open `/swelancer-tasks/` (e.g. `bunx serve docs` and visit `http://localhost:3000/swelancer-tasks/`).
+- **Live site (this fork):** [https://laiso.github.io/ts-bench/swelancer-tasks/](https://laiso.github.io/ts-bench/swelancer-tasks/)
+- **URL pattern (other forks):** `https://<org>.github.io/<repo>/swelancer-tasks/` after enabling **GitHub Actions** as the Pages source (Settings → Pages). The deployment summary on the workflow run also shows the exact URL.
+
+Locally, run `bun run build:swelancer-pages`, then serve the `docs/` folder with any static file server and open `/swelancer-tasks/` (e.g. `bunx serve docs` and visit `http://localhost:3000/swelancer-tasks/`).
 
 ## Documentation
 For detailed documentation, see:
