@@ -68,6 +68,25 @@
         that:
           - lookup('env', 'ISSUE_ID') is not none
         fail_msg: "The environment variable ISSUE_ID is not set."
+
+    # Monolith image lacks Google Chrome; Playwright tests use channel="chrome".
+    - name: Check for Google Chrome
+      ansible.builtin.stat:
+        path: /usr/bin/google-chrome
+      register: chrome_bin
+
+    - name: Download Google Chrome deb
+      ansible.builtin.get_url:
+        url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        dest: /tmp/google-chrome-stable.deb
+        mode: "0644"
+      when: not chrome_bin.stat.exists
+
+    - name: Install Google Chrome
+      ansible.builtin.apt:
+        deb: /tmp/google-chrome-stable.deb
+        state: present
+      when: not chrome_bin.stat.exists
   
     - name: Start npm server in the background
       shell: |
