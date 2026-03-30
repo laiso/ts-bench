@@ -20,20 +20,26 @@
         state: directory
         mode: '0755'
 
+    # Plain mitmdump (no replay.py): replay addon can exit immediately during this
+    # playbook; we only need the CA materialized under /root/.mitmproxy/.
     - name: Start mitmdump in the background
       shell: |
         ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
         export PATH="${PATH}:/root/.local/bin"
-        nohup mitmdump -s replay.py --ssl-insecure --quiet \
+        nohup mitmdump -p 18080 --ssl-insecure --set confdir=/root/.mitmproxy \
           > /app/tests/logs/$ISSUE_ID/mitmdump.log 2>&1 & echo $! > /tmp/mitmdump.pid
       args:
-        chdir: /app/tests/
-      async: 1
-      poll: 0
+        executable: /bin/bash
 
     - name: Wait for mitmdump to start
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: 18080
+        timeout: 60
+
+    - name: Brief pause for CA files to be written
       pause:
-        seconds: 10
+        seconds: 3
 
     - name: Stop mitmdump
       shell: "kill `cat /tmp/mitmdump.pid`"
