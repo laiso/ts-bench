@@ -21,7 +21,7 @@
 
   function cliTemplate(questionId) {
     return (
-      'bun src/index.ts --dataset v2 --agent <YOUR_AGENT> --exercise ' +
+      'bun src/index.ts --dataset v2 --agent <YOUR_AGENT> --task ' +
       questionId
     );
   }

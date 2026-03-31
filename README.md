@@ -87,8 +87,7 @@ After you enable **GitHub Pages** with **GitHub Actions** as the source (Setting
 
 - [Environment Setup](docs/environment.md) — local, Docker, secrets, v2 image, GHA
 - [AGENTS.md](AGENTS.md) — agent-specific notes and v2 caveats
-- [V2 env trial plan](docs/v2-env-trial-plan.md) — disk / cloud options when you cannot run locally
-- [Phase 0: Cursor Cloud](docs/phase-0-cursor-cloud.md)
+- [Cursor Cloud and fallback hosts for v2](docs/phase-0-cursor-cloud.md) — disk, Docker, image pull; alternatives if cloud is insufficient
 - [Aggregated results JSON](docs/leaderboard.md) — optional `public/data/leaderboard.json` (community-maintained)
 
 ## Git branches
@@ -121,8 +120,8 @@ bun src/index.ts --agent claude --model claude-3-5-sonnet-20240620
 # Single Exercism exercise
 bun src/index.ts --agent aider --model gpt-4o --exercise acronym
 
-# v2 example (Docker)
-bun src/index.ts --dataset v2 --agent claude --model <model> --provider anthropic --exercise 16912_4
+# v2 (Docker): one SWE-Lancer task by id (--task; v1 uses --exercise only)
+bun src/index.ts --dataset v2 --agent claude --model <model> --provider anthropic --task 16912_4
 ```
 
 With `--save-result`, results are written under your `--result-dir` and local aggregates can be refreshed (see [docs/leaderboard.md](docs/leaderboard.md)).

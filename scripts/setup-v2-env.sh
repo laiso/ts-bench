@@ -38,6 +38,6 @@ test -d repos/expensify-app/.git || { echo "expensify-app submodule missing"; ex
 echo ""
 echo "v2 environment ready."
 echo "Example (single IC task; requires agent API key, e.g. CURSOR_API_KEY):"
-echo "  bun src/index.ts --agent cursor --model sonnet --dataset v2 --exercise 16912_4 --verbose"
+echo "  bun src/index.ts --agent cursor --model sonnet --dataset v2 --task 16912_4 --verbose"
 echo ""
 echo "See docs/environment.md (SWE-Lancer / Docker execution) for details."

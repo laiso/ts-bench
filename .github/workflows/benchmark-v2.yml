@@ -1,5 +1,5 @@
 # Manual SWE-Lancer (v2) benchmark (Docker + monolith image).
-# One or more task ids: comma-separated (same as local `bun src/index.ts --dataset v2 --exercise a,b,c`).
+# One or more task ids: comma-separated (same as local `bun src/index.ts --dataset v2 --tasks a,b,c`).
 # See docs/environment.md § GitHub Actions (v2) and AGENTS.md v2 caveats.
 
 name: Manual Benchmark Run (v2 SWE-Lancer)
@@ -156,6 +156,12 @@ jobs:
           mkdir -p "${{ env.RESULT_DIR }}"
           mkdir -p "${{ env.OUTPUT_DIR }}"
 
+          TASK_INPUT="${{ github.event.inputs.exercise }}"
+          TASK_FLAG=(--task "$TASK_INPUT")
+          if [[ "$TASK_INPUT" == *","* ]]; then
+            TASK_FLAG=(--tasks "$TASK_INPUT")
+          fi
+
           CMD=(
             bun src/index.ts
             --dataset v2
@@ -163,7 +169,7 @@ jobs:
             --agent "${{ github.event.inputs.agent }}"
             --model "${{ github.event.inputs.model }}"
             --provider "${{ github.event.inputs.provider }}"
-            --exercise "${{ github.event.inputs.exercise }}"
+            "${TASK_FLAG[@]}"
             --timeout "${{ github.event.inputs.timeout_seconds }}"
             --output-dir "${{ env.OUTPUT_DIR }}"
             --save-result

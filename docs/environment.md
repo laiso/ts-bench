@@ -69,7 +69,7 @@
 
 ## GitHub Actions (v2 SWE-Lancer)
 
-- Workflow: `.github/workflows/benchmark-v2.yml` (manual `workflow_dispatch`). **Task input** accepts **one or more** v2 task ids as a **comma-separated list** (same as `--exercise a,b,c` locally). Use workflow input **`job_timeout_minutes`** when running several tasks so the job is not killed before completion (default **360** minutes).
+- Workflow: `.github/workflows/benchmark-v2.yml` (manual `workflow_dispatch`). **Task input** accepts **one or more** v2 task ids as a **comma-separated list** (same as `--tasks a,b,c` locally; a single id uses `--task`). Use workflow input **`job_timeout_minutes`** when running several tasks so the job is not killed before completion (default **360** minutes).
 - Workflow: `.github/workflows/benchmark-v2-set.yml` (manual `workflow_dispatch`, **subset of tasks**). Task pool is **`data/v2-top-reward-tasks.json`**: the **top 10** `ic_swe` rows from `all_swelancer_tasks.csv` sorted by **`price`** (reward) descending. Input **`task_count`** (default **2**) selects the first *N* ids from that list. Jobs run **serially** (`max-parallel: 1`) to avoid duplicate monolith image pulls. Regenerate the JSON after CSV changes: `bun scripts/generate-v2-top-reward-tasks.ts`.
 - **Submodules**: Checkout uses `submodules: recursive` and **Git LFS** (`lfs: true` + `git lfs pull` in submodules) so `repos/frontier-evals` and `repos/expensify-app` are present.
 - **Docker**: The job pulls `swelancer/swelancer_x86_monolith:releasev1` (`linux/amd64`). Agent and tests run inside that image per the CLI (same as local v2).
@@ -87,7 +87,8 @@
 - `--model <model>`: Model to use
 - `--provider <provider>`: openai/anthropic/google/openrouter/dashscope/xai/deepseek/moonshot
 - `--docker`: Switch to Docker execution
-- `--exercise <name|N|a,b,c>`: Specify exercise (name / first N / multiple)
+- **v1**: `--exercise <name|N|a,b,c>` — single slug, first N exercises, or comma-separated slugs
+- **v2**: `--task <id>`, `--tasks id,id,...`, or `--task-limit <n>` — SWE-Lancer task ids only (`--exercise` is rejected with `--dataset v2`)
 - `--exercism-path <path>`: Exercism root (default: `exercism-typescript`)
 - `--test-only` / `--print-instructions`: Test only / show instructions
 - `--save-result --result-dir <dir>`: Save results and refresh local aggregate data (e.g. `public/data/latest-results.json`; see [docs/leaderboard.md](leaderboard.md))
@@ -192,7 +193,7 @@ docker pull --platform linux/amd64 swelancer/swelancer_x86_monolith:releasev1
 
 ```bash
 export CURSOR_API_KEY=...   # or rely on your existing shell / IDE injection
-bun src/index.ts --agent cursor --model sonnet --dataset v2 --exercise 16912_4 --verbose
+bun src/index.ts --agent cursor --model sonnet --dataset v2 --task 16912_4 --verbose
 ```
 
 **Without Docker (native v2)** you can pass an explicit flag only when you intentionally avoid the default: the CLI sets Docker on for v2; to experiment with host-side git checkout + patch in `repos/expensify-app`, you would need a workflow that disables Docker (advanced; not the default path).
