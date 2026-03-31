@@ -175,6 +175,9 @@ jobs:
       - name: Create patches directory
         run: mkdir -p .patches
 
+      - name: Create v2 SWE-Lancer host log directory
+        run: mkdir -p .v2-swelancer-logs
+
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
@@ -283,6 +286,7 @@ jobs:
           path: |
             ${{ env.OUTPUT_DIR }}/${{ github.event.inputs.agent }}/logs/
             .patches/
+            .v2-swelancer-logs/
           if-no-files-found: warn
           retention-days: 7
 
