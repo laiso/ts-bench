@@ -55,5 +55,5 @@ The benchmark runner executes a sequence of steps for each problem to ensure con
 ## 6. Transparency and Reporting
 
 * **Result Storage**: All results from a benchmark run are saved into a detailed JSON file. This includes metadata about the run (agent, model, timestamp) and the full list of per-exercise results.
-* **Leaderboard Generation**: A separate utility aggregates multiple result files to generate a consolidated leaderboard, allowing for comparison across different agents and models.
+* **Aggregated JSON**: A utility can merge result files into `public/data/leaderboard.json` for optional comparison across agents and models (see [leaderboard.md](leaderboard.md)). The main README does not embed a ranked table.
 * **Automation**: The entire process is designed to be automated via GitHub Actions, with results and logs being publicly available for scrutiny.
