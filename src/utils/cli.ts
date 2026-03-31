@@ -43,6 +43,7 @@ Output Options:
 
 Result Saving:
   --save-result          Save benchmark results to file (automatically refreshes leaderboard)
+  --skip-leaderboard-refresh  With --save-result, write JSON only (no leaderboard regen; use for parallel CI)
   --result-name <name>   Custom name for result file (auto-generated if not specified)
   --result-dir <dir>     Directory to save results [default: ./data/results]
 
@@ -140,6 +141,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
 
     // Result saving options
     const saveResult = process.argv.includes('--save-result');
+    const skipLeaderboardRefresh = process.argv.includes('--skip-leaderboard-refresh');
     
     const resultNameIndex = process.argv.indexOf('--result-name');
     const resultName = resultNameIndex !== -1 && resultNameIndex + 1 < process.argv.length
@@ -266,6 +268,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         totalBatches,
         useDocker,
         saveResult,
+        skipLeaderboardRefresh,
         resultName,
         resultDir,
         version,
