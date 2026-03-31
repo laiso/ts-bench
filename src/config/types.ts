@@ -68,6 +68,8 @@ export interface CLIArgs {
     totalBatches?: number;
     useDocker?: boolean;
     saveResult?: boolean;
+    /** When true with --save-result, skip regenerating public leaderboard (for parallel CI shards) */
+    skipLeaderboardRefresh?: boolean;
     resultName?: string;
     resultDir?: string;
     version?: string;

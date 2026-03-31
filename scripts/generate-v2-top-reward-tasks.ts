@@ -1,8 +1,11 @@
 /**
  * Regenerate data/v2-top-reward-tasks.json from the SWE-Lancer CSV:
- * ic_swe rows only, sorted by price descending, top 10 question_ids.
+ * ic_swe rows only, sorted by price descending, top N question_ids.
+ *
+ * Env: TOP_N (default 198 = all ic_swe in CSV); workflow task_count must be ≤ pool size.
  *
  * Run: bun scripts/generate-v2-top-reward-tasks.ts
+ * Run: TOP_N=100 bun scripts/generate-v2-top-reward-tasks.ts
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -29,14 +32,19 @@ async function main(): Promise<void> {
         price: Number.parseFloat(r.price),
     }));
     withPrice.sort((a, b) => b.price - a.price);
-    const top = withPrice.slice(0, 10);
+    const topN = Math.min(
+        Math.max(1, Number.parseInt(process.env.TOP_N ?? '198', 10) || 198),
+        withPrice.length
+    );
+    const top = withPrice.slice(0, topN);
 
     const payload = {
         description:
-            'Top 10 SWE-Lancer ic_swe tasks by CSV price (reward amount), descending. Used by benchmark-v2-set.yml.',
+            `Top ${topN} SWE-Lancer ic_swe tasks by CSV price (reward amount), descending. Used by benchmark-v2-set.yml (GHA task_count must be ≤ pool size).`,
+        top_n: topN,
         source_csv: SWELANCER_DATA_PATH,
         variant: 'ic_swe',
-        selection: 'sort by price descending; take first 10',
+        selection: `sort by price descending; take first ${topN}`,
         generated_at: new Date().toISOString(),
         tasks: top.map((t, i) => ({
             rank: i + 1,

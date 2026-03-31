@@ -1,4 +1,5 @@
 # v2 (SWE-Lancer) benchmark subset: top reward tasks from data/v2-top-reward-tasks.json.
+# Split the first N tasks into J roughly equal shards (no price grouping); each shard = one matrix job (--tasks ...).
 # See https://github.com/laiso/ts-bench/issues/73 and docs/environment.md (v2 set).
 
 name: Manual Benchmark Run (v2 set — top reward)
@@ -7,21 +8,20 @@ on:
   workflow_dispatch:
     inputs:
       task_count:
-        description: "How many tasks to run from the top of the reward-ranked list (1–10)"
+        description: "Number of tasks from the top of the reward-ranked list (must be ≤ pool size in data/v2-top-reward-tasks.json)"
+        required: true
+        default: "1"
+        type: string
+      job_count:
+        description: "Number of parallel jobs (tasks are split evenly across jobs; use 1 for a single --tasks run)"
+        required: true
+        default: "1"
+        type: string
+      max_parallel:
+        description: "Max matrix jobs running at once (cap concurrent runners; typically ≤ job_count)"
         required: false
-        default: "2"
-        type: choice
-        options:
-          - "1"
-          - "2"
-          - "3"
-          - "4"
-          - "5"
-          - "6"
-          - "7"
-          - "8"
-          - "9"
-          - "10"
+        default: "16"
+        type: string
       agent:
         description: Agent to run
         required: true
@@ -81,7 +81,7 @@ on:
         default: false
         type: boolean
 
-run-name: "v2 set (top ${{ github.event.inputs.task_count }} by reward) — ${{ github.event.inputs.agent }} / ${{ github.event.inputs.model }}"
+run-name: "v2 set (tasks=${{ github.event.inputs.task_count }}, jobs=${{ github.event.inputs.job_count }}) — ${{ github.event.inputs.agent }} / ${{ github.event.inputs.model }}"
 
 concurrency:
   group: benchmark-v2-set-${{ github.repository }}
@@ -89,7 +89,7 @@ concurrency:
 
 jobs:
   prepare-matrix:
-    name: Prepare task matrix
+    name: Build matrix (task shards)
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
@@ -97,25 +97,46 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build matrix from top-reward list
+      - name: Split tasks into shards
         id: build
         env:
           TASK_COUNT: ${{ github.event.inputs.task_count }}
+          JOB_COUNT: ${{ github.event.inputs.job_count }}
         run: |
           set -euo pipefail
           test -f data/v2-top-reward-tasks.json
-          LEN="$(jq '.question_ids | length' data/v2-top-reward-tasks.json)"
-          if [ "$TASK_COUNT" -lt 1 ] || [ "$TASK_COUNT" -gt "$LEN" ]; then
-            echo "task_count must be between 1 and $LEN"
+          if ! [[ "$TASK_COUNT" =~ ^[0-9]+$ ]] || [ "$TASK_COUNT" -lt 1 ]; then
+            echo "task_count must be a positive integer"
             exit 1
           fi
-          jq -c --argjson n "$TASK_COUNT" \
-            '{include: [.question_ids[0:$n][] | {exercise: .}]}' \
-            data/v2-top-reward-tasks.json > matrix.json
-          echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+          if ! [[ "$JOB_COUNT" =~ ^[0-9]+$ ]] || [ "$JOB_COUNT" -lt 1 ]; then
+            echo "job_count must be a positive integer"
+            exit 1
+          fi
+          LEN="$(jq '.question_ids | length' data/v2-top-reward-tasks.json)"
+          if [ "$TASK_COUNT" -gt "$LEN" ]; then
+            echo "task_count ($TASK_COUNT) exceeds pool size ($LEN). Regenerate JSON or lower task_count."
+            exit 1
+          fi
+          if [ "$JOB_COUNT" -gt "$TASK_COUNT" ]; then
+            echo "job_count ($JOB_COUNT) cannot exceed task_count ($TASK_COUNT)"
+            exit 1
+          fi
+          MATRIX="$(jq -c --argjson tc "$TASK_COUNT" --argjson jc "$JOB_COUNT" '
+            .question_ids[0:$tc] as $ids
+            | ($ids | length) as $t
+            | [range(0; $jc) | . as $j | {
+                shard_index: $j,
+                tasks_csv: ($ids[(($j * $t / $jc) | floor) : ((($j + 1) * $t / $jc) | floor)] | join(","))
+              }]
+            | map(select(.tasks_csv != ""))
+            | {include: .}
+          ' data/v2-top-reward-tasks.json)"
+          echo "matrix=${MATRIX}" >> "$GITHUB_OUTPUT"
+          echo "${MATRIX}" | jq .
 
   run-v2-benchmark-set:
-    name: "v2 ${{ matrix.exercise }}"
+    name: "v2 shard ${{ matrix.shard_index }} (${{ matrix.tasks_csv }})"
     needs: prepare-matrix
     runs-on: ubuntu-latest
     permissions:
@@ -123,7 +144,7 @@ jobs:
     timeout-minutes: 360
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: ${{ fromJSON(github.event.inputs.max_parallel) }}
       matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
     env:
       RESULT_DIR: ./data/results
@@ -166,7 +187,7 @@ jobs:
           set -euo pipefail
           docker pull --platform linux/amd64 swelancer/swelancer_x86_monolith:releasev1
 
-      - name: Run v2 benchmark
+      - name: Run v2 benchmark (shard)
         env:
           TS_BENCH_V2_SETUP_WAIT_SEC: ${{ github.event.inputs.v2_setup_wait_seconds }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -198,11 +219,13 @@ jobs:
             --agent "${{ github.event.inputs.agent }}"
             --model "${{ github.event.inputs.model }}"
             --provider "${{ github.event.inputs.provider }}"
-            --task "${{ matrix.exercise }}"
+            --tasks "${{ matrix.tasks_csv }}"
             --timeout "${{ github.event.inputs.timeout_seconds }}"
             --output-dir "${{ env.OUTPUT_DIR }}"
             --save-result
+            --skip-leaderboard-refresh
             --result-dir "${{ env.RESULT_DIR }}"
+            --result-name "shard-${{ matrix.shard_index }}"
           )
 
           if [ "${{ github.event.inputs.verbose }}" = "true" ]; then
@@ -214,19 +237,18 @@ jobs:
           fi
 
           echo "Running: ${CMD[*]}"
-          "${CMD[@]}" | tee "benchmark-summary-${{ matrix.exercise }}.txt"
+          "${CMD[@]}" | tee "benchmark-summary-shard-${{ matrix.shard_index }}.txt"
 
       - name: Write job summary
         if: always()
         run: |
           {
-            echo "## v2 (SWE-Lancer) benchmark — set run"
+            echo "## v2 set — shard \`${{ matrix.shard_index }}\`"
             echo
-            echo "- Task id: ${{ matrix.exercise }}"
+            echo "- Tasks: \`${{ matrix.tasks_csv }}\`"
             echo "- Agent: ${{ github.event.inputs.agent }}"
             echo "- Model: ${{ github.event.inputs.model }}"
             echo "- Provider: ${{ github.event.inputs.provider }}"
-            echo "- TS_BENCH_V2_SETUP_WAIT_SEC: ${{ github.event.inputs.v2_setup_wait_seconds }}"
             if [ -f "${{ env.RESULT_DIR }}/latest.json" ] && command -v jq >/dev/null 2>&1; then
               echo
               echo "### Summary"
@@ -236,28 +258,95 @@ jobs:
               echo "- Success rate: ${SR}% (${SC}/${TC})"
               jq -r '.results[]? | "- Task \(.exercise): " + (if .overallSuccess then "pass" else "fail" end) + " (" + ((.totalDuration/1000)|tostring) + "s)"' "${{ env.RESULT_DIR }}/latest.json" 2>/dev/null || true
             fi
-            echo
-            echo "### Task pool"
-            echo "- Top-reward list: \`data/v2-top-reward-tasks.json\` (regenerate: \`bun scripts/generate-v2-top-reward-tasks.ts\`)"
-            echo
-            echo "### Docs"
-            echo "- [docs/environment.md — v2 & GHA](https://github.com/${{ github.repository }}/blob/main/docs/environment.md)"
-            echo "- [AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)"
           } >> "$GITHUB_STEP_SUMMARY"
 
-          if [ -f "benchmark-summary-${{ matrix.exercise }}.txt" ]; then
-            SUMMARY_FILE="benchmark-summary-${{ matrix.exercise }}.txt" node scripts/append-gh-summary.mjs
+          if [ -f "benchmark-summary-shard-${{ matrix.shard_index }}.txt" ]; then
+            SUMMARY_FILE="benchmark-summary-shard-${{ matrix.shard_index }}.txt" node scripts/append-gh-summary.mjs
           fi
 
-      - name: Upload artifacts
+      - name: Upload result fragment
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-v2-set-${{ matrix.exercise }}-${{ github.run_id }}
+          name: v2-set-result-${{ matrix.shard_index }}-${{ github.run_id }}
           path: |
-            ${{ env.RESULT_DIR }}/
+            ${{ env.RESULT_DIR }}/shard-${{ matrix.shard_index }}.json
+            benchmark-summary-shard-${{ matrix.shard_index }}.txt
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload logs and patches (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2-set-shard-${{ matrix.shard_index }}-logs-${{ github.run_id }}
+          path: |
             ${{ env.OUTPUT_DIR }}/${{ github.event.inputs.agent }}/logs/
-            benchmark-summary-${{ matrix.exercise }}.txt
             .patches/
           if-no-files-found: warn
+          retention-days: 7
+
+  aggregate-v2-set:
+    name: Aggregate shard results
+    needs: run-v2-benchmark-set
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Download shard JSON files
+        uses: actions/download-artifact@v4
+        with:
+          pattern: v2-set-result-*-${{ github.run_id }}
+          merge-multiple: true
+          path: ./merged-raw
+
+      - name: Collect JSON for merge
+        run: |
+          set -euo pipefail
+          mkdir -p ./merged-input
+          find ./merged-raw -name 'shard-*.json' -exec cp {} ./merged-input/ \;
+          ls -la ./merged-input || true
+          if [ "$(find ./merged-input -name '*.json' | wc -l)" -eq 0 ]; then
+            echo "No shard-*.json fragments found"
+            exit 0
+          fi
+
+      - name: Merge summaries
+        run: |
+          set -euo pipefail
+          if [ "$(find ./merged-input -maxdepth 1 -name '*.json' 2>/dev/null | wc -l)" -eq 0 ]; then
+            echo "## v2 set aggregate — no result files" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          bun scripts/merge-v2-set-shards.ts ./merged-input
+
+      - name: Write aggregate summary
+        if: always()
+        run: |
+          if [ -f v2-set-aggregate.json ] && command -v jq >/dev/null 2>&1; then
+            {
+              echo "## v2 set — aggregate (all shards)"
+              echo
+              jq -r '"- Overall success rate: \(.summary.successRate)% (\(.summary.successCount)/\(.summary.totalCount))"' v2-set-aggregate.json
+              echo
+              echo "### By shard"
+              jq -r '.byShard[]? | "- **shard \(.shardIndex)** (\(.taskCount) tasks): success \(.summary.successCount // "?")/\(.summary.totalCount // "?") (\(.summary.successRate // "?")%)"' v2-set-aggregate.json
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload aggregate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-v2-set-aggregate-${{ github.run_id }}
+          path: v2-set-aggregate.json
+          if-no-files-found: ignore
           retention-days: 14

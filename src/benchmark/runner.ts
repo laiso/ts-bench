@@ -119,10 +119,11 @@ export class BenchmarkRunner {
             const resultDir = args.resultDir || './data/results';
             await this.reporter.saveResult(results, config, resultDir, args.resultName);
 
-            // Always refresh leaderboard after saving results.
-            console.log('🔄 Updating leaderboard...');
-            const generator = new LeaderboardGenerator();
-            await generator.generateLeaderboard();
+            if (!args.skipLeaderboardRefresh) {
+                console.log('🔄 Updating leaderboard...');
+                const generator = new LeaderboardGenerator();
+                await generator.generateLeaderboard();
+            }
         }
     }
 
