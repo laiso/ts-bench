@@ -20,7 +20,7 @@ Repository copy of the trial plan for cloud / offline use (see also `docs/phase-
 - **ベンチの前提**（リポジトリ既存仕様）:
   - サブモジュール: `repos/frontier-evals`, `repos/expensify-app`
   - Docker イメージ: `swelancer/swelancer_x86_monolith:releasev1`（`linux/amd64`）
-  - 例コマンド: `bun src/index.ts --agent <agent> --model <model> --dataset v2 --exercise <task_id> --verbose`
+  - 例コマンド: `bun src/index.ts --agent <agent> --model <model> --dataset v2 --task <task_id> --verbose`
   - 参考: [docs/environment.md](environment.md) の SWE-Lancer / Docker 節、[scripts/setup-v2-env.sh](../scripts/setup-v2-env.sh)
 
 ## 試行リスト（この順のみ）
@@ -46,7 +46,7 @@ Repository copy of the trial plan for cloud / offline use (see also `docs/phase-
 1. `git submodule update --init` 相当で **frontier-evals / expensify-app** が揃う（git-lfs 含め取得可能）。
 2. `docker pull --platform linux/amd64 swelancer/swelancer_x86_monolith:releasev1` が **エラーなく完了**。
 3. **1 タスク**のスモークが完了:  
-   `bun src/index.ts --agent cursor --model sonnet --dataset v2 --exercise <task_id> --verbose`（または利用エージェントに置換）で **Overall が成功**、または少なくとも **Docker 内セットアップ＋テスト段階まで到達**が再現可能。
+   `bun src/index.ts --agent cursor --model sonnet --dataset v2 --task <task_id> --verbose`（または利用エージェントに置換）で **Overall が成功**、または少なくとも **Docker 内セットアップ＋テスト段階まで到達**が再現可能。
 
 **失敗時の扱い:** 上記のいずれかで **ディスク不足・I/O エラー・タイムアウト・Docker デーモン不可**など、**同じ環境では解消が難しい**と判断したら **次の順へ進む**（戻りは任意）。
 

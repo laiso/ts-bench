@@ -8,6 +8,7 @@ import { getAgentScriptPath } from '../config/paths';
 import { SWELANCER_IMAGE, TS_BENCH_CONTAINER } from '../config/constants';
 import { SWELANCER_CLI_CACHE_CONTAINER_PATH } from '../utils/docker';
 import { sanitizeFilenameSegment } from '../utils/file-name';
+import { resolveBenchmarkSelection } from '../utils/task-selection';
 
 export class BenchmarkRunner {
     constructor(
@@ -47,7 +48,7 @@ export class BenchmarkRunner {
             console.log(`📦 Using specified ${args.agent} version: ${agentVersion}\n`);
         }
 
-        const exercises = this.selectExercises(args, allExercises);
+        const exercises = resolveBenchmarkSelection(args, allExercises);
         const results: TestResult[] = [];
 
         // Display titles for selected exercises
@@ -143,32 +144,4 @@ export class BenchmarkRunner {
     }
 
 
-    private selectExercises(args: CLIArgs, allExercises: string[]): string[] {
-        if (args.specificExercise) {
-            if (!allExercises.includes(args.specificExercise)) {
-                console.error(`❌ Specified problem '${args.specificExercise}' not found`);
-                console.log("Use --list option to see available problems");
-                process.exit(1);
-            }
-            console.log(`🎯 Specified problem: ${args.specificExercise}\n`);
-            return [args.specificExercise];
-        } else if (args.exerciseList && args.exerciseList.length > 0) {
-            const invalidExercises = args.exerciseList.filter(ex => !allExercises.includes(ex));
-            if (invalidExercises.length > 0) {
-                console.error(`❌ Invalid problem(s): ${invalidExercises.join(', ')}`);
-                console.log("Use --list option to see available problems");
-                process.exit(1);
-            }
-            console.log(`📋 Selected problems: ${args.exerciseList.join(', ')} (${args.exerciseList.length} problems)\n`);
-            return args.exerciseList;
-        } else if (args.exerciseCount) {
-            const count = Math.min(args.exerciseCount, allExercises.length);
-            console.log(`🔢 Number of problems: ${count} (out of ${allExercises.length})\n`);
-            return allExercises.slice(0, count);
-        } else {
-            // Default: run only the first available exercise
-            console.log(`📊 Found problems: ${allExercises.length} (testing only the first one)\n`);
-            return allExercises.slice(0, 1);
-        }
-    }
 }

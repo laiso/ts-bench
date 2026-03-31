@@ -14,13 +14,18 @@ Basic Options:
   --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, moonshot) [default: openai; kimi defaults to moonshot]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
   --verbose              Show detailed output
-  --list                 List available exercises
+  --list                 List available exercises (v1) or tasks (v2)
 
-Exercise Selection:
-  --exercise <name>      Run specific exercise
-  --exercise <number>    Run first N exercises
-  --exercise <list>      Run multiple exercises (comma-separated)
+Exercise selection (v1 / Exercism only):
+  --exercise <name>      Run a single exercise by slug
+  --exercise <number>    Run first N exercises (by dataset order)
+  --exercise <list>      Comma-separated exercise slugs
   --exercism-path <path> Path to exercism practice directory [default: exercism-typescript]
+
+Task selection (v2 / SWE-Lancer only):
+  --task <id>            Run one task (e.g. 6883, 16912_4)
+  --tasks <id,id,...>    Comma-separated task ids
+  --task-limit <n>       Run first N tasks (by CSV order)
 
 Execution Options:
   --docker               Use Docker containers for agent execution [default: local execution; v2 defaults to Docker]
@@ -50,16 +55,22 @@ Examples:
   bun src/index.ts --agent claude --export-web --output-dir ./public/data
   bun src/index.ts --output-format json --output-dir ./results
   bun src/index.ts --exercise acronym,anagram,bank-account
+  bun src/index.ts --dataset v2 --task 16912_4 --agent cursor --model sonnet
   bun src/index.ts --list
   bun src/index.ts --agent claude --model sonnet --save-result
   bun src/index.ts --agent goose --model gemini --save-result
   bun src/index.ts --agent claude --model sonnet --version 1.2.3 --save-result
   bun src/index.ts --agent kimi --provider moonshot --model kimi-k2.5 --save-result
-  bun src/index.ts --print-instructions --   acronym      # Show instructions for specific exercise
+  bun src/index.ts --print-instructions --   acronym      # v1: show instructions for one exercise
 
 Help:
   --help                 Show this help message
 `);
+}
+
+function die(msg: string): never {
+    console.error(msg);
+    process.exit(1);
 }
 
 export async function parseCommandLineArgs(): Promise<CLIArgs> {
@@ -151,34 +162,85 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         : undefined;
 
     const exerciseIndex = process.argv.indexOf('--exercise');
-    let specificExercise = exerciseIndex !== -1 && exerciseIndex + 1 < process.argv.length
+    const exerciseArg = exerciseIndex !== -1 && exerciseIndex + 1 < process.argv.length
         ? process.argv[exerciseIndex + 1]!
         : null;
 
-    let exerciseCount: number | null = null;
-    let exerciseList: string[] | undefined = undefined;
-    
-    // Use TOP_25_EXERCISES by default
-    if (!specificExercise) {
-        const { TOP_25_EXERCISES } = await import('../config/constants');
-        exerciseList = TOP_25_EXERCISES.split(',').map(ex => ex.trim());
+    const taskIndex = process.argv.indexOf('--task');
+    const taskArg = taskIndex !== -1 && taskIndex + 1 < process.argv.length
+        ? process.argv[taskIndex + 1]!
+        : null;
+
+    const tasksIndex = process.argv.indexOf('--tasks');
+    const tasksArg = tasksIndex !== -1 && tasksIndex + 1 < process.argv.length
+        ? process.argv[tasksIndex + 1]!
+        : null;
+
+    const taskLimitIndex = process.argv.indexOf('--task-limit');
+    const taskLimitRaw = taskLimitIndex !== -1 && taskLimitIndex + 1 < process.argv.length
+        ? process.argv[taskLimitIndex + 1]!
+        : null;
+
+    if (dataset === 'v1') {
+        if (taskArg !== null || tasksArg !== null || taskLimitRaw !== null) {
+            die('❌ --task, --tasks, and --task-limit are for --dataset v2 only. Use --exercise for Exercism.');
+        }
+    } else {
+        if (exerciseArg !== null) {
+            die('❌ --exercise is for --dataset v1 only. Use --task, --tasks, or --task-limit for v2.');
+        }
     }
 
-    if (specificExercise) {
-        if (/^\d+$/.test(specificExercise)) {
-            // Numeric case: run first N exercises
-            exerciseCount = parseInt(specificExercise, 10);
-            specificExercise = null;
-        } else if (specificExercise.includes(',')) {
-            // Comma-separated case: specify multiple exercises
-            exerciseList = specificExercise.split(',').map(ex => {
-                const trimmed = ex.trim();
+    let specificExercise: string | null = null;
+    let exerciseCount: number | null = null;
+    let exerciseList: string[] | undefined = undefined;
+
+    let specificTask: string | null = null;
+    let taskList: string[] | undefined = undefined;
+    let taskLimit: number | null = null;
+
+    if (dataset === 'v1') {
+        specificExercise = exerciseArg;
+        if (!specificExercise) {
+            const { TOP_25_EXERCISES } = await import('../config/constants');
+            exerciseList = TOP_25_EXERCISES.split(',').map(ex => ex.trim());
+        }
+        if (specificExercise) {
+            if (/^\d+$/.test(specificExercise)) {
+                exerciseCount = parseInt(specificExercise, 10);
+                specificExercise = null;
+            } else if (specificExercise.includes(',')) {
+                exerciseList = specificExercise.split(',').map(ex => {
+                    const trimmed = ex.trim();
+                    return trimmed.includes('/') ? trimmed.split('/').pop()! || trimmed : trimmed;
+                }).filter(ex => ex.length > 0);
+                specificExercise = null;
+            } else if (specificExercise.includes('/')) {
+                specificExercise = specificExercise.split('/').pop()! || null;
+            }
+        }
+    } else {
+        // v2: task selection only
+        const taskModes =
+            (taskArg !== null ? 1 : 0) +
+            (tasksArg !== null ? 1 : 0) +
+            (taskLimitRaw !== null ? 1 : 0);
+        if (taskModes > 1) {
+            die('❌ Use only one of --task, --tasks, or --task-limit');
+        }
+        if (taskArg !== null) {
+            specificTask = taskArg.includes('/') ? taskArg.split('/').pop()! || taskArg : taskArg;
+        } else if (tasksArg !== null) {
+            taskList = tasksArg.split(',').map(t => {
+                const trimmed = t.trim();
                 return trimmed.includes('/') ? trimmed.split('/').pop()! || trimmed : trimmed;
-            }).filter(ex => ex.length > 0);
-            specificExercise = null;
-        } else if (specificExercise.includes('/')) {
-            // Path format case: extract exercise name
-            specificExercise = specificExercise.split('/').pop()! || null;
+            }).filter(t => t.length > 0);
+        } else if (taskLimitRaw !== null) {
+            const n = parseInt(taskLimitRaw, 10);
+            if (Number.isNaN(n)) {
+                die('❌ --task-limit must be a positive integer');
+            }
+            taskLimit = n;
         }
     }
 
@@ -191,6 +253,9 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         specificExercise,
         exerciseCount,
         exerciseList,
+        specificTask,
+        taskList,
+        taskLimit,
         listExercises,
         outputFormat,
         outputDir,

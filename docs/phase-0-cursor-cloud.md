@@ -60,7 +60,7 @@ You can **Pass** checklist items **1–2** (disk + pull) and still **not** run *
 
 5. **Smoke (optional)**
    - [ ] Run one task, e.g.  
-     `bun src/index.ts --agent cursor --model sonnet --dataset v2 --exercise 16912_4 --verbose`  
+     `bun src/index.ts --agent cursor --model sonnet --dataset v2 --task 16912_4 --verbose`  
      (adjust agent/model per your setup.)
 
 ## Decision

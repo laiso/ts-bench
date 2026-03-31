@@ -198,7 +198,7 @@ jobs:
             --agent "${{ github.event.inputs.agent }}"
             --model "${{ github.event.inputs.model }}"
             --provider "${{ github.event.inputs.provider }}"
-            --exercise "${{ matrix.exercise }}"
+            --task "${{ matrix.exercise }}"
             --timeout "${{ github.event.inputs.timeout_seconds }}"
             --output-dir "${{ env.OUTPUT_DIR }}"
             --save-result

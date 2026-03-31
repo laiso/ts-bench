@@ -97,6 +97,9 @@ bun src/index.ts --agent claude --model claude-3-5-sonnet-20240620
 
 # Run only the 'acronym' problem with Aider (GPT-4o)
 bun src/index.ts --agent aider --model gpt-4o --exercise acronym
+
+# SWE-Lancer (v2): one task by id (--exercise is v1 only)
+bun src/index.ts --dataset v2 --task 16912_4 --agent cursor --model sonnet
 ```
 
 Running the benchmark with `--save-result` now also regenerates the local leaderboard dataset under `public/data/latest-results.json`, so you no longer need separate leaderboard flags after exporting results.
