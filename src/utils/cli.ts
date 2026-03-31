@@ -68,117 +68,131 @@ Help:
 `);
 }
 
-function die(msg: string): never {
-    console.error(msg);
-    process.exit(1);
-}
+export type ParseCliOptions = {
+    /**
+     * Override process exit (for tests). Must not return.
+     */
+    exit?: (code: number) => never;
+};
 
-export async function parseCommandLineArgs(): Promise<CLIArgs> {
-    const modelIndex = process.argv.indexOf('--model');
-    const model = modelIndex !== -1 && modelIndex + 1 < process.argv.length
-        ? process.argv[modelIndex + 1]!
+/**
+ * Parse CLI args from an argv array (defaults to global parsing via {@link parseCommandLineArgs}).
+ */
+export async function parseCliArgsFromArgv(argv: string[], parseOptions?: ParseCliOptions): Promise<CLIArgs> {
+    const die = (msg: string): never => {
+        console.error(msg);
+        if (parseOptions?.exit) {
+            parseOptions.exit(1);
+        }
+        process.exit(1);
+        throw new Error('unreachable');
+    };
+
+    const modelIndex = argv.indexOf('--model');
+    const model = modelIndex !== -1 && modelIndex + 1 < argv.length
+        ? argv[modelIndex + 1]!
         : 'sonnet';
 
-    const agentIndex = process.argv.indexOf('--agent');
-    const agent = (agentIndex !== -1 && agentIndex + 1 < process.argv.length
-        ? process.argv[agentIndex + 1]!
+    const agentIndex = argv.indexOf('--agent');
+    const agent = (agentIndex !== -1 && agentIndex + 1 < argv.length
+        ? argv[agentIndex + 1]!
         : 'claude') as AgentType;
 
-    const datasetIndex = process.argv.indexOf('--dataset');
-    const dataset = (datasetIndex !== -1 && datasetIndex + 1 < process.argv.length
-        ? process.argv[datasetIndex + 1]!
+    const datasetIndex = argv.indexOf('--dataset');
+    const dataset = (datasetIndex !== -1 && datasetIndex + 1 < argv.length
+        ? argv[datasetIndex + 1]!
         : 'v1') as import('../config/types').DatasetType;
 
-    const providerIndex = process.argv.indexOf('--provider');
-    const provider = (providerIndex !== -1 && providerIndex + 1 < process.argv.length
-        ? process.argv[providerIndex + 1]!
+    const providerIndex = argv.indexOf('--provider');
+    const provider = (providerIndex !== -1 && providerIndex + 1 < argv.length
+        ? argv[providerIndex + 1]!
         : (agent === 'kimi' ? 'moonshot' : 'openai')) as ProviderType;
 
-    const verbose = process.argv.includes('--verbose');
-    const listExercises = process.argv.includes('--list');
+    const verbose = argv.includes('--verbose');
+    const listExercises = argv.includes('--list');
 
     // New output options
-    const outputFormatIndex = process.argv.indexOf('--output-format');
-    const outputFormat = outputFormatIndex !== -1 && outputFormatIndex + 1 < process.argv.length
-        ? process.argv[outputFormatIndex + 1]! as 'console' | 'json'
+    const outputFormatIndex = argv.indexOf('--output-format');
+    const outputFormat = outputFormatIndex !== -1 && outputFormatIndex + 1 < argv.length
+        ? argv[outputFormatIndex + 1]! as 'console' | 'json'
         : 'console';
 
-    const outputDirIndex = process.argv.indexOf('--output-dir');
-    const outputDir = outputDirIndex !== -1 && outputDirIndex + 1 < process.argv.length
-        ? process.argv[outputDirIndex + 1]!
+    const outputDirIndex = argv.indexOf('--output-dir');
+    const outputDir = outputDirIndex !== -1 && outputDirIndex + 1 < argv.length
+        ? argv[outputDirIndex + 1]!
         : undefined;
 
-    const exportWeb = process.argv.includes('--export-web');
-    const allAgents = process.argv.includes('--all-agents');
+    const exportWeb = argv.includes('--export-web');
+    const allAgents = argv.includes('--all-agents');
 
     // Batch execution options
-    const batchIndex = process.argv.indexOf('--batch');
-    const batch = batchIndex !== -1 && batchIndex + 1 < process.argv.length
-        ? parseInt(process.argv[batchIndex + 1]!, 10)
+    const batchIndex = argv.indexOf('--batch');
+    const batch = batchIndex !== -1 && batchIndex + 1 < argv.length
+        ? parseInt(argv[batchIndex + 1]!, 10)
         : undefined;
 
-    const totalBatchesIndex = process.argv.indexOf('--total-batches');
-    const totalBatches = totalBatchesIndex !== -1 && totalBatchesIndex + 1 < process.argv.length
-        ? parseInt(process.argv[totalBatchesIndex + 1]!, 10)
+    const totalBatchesIndex = argv.indexOf('--total-batches');
+    const totalBatches = totalBatchesIndex !== -1 && totalBatchesIndex + 1 < argv.length
+        ? parseInt(argv[totalBatchesIndex + 1]!, 10)
         : 5;
 
-    const exercismPathIndex = process.argv.indexOf('--exercism-path');
-    const exercismPath = exercismPathIndex !== -1 && exercismPathIndex + 1 < process.argv.length
-        ? process.argv[exercismPathIndex + 1]!
+    const exercismPathIndex = argv.indexOf('--exercism-path');
+    const exercismPath = exercismPathIndex !== -1 && exercismPathIndex + 1 < argv.length
+        ? argv[exercismPathIndex + 1]!
         : undefined;
 
-    const useDocker = process.argv.includes('--docker') || dataset === 'v2';
-    const showProgress = process.argv.includes('--show-progress');
-    const testOnly = process.argv.includes('--test-only');
-    const printInstructions = process.argv.includes('--print-instructions');
+    const useDocker = argv.includes('--docker') || dataset === 'v2';
+    const showProgress = argv.includes('--show-progress');
+    const testOnly = argv.includes('--test-only');
+    const printInstructions = argv.includes('--print-instructions');
     
     // Timeout option (seconds), default 300
-    const timeoutIndex = process.argv.indexOf('--timeout');
-    const timeout = timeoutIndex !== -1 && timeoutIndex + 1 < process.argv.length
-        ? parseInt(process.argv[timeoutIndex + 1]!, 10)
+    const timeoutIndex = argv.indexOf('--timeout');
+    const timeout = timeoutIndex !== -1 && timeoutIndex + 1 < argv.length
+        ? parseInt(argv[timeoutIndex + 1]!, 10)
         : 300;
 
     // Result saving options
-    const saveResult = process.argv.includes('--save-result');
+    const saveResult = argv.includes('--save-result');
     
-    const resultNameIndex = process.argv.indexOf('--result-name');
-    const resultName = resultNameIndex !== -1 && resultNameIndex + 1 < process.argv.length
-        ? process.argv[resultNameIndex + 1]!
+    const resultNameIndex = argv.indexOf('--result-name');
+    const resultName = resultNameIndex !== -1 && resultNameIndex + 1 < argv.length
+        ? argv[resultNameIndex + 1]!
         : undefined;
     
-    const resultDirIndex = process.argv.indexOf('--result-dir');
-    const resultDir = resultDirIndex !== -1 && resultDirIndex + 1 < process.argv.length
-        ? process.argv[resultDirIndex + 1]!
+    const resultDirIndex = argv.indexOf('--result-dir');
+    const resultDir = resultDirIndex !== -1 && resultDirIndex + 1 < argv.length
+        ? argv[resultDirIndex + 1]!
         : undefined;
 
-    const versionIndex = process.argv.indexOf('--version');
-    const version = versionIndex !== -1 && versionIndex + 1 < process.argv.length
-        ? process.argv[versionIndex + 1]!
+    const versionIndex = argv.indexOf('--version');
+    const version = versionIndex !== -1 && versionIndex + 1 < argv.length
+        ? argv[versionIndex + 1]!
         : undefined;
 
-    const customInstructionIndex = process.argv.indexOf('--custom-instruction');
-    const customInstruction = customInstructionIndex !== -1 && customInstructionIndex + 1 < process.argv.length
-        ? process.argv[customInstructionIndex + 1]!
+    const customInstructionIndex = argv.indexOf('--custom-instruction');
+    const customInstruction = customInstructionIndex !== -1 && customInstructionIndex + 1 < argv.length
+        ? argv[customInstructionIndex + 1]!
         : undefined;
 
-    const exerciseIndex = process.argv.indexOf('--exercise');
-    const exerciseArg = exerciseIndex !== -1 && exerciseIndex + 1 < process.argv.length
-        ? process.argv[exerciseIndex + 1]!
+    const exerciseIndex = argv.indexOf('--exercise');
+    const exerciseArg = exerciseIndex !== -1 && exerciseIndex + 1 < argv.length
+        ? argv[exerciseIndex + 1]!
         : null;
 
-    const taskIndex = process.argv.indexOf('--task');
-    const taskArg = taskIndex !== -1 && taskIndex + 1 < process.argv.length
-        ? process.argv[taskIndex + 1]!
+    const taskIndex = argv.indexOf('--task');
+    const taskArg = taskIndex !== -1 && taskIndex + 1 < argv.length
+        ? argv[taskIndex + 1]!
         : null;
 
-    const tasksIndex = process.argv.indexOf('--tasks');
-    const tasksArg = tasksIndex !== -1 && tasksIndex + 1 < process.argv.length
-        ? process.argv[tasksIndex + 1]!
+    const tasksIndex = argv.indexOf('--tasks');
+    const tasksArg = tasksIndex !== -1 && tasksIndex + 1 < argv.length
+        ? argv[tasksIndex + 1]!
         : null;
 
-    const taskLimitIndex = process.argv.indexOf('--task-limit');
-    const taskLimitRaw = taskLimitIndex !== -1 && taskLimitIndex + 1 < process.argv.length
-        ? process.argv[taskLimitIndex + 1]!
+    const taskLimitIndex = argv.indexOf('--task-limit');
+    const taskLimitRaw = taskLimitIndex !== -1 && taskLimitIndex + 1 < argv.length
+        ? argv[taskLimitIndex + 1]!
         : null;
 
     if (dataset === 'v1') {
@@ -276,4 +290,8 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         timeout
     };
     return result;
+}
+
+export async function parseCommandLineArgs(): Promise<CLIArgs> {
+    return parseCliArgsFromArgv(process.argv);
 }
