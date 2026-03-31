@@ -1,0 +1,71 @@
+{
+  "description": "Top 10 SWE-Lancer ic_swe tasks by CSV price (reward amount), descending. Used by benchmark-v2-set.yml.",
+  "source_csv": "repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv",
+  "variant": "ic_swe",
+  "selection": "sort by price descending; take first 10",
+  "generated_at": "2026-03-31T00:21:36.054Z",
+  "tasks": [
+    {
+      "rank": 1,
+      "question_id": "6883",
+      "price": 32000
+    },
+    {
+      "rank": 2,
+      "question_id": "14127",
+      "price": 8000
+    },
+    {
+      "rank": 3,
+      "question_id": "15289_1",
+      "price": 8000
+    },
+    {
+      "rank": 4,
+      "question_id": "14958",
+      "price": 8000
+    },
+    {
+      "rank": 5,
+      "question_id": "17387_1",
+      "price": 4000
+    },
+    {
+      "rank": 6,
+      "question_id": "14294",
+      "price": 4000
+    },
+    {
+      "rank": 7,
+      "question_id": "12155_1",
+      "price": 4000
+    },
+    {
+      "rank": 8,
+      "question_id": "14857",
+      "price": 4000
+    },
+    {
+      "rank": 9,
+      "question_id": "14340",
+      "price": 4000
+    },
+    {
+      "rank": 10,
+      "question_id": "14223_1",
+      "price": 4000
+    }
+  ],
+  "question_ids": [
+    "6883",
+    "14127",
+    "15289_1",
+    "14958",
+    "17387_1",
+    "14294",
+    "12155_1",
+    "14857",
+    "14340",
+    "14223_1"
+  ]
+}
