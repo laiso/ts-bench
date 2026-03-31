@@ -61,10 +61,9 @@ After you enable **GitHub Pages** with **GitHub Actions** as the source (Setting
 ## Documentation
 For detailed documentation, see:
 
-- [Environment Setup](docs/environment.md): Details on setting up the local and Docker environments.
-- [V2 env trial plan](docs/v2-env-trial-plan.md): Phase 0–4 (Cursor Cloud → Codespaces → GCP → Hetzner → exe.dev).
-- [Phase 0: Cursor Cloud](docs/phase-0-cursor-cloud.md): Checklist for verifying Cursor Cloud before v2.
-- [Leaderboard Operation Design](docs/leaderboard.md): Explains how the leaderboard is updated and maintained.
+- [Environment Setup](docs/environment.md): Local, Docker, GitHub Actions, and v2 (SWE-Lancer) setup.
+- [Cursor Cloud and alternative hosts for v2](docs/phase-0-cursor-cloud.md): Phase 0 checklist (disk, Docker, pull) plus fallback order (Codespaces, GCP, Hetzner, exe.dev).
+- [Leaderboard Operation Design](docs/leaderboard.md): How the leaderboard is updated and maintained.
 
 ## Git branches
 

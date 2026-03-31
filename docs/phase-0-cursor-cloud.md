@@ -68,7 +68,27 @@ You can **Pass** checklist items **1–2** (disk + pull) and still **not** run *
 | Outcome | Next step |
 |---------|-----------|
 | **Pass** (pull + optional smoke OK) | You may continue v2 work on Cursor Cloud; still monitor disk for multi-run debugging. |
-| **Fail** (disk or Docker) | Proceed to **Phase 1: GitHub Codespaces** (see [docs/v2-env-trial-plan.md](v2-env-trial-plan.md)) or **GCP GCE** with explicit disk size. |
+| **Fail** (disk or Docker) | Try **GitHub Codespaces** or **GCP GCE** with explicit disk size (see [Alternative platforms](#alternative-platforms-if-cursor-cloud-is-insufficient) below). |
+
+## Alternative platforms (if Cursor Cloud is insufficient)
+
+Suggested order when disposable cloud is not enough for v2 (large image + workspace):
+
+| Order | Platform | Role |
+|:-----:|----------|------|
+| **0** | **Cursor Cloud** | Fast check: disk, Docker, image pull — this document. |
+| **1** | **GitHub Codespaces** | Browser workflow; confirm **storage GB** for the machine type (UI or devcontainer `hostRequirements.storage`). Set spending limits. |
+| **2** | **GCP Compute Engine** | Full Linux VM; provision **100GB+** disk and **8GB+** RAM; stop or delete instances to control cost. |
+| **3** | **Hetzner Cloud** | Fixed-price VPS; add volume if needed; easy to automate (Terraform, `hcloud`). |
+| **4** | **exe.dev** | Persistent VM; default **~25GB** is often tight for v2 — plan **disk expansion** (support / paid add-on). |
+
+### Definition of “environment ready” (any row above)
+
+1. `git submodule update --init repos/frontier-evals repos/expensify-app` succeeds (install **git-lfs** first if required).
+2. `docker pull --platform linux/amd64 swelancer/swelancer_x86_monolith:releasev1` completes without disk or I/O errors.
+3. **Optional smoke:** one v2 task, e.g. `bun src/index.ts --agent cursor --model sonnet --dataset v2 --task 16912_4 --verbose` (adjust agent/model/credentials).
+
+If any step fails in a way you cannot fix in that environment (disk, daemon, timeouts), move to the **next** platform in the table.
 
 ## Example verdict (2026-03 project session)
 
