@@ -4,6 +4,7 @@ import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANC
 import { BunCommandExecutor } from './utils/shell';
 import { ConsoleLogger } from './utils/logger';
 import { parseCommandLineArgs, printHelp } from './utils/cli';
+import { resolveBenchmarkSelection } from './utils/task-selection';
 import { ExerciseReader } from './exercises/reader';
 import { ExercismDataset } from './datasets/exercism';
 import { SweLancerDataset } from './datasets/swelancer';
@@ -120,18 +121,8 @@ async function runTestOnlyMode(
         timeout: args.timeout
     };
 
-    let exercises: string[] = [];
-
-    if (args.specificExercise) {
-        exercises = [args.specificExercise];
-    } else if (args.exerciseList) {
-        exercises = args.exerciseList;
-    } else if (args.exerciseCount) {
-        const allExercises = await datasetReader.getTasks();
-        exercises = allExercises.slice(0, args.exerciseCount);
-    } else {
-        exercises = await datasetReader.getTasks();
-    }
+    const allIds = await datasetReader.getTasks();
+    const exercises = resolveBenchmarkSelection(args, allIds);
 
     const results: TestOnlyResult[] = [];
     let totalPassed = 0;
@@ -168,24 +159,13 @@ async function runPrintInstructionsMode(
     args: CLIArgs,
     datasetReader: DatasetReader
 ): Promise<void> {
-    let exercises: string[] = [];
-
-    if (args.specificExercise) {
-        exercises = [args.specificExercise];
-    } else if (args.exerciseList) {
-        exercises = args.exerciseList;
-    } else if (args.exerciseCount) {
-        const allExercises = await datasetReader.getTasks();
-        exercises = allExercises.slice(0, args.exerciseCount);
-    } else {
-        // Default: show instructions for first exercise only
-        const allExercises = await datasetReader.getTasks();
-        exercises = allExercises.slice(0, 1);
-    }
+    const allIds = await datasetReader.getTasks();
+    const exercises = resolveBenchmarkSelection(args, allIds);
+    const label = args.dataset === 'v2' ? 'task' : 'exercise';
 
     for (const exercise of exercises) {
         console.log(`\n${'='.repeat(60)}`);
-        console.log(`Instructions for exercise: ${exercise}`);
+        console.log(`Instructions for ${label}: ${exercise}`);
         console.log(`${'='.repeat(60)}\n`);
 
         try {

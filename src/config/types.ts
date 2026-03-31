@@ -49,9 +49,14 @@ export interface CLIArgs {
     agent: AgentType;
     provider: ProviderType;
     verbose: boolean;
+    /** v1 Exercism only */
     specificExercise: string | null;
     exerciseCount: number | null;
     exerciseList?: string[];
+    /** v2 SWE-Lancer only: single task id (e.g. 6883, 16912_4) */
+    specificTask: string | null;
+    taskList?: string[];
+    taskLimit: number | null;
     listExercises: boolean;
     dataset?: DatasetType;
     outputFormat?: 'console' | 'json';
@@ -63,6 +68,8 @@ export interface CLIArgs {
     totalBatches?: number;
     useDocker?: boolean;
     saveResult?: boolean;
+    /** When true with --save-result, skip regenerating public leaderboard (for parallel CI shards) */
+    skipLeaderboardRefresh?: boolean;
     resultName?: string;
     resultDir?: string;
     version?: string;

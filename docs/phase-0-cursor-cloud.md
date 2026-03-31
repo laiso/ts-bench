@@ -60,7 +60,7 @@ You can **Pass** checklist items **1–2** (disk + pull) and still **not** run *
 
 5. **Smoke (optional)**
    - [ ] Run one task, e.g.  
-     `bun src/index.ts --agent cursor --model sonnet --dataset v2 --exercise 16912_4 --verbose`  
+     `bun src/index.ts --agent cursor --model sonnet --dataset v2 --task 16912_4 --verbose`  
      (adjust agent/model per your setup.)
 
 ## Decision
@@ -68,7 +68,19 @@ You can **Pass** checklist items **1–2** (disk + pull) and still **not** run *
 | Outcome | Next step |
 |---------|-----------|
 | **Pass** (pull + optional smoke OK) | You may continue v2 work on Cursor Cloud; still monitor disk for multi-run debugging. |
-| **Fail** (disk or Docker) | Proceed to **Phase 1: GitHub Codespaces** (see [docs/v2-env-trial-plan.md](v2-env-trial-plan.md)) or **GCP GCE** with explicit disk size. |
+| **Fail** (disk or Docker) | Try **GitHub Codespaces** or **GCP GCE** with explicit disk size (see [Environment Setup](environment.md) for v2 disk / Docker notes). |
+
+## Alternative platforms (if Cursor Cloud is insufficient)
+
+Suggested order when disposable cloud is not enough for v2 (large image + workspace):
+
+| Order | Platform | Notes |
+|:-----:|----------|--------|
+| **0** | **Cursor Cloud** | This checklist. |
+| **1** | **GitHub Codespaces** | Confirm storage for machine type; set spending limits. |
+| **2** | **GCP Compute Engine** | Full VM; provision **100GB+** disk, **8GB+** RAM. |
+| **3** | **Hetzner Cloud** | Fixed-price VPS; easy to automate. |
+| **4** | **exe.dev** | Default **~25GB** often tight — plan disk expansion. |
 
 ## Example verdict (2026-03 project session)
 
