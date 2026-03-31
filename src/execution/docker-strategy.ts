@@ -9,10 +9,12 @@ import {
 } from '../utils/docker';
 import type { ExecutionStrategy, Command, PrepareContext, PreparedCommand } from './types';
 import {
+  SWELANCER_HOST_LOGS_DIR,
   SWELANCER_ISSUES_PATH,
   SWELANCER_RUN_TESTS_HOST,
   SWELANCER_SETUP_MITMPROXY_HOST
 } from '../config/constants';
+import { mkdirSync } from 'fs';
 import { join } from 'path';
 import { PROMPT_PLACEHOLDER } from '../agents/prompt-files';
 
@@ -40,6 +42,9 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       const runTestsMount = ['-v', `${runTestsHost}:/app/tests/run_tests.yml:ro`];
       const mitmHost = join(process.cwd(), SWELANCER_SETUP_MITMPROXY_HOST);
       const mitmMount = ['-v', `${mitmHost}:/app/tests/setup_mitmproxy.yml:ro`];
+      const swelancerLogsHost = join(process.cwd(), SWELANCER_HOST_LOGS_DIR);
+      mkdirSync(swelancerLogsHost, { recursive: true });
+      const swelancerLogsMount = ['-v', `${swelancerLogsHost}:/app/tests/logs`];
       const npmCacheMount = createNpmCacheArgs();
 
       // Extract ISSUE_ID from context (fallback to exercise path basename)
@@ -107,6 +112,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         ...issuesMount,
         ...runTestsMount,
         ...mitmMount,
+        ...swelancerLogsMount,
         "-w", "/app/expensify",
         this.containerName,
         "bash", "-c",

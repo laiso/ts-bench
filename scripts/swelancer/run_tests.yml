@@ -69,6 +69,13 @@
           - lookup('env', 'ISSUE_ID') is not none
         fail_msg: "The environment variable ISSUE_ID is not set."
 
+    # Host may mount an empty dir at /app/tests/logs; ensure per-issue subdir exists before redirects.
+    - name: Ensure per-issue log directory exists
+      ansible.builtin.file:
+        path: "/app/tests/logs/{{ lookup('env', 'ISSUE_ID') }}"
+        state: directory
+        mode: "0755"
+
     # Monolith image lacks Google Chrome; Playwright tests use channel="chrome".
     - name: Check for Google Chrome
       ansible.builtin.stat:

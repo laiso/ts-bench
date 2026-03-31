@@ -39,3 +39,4 @@ commit-body.md
 yarn.lock
 .patches/
 .agent-prompts/
+.v2-swelancer-logs/
