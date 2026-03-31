@@ -1,4 +1,5 @@
-# Manual SWE-Lancer (v2) benchmark — one task per run (Docker + monolith image).
+# Manual SWE-Lancer (v2) benchmark (Docker + monolith image).
+# One or more task ids: comma-separated (same as local `bun src/index.ts --dataset v2 --exercise a,b,c`).
 # See docs/environment.md § GitHub Actions (v2) and AGENTS.md v2 caveats.
 
 name: Manual Benchmark Run (v2 SWE-Lancer)
@@ -7,10 +8,15 @@ on:
   workflow_dispatch:
     inputs:
       exercise:
-        description: "Single v2 task id (e.g. 16912_4). Use CSV/issue folder name, not Exercism slugs."
+        description: "v2 task id(s), comma-separated (e.g. 16912_4 or 16912_4,28565_1001). CSV/issue folder names, not Exercism slugs."
         required: true
         type: string
         default: "16912_4"
+      job_timeout_minutes:
+        description: "Max wall-clock minutes for the whole job (raise when running many tasks; each task can take 1h+)"
+        required: false
+        default: "360"
+        type: string
       agent:
         description: Agent to run
         required: true
@@ -70,7 +76,7 @@ on:
         default: false
         type: boolean
 
-run-name: "v2 ${{ github.event.inputs.exercise }} — ${{ github.event.inputs.agent }} / ${{ github.event.inputs.model }}"
+run-name: "v2 (${{ github.event.inputs.exercise }}) — ${{ github.event.inputs.agent }} / ${{ github.event.inputs.model }}"
 
 concurrency:
   group: benchmark-v2-${{ github.repository }}
@@ -78,11 +84,11 @@ concurrency:
 
 jobs:
   run-benchmark-v2:
-    name: Run v2 benchmark (one task)
+    name: Run v2 benchmark
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    timeout-minutes: 360
+    timeout-minutes: ${{ fromJSON(github.event.inputs.job_timeout_minutes) }}
     env:
       RESULT_DIR: ./data/results
       OUTPUT_DIR: ./results
@@ -181,7 +187,7 @@ jobs:
           {
             echo "## v2 (SWE-Lancer) benchmark"
             echo
-            echo "- Task id: ${{ github.event.inputs.exercise }}"
+            echo "- Task id(s): ${{ github.event.inputs.exercise }}"
             echo "- Agent: ${{ github.event.inputs.agent }}"
             echo "- Model: ${{ github.event.inputs.model }}"
             echo "- Provider: ${{ github.event.inputs.provider }}"
@@ -205,11 +211,22 @@ jobs:
             node scripts/append-gh-summary.mjs
           fi
 
+      - name: Sanitize artifact name
+        if: always()
+        id: artifact_name
+        run: |
+          set -euo pipefail
+          raw="${{ github.event.inputs.exercise }}"
+          safe=$(printf '%s' "$raw" | tr ', ' '__' | sed 's/[^a-zA-Z0-9._-]/_/g')
+          safe=${safe:0:120}
+          if [ -z "$safe" ]; then safe="run-${{ github.run_id }}"; fi
+          echo "artifact_name=benchmark-v2-results-${safe}" >> "$GITHUB_OUTPUT"
+
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-v2-results-${{ github.event.inputs.exercise }}
+          name: ${{ steps.artifact_name.outputs.artifact_name }}
           path: |
             ${{ env.RESULT_DIR }}/
             ${{ env.OUTPUT_DIR }}/${{ github.event.inputs.agent }}/logs/
