@@ -175,6 +175,9 @@ jobs:
       - name: Create patches directory
         run: mkdir -p .patches
 
+      - name: Create v2 SWE-Lancer host log directory
+        run: mkdir -p .v2-swelancer-logs
+
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
@@ -239,6 +242,10 @@ jobs:
           echo "Running: ${CMD[*]}"
           "${CMD[@]}" | tee "benchmark-summary-shard-${{ matrix.shard_index }}.txt"
 
+      - name: Print v2 SWE-Lancer logs to job log
+        if: always()
+        run: bash scripts/print-v2-swelancer-logs.sh .v2-swelancer-logs
+
       - name: Write job summary
         if: always()
         run: |
@@ -283,6 +290,8 @@ jobs:
           path: |
             ${{ env.OUTPUT_DIR }}/${{ github.event.inputs.agent }}/logs/
             .patches/
+            .v2-swelancer-logs/
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
 

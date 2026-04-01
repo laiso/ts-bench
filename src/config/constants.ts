@@ -11,3 +11,5 @@ export const SWELANCER_RUN_TESTS_HOST = "scripts/swelancer/run_tests.yml";
 export const SWELANCER_SETUP_MITMPROXY_HOST = "scripts/swelancer/setup_mitmproxy.yml";
 export const SWELANCER_IMAGE = "swelancer/swelancer_x86_monolith:releasev1";
 export const SWELANCER_REPO_PATH = "repos/expensify-app";
+/** Host dir mounted to /app/tests/logs in v2 Docker so pytest/npm/mitm logs survive --rm */
+export const SWELANCER_HOST_LOGS_DIR = ".v2-swelancer-logs";
