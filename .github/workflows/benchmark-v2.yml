@@ -246,5 +246,6 @@ jobs:
             benchmark-summary.txt
             .patches/
             .v2-swelancer-logs/
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 14

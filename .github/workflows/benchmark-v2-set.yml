@@ -291,6 +291,7 @@ jobs:
             ${{ env.OUTPUT_DIR }}/${{ github.event.inputs.agent }}/logs/
             .patches/
             .v2-swelancer-logs/
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
 
