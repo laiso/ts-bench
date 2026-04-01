@@ -90,7 +90,7 @@
 - `--docker`: Switch to Docker execution
 - **v1**: `--exercise <name|N|a,b,c>` — single slug, first N exercises, or comma-separated slugs
 - **v2**: `--task <id>`, `--tasks id,id,...`, or `--task-limit <n>` — SWE-Lancer task ids only (`--exercise` is rejected with `--dataset v2`)
-- `--exercism-path <path>`: Exercism root (default: `exercism-typescript`)
+- `--exercism-path <path>`: Exercism root (default: `repos/exercism-typescript`)
 - `--test-only` / `--print-instructions`: Test only / show instructions
 - `--save-result --result-dir <dir>`: Save results and refresh local aggregate data (e.g. `public/data/latest-results.json`; see [docs/leaderboard.md](leaderboard.md))
 - `--timeout <sec>`: Timeout per exercise (default: 300)
@@ -129,7 +129,7 @@ bun src/index.ts --agent kimi --provider moonshot --model kimi-k2.5 --exercise a
 
 ## Directories and I/O
 
-- Exercise root: `exercism-typescript` (`EXERCISM_PRACTICE_PATH`)
+- Exercise root: `repos/exercism-typescript` (`EXERCISM_PRACTICE_PATH`)
 - Exercise path: `exercises/practice/<exercise>`
 - Output (example): Use `--save-result --result-dir ./results` to export JSON
 
@@ -161,7 +161,7 @@ test -f repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv && echo "
 test -d repos/expensify-app/.git && echo "expensify-app OK"
 ```
 
-v1 (Exercism-only) runs use `repos/exercism-typescript` or the legacy `exercism-typescript` submodule; initialize those separately if needed.
+v1 (Exercism-only) runs use the `repos/exercism-typescript` submodule; initialize it with `git submodule update --init repos/exercism-typescript` if needed.
 
 ### Docker execution (required for v2)
 

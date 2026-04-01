@@ -20,7 +20,7 @@ Exercise selection (v1 / Exercism only):
   --exercise <name>      Run a single exercise by slug
   --exercise <number>    Run first N exercises (by dataset order)
   --exercise <list>      Comma-separated exercise slugs
-  --exercism-path <path> Path to exercism practice directory [default: exercism-typescript]
+  --exercism-path <path> Path to exercism practice directory [default: repos/exercism-typescript]
 
 Task selection (v2 / SWE-Lancer only):
   --task <id>            Run one task (e.g. 6883, 16912_4)

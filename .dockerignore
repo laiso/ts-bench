@@ -7,7 +7,7 @@ public/
 scripts/
 !scripts/run-agent.sh
 !scripts/smoke-agents.sh
-exercism-typescript/
+repos/exercism-typescript/
 *.log
 .tmp/
 .git

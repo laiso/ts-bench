@@ -40,7 +40,7 @@ export interface LogCollector {
  */
 class ClaudeLogCollector implements LogCollector {
     // Build Claude Code project directory name from absolute exercise path
-    // e.g. "/Users/foo/bar/exercism-typescript/exercises/practice/accumulate" -> "-Users-foo-bar-exercism-typescript-exercises-practice-accumulate"
+    // e.g. "/Users/foo/bar/repos/exercism-typescript/exercises/practice/accumulate" -> "-Users-foo-bar-repos-exercism-typescript-exercises-practice-accumulate"
     // Windows: "C:\\Users\\foo\\proj" -> "C-Users-foo-proj"
     private toProjectDirName(absExercisePath: string): string {
         let p = absExercisePath.replace(/[\\/]/g, '-');

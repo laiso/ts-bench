@@ -7,8 +7,8 @@
 🔢 Number of problems: 1 (out of 101)
 
 🧪 Starting accumulate...
-🔄 Resetting exercise: exercism-typescript/exercises/practice/accumulate
-✅ Successfully reset exercism-typescript/exercises/practice/accumulate
+🔄 Resetting exercise: repos/exercism-typescript/exercises/practice/accumulate
+✅ Successfully reset repos/exercism-typescript/exercises/practice/accumulate
 🤖 Agent command: claude --dangerously-skip-permissions --model claude-3-5-haiku-20241022 -p Solve this TypeScript exercise. Read the test file to understand requirements and implement the solution.
 
 # Instructions
@@ -54,7 +54,7 @@ Solve this one yourself using other basic tools instead.
 - Supports rec...
 🔄 Restored test file: accumulate.test.ts
 📋 Code changes made by agent:
---- Diff for exercism-typescript/exercises/practice/accumulate ---
+--- Diff for repos/exercism-typescript/exercises/practice/accumulate ---
 diff --git a/exercises/practice/accumulate/accumulate.ts b/exercises/practice/accumulate/accumulate.ts
 index 54e3f7c..c2a9d56 100644
 --- a/exercises/practice/accumulate/accumulate.ts

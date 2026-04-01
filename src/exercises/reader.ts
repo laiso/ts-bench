@@ -27,15 +27,6 @@ export class ExerciseReader {
             return defaultPath;
         }
 
-        if (this.basePath === 'exercism-typescript') {
-            const fallback = join(process.cwd(), 'repos', 'exercism-typescript');
-            const fallbackEnvFile = join(fallback, 'CLAUDE.md');
-            if (await this.pathExists(fallbackEnvFile)) {
-                this.resolvedBasePath = fallback;
-                return fallback;
-            }
-        }
-
         this.resolvedBasePath = defaultPath;
         return defaultPath;
     }
