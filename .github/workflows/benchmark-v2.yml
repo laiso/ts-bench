@@ -190,6 +190,10 @@ jobs:
           echo "Running: ${CMD[*]}"
           "${CMD[@]}" | tee benchmark-summary.txt
 
+      - name: Print v2 SWE-Lancer logs to job log
+        if: always()
+        run: bash scripts/print-v2-swelancer-logs.sh .v2-swelancer-logs
+
       - name: Write job summary
         if: always()
         run: |

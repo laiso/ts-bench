@@ -242,6 +242,10 @@ jobs:
           echo "Running: ${CMD[*]}"
           "${CMD[@]}" | tee "benchmark-summary-shard-${{ matrix.shard_index }}.txt"
 
+      - name: Print v2 SWE-Lancer logs to job log
+        if: always()
+        run: bash scripts/print-v2-swelancer-logs.sh .v2-swelancer-logs
+
       - name: Write job summary
         if: always()
         run: |
