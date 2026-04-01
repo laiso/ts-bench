@@ -25,6 +25,13 @@ This project is **not** an enterprise-grade evaluation platform. Runs depend on 
 - **Requires Docker** (`--dataset v2` implies Docker) and the SWE-Lancer monolith image; setup: `./scripts/setup-v2-env.sh` or [Environment Setup](docs/environment.md) (Docker / v2).
 - **CI:** manual workflow [`.github/workflows/benchmark-v2.yml`](.github/workflows/benchmark-v2.yml) (long-running; see docs). Optional: [`.github/workflows/benchmark-v2-set.yml`](.github/workflows/benchmark-v2-set.yml) runs a **subset** of high-reward tasks serially (see `docs/environment.md`).
 
+## Releases and v1 compatibility
+
+- **v1 final baseline:** Tag [`v1-final`](https://github.com/laiso/ts-bench/releases/tag/v1-final) points to commit [`2b3bc94`](https://github.com/laiso/ts-bench/commit/2b3bc944eb5728b5cb24d00e19371b595d528847) — the last **v1-era** snapshot (Exercism-first harness) before development emphasis moved to **v2** (SWE-Lancer). Use it when you need a **frozen tree** for reproducible papers, regression baselines, or CI pinned to that baseline.
+- **Current `main`:** The project continues to evolve toward **v2**, but **v1 remains supported and is still the default**: omit `--dataset` or pass `--dataset v1` for Exercism runs; v2 is opt-in via `--dataset v2`. The v1 CLI surface is treated as **stable** where practical; breaking changes are avoided when possible, with new work focused on v2.
+
+All [GitHub Releases](https://github.com/laiso/ts-bench/releases) are listed on the repository Releases page.
+
 ## Supported agents (`--agent`)
 
 | CLI value | Agent | Notes |
