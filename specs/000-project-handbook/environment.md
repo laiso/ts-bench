@@ -92,7 +92,7 @@
 - **v2**: `--task <id>`, `--tasks id,id,...`, or `--task-limit <n>` — SWE-Lancer task ids only (`--exercise` is rejected with `--dataset v2`)
 - `--exercism-path <path>`: Exercism root (default: `repos/exercism-typescript`)
 - `--test-only` / `--print-instructions`: Test only / show instructions
-- `--save-result --result-dir <dir>`: Save results and refresh local aggregate data (e.g. `public/data/latest-results.json`; see [docs/leaderboard.md](leaderboard.md))
+- `--save-result --result-dir <dir>`: Save results and refresh local aggregate data (e.g. `public/data/latest-results.json`; see [leaderboard.md](leaderboard.md))
 - `--timeout <sec>`: Timeout per exercise (default: 300)
 
 ---
