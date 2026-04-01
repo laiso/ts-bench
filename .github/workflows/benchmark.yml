@@ -333,7 +333,7 @@ jobs:
             fi
             echo
             echo "### Docs"
-            echo "- Methodology: [docs/METHODOLOGY.md](https://github.com/laiso/ts-bench/blob/main/docs/METHODOLOGY.md)"
+            echo "- Methodology: [specs/000-project-handbook/METHODOLOGY.md](https://github.com/laiso/ts-bench/blob/main/specs/000-project-handbook/METHODOLOGY.md)"
             echo "- README: [README.md](https://github.com/laiso/ts-bench/)"
           } >> "$GITHUB_STEP_SUMMARY"
 

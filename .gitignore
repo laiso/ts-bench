@@ -30,6 +30,9 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # IntelliJ based IDEs
 .idea
 
+# Cursor IDE (local-only; regenerate Spec Kit commands with `specify init --here --ai cursor-agent`)
+.cursor/
+
 # Finder (MacOS) folder config
 .DS_Store
 results/

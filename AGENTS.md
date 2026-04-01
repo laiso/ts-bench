@@ -4,7 +4,9 @@
 
 ### Project overview
 
-ts-bench is a TypeScript AI Agent Benchmark CLI tool built with **Bun**. See `README.md` for full details.
+ts-bench is a TypeScript AI Agent Benchmark CLI tool built with **Bun**. See `README.md` for a minimal entry point; **handbook:** `specs/000-project-handbook/`. **Project principles:** `.specify/memory/constitution.md`.
+
+**Spec Kit (SDD):** [GitHub Spec Kit](https://github.com/github/spec-kit) — `.specify/` (templates, scripts), feature dirs under `specs/`. **`.cursor/` is gitignored** (local IDE state + slash commands). Regenerate slash commands: `specify init --here --ai cursor-agent --force` (or install CLI and run once per clone).
 
 ### Key commands
 
@@ -23,7 +25,7 @@ ts-bench is a TypeScript AI Agent Benchmark CLI tool built with **Bun**. See `RE
 - Exercises contain intentionally broken placeholder code; `--test-only` will report failures — this is expected and by design.
 - Running actual benchmarks requires an AI agent CLI + API key (e.g. `ANTHROPIC_API_KEY`). Use `--test-only` or `--print-instructions` for dry-run validation without credentials.
 - Exercise test execution uses `corepack yarn` (Yarn v4). `corepack@0.29.4` must be installed globally and enabled: `npm install -g corepack@0.29.4 && corepack enable`.
-- The v2 dataset (SWE-Lancer) requires Docker and additional submodules — see `docs/environment.md`.
+- The v2 dataset (SWE-Lancer) requires Docker and additional submodules — see `specs/000-project-handbook/environment.md`.
 
 ### v2 (SWE-Lancer) Docker caveats in Cursor Cloud
 

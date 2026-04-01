@@ -1,6 +1,6 @@
 # Manual SWE-Lancer (v2) benchmark (Docker + monolith image).
 # One or more task ids: comma-separated (same as local `bun src/index.ts --dataset v2 --tasks a,b,c`).
-# See docs/environment.md § GitHub Actions (v2) and AGENTS.md v2 caveats.
+# See specs/000-project-handbook/environment.md § GitHub Actions (v2) and AGENTS.md v2 caveats.
 
 name: Manual Benchmark Run (v2 SWE-Lancer)
 
@@ -216,7 +216,7 @@ jobs:
             fi
             echo
             echo "### Docs"
-            echo "- [docs/environment.md — v2 & GHA](https://github.com/${{ github.repository }}/blob/main/docs/environment.md)"
+            echo "- [specs/000-project-handbook/environment.md — v2 & GHA](https://github.com/${{ github.repository }}/blob/main/specs/000-project-handbook/environment.md)"
             echo "- [AGENTS.md](https://github.com/${{ github.repository }}/blob/main/AGENTS.md)"
           } >> "$GITHUB_STEP_SUMMARY"
 
