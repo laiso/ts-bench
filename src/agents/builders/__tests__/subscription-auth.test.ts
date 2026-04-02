@@ -73,7 +73,7 @@ describe('Subscription auth: Claude', () => {
         clearAuthCache('claude');
 
         const builder = new ClaudeAgentBuilder(DOCKER_CONFIG);
-        expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth claude/);
+        await expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth claude/);
     });
 
     it('uses API key when set (takes priority over auth cache)', async () => {
@@ -112,7 +112,7 @@ describe('Subscription auth: Gemini', () => {
         clearAuthCache('gemini');
 
         const builder = new GeminiAgentBuilder(DOCKER_CONFIG);
-        expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth gemini/);
+        await expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth gemini/);
     });
 
     it('uses API key when set (takes priority over auth cache)', async () => {
@@ -151,7 +151,7 @@ describe('Subscription auth: Codex', () => {
         clearAuthCache('codex');
 
         const builder = new CodexAgentBuilder(DOCKER_CONFIG);
-        expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth codex/);
+        await expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth codex/);
     });
 
     it('uses API key when set (takes priority over auth cache)', async () => {

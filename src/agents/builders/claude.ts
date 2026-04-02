@@ -52,15 +52,15 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
                 const found = tryAnyEnv(['ANTHROPIC_API_KEY', 'DASHSCOPE_API_KEY']);
                 if (found) {
                     env.ANTHROPIC_API_KEY = found.value;
-                } else if (!(this.config.useDocker && hasAuthCache('claude'))) {
+                    console.log(`[auth] Claude: using API key (${found.key})`);
+                } else if (this.config.useDocker && hasAuthCache('claude')) {
+                    console.log('[auth] Claude: using subscription auth (no API key, auth cache found)');
+                } else {
                     throw new Error(
                         'Missing ANTHROPIC_API_KEY or DASHSCOPE_API_KEY for Claude. ' +
                         'Set an API key or run: bun src/index.ts --setup-auth claude'
                     );
                 }
-                // When hasAuthCache('claude') is true and no API key is set,
-                // env is returned without ANTHROPIC_API_KEY — the agent will
-                // use subscription auth from the mounted auth volume.
             }
         }
 

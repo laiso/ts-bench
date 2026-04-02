@@ -19,16 +19,17 @@ export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
             case 'openai': {
                 const found = tryAnyEnv(['CODEX_API_KEY', 'OPENAI_API_KEY']);
                 if (found) {
+                    console.log(`[auth] Codex: using API key (${found.key})`);
                     return { CODEX_API_KEY: found.value };
                 }
-                if (!(this.config.useDocker && hasAuthCache('codex'))) {
-                    throw new Error(
-                        'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider. ' +
-                        'Set an API key or run: bun src/index.ts --setup-auth codex'
-                    );
+                if (this.config.useDocker && hasAuthCache('codex')) {
+                    console.log('[auth] Codex: using subscription auth (no API key, auth cache found)');
+                    return {};
                 }
-                // Subscription auth — no API key needed.
-                return {};
+                throw new Error(
+                    'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider. ' +
+                    'Set an API key or run: bun src/index.ts --setup-auth codex'
+                );
             }
             default:
                 throw new Error(`Unsupported provider for Codex: ${provider}`);
