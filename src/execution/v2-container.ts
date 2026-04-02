@@ -33,6 +33,7 @@ import {
 import {
     createCliCacheArgs,
     createEnvironmentArgs,
+    createEnvironmentFile,
     createNpmCacheArgs,
     NPM_CACHE_CONTAINER_PATH,
     SWELANCER_CLI_CACHE_CONTAINER_PATH,
@@ -88,12 +89,13 @@ export class V2ContainerManager {
     async create(opts: V2ContainerOptions): Promise<void> {
         const mounts = this.buildMounts();
         const env = this.buildEnv(opts.issueId);
+        const envFile = createEnvironmentFile(env);
 
         const createArgs = [
             'docker', 'create',
             '--entrypoint', '/usr/bin/env',
             ...createCliCacheArgs(SWELANCER_CLI_CACHE_CONTAINER_PATH),
-            ...createEnvironmentArgs(env),
+            ...envFile.args,
             '--platform', 'linux/amd64',
             ...mounts,
             '-w', '/app/expensify',
@@ -105,7 +107,12 @@ export class V2ContainerManager {
             this.logger.info(`[v2] Creating container for task ${opts.issueId}`);
         }
 
-        const createResult = await this.executor.execute(createArgs);
+        let createResult;
+        try {
+            createResult = await this.executor.execute(createArgs);
+        } finally {
+            envFile.cleanup();
+        }
         if (createResult.exitCode !== 0) {
             throw new Error(`docker create failed: ${createResult.stderr}`);
         }

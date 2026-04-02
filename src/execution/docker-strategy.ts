@@ -2,6 +2,7 @@ import {
   DOCKER_BASE_ARGS,
   createCliCacheArgs,
   createEnvironmentArgs,
+  createEnvironmentFile,
   createNpmCacheArgs,
   createWorkspaceArgs,
   NPM_CACHE_CONTAINER_PATH,
@@ -98,11 +99,13 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         }
       }
 
+      const envFile = createEnvironmentFile(env);
+
       const command = [
         ...DOCKER_BASE_ARGS,
         "--entrypoint", "/usr/bin/env",
         ...createCliCacheArgs(SWELANCER_CLI_CACHE_CONTAINER_PATH),
-        ...createEnvironmentArgs(env),
+        ...envFile.args,
         "--platform", "linux/amd64",
         ...hostMount,
         ...promptMount,
@@ -121,7 +124,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
       return {
         command,
-        options: {}
+        options: {},
+        cleanup: envFile.cleanup
       };
     }
 
@@ -137,10 +141,12 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       }
     }
 
+    const envFile = createEnvironmentFile(core.env || {});
+
     const command = [
       ...DOCKER_BASE_ARGS,
       ...createCliCacheArgs(),
-      ...createEnvironmentArgs(core.env || {}),
+      ...envFile.args,
       ...createWorkspaceArgs({ workspacePath }),
       ...testMountArgs,
       this.containerName,
@@ -149,7 +155,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
 
     return {
       command,
-      options: {}
+      options: {},
+      cleanup: envFile.cleanup
     };
   }
 }

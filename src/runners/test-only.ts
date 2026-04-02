@@ -54,6 +54,7 @@ export class TestOnlyRunner {
 
             const execOptions = { ...prepared.options, timeout: config.timeout };
             const result = await this.executor.execute(prepared.command, execOptions);
+            prepared.cleanup?.();
             const duration = Date.now() - startTime;
 
             if (result.exitCode === 0) {
@@ -127,6 +128,7 @@ export class TestOnlyRunner {
 
             const execOptions = { ...prepared.options, timeout: config.timeout };
             const result = await this.executor.execute(prepared.command, execOptions);
+            prepared.cleanup?.();
             const duration = Date.now() - startTime;
 
             if (result.exitCode === 0) {

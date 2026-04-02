@@ -20,6 +20,8 @@ export interface PrepareContext {
 export interface PreparedCommand {
   command: string[];
   options: import('../utils/shell').ExecuteOptions;
+  /** Optional cleanup to call after the command finishes (e.g. remove temp env files). */
+  cleanup?: () => void;
 }
 
 export interface ExecutionStrategy {

@@ -78,6 +78,7 @@ export class AgentRunner {
 
             const execOptions = { ...prepared.options, timeout: config.timeout };
             const result = await this.executor.execute(prepared.command, execOptions);
+            prepared.cleanup?.();
 
             const logCollector = AgentLoggerFactory.create(config.agent);
             await logCollector.collect(config, exercise, exercisePath, result);
