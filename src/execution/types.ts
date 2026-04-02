@@ -15,6 +15,8 @@ export interface PrepareContext {
   commitId?: string;
   generatePatchPath?: string;
   applyPatchPath?: string;
+  /** Agent name (e.g. 'claude', 'gemini', 'codex') — used for auth cache mounts */
+  agentName?: string;
 }
 
 export interface PreparedCommand {
