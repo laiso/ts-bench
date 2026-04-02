@@ -1,6 +1,7 @@
 import type { AgentBuilder, AgentConfig, FileList } from '../types';
 import { BaseAgentBuilder } from '../base';
-import { requireAnyEnv, requireEnv } from '../../utils/env';
+import { requireEnv, tryAnyEnv } from '../../utils/env';
+import { hasAuthCache } from '../../utils/docker';
 
 export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
     constructor(agentConfig: AgentConfig) {
@@ -48,11 +49,18 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
                 break;
             }
             default: {
-                const { value } = requireAnyEnv(
-                    ['ANTHROPIC_API_KEY', 'DASHSCOPE_API_KEY'],
-                    'Missing ANTHROPIC_API_KEY or DASHSCOPE_API_KEY for Claude'
-                );
-                env.ANTHROPIC_API_KEY = value;
+                const found = tryAnyEnv(['ANTHROPIC_API_KEY', 'DASHSCOPE_API_KEY']);
+                if (found) {
+                    env.ANTHROPIC_API_KEY = found.value;
+                } else if (!hasAuthCache('claude')) {
+                    throw new Error(
+                        'Missing ANTHROPIC_API_KEY or DASHSCOPE_API_KEY for Claude. ' +
+                        'Set an API key or run: bun src/index.ts --setup-auth claude'
+                    );
+                }
+                // When hasAuthCache('claude') is true and no API key is set,
+                // env is returned without ANTHROPIC_API_KEY — the agent will
+                // use subscription auth from the mounted auth volume.
             }
         }
 

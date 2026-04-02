@@ -1,4 +1,4 @@
-import { mkdirSync } from 'fs';
+import { mkdirSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 
@@ -62,4 +62,42 @@ function resolveNpmCachePath(): string {
     : join(homedir(), '.cache', 'ts-bench', 'npm');
   mkdirSync(base, { recursive: true });
   return base;
+}
+
+/** Mapping of agent names to their auth config directory inside the container. */
+const AUTH_CACHE_AGENTS: Record<string, string> = {
+  claude: '/root/.claude',
+  gemini: '/root/.gemini',
+  codex: '/root/.codex',
+};
+
+/**
+ * Create Docker volume mount arguments for an agent's subscription-auth
+ * state directory.  Returns an empty array for unknown agents.
+ */
+export function createAuthCacheArgs(agent: string): string[] {
+  const containerPath = AUTH_CACHE_AGENTS[agent];
+  if (!containerPath) return [];
+  const hostPath = resolveAuthCachePath(agent);
+  return ['-v', `${hostPath}:${containerPath}`];
+}
+
+/**
+ * Return the host-side auth cache directory for an agent, creating it
+ * if it does not exist.
+ */
+export function resolveAuthCachePath(agent: string): string {
+  const base = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
+  mkdirSync(base, { recursive: true });
+  return base;
+}
+
+/** Return true when the host-side auth cache for `agent` contains at least one file. */
+export function hasAuthCache(agent: string): boolean {
+  try {
+    const dir = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
+    return readdirSync(dir).length > 0;
+  } catch {
+    return false;
+  }
 }

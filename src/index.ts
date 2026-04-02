@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 
 import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANCER_IMAGE } from './config/constants';
+import { createAuthCacheArgs, createCliCacheArgs } from './utils/docker';
 import { BunCommandExecutor } from './utils/shell';
 import { ConsoleLogger } from './utils/logger';
 import { parseCommandLineArgs, printHelp } from './utils/cli';
@@ -23,6 +24,18 @@ async function main(): Promise<void> {
     // Display help if requested
     if (process.argv.includes('--help')) {
         printHelp();
+        return;
+    }
+
+    // --setup-auth <agent>: interactive Docker login for subscription auth
+    const setupAuthIndex = process.argv.indexOf('--setup-auth');
+    if (setupAuthIndex !== -1) {
+        const agent = process.argv[setupAuthIndex + 1];
+        if (!agent) {
+            console.error('Usage: --setup-auth <agent>  (claude, gemini, codex)');
+            process.exit(1);
+        }
+        await runSetupAuth(agent);
         return;
     }
 
@@ -172,6 +185,46 @@ async function runPrintInstructionsMode(
         if (exercises.length > 1) {
             console.log(`\n${'='.repeat(60)}`);
         }
+    }
+}
+
+/**
+ * --setup-auth <agent>: Start an interactive Docker container to run the
+ * agent's login command.  Auth state is persisted in a Docker volume so
+ * future benchmark runs can use subscription auth without API keys.
+ */
+async function runSetupAuth(agent: string): Promise<void> {
+    const supportedAgents = ['claude', 'gemini', 'codex'];
+    if (!supportedAgents.includes(agent)) {
+        console.error(`Unsupported agent for --setup-auth: ${agent}`);
+        console.error(`Supported agents: ${supportedAgents.join(', ')}`);
+        process.exit(1);
+    }
+
+    console.log(`Setting up subscription auth for ${agent} inside Docker...`);
+    console.log('An interactive container will start. Complete the login flow in your browser.');
+    console.log('Auth state will be saved and reused for future --docker runs.\n');
+
+    const command = [
+        'docker', 'run', '--rm', '-it',
+        ...createCliCacheArgs(),
+        ...createAuthCacheArgs(agent),
+        TS_BENCH_CONTAINER,
+        'bash', '/app/scripts/run-agent.sh', agent, 'login',
+    ];
+
+    const { spawnSync } = await import('child_process');
+    const result = spawnSync(command[0]!, command.slice(1), {
+        stdio: 'inherit',
+    });
+
+    if (result.status === 0) {
+        console.log(`\n✓ Auth setup complete for ${agent}.`);
+        console.log(`  You can now run benchmarks without an API key:`);
+        console.log(`  bun src/index.ts --agent ${agent} --exercise acronym --docker`);
+    } else {
+        console.error(`\n✗ Auth setup failed for ${agent} (exit code: ${result.status}).`);
+        process.exit(result.status ?? 1);
     }
 }
 
