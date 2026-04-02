@@ -82,4 +82,31 @@ describe('ClaudeAgentBuilder', () => {
 
         process.env.ANTHROPIC_API_KEY = prev;
     });
+
+    it('sets IS_SANDBOX=1 for Docker runs to allow skip-permissions as root', async () => {
+        const prev = process.env.ANTHROPIC_API_KEY;
+        process.env.ANTHROPIC_API_KEY = 'test-key';
+
+        const builder = new ClaudeAgentBuilder({
+            ...config,
+            useDocker: true
+        });
+        const cmd = await builder.buildCommand('Test instructions');
+
+        expect(cmd.env?.IS_SANDBOX).toBe('1');
+
+        process.env.ANTHROPIC_API_KEY = prev;
+    });
+
+    it('does not set IS_SANDBOX when not using Docker', async () => {
+        const prev = process.env.ANTHROPIC_API_KEY;
+        process.env.ANTHROPIC_API_KEY = 'test-key';
+
+        const builder = new ClaudeAgentBuilder(config);
+        const cmd = await builder.buildCommand('Test instructions');
+
+        expect(cmd.env?.IS_SANDBOX).toBeUndefined();
+
+        process.env.ANTHROPIC_API_KEY = prev;
+    });
 });
