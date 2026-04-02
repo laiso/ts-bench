@@ -417,7 +417,7 @@ footer a:hover { color: var(--text); }
         var key = resultKey(d);
         var detailHref = RESULTS_DIR + key + '.html';
         var agentName = (meta.agent || entry.key).toLowerCase();
-        var iconPath = 'assets/icons/' + agentName + '.png';
+        var iconPath = 'assets/icons/' + esc(agentName) + '.png';
         html += '<a class="agent-card" href="' + detailHref + '">';
         html += '<img class="agent-icon" src="' + iconPath + '" alt="' + esc(meta.agent || entry.key) + '" onerror="this.style.display=\'none\'">';
         html += '<span class="agent-name">' + esc(meta.agent || entry.key) + '</span>';
@@ -496,7 +496,7 @@ footer a:hover { color: var(--text); }
           if (e.data.results[i].exercise === task) { found = e.data.results[i]; break; }
         }
         if (!found) {
-          html += '<td style="color:var(--text-muted)">-</td>';
+          html += '<td style="color:var(--text-secondary)">-</td>';
         } else if (found.overallSuccess) {
           html += '<td class="pass" title="' + fmtDuration(found.totalDuration) + '">Pass</td>';
         } else {
