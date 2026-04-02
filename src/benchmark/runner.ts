@@ -5,10 +5,11 @@ import { BenchmarkReporter } from './reporter';
 import { LeaderboardGenerator } from '../utils/leaderboard-generator';
 import { VersionDetector } from '../utils/version-detector';
 import { getAgentScriptPath } from '../config/paths';
-import { SWELANCER_IMAGE, TS_BENCH_CONTAINER } from '../config/constants';
+import { SWELANCER_IMAGE, SWELANCER_REPO_PATH, TS_BENCH_CONTAINER } from '../config/constants';
 import { SWELANCER_CLI_CACHE_CONTAINER_PATH } from '../utils/docker';
 import { sanitizeFilenameSegment } from '../utils/file-name';
 import { resolveBenchmarkSelection } from '../utils/task-selection';
+import { V2ContainerManager, V2DockerExecStrategy } from '../execution/v2-container';
 
 export class BenchmarkRunner {
     constructor(
@@ -92,13 +93,174 @@ export class BenchmarkRunner {
             dataset: args.dataset
         };
 
-        for (const exercise of exercises) {
-            const result = await this.exerciseRunner.run(config, exercise);
-            results.push(result);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+        // V2 Docker with multiple tasks: use commit-grouped execution
+        const isV2DockerMulti = args.dataset === 'v2' && useDocker && exercises.length > 1;
+
+        if (isV2DockerMulti) {
+            const grouped = await this.runV2CommitGroups(config, exercises);
+            results.push(...grouped);
+        } else {
+            for (const exercise of exercises) {
+                const result = await this.exerciseRunner.run(config, exercise);
+                results.push(result);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
         }
 
         await this.handleOutput(results, config, args);
+    }
+
+    // ------------------------------------------------------------------
+    // V2 commit-grouped execution
+    // ------------------------------------------------------------------
+
+    /**
+     * Group tasks by commitId, then run each group in a single long-lived
+     * container.  `setupBase()` runs once per commit; each task only pays
+     * the cost of `prepareTask()` (patch apply) and `resetToBaseline()`.
+     *
+     * Tasks whose commitId cannot be determined fall back to the normal
+     * single-task-per-container path via `exerciseRunner.run()`.
+     */
+    private async runV2CommitGroups(
+        config: BenchmarkConfig,
+        exercises: string[],
+    ): Promise<TestResult[]> {
+        const results: TestResult[] = [];
+
+        // Resolve commitId for every task
+        const commitMap = this.datasetReader.getCommitIds
+            ? await this.datasetReader.getCommitIds(exercises)
+            : new Map<string, string>();
+
+        // Build groups: commitId → taskId[]
+        const groups = new Map<string, string[]>();
+        const ungrouped: string[] = [];
+        for (const taskId of exercises) {
+            const cid = commitMap.get(taskId);
+            if (cid) {
+                const list = groups.get(cid) ?? [];
+                list.push(taskId);
+                groups.set(cid, list);
+            } else {
+                ungrouped.push(taskId);
+            }
+        }
+
+        // Run each commit group in a single container
+        for (const [commitId, taskIds] of groups) {
+            const groupResults = await this.runOneCommitGroup(config, commitId, taskIds);
+            results.push(...groupResults);
+        }
+
+        // Fallback: run ungrouped tasks one at a time (single-container mode)
+        for (const taskId of ungrouped) {
+            const result = await this.exerciseRunner.run(config, taskId);
+            results.push(result);
+        }
+
+        return results;
+    }
+
+    /**
+     * Execute all tasks that share a single commitId inside one container.
+     *
+     * Lifecycle:
+     *   docker create → setupBase(commitId) → for each task:
+     *     prepareTask() → agent + test → resetToBaseline()
+     *   → docker rm
+     */
+    private async runOneCommitGroup(
+        config: BenchmarkConfig,
+        commitId: string,
+        taskIds: string[],
+    ): Promise<TestResult[]> {
+        const results: TestResult[] = [];
+        const executor = this.exerciseRunner.getExecutor();
+        const logger = this.exerciseRunner.getLogger();
+        const container = new V2ContainerManager(executor, logger, SWELANCER_IMAGE);
+
+        const firstTask = taskIds[0]!;
+        console.log(
+            `\n[v2-group] Commit ${commitId.slice(0, 12)} — ${taskIds.length} task(s), ` +
+            `setup once then iterate\n`,
+        );
+
+        try {
+            // Phase 0: Create container & run base setup (ONCE)
+            await container.create({
+                issueId: firstTask,
+                timeout: config.timeout,
+                verbose: config.verbose,
+            });
+            const setupResult = await container.setupBase({
+                commitId,
+                firstIssueId: firstTask,
+                timeout: config.timeout,
+                verbose: config.verbose,
+            });
+            if (setupResult.exitCode !== 0) {
+                // Base setup failed — mark all tasks as failed
+                for (const taskId of taskIds) {
+                    results.push({
+                        exercise: taskId,
+                        agentSuccess: false,
+                        testSuccess: false,
+                        overallSuccess: false,
+                        agentError: `Base setup failed for commit ${commitId}: ${setupResult.stderr}`,
+                        agentDuration: 0,
+                        testDuration: 0,
+                        totalDuration: 0,
+                    });
+                }
+                return results;
+            }
+
+            const containerId = container.getId()!;
+            const execStrategy = new V2DockerExecStrategy(containerId);
+
+            // Phase 1–N: For each task, prepare → agent+test → reset
+            for (let i = 0; i < taskIds.length; i++) {
+                const taskId = taskIds[i]!;
+                console.log(`[v2-group] Task ${i + 1}/${taskIds.length}: ${taskId}`);
+
+                // Apply task-specific patch
+                const prepResult = await container.prepareTask(taskId, {
+                    timeout: config.timeout,
+                    verbose: config.verbose,
+                });
+                if (prepResult.exitCode !== 0) {
+                    results.push({
+                        exercise: taskId,
+                        agentSuccess: false,
+                        testSuccess: false,
+                        overallSuccess: false,
+                        agentError: `prepareTask failed: ${prepResult.stderr}`,
+                        agentDuration: 0,
+                        testDuration: 0,
+                        totalDuration: 0,
+                    });
+                    // Still reset so the next task starts clean
+                    await container.resetToBaseline({ verbose: config.verbose });
+                    continue;
+                }
+
+                // Run agent + test
+                const result = await this.exerciseRunner.runV2Task(
+                    config, taskId, SWELANCER_REPO_PATH, execStrategy,
+                );
+                results.push(result);
+
+                // Reset to baseline for next task (skip after last task)
+                if (i < taskIds.length - 1) {
+                    await container.resetToBaseline({ verbose: config.verbose });
+                }
+            }
+        } finally {
+            await container.destroy();
+        }
+
+        return results;
     }
 
     private async handleOutput(results: TestResult[], config: BenchmarkConfig, args: CLIArgs): Promise<void> {

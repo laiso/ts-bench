@@ -81,6 +81,25 @@ export class SweLancerDataset implements DatasetReader {
         };
     }
 
+    async getCommitIds(taskIds: string[]): Promise<Map<string, string>> {
+        const result = new Map<string, string>();
+        const issuesBase = join(process.cwd(), 'repos/frontier-evals/project/swelancer/issues');
+
+        await Promise.all(taskIds.map(async (taskId) => {
+            try {
+                const content = await readFile(join(issuesBase, taskId, 'commit_id.txt'), 'utf-8');
+                const commitId = content.trim();
+                if (commitId) {
+                    result.set(taskId, commitId);
+                }
+            } catch {
+                // Task has no commit_id.txt — omit from map
+            }
+        }));
+
+        return result;
+    }
+
     async getInstructions(taskId: string, baseInstruction: string, customInstruction?: string): Promise<string> {
         const tasks = await this.loadTasks();
         const task = tasks.find(t => t.question_id === taskId);

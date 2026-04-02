@@ -1,11 +1,22 @@
 /**
  * V2 (SWE-Lancer) single-container execution.
  *
- * V2ContainerManager creates a long-lived Docker container and runs
- * `setup_expensify.yml` exactly once.  V2DockerExecStrategy implements
- * the standard ExecutionStrategy interface so AgentRunner / TestRunner
- * can use it transparently — every `prepare()` call emits a `docker exec`
- * instead of `docker run`, so the expensive setup is never repeated.
+ * V2ContainerManager creates a long-lived Docker container.  It supports
+ * two modes:
+ *
+ *   1. **Single-task** — `setup(opts)` runs `setup_expensify.yml` once
+ *      (checkout + patch + npm install + webpack) for a single task.
+ *
+ *   2. **Commit-grouped** — `setupBase(commitId, firstIssueId)` runs the
+ *      expensive, commit-specific steps (checkout + npm install + webpack)
+ *      once.  Then for each task sharing that commit,
+ *      `prepareTask(issueId)` applies the task-specific patch and
+ *      `resetToBaseline()` reverts to the clean post-setup state.
+ *      This avoids repeating npm install + webpack for every task.
+ *
+ * V2DockerExecStrategy implements the standard ExecutionStrategy interface
+ * so AgentRunner / TestRunner can use it transparently — every `prepare()`
+ * call emits a `docker exec` instead of `docker run`.
  */
 
 import { mkdirSync } from 'fs';
@@ -43,6 +54,15 @@ export interface V2ContainerOptions {
     /** Task / issue ID (e.g. "15815_1") */
     issueId: string;
     /** Timeout in ms for long-running exec calls */
+    timeout?: number;
+    verbose?: boolean;
+}
+
+export interface V2BaseSetupOptions {
+    /** Git commit hash to checkout (shared across tasks in a group) */
+    commitId: string;
+    /** Any issue ID in the group — used only for cert generation & log dirs */
+    firstIssueId: string;
     timeout?: number;
     verbose?: boolean;
 }
@@ -126,6 +146,118 @@ export class V2ContainerManager {
         }
 
         return this.exec(setupCmd, { timeout: opts.timeout });
+    }
+
+    // ------------------------------------------------------------------
+    // Commit-grouped lifecycle (shared setup across tasks)
+    // ------------------------------------------------------------------
+
+    /**
+     * Run the expensive, commit-specific parts of setup_expensify once:
+     *   cert generation → git checkout → npm_fix → nvm install → npm install → webpack
+     * Task-specific patches are NOT applied here — use `prepareTask()`.
+     */
+    async setupBase(opts: V2BaseSetupOptions): Promise<CommandResult> {
+        // We run the steps from setup_expensify.yml manually, skipping
+        // the task-specific patch/revert steps.
+        const setupCmd = [
+            `export ISSUE_ID=${opts.firstIssueId}`,
+            'export CI=true',
+            'export NPM_CONFIG_YES=true',
+
+            // 1. Certs
+            'mkdir -p /root/.pki/nssdb',
+            'certutil --empty-password -d $HOME/.pki/nssdb -N',
+            'cd /app/expensify/config/webpack/',
+            'mkcert -install',
+            'mkcert -cert-file certificate.pem -key-file key.pem dev.new.expensify.com localhost 127.0.0.1',
+
+            // 2. Checkout commit (no task-specific patch)
+            'cd /app/expensify',
+            'git reset --hard origin/master',
+            `git checkout ${opts.commitId}`,
+
+            // 3. npm_fix, clean, nvm install
+            'python3.12 /app/expensify/npm_fix.py',
+            'rm -rf /app/expensify/node_modules',
+            'rm -f /app/expensify/.npmrc',
+            'unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX',
+            'source /root/.nvm/nvm.sh && nvm install',
+
+            // 4. npm install
+            'source /root/.nvm/nvm.sh && npm install --no-cache',
+
+            // 5. Webpack
+            'source /root/.nvm/nvm.sh && ' +
+                '([ -f config/webpack/webpack.dev.ts ] && npx webpack --config ./config/webpack/webpack.dev.ts || ' +
+                '([ -f config/webpack/webpack.dev.js ] && npx webpack --config ./config/webpack/webpack.dev.js || true))',
+
+            // 6. Commit baseline (before any task patches)
+            'git add -A',
+            'git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "base setup" --no-gpg-sign --allow-empty',
+        ].join(' && ');
+
+        if (opts.verbose) {
+            this.logger.info(`[v2] Running base setup for commit ${opts.commitId.slice(0, 12)} (shared across tasks)...`);
+        }
+
+        return this.exec(setupCmd, { timeout: opts.timeout });
+    }
+
+    /**
+     * Apply the task-specific patch (revert_command or bug_reintroduce.patch)
+     * and commit so agent diffs are clean.
+     */
+    async prepareTask(issueId: string, opts?: { timeout?: number; verbose?: boolean }): Promise<CommandResult> {
+        // Mirrors the revert_command / bug_reintroduce.patch logic from
+        // setup_expensify.yml, but runs as a lightweight docker exec.
+        const cmd = [
+            'cd /app/expensify',
+            `export ISSUE_ID=${issueId}`,
+
+            // Create log/attempts dirs
+            `mkdir -p /app/tests/logs/${issueId}`,
+            `mkdir -p /app/tests/attempts/${issueId}`,
+
+            // Apply revert_command if non-empty, else apply bug_reintroduce.patch
+            `REVERT=$(cat /app/tests/issues/${issueId}/revert_command.txt 2>/dev/null || echo "")`,
+            `PATCH=$(cat /app/tests/issues/${issueId}/bug_reintroduce.patch 2>/dev/null | head -c 1 || echo "")`,
+            'if [ -n "$REVERT" ]; then eval "$REVERT";' +
+            ' elif [ -n "$PATCH" ]; then patch -p1 < /app/tests/issues/$ISSUE_ID/bug_reintroduce.patch;' +
+            ' fi',
+
+            // Commit so agent git-diff is clean
+            'git add -A',
+            `git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "task ${issueId} patch" --no-gpg-sign --allow-empty`,
+        ].join(' && ');
+
+        if (opts?.verbose) {
+            this.logger.info(`[v2] Preparing task ${issueId} (applying patch)...`);
+        }
+
+        return this.exec(cmd, { timeout: opts?.timeout });
+    }
+
+    /**
+     * Revert the working tree to the base-setup state (undo task patch +
+     * agent changes).  Call this between tasks in a commit group.
+     */
+    async resetToBaseline(opts?: { verbose?: boolean }): Promise<CommandResult> {
+        // The base setup commit is the one tagged "base setup".  We find
+        // it and hard-reset to it, which is faster than cherry-picking.
+        const cmd = [
+            'cd /app/expensify',
+            // Find the "base setup" commit (always the first ts-bench commit)
+            'BASE=$(git log --all --oneline --grep="base setup" --format="%H" | tail -1)',
+            'git reset --hard $BASE',
+            'git clean -fd',
+        ].join(' && ');
+
+        if (opts?.verbose) {
+            this.logger.info('[v2] Resetting to baseline for next task...');
+        }
+
+        return this.exec(cmd);
     }
 
     /**

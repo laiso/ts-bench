@@ -68,7 +68,7 @@ export class ExerciseRunner {
 
         // ── V2 Docker: single-container path (setup runs once) ──────────
         if (config.dataset === 'v2' && useDocker) {
-            return this.runV2Docker(config, exercise, exercisePath, metadata.commitId);
+            return this.runV2Docker(config, exercise, exercisePath);
         }
 
         // ── V1 / local path (unchanged) ─────────────────────────────────
@@ -131,7 +131,6 @@ export class ExerciseRunner {
         config: BenchmarkConfig,
         exercise: string,
         exercisePath: string,
-        _commitId?: string,
     ): Promise<TestResult> {
         const startTime = Date.now();
         const container = new V2ContainerManager(this.executor, this.logger, SWELANCER_IMAGE);
@@ -160,38 +159,58 @@ export class ExerciseRunner {
             const containerId = container.getId()!;
             const execStrategy = new V2DockerExecStrategy(containerId);
 
-            // Phase 1: Run AI Agent (inside the already-set-up container)
-            const agentResult = await this.agentRunner.run(
-                config, exercise, exercisePath, true, execStrategy,
-            );
-
-            // Phase 2: Run Tests (same container, no second setup)
-            const testContext: TestContext = {
-                datasetType: 'v2',
-                // No applyPatchPath: agent changes are already in the working tree
-                // No commitId: container is already at the right commit from setup
-            };
-            const testResult = await this.testRunner.run(
-                config, exercise, exercisePath, true, testContext, execStrategy,
-            );
-
-            const totalDuration = Date.now() - startTime;
-            const overallSuccess = agentResult.success && testResult.success;
-            this.logger.logExerciseResult(exercise, overallSuccess, totalDuration);
-
-            return {
-                exercise,
-                agentSuccess: agentResult.success,
-                testSuccess: testResult.success,
-                overallSuccess,
-                agentError: agentResult.error,
-                testError: testResult.error,
-                agentDuration: agentResult.duration,
-                testDuration: testResult.duration,
-                totalDuration,
-            };
+            return this.runV2Task(config, exercise, exercisePath, execStrategy);
         } finally {
             await container.destroy();
         }
     }
+
+    /**
+     * Run agent + test for a single v2 task inside an already-set-up container.
+     * Used by both single-task mode (`runV2Docker`) and grouped mode
+     * (`runV2CommitGroup` in BenchmarkRunner).
+     */
+    async runV2Task(
+        config: BenchmarkConfig,
+        exercise: string,
+        exercisePath: string,
+        execStrategy: V2DockerExecStrategy,
+    ): Promise<TestResult> {
+        const startTime = Date.now();
+
+        this.logger.logExerciseStart(exercise);
+
+        // Phase 1: Run AI Agent (inside the already-set-up container)
+        const agentResult = await this.agentRunner.run(
+            config, exercise, exercisePath, true, execStrategy,
+        );
+
+        // Phase 2: Run Tests (same container, no second setup)
+        const testContext: TestContext = {
+            datasetType: 'v2',
+        };
+        const testResult = await this.testRunner.run(
+            config, exercise, exercisePath, true, testContext, execStrategy,
+        );
+
+        const totalDuration = Date.now() - startTime;
+        const overallSuccess = agentResult.success && testResult.success;
+        this.logger.logExerciseResult(exercise, overallSuccess, totalDuration);
+
+        return {
+            exercise,
+            agentSuccess: agentResult.success,
+            testSuccess: testResult.success,
+            overallSuccess,
+            agentError: agentResult.error,
+            testError: testResult.error,
+            agentDuration: agentResult.duration,
+            testDuration: testResult.duration,
+            totalDuration,
+        };
+    }
+
+    /** Expose internals needed by BenchmarkRunner for grouped execution */
+    getExecutor(): CommandExecutor { return this.executor; }
+    getLogger(): Logger { return this.logger; }
 }
