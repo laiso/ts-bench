@@ -2,7 +2,7 @@
 
 import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANCER_IMAGE } from './config/constants';
 import { join } from 'path';
-import { AUTH_CACHE_AGENTS, AUTH_SENTINEL, createAuthCacheArgs, createCliCacheArgs, resolveAuthCachePath } from './utils/docker';
+import { AUTH_CACHE_AGENTS, AUTH_LOGIN_ARGS, AUTH_SENTINEL, createAuthCacheArgs, createCliCacheArgs, resolveAuthCachePath } from './utils/docker';
 import { BunCommandExecutor } from './utils/shell';
 import { ConsoleLogger } from './utils/logger';
 import { parseCommandLineArgs, printHelp } from './utils/cli';
@@ -211,7 +211,7 @@ async function runSetupAuth(agent: string): Promise<void> {
         ...createCliCacheArgs(),
         ...createAuthCacheArgs(agent),
         TS_BENCH_CONTAINER,
-        'bash', '/app/scripts/run-agent.sh', agent, 'login',
+        'bash', '/app/scripts/run-agent.sh', agent, ...(AUTH_LOGIN_ARGS[agent] ?? ['login']),
     ];
 
     const { spawnSync } = await import('child_process');

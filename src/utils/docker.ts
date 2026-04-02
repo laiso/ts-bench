@@ -72,6 +72,17 @@ export const AUTH_CACHE_AGENTS: Record<string, string> = {
 };
 
 /**
+ * Arguments appended to `bash /app/scripts/run-agent.sh <agent>` to trigger
+ * the agent's login flow.  Most CLIs use `<agent> login`, but Gemini CLI
+ * authenticates interactively on first launch (no `login` sub-command).
+ */
+export const AUTH_LOGIN_ARGS: Record<string, string[]> = {
+  claude: ['login'],
+  gemini: [],
+  codex: ['login'],
+};
+
+/**
  * Create Docker volume mount arguments for an agent's subscription-auth
  * state directory.  Returns an empty array for unknown agents.
  */
