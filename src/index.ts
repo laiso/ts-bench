@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
-import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANCER_IMAGE } from './config/constants';
-import { join } from 'path';
+import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANCER_IMAGE, SETUP_AUTH_IMAGE } from './config/constants';
+import { join, resolve } from 'path';
 import { AUTH_CACHE_AGENTS, AUTH_LOGIN_ARGS, AUTH_SENTINEL, createAuthCacheArgs, createCliCacheArgs, resolveAuthCachePath } from './utils/docker';
 import { BunCommandExecutor } from './utils/shell';
 import { ConsoleLogger } from './utils/logger';
@@ -206,12 +206,18 @@ async function runSetupAuth(agent: string): Promise<void> {
     console.log('An interactive container will start. Complete the login flow in your browser.');
     console.log('Auth state will be saved and reused for future --docker runs.\n');
 
+    // Mount the local run-agent.sh into the container so we can use the
+    // lightweight node:lts image instead of requiring ts-bench-container.
+    const scriptHost = resolve(process.cwd(), 'scripts', 'run-agent.sh');
+    const scriptContainer = '/tmp/run-agent.sh';
+
     const command = [
         'docker', 'run', '--rm', '-it',
         ...createCliCacheArgs(),
         ...createAuthCacheArgs(agent),
-        TS_BENCH_CONTAINER,
-        'bash', '/app/scripts/run-agent.sh', agent, ...(AUTH_LOGIN_ARGS[agent] ?? ['login']),
+        '-v', `${scriptHost}:${scriptContainer}:ro`,
+        SETUP_AUTH_IMAGE,
+        'bash', scriptContainer, agent, ...(AUTH_LOGIN_ARGS[agent] ?? []),
     ];
 
     const { spawnSync } = await import('child_process');

@@ -130,12 +130,13 @@ Replace the hardcoded `claudeMount` (line 310-311) in `buildMounts()` with `crea
 
 Add a new CLI option `--setup-auth` that accepts an agent name. When invoked:
 
-1. Start a Docker container interactively (`docker run --rm -it`).
-2. Mount the CLI cache volume (`createCliCacheArgs()`).
-3. Mount the auth cache volume (`createAuthCacheArgs(agent)`).
-4. Run the agent CLI inside the container (e.g., `bash /app/scripts/run-agent.sh claude`). All supported CLIs authenticate interactively on first launch — none have a dedicated `login` sub-command.
-5. The CLI (e.g., Claude Code) will use Device Code Flow — print a URL and code to the terminal. The user opens the URL in their host browser and completes OAuth.
-6. Auth state is saved to the auth cache volume and persists for future runs.
+1. Start a Docker container interactively (`docker run --rm -it`) using the lightweight `node:lts` image. This avoids requiring users to build `ts-bench-container` just for authentication.
+2. Mount the local `scripts/run-agent.sh` into the container (read-only).
+3. Mount the CLI cache volume (`createCliCacheArgs()`).
+4. Mount the auth cache volume (`createAuthCacheArgs(agent)`).
+5. Run the agent CLI inside the container (e.g., `bash /tmp/run-agent.sh claude`). Claude and Gemini authenticate interactively on first launch; Codex uses `codex login --device-auth`.
+6. The CLI will use Device Code Flow — print a URL and code to the terminal. The user opens the URL in their host browser and completes OAuth.
+7. Auth state is saved to the auth cache volume and persists for future runs.
 
 Add this to the CLI parser in `src/utils/cli.ts` or `src/index.ts`.
 
@@ -172,7 +173,7 @@ Note: The existing codebase has inconsistent home directory resolution — `proc
 
 ## Acceptance Criteria
 
-- [ ] `bun src/index.ts --setup-auth claude` starts an interactive Docker session and completes `claude login`.
+- [ ] `bun src/index.ts --setup-auth claude` starts an interactive Docker session using `node:lts` and completes authentication.
 - [ ] `bun src/index.ts --agent claude --exercise acronym --docker` succeeds without `ANTHROPIC_API_KEY` after `--setup-auth`.
 - [ ] Same for `--agent gemini` and `--agent codex`.
 - [ ] Existing API key-based execution is unaffected.

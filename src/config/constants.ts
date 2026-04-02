@@ -39,6 +39,8 @@ export const SWELANCER_RUN_TESTS_HOST = "scripts/swelancer/run_tests.yml";
 /** Patched setup_mitmproxy.yml; mounted over /app/tests/setup_mitmproxy.yml in v2 Docker */
 export const SWELANCER_SETUP_MITMPROXY_HOST = "scripts/swelancer/setup_mitmproxy.yml";
 export const SWELANCER_IMAGE = "swelancer/swelancer_x86_monolith:releasev1";
+/** Lightweight image used by `--setup-auth` so users do not need to build ts-bench-container. */
+export const SETUP_AUTH_IMAGE = "node:lts";
 export const SWELANCER_REPO_PATH = "repos/expensify-app";
 /** Host dir mounted to /app/tests/logs in v2 Docker so pytest/npm/mitm logs survive --rm */
 export const SWELANCER_HOST_LOGS_DIR = ".v2-swelancer-logs";
