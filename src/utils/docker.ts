@@ -85,6 +85,18 @@ export const AUTH_LOGIN_ARGS: Record<string, string[]> = {
 };
 
 /**
+ * Known credential files written by each agent CLI after a successful login.
+ * Used by `--setup-auth` to detect whether auth succeeded even when the CLI
+ * exits with a non-zero code (e.g. Claude/Gemini enter interactive mode and
+ * the user presses Ctrl-C to quit).
+ */
+export const AUTH_CREDENTIAL_FILES: Record<string, string> = {
+  claude: '.credentials.json',
+  gemini: 'oauth_creds.json',
+  codex: 'auth.json',
+};
+
+/**
  * Create Docker volume mount arguments for an agent's subscription-auth
  * state directory.  Returns an empty array for unknown agents.
  */
@@ -119,6 +131,24 @@ export function hasAuthCache(agent: string): boolean {
   try {
     const dir = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
     return existsSync(join(dir, AUTH_SENTINEL));
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Return true when the host-side auth cache for `agent` contains the
+ * agent-specific credential file (e.g. `.credentials.json` for Claude).
+ * This is more reliable than checking the exit code because some CLIs
+ * (Claude, Gemini) enter interactive mode after login and exit non-zero
+ * when the user presses Ctrl-C.
+ */
+export function hasCredentialFile(agent: string): boolean {
+  const fileName = AUTH_CREDENTIAL_FILES[agent];
+  if (!fileName) return false;
+  try {
+    const dir = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
+    return existsSync(join(dir, fileName));
   } catch {
     return false;
   }

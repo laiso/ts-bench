@@ -2,7 +2,7 @@
 
 import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANCER_IMAGE, SETUP_AUTH_IMAGE } from './config/constants';
 import { join, resolve } from 'path';
-import { AUTH_CACHE_AGENTS, AUTH_LOGIN_ARGS, AUTH_SENTINEL, createAuthCacheArgs, createCliCacheArgs, resolveAuthCachePath } from './utils/docker';
+import { AUTH_CACHE_AGENTS, AUTH_LOGIN_ARGS, AUTH_SENTINEL, createAuthCacheArgs, createCliCacheArgs, hasCredentialFile, resolveAuthCachePath } from './utils/docker';
 import { BunCommandExecutor } from './utils/shell';
 import { ConsoleLogger } from './utils/logger';
 import { parseCommandLineArgs, printHelp } from './utils/cli';
@@ -225,7 +225,13 @@ async function runSetupAuth(agent: string): Promise<void> {
         stdio: 'inherit',
     });
 
-    if (result.status === 0) {
+    // Some agent CLIs (Claude, Gemini) enter interactive chat mode after a
+    // successful login, so the user must Ctrl-C to exit — which produces a
+    // non-zero exit code.  We therefore check for the actual credential file
+    // in the auth cache rather than relying solely on the exit code.
+    const authSucceeded = result.status === 0 || hasCredentialFile(agent);
+
+    if (authSucceeded) {
         // Write sentinel so hasAuthCache() recognises a completed login
         const { writeFileSync } = await import('fs');
         const sentinelPath = join(resolveAuthCachePath(agent), AUTH_SENTINEL);
