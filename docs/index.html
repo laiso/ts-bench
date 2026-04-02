@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ts-bench &mdash; SWE-Lancer AI Agent Benchmark</title>
+<meta name="description" content="Tier ratings and benchmark results for AI coding agents on the SWE-Lancer v2 task set.">
+<meta property="og:title" content="ts-bench &mdash; SWE-Lancer AI Agent Benchmark">
+<meta property="og:description" content="Tier ratings (S/A/B/C/D/F) for AI coding agents on the SWE-Lancer v2 benchmark (5 tasks).">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<style>
+:root {
+  --bg: #000;
+  --surface: #111;
+  --surface-2: #1a1a1a;
+  --border: #333;
+  --text: #ededed;
+  --text-secondary: #888;
+  --accent: #0070f3;
+  --green: #50e3c2;
+  --red: #ee0000;
+  --link: #888;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--text); text-decoration: none; }
+a:hover { color: #fff; }
+.container { max-width: 960px; margin: 0 auto; padding: 48px 24px; }
+
+/* Header — Vercel style */
+header { margin-bottom: 48px; }
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+header p { color: var(--text-secondary); font-size: 1rem; }
+.updated { color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px; }
+
+/* Nav tabs — Vercel style underline */
+.tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.tab {
+  padding: 12px 0;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s;
+}
+.tab:hover { color: var(--text); }
+.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ============ TIER LIST (tiermaker style) ============ */
+.tier-list { display: flex; flex-direction: column; gap: 4px; }
+.tier-row {
+  display: flex;
+  min-height: 72px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.tier-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  min-width: 72px;
+  font-weight: 800;
+  font-size: 1.75rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.tier-label-S { background: #ff7f7f; }
+.tier-label-A { background: #ffbf7f; }
+.tier-label-B { background: #ffdf7f; }
+.tier-label-C { background: #ffff7f; }
+.tier-label-D { background: #bfff7f; }
+.tier-label-F { background: #7fffff; }
+.tier-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  flex: 1;
+  min-height: 72px;
+}
+
+/* Agent card inside tier row */
+.agent-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  min-width: 130px;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.agent-card:hover {
+  border-color: #555;
+  background: #222;
+  color: #fff;
+}
+.agent-card .agent-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  background: #222;
+}
+.agent-card .agent-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+.agent-card .agent-model {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.agent-card .agent-meta {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Small tier badge (for tables) */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  color: #fff;
+}
+.tier-badge-S { background: #ff7f7f; }
+.tier-badge-A { background: #ffbf7f; }
+.tier-badge-B { background: #ffdf7f; }
+.tier-badge-C { background: #ffff7f; color: #333; }
+.tier-badge-D { background: #bfff7f; color: #333; }
+.tier-badge-F { background: #7fffff; color: #333; }
+
+/* Tables — Vercel style */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px 16px; text-align: left; font-size: 0.875rem; }
+th {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+}
+td { border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface); }
+
+/* Pass / fail */
+.pass { color: var(--green); font-weight: 500; }
+.fail { color: var(--red); font-weight: 500; }
+
+/* Task breakdown grid */
+.breakdown-grid { overflow-x: auto; }
+
+/* Loading */
+.loading { text-align: center; padding: 80px 20px; color: var(--text-secondary); font-size: 0.9rem; }
+
+/* Empty */
+.empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  header h1 { font-size: 1.75rem; }
+  .tier-label { width: 52px; min-width: 52px; font-size: 1.25rem; }
+  .agent-card { min-width: 90px; padding: 8px 10px; }
+  .agent-card .agent-name { font-size: 0.78rem; }
+  .agent-card .agent-model { font-size: 0.68rem; }
+  th, td { padding: 8px 12px; font-size: 0.82rem; }
+  .tab { font-size: 0.82rem; }
+}
+
+footer {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 40px 0 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+}
+footer a { color: var(--text-secondary); }
+footer a:hover { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>ts-bench</h1>
+    <p>SWE-Lancer v2 benchmark &mdash; tier ratings for AI coding agents</p>
+    <div class="updated" id="lastUpdated"></div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="leaderboard">Tier List</div>
+    <div class="tab" data-tab="history">Historical Runs</div>
+    <div class="tab" data-tab="breakdown">Task Breakdown</div>
+  </div>
+
+  <div id="leaderboard" class="tab-content active">
+    <div class="loading" id="leaderboardLoading">Loading results&hellip;</div>
+    <div id="tierListContainer" style="display:none"></div>
+  </div>
+
+  <div id="history" class="tab-content">
+    <div class="loading" id="historyLoading">Loading history&hellip;</div>
+    <table id="historyTable" style="display:none">
+      <thead>
+        <tr>
+          <th>Agent</th>
+          <th>Model</th>
+          <th>Provider</th>
+          <th>Tier</th>
+          <th>Solved</th>
+          <th>Total Time</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="historyBody"></tbody>
+    </table>
+  </div>
+
+  <div id="breakdown" class="tab-content">
+    <div class="loading" id="breakdownLoading">Loading breakdown&hellip;</div>
+    <div class="breakdown-grid" id="breakdownGrid" style="display:none"></div>
+  </div>
+
+  <footer>
+    <a href="https://github.com/laiso/ts-bench">GitHub</a> &middot;
+    Powered by <a href="https://github.com/laiso/ts-bench">ts-bench</a>
+  </footer>
+</div>
+
+<script>
+(function() {
+  var BASE = '';
+  var LEADERBOARD_URL = BASE + 'data/leaderboard.json';
+  var RESULTS_DIR = BASE + 'results/';
+
+  // V2 default task set (5 tasks)
+  var V2_DEFAULT_TASKS = ['14958','15815_1','15193','14268','20079'];
+  var V2_SET = {};
+  V2_DEFAULT_TASKS.forEach(function(t) { V2_SET[t] = true; });
+  var V2_TOTAL = V2_DEFAULT_TASKS.length;
+
+  // Allowed tier values (XSS prevention)
+  var TIER_ALLOW = {S:1,A:1,B:1,C:1,D:1,F:1};
+
+  function isV2Entry(d) {
+    if (d.tier && d.tier.tier) return true;
+    if (d.results && d.results.length === V2_TOTAL) {
+      var allMatch = true;
+      for (var i = 0; i < d.results.length; i++) {
+        if (!V2_SET[d.results[i].exercise]) { allMatch = false; break; }
+      }
+      if (allMatch) return true;
+    }
+    return false;
+  }
+
+  function tierFromEntry(d) {
+    if (d.tier && d.tier.tier) return d.tier.tier;
+    if (!d.results || d.results.length === 0) return null;
+    var solved = 0;
+    for (var i = 0; i < d.results.length; i++) {
+      if (V2_SET[d.results[i].exercise] && d.results[i].overallSuccess) solved++;
+    }
+    if (solved >= 5) return 'S';
+    if (solved >= 4) return 'A';
+    if (solved >= 3) return 'B';
+    if (solved >= 2) return 'C';
+    if (solved >= 1) return 'D';
+    return 'F';
+  }
+
+  function tierBadge(tier) {
+    if (!tier) return '<span style="color:var(--text-secondary)">-</span>';
+    if (!TIER_ALLOW[tier]) return '<span style="color:var(--text-secondary)">' + esc(tier) + '</span>';
+    return '<span class="tier-badge tier-badge-' + tier + '">' + tier + '</span>';
+  }
+
+  function fmtDuration(ms) {
+    if (!ms || ms <= 0) return '-';
+    var sec = ms / 1000;
+    if (sec < 60) return sec.toFixed(1) + 's';
+    var min = sec / 60;
+    if (min < 60) return min.toFixed(1) + 'm';
+    var hr = min / 60;
+    return hr.toFixed(1) + 'h';
+  }
+
+  function fmtDate(ts) {
+    if (!ts) return '-';
+    return ts.split('T')[0];
+  }
+
+  function resultKey(entry) {
+    var a = (entry.metadata ? entry.metadata.agent : entry.agent) || '';
+    var m = (entry.metadata ? entry.metadata.model : entry.model) || '';
+    return (a + '-' + m).replace(/[^a-zA-Z0-9._-]/g, '_');
+  }
+
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Fetch leaderboard data
+  fetch(LEADERBOARD_URL)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      renderAll(data);
+    })
+    .catch(function(err) {
+      document.getElementById('leaderboardLoading').textContent = 'Failed to load results. ' + err;
+      document.getElementById('historyLoading').textContent = 'Failed to load results.';
+      document.getElementById('breakdownLoading').textContent = 'Failed to load results.';
+    });
+
+  function renderAll(data) {
+    if (data.lastUpdated) {
+      document.getElementById('lastUpdated').textContent = 'Last updated: ' + fmtDate(data.lastUpdated);
+    }
+
+    // Filter to v2 entries only
+    var entries = Object.entries(data.results || {})
+      .map(function(pair) { return { key: pair[0], data: pair[1] }; })
+      .filter(function(e) { return isV2Entry(e.data); });
+
+    // Sort by tier rank (S > A > B > ... > F), then avg duration asc
+    var tierRank = {S:0,A:1,B:2,C:3,D:4,F:5};
+    entries.sort(function(a, b) {
+      var tA = tierFromEntry(a.data);
+      var tB = tierFromEntry(b.data);
+      var rA = tA ? (tierRank[tA] != null ? tierRank[tA] : 99) : 99;
+      var rB = tB ? (tierRank[tB] != null ? tierRank[tB] : 99) : 99;
+      if (rA !== rB) return rA - rB;
+      var durA = a.data.summary ? a.data.summary.avgDuration : 0;
+      var durB = b.data.summary ? b.data.summary.avgDuration : 0;
+      return durA - durB;
+    });
+
+    renderLeaderboard(entries);
+    renderHistory(entries);
+    renderBreakdown(entries);
+  }
+
+  function renderLeaderboard(entries) {
+    var container = document.getElementById('tierListContainer');
+    if (entries.length === 0) {
+      document.getElementById('leaderboardLoading').innerHTML =
+        'No v2 benchmark results yet.<br><small style="color:var(--text-secondary)">Run <code style="background:var(--surface-2);padding:2px 6px;border-radius:4px;font-size:0.85em">bun src/index.ts --dataset v2</code> and update the leaderboard to see tier ratings here.</small>';
+      return;
+    }
+
+    // Group entries by tier
+    var TIERS = ['S','A','B','C','D','F'];
+    var groups = {};
+    TIERS.forEach(function(t) { groups[t] = []; });
+    entries.forEach(function(entry) {
+      var tier = tierFromEntry(entry.data);
+      if (tier && groups[tier]) groups[tier].push(entry);
+    });
+
+    var html = '<div class="tier-list">';
+    TIERS.forEach(function(t) {
+      html += '<div class="tier-row">';
+      html += '<div class="tier-label tier-label-' + t + '">' + t + '</div>';
+      html += '<div class="tier-items">';
+      groups[t].forEach(function(entry) {
+        var d = entry.data;
+        var meta = d.metadata || {};
+        var summary = d.summary || {};
+        var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
+        var key = resultKey(d);
+        var detailHref = RESULTS_DIR + key + '.html';
+        var agentName = (meta.agent || entry.key).toLowerCase();
+        var iconPath = 'assets/icons/' + esc(agentName) + '.png';
+        html += '<a class="agent-card" href="' + detailHref + '">';
+        html += '<img class="agent-icon" src="' + iconPath + '" alt="' + esc(meta.agent || entry.key) + '" onerror="this.style.display=\'none\'">';
+        html += '<span class="agent-name">' + esc(meta.agent || entry.key) + '</span>';
+        html += '<span class="agent-model">' + esc(meta.model || '') + '</span>';
+        html += '<span class="agent-meta">' + solved + '/5 &middot; ' + fmtDuration(summary.avgDuration) + '</span>';
+        html += '</a>';
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+
+    document.getElementById('leaderboardLoading').style.display = 'none';
+    container.innerHTML = html;
+    container.style.display = '';
+  }
+
+  function renderHistory(entries) {
+    var tbody = document.getElementById('historyBody');
+    if (entries.length === 0) {
+      document.getElementById('historyLoading').innerHTML = 'No v2 results yet.';
+      return;
+    }
+
+    var sorted = entries.slice().sort(function(a, b) {
+      var tA = a.data.metadata ? a.data.metadata.timestamp : '';
+      var tB = b.data.metadata ? b.data.metadata.timestamp : '';
+      return tB.localeCompare(tA);
+    });
+
+    sorted.forEach(function(entry) {
+      var d = entry.data;
+      var meta = d.metadata || {};
+      var summary = d.summary || {};
+      var tier = tierFromEntry(d);
+      var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
+      var key = resultKey(d);
+      var detailHref = RESULTS_DIR + key + '.html';
+
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + esc(meta.agent || entry.key) + '</td>' +
+        '<td>' + esc(meta.model || '-') + '</td>' +
+        '<td>' + esc(meta.provider || '-') + '</td>' +
+        '<td>' + tierBadge(tier) + '</td>' +
+        '<td>' + solved + '/' + V2_TOTAL + '</td>' +
+        '<td>' + fmtDuration(summary.totalDuration) + '</td>' +
+        '<td>' + fmtDate(meta.timestamp) + '</td>' +
+        '<td><a class="result-link" href="' + detailHref + '">Details</a></td>';
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('historyLoading').style.display = 'none';
+    document.getElementById('historyTable').style.display = '';
+  }
+
+  function renderBreakdown(entries) {
+    var withResults = entries.filter(function(e) { return e.data.results && e.data.results.length > 0; });
+    if (withResults.length === 0) {
+      document.getElementById('breakdownLoading').textContent = 'No v2 task-level data available.';
+      return;
+    }
+
+    // Use the fixed v2 task list as columns
+    var html = '<table><thead><tr><th>Agent / Model</th>';
+    V2_DEFAULT_TASKS.forEach(function(task) {
+      html += '<th>' + esc(task) + '</th>';
+    });
+    html += '</tr></thead><tbody>';
+
+    withResults.forEach(function(e) {
+      var meta = e.data.metadata || {};
+      html += '<tr><td><strong>' + esc(meta.agent || e.key) + '</strong><br><small>' + esc(meta.model || '') + '</small></td>';
+      V2_DEFAULT_TASKS.forEach(function(task) {
+        var found = null;
+        for (var i = 0; i < (e.data.results || []).length; i++) {
+          if (e.data.results[i].exercise === task) { found = e.data.results[i]; break; }
+        }
+        if (!found) {
+          html += '<td style="color:var(--text-secondary)">-</td>';
+        } else if (found.overallSuccess) {
+          html += '<td class="pass" title="' + fmtDuration(found.totalDuration) + '">Pass</td>';
+        } else {
+          html += '<td class="fail">Fail</td>';
+        }
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+
+    document.getElementById('breakdownLoading').style.display = 'none';
+    var grid = document.getElementById('breakdownGrid');
+    grid.innerHTML = html;
+    grid.style.display = '';
+  }
+
+  function esc(s) {
+    if (!s) return '';
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,20 +1,27 @@
-# Publishes the SWE-Lancer task browser to GitHub Pages (Project site: /swelancer-tasks/).
+# Unified GitHub Pages deployment workflow.
+# Builds both benchmark result pages and SWE-Lancer task browser,
+# then deploys the full docs/ directory to GitHub Pages.
+#
 # Repository setting: Settings → Pages → Build and deployment → Source: GitHub Actions.
 
-name: Deploy SWE-Lancer task pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
     paths:
+      # Benchmark results
+      - 'public/data/leaderboard.json'
+      - 'scripts/build-results-pages.ts'
+      # SWE-Lancer task browser
       - 'repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv'
       - 'scripts/build-swelancer-pages.ts'
-      - 'docs/swelancer-tasks/**'
-      - '.github/workflows/swelancer-pages.yml'
+      # Shared static assets and workflows
+      - 'docs/**'
+      - '.github/workflows/gh-pages.yml'
       - 'package.json'
       - 'bun.lock'
+  # Allow manual trigger
   workflow_dispatch:
 
 permissions:
@@ -23,7 +30,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: swelancer-pages
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -33,19 +40,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Init frontier-evals submodule (CSV source)
+      - name: Init frontier-evals submodule (CSV source for SWE-Lancer pages)
         run: git submodule update --init repos/frontier-evals
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build tasks.json and verify static assets
+      - name: Build benchmark result pages
+        run: bun scripts/build-results-pages.ts
+
+      - name: Build SWE-Lancer task pages
         run: bun run build:swelancer-pages
 
-      - name: Upload Pages artifact
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
