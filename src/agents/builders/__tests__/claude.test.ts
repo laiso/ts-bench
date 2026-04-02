@@ -67,4 +67,19 @@ describe('ClaudeAgentBuilder', () => {
 
         process.env.ANTHROPIC_API_KEY = prev;
     });
+
+    it('keeps skip-permissions enabled for Docker runs', async () => {
+        const prev = process.env.ANTHROPIC_API_KEY;
+        process.env.ANTHROPIC_API_KEY = 'test-key';
+
+        const builder = new ClaudeAgentBuilder({
+            ...config,
+            useDocker: true
+        });
+        const cmd = await builder.buildCommand('Test instructions');
+
+        expect(cmd.args).toContain('--dangerously-skip-permissions');
+
+        process.env.ANTHROPIC_API_KEY = prev;
+    });
 });

@@ -30,10 +30,9 @@ export class LocalExecutionStrategy implements ExecutionStrategy {
             postCmd = `; RES=$?; git diff > ${ctx.generatePatchPath}; exit $RES`;
         }
 
-        // Wrap the original command in bash -c
-        // We join the original core.args with spaces, escaping if necessary.
-        // For simplicity we assume simple args for now.
-        const originalCmd = core.args.map(a => a.includes(' ') ? `"${a}"` : a).join(' ');
+        // Wrap the original command in bash -c with proper shell escaping
+        const shellEscape = (s: string): string => `'${s.replace(/'/g, "'\\''")}'`;
+        const originalCmd = core.args.map(shellEscape).join(' ');
         
         command = [
             'bash', '-c',

@@ -9,6 +9,7 @@ import { SWELANCER_IMAGE, SWELANCER_REPO_PATH, TS_BENCH_CONTAINER } from '../con
 import { SWELANCER_CLI_CACHE_CONTAINER_PATH } from '../utils/docker';
 import { sanitizeFilenameSegment } from '../utils/file-name';
 import { resolveBenchmarkSelection } from '../utils/task-selection';
+import { buildTestCommand, getExerciseTimeout } from '../config/test-commands';
 import { V2ContainerManager, V2DockerExecStrategy } from '../execution/v2-container';
 
 export class BenchmarkRunner {
@@ -60,24 +61,10 @@ export class BenchmarkRunner {
             }
         }
 
-        let testCommand = 'corepack yarn && corepack yarn test';
-        if (args.dataset === 'v2') {
-            if (useDocker) {
-                // V2 Docker uses single-container mode: setup already ran once via
-                // V2ContainerManager.setup().  The test command only needs to start
-                // services (run.sh) and run pytest via run_tests.yml.
-                const setupWaitSec = parseInt(process.env.TS_BENCH_V2_SETUP_WAIT_SEC || '600', 10) || 600;
-                testCommand = `export CI=true && unset RUNTIME_SETUP && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml`;
-            } else {
-                // Native V2: Run Jest on changed files
-                testCommand = `npm rebuild canvas && npm test -- -o`;
-            }
-        }
-
-        const requestedTimeout = args.timeout ?? 300;
-        // v2 single-container: setup runs once; remaining time is agent + services + pytest
-        const exerciseTimeout =
-            args.dataset === 'v2' ? Math.max(requestedTimeout, 3600) : requestedTimeout;
+        const testCommand = buildTestCommand(args.dataset, useDocker);
+        const exerciseTimeout = getExerciseTimeout(args.dataset, args.timeout);
+        const testCommand = buildTestCommand(args.dataset, useDocker);
+        const exerciseTimeout = getExerciseTimeout(args.dataset, args.timeout);
 
         const config: BenchmarkConfig = {
             testCommand,
