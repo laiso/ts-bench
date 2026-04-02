@@ -116,7 +116,7 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 16px;
-  min-width: 120px;
+  min-width: 130px;
   text-decoration: none;
   transition: border-color 0.15s, background 0.15s;
 }
@@ -124,6 +124,14 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   border-color: #555;
   background: #222;
   color: #fff;
+}
+.agent-card .agent-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  background: #222;
 }
 .agent-card .agent-name {
   font-weight: 600;
@@ -408,7 +416,10 @@ footer a:hover { color: var(--text); }
         var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
         var key = resultKey(d);
         var detailHref = RESULTS_DIR + key + '.html';
+        var agentName = (meta.agent || entry.key).toLowerCase();
+        var iconPath = 'assets/icons/' + agentName + '.png';
         html += '<a class="agent-card" href="' + detailHref + '">';
+        html += '<img class="agent-icon" src="' + iconPath + '" alt="' + esc(meta.agent || entry.key) + '" onerror="this.style.display=\'none\'">';
         html += '<span class="agent-name">' + esc(meta.agent || entry.key) + '</span>';
         html += '<span class="agent-model">' + esc(meta.model || '') + '</span>';
         html += '<span class="agent-meta">' + solved + '/5 &middot; ' + fmtDuration(summary.avgDuration) + '</span>';
