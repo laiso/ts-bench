@@ -64,6 +64,13 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
             env.ANTHROPIC_DEFAULT_HAIKU_MODEL = model;
         }
 
+        // Allow --dangerously-skip-permissions when running as root inside Docker.
+        // Claude Code refuses this flag as root for safety, but IS_SANDBOX=1
+        // signals that we are inside an isolated container environment.
+        if (this.config.useDocker) {
+            env.IS_SANDBOX = '1';
+        }
+
         return env;
     }
 

@@ -155,7 +155,11 @@ export class ExerciseRunner {
             const containerId = container.getId()!;
             const execStrategy = new V2DockerExecStrategy(containerId);
 
-            return this.runV2Task(config, exercise, exercisePath, execStrategy);
+            // IMPORTANT: `return await` is required here so the finally block
+            // waits for runV2Task to complete before destroying the container.
+            // Using bare `return` would let the finally block run immediately,
+            // killing the container while the agent is still executing.
+            return await this.runV2Task(config, exercise, exercisePath, execStrategy);
         } finally {
             await container.destroy();
         }
