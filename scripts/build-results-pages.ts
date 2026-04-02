@@ -116,6 +116,9 @@ function escapeHtml(s: string): string {
 
 function tierClass(tier: string | null): string {
     if (!tier) return '';
+    // Only allow known tier letters to prevent class injection
+    const allowed = new Set(['S', 'A', 'B', 'C', 'D', 'F']);
+    if (!allowed.has(tier)) return '';
     return `tier-${tier}`;
 }
 
@@ -127,7 +130,8 @@ function generateResultPage(key: string, entry: SavedResult): string {
     const total = summary.totalCount ?? 0;
 
     const pageTitle = `${escapeHtml(meta.agent)} / ${escapeHtml(meta.model)} - ts-bench`;
-    const ogDescription = `Tier ${tier ?? '-'} | ${solved}/${total} solved | ${summary.successRate?.toFixed(1) ?? 0}% success rate | ${escapeHtml(meta.provider)}`;
+    const escapedTier = escapeHtml(tier ?? '-');
+    const ogDescription = `Tier ${escapedTier} | ${solved}/${total} solved | ${summary.successRate?.toFixed(1) ?? 0}% success rate | ${escapeHtml(meta.provider)}`;
 
     let resultsRows = '';
     if (entry.results && entry.results.length > 0) {
@@ -233,7 +237,7 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
 
   <div class="hero">
     <div style="display:flex;align-items:center;gap:16px">
-      ${tier ? `<span class="tier ${tierClass(tier)}">${tier}</span>` : ''}
+      ${tier ? `<span class="tier ${tierClass(tier)}">${escapeHtml(tier)}</span>` : ''}
       <div>
         <h1>${escapeHtml(meta.agent)} / ${escapeHtml(meta.model)}</h1>
         <div style="color:var(--text-muted);font-size:0.9rem">${escapeHtml(meta.provider)} &middot; ${fmtDate(meta.timestamp)}</div>
