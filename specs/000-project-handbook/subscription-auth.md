@@ -64,7 +64,7 @@ GitHub Actions workflows are unaffected — they always provide API keys via `${
 |---|---|---|---|
 | Claude | `/root/.claude` | `~/.cache/ts-bench/auth/claude` | `claude` (interactive auth on first launch) |
 | Gemini | `/root/.gemini` | `~/.cache/ts-bench/auth/gemini` | `gemini` (interactive auth on first launch) |
-| Codex | `/root/.codex` | `~/.cache/ts-bench/auth/codex` | `codex` (interactive auth on first launch) |
+| Codex | `/root/.codex` | `~/.cache/ts-bench/auth/codex` | `codex login --device-auth` |
 
 ---
 

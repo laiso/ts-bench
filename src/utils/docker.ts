@@ -73,13 +73,15 @@ export const AUTH_CACHE_AGENTS: Record<string, string> = {
 
 /**
  * Arguments appended to `bash /app/scripts/run-agent.sh <agent>` to trigger
- * the agent's login flow.  All supported CLIs authenticate interactively on
- * first launch — none have a dedicated `login` sub-command.
+ * the agent's login flow.
+ *
+ * - Claude / Gemini: authenticate interactively on first launch (no extra args).
+ * - Codex: requires `codex login --device-auth` for headless Device-Code flow.
  */
 export const AUTH_LOGIN_ARGS: Record<string, string[]> = {
   claude: [],
   gemini: [],
-  codex: [],
+  codex: ['login', '--device-auth'],
 };
 
 /**
