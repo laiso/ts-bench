@@ -2,6 +2,7 @@ import { describe, expect, it, afterEach } from 'bun:test';
 import { ClaudeAgentBuilder } from '../claude';
 import { GeminiAgentBuilder } from '../gemini';
 import { CodexAgentBuilder } from '../codex';
+import { AUTH_SENTINEL } from '../../../utils/docker';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
@@ -16,13 +17,13 @@ const BASE_CONFIG = {
 const DOCKER_CONFIG = { ...BASE_CONFIG, useDocker: true };
 
 /**
- * Helper: create a fake auth-cache directory with a dummy credentials file
+ * Helper: create a fake auth-cache directory with the sentinel file
  * to simulate a successful --setup-auth run.
  */
 function seedAuthCache(agent: string): string {
     const dir = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, 'credentials.json'), '{}');
+    writeFileSync(join(dir, AUTH_SENTINEL), new Date().toISOString());
     return dir;
 }
 

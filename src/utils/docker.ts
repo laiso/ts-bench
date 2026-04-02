@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 
@@ -92,11 +92,20 @@ export function resolveAuthCachePath(agent: string): string {
   return base;
 }
 
-/** Return true when the host-side auth cache for `agent` contains at least one file. */
+/**
+ * Sentinel file written by `--setup-auth` to indicate that a successful
+ * login was completed.  We check for this instead of "any file" because
+ * the auth cache directory is mounted as the agent's config root inside
+ * Docker, so the agent may also write non-auth files (e.g. Claude's
+ * conversation logs under `projects/`) during normal API-key runs.
+ */
+export const AUTH_SENTINEL = '.ts-bench-auth';
+
+/** Return true when the host-side auth cache for `agent` contains the sentinel written by `--setup-auth`. */
 export function hasAuthCache(agent: string): boolean {
   try {
     const dir = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
-    return readdirSync(dir).length > 0;
+    return existsSync(join(dir, AUTH_SENTINEL));
   } catch {
     return false;
   }

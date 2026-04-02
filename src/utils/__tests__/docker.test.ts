@@ -1,5 +1,5 @@
 import { describe, expect, it, afterEach } from 'bun:test';
-import { createEnvironmentArgs, createAuthCacheArgs, hasAuthCache } from '../docker';
+import { createEnvironmentArgs, createAuthCacheArgs, hasAuthCache, AUTH_SENTINEL } from '../docker';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
@@ -71,9 +71,15 @@ describe('hasAuthCache', () => {
         expect(hasAuthCache(testAgent)).toBe(false);
     });
 
-    it('returns true when auth cache dir has files', () => {
+    it('returns false when dir has files but no sentinel', () => {
         mkdirSync(testDir, { recursive: true });
         writeFileSync(join(testDir, 'credentials.json'), '{}');
+        expect(hasAuthCache(testAgent)).toBe(false);
+    });
+
+    it('returns true when sentinel file exists', () => {
+        mkdirSync(testDir, { recursive: true });
+        writeFileSync(join(testDir, AUTH_SENTINEL), new Date().toISOString());
         expect(hasAuthCache(testAgent)).toBe(true);
     });
 });

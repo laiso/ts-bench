@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 
 import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANCER_IMAGE } from './config/constants';
-import { AUTH_CACHE_AGENTS, createAuthCacheArgs, createCliCacheArgs } from './utils/docker';
+import { join } from 'path';
+import { AUTH_CACHE_AGENTS, AUTH_SENTINEL, createAuthCacheArgs, createCliCacheArgs, resolveAuthCachePath } from './utils/docker';
 import { BunCommandExecutor } from './utils/shell';
 import { ConsoleLogger } from './utils/logger';
 import { parseCommandLineArgs, printHelp } from './utils/cli';
@@ -219,6 +220,11 @@ async function runSetupAuth(agent: string): Promise<void> {
     });
 
     if (result.status === 0) {
+        // Write sentinel so hasAuthCache() recognises a completed login
+        const { writeFileSync } = await import('fs');
+        const sentinelPath = join(resolveAuthCachePath(agent), AUTH_SENTINEL);
+        writeFileSync(sentinelPath, new Date().toISOString(), 'utf-8');
+
         console.log(`\n✓ Auth setup complete for ${agent}.`);
         console.log(`  You can now run benchmarks without an API key:`);
         console.log(`  bun src/index.ts --agent ${agent} --exercise acronym --docker`);
