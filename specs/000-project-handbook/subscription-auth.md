@@ -4,7 +4,7 @@
 
 ## Background
 
-Currently, all agents in ts-bench require an API key set in environment variables (e.g., `ANTHROPIC_API_KEY`). However, modern CLI agents like Claude Code, Gemini CLI, and Codex support subscription-based authentication via local login sessions (`claude login`, `codex login`, interactive `gemini` launch, etc.). This spec enables agents to run using these local credentials without API keys.
+Currently, all agents in ts-bench require an API key set in environment variables (e.g., `ANTHROPIC_API_KEY`). However, modern CLI agents like Claude Code, Gemini CLI, and Codex support subscription-based authentication via local login sessions (interactive first-launch authentication). This spec enables agents to run using these local credentials without API keys.
 
 ---
 
@@ -62,9 +62,9 @@ GitHub Actions workflows are unaffected — they always provide API keys via `${
 
 | Agent | Auth directory (container) | Auth directory (host volume) | Login command |
 |---|---|---|---|
-| Claude | `/root/.claude` | `~/.cache/ts-bench/auth/claude` | `claude login` |
-| Gemini | `/root/.gemini` | `~/.cache/ts-bench/auth/gemini` | `gemini` (authenticates interactively on first launch) |
-| Codex | `/root/.codex` | `~/.cache/ts-bench/auth/codex` | `codex login` |
+| Claude | `/root/.claude` | `~/.cache/ts-bench/auth/claude` | `claude` (interactive auth on first launch) |
+| Gemini | `/root/.gemini` | `~/.cache/ts-bench/auth/gemini` | `gemini` (interactive auth on first launch) |
+| Codex | `/root/.codex` | `~/.cache/ts-bench/auth/codex` | `codex` (interactive auth on first launch) |
 
 ---
 
@@ -133,7 +133,7 @@ Add a new CLI option `--setup-auth` that accepts an agent name. When invoked:
 1. Start a Docker container interactively (`docker run --rm -it`).
 2. Mount the CLI cache volume (`createCliCacheArgs()`).
 3. Mount the auth cache volume (`createAuthCacheArgs(agent)`).
-4. Run the agent's login command inside the container (e.g., `bash /app/scripts/run-agent.sh claude login`). Note: Gemini CLI has no `login` sub-command — it authenticates interactively on first launch, so `--setup-auth gemini` runs `gemini` without arguments.
+4. Run the agent CLI inside the container (e.g., `bash /app/scripts/run-agent.sh claude`). All supported CLIs authenticate interactively on first launch — none have a dedicated `login` sub-command.
 5. The CLI (e.g., Claude Code) will use Device Code Flow — print a URL and code to the terminal. The user opens the URL in their host browser and completes OAuth.
 6. Auth state is saved to the auth cache volume and persists for future runs.
 

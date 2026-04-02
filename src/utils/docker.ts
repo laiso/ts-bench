@@ -73,13 +73,13 @@ export const AUTH_CACHE_AGENTS: Record<string, string> = {
 
 /**
  * Arguments appended to `bash /app/scripts/run-agent.sh <agent>` to trigger
- * the agent's login flow.  Most CLIs use `<agent> login`, but Gemini CLI
- * authenticates interactively on first launch (no `login` sub-command).
+ * the agent's login flow.  All supported CLIs authenticate interactively on
+ * first launch — none have a dedicated `login` sub-command.
  */
 export const AUTH_LOGIN_ARGS: Record<string, string[]> = {
-  claude: ['login'],
+  claude: [],
   gemini: [],
-  codex: ['login'],
+  codex: [],
 };
 
 /**
