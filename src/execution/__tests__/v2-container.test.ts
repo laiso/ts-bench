@@ -181,7 +181,7 @@ describe('V2ContainerManager', () => {
     });
 
     describe('resetToBaseline()', () => {
-        it('should git reset --hard to the base setup commit', async () => {
+        it('should kill services and git reset --hard to the base setup commit', async () => {
             executor.push(ok('cid\n'));
             executor.push(ok());
             await mgr.create({ issueId: '15815_1' });
@@ -191,6 +191,13 @@ describe('V2ContainerManager', () => {
 
             const call = executor.calls[2]!;
             const bashCmd = call.args[call.args.length - 1]!;
+            // Kills background services from previous test phase
+            expect(bashCmd).toContain('pkill -f "web/proxy.ts"');
+            expect(bashCmd).toContain('pkill -f "webpack-dev-server"');
+            expect(bashCmd).toContain('pkill -f "mitmdump"');
+            expect(bashCmd).toContain('nginx -s stop');
+            expect(bashCmd).toContain('rm -f /setup_done.txt');
+            // Git reset
             expect(bashCmd).toContain('git reset --hard $BASE');
             expect(bashCmd).toContain('git clean -fd');
             expect(bashCmd).toContain('"base setup"');

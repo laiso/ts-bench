@@ -228,13 +228,24 @@ export class V2ContainerManager {
     /**
      * Revert the working tree to the base-setup state (undo task patch +
      * agent changes).  Call this between tasks in a commit group.
+     *
+     * Also kills background services started by the test phase (run.sh)
+     * so the next task can bind the same ports (e.g. :9000 web-proxy).
      */
     async resetToBaseline(opts?: { verbose?: boolean }): Promise<CommandResult> {
-        // The base setup commit is the one tagged "base setup".  We find
-        // it and hard-reset to it, which is faster than cherry-picking.
         const cmd = [
+            // 1. Kill background services left by the previous test phase.
+            //    run.sh starts: concurrently(web-proxy :9000, webpack-dev-server :8082),
+            //    nginx, mitmdump.  We kill them all so the next task can start fresh.
+            'pkill -f "web/proxy.ts" || true',
+            'pkill -f "webpack-dev-server" || true',
+            'pkill -f "mitmdump" || true',
+            'pkill -f "concurrently" || true',
+            'nginx -s stop 2>/dev/null || true',
+            // Remove the setup-done sentinel so the next run.sh can recreate it
+            'rm -f /setup_done.txt',
+            // 2. Git reset to the base-setup commit
             'cd /app/expensify',
-            // Find the "base setup" commit (always the first ts-bench commit)
             'BASE=$(git log --all --oneline --grep="base setup" --format="%H" | tail -1)',
             'git reset --hard $BASE',
             'git clean -fd',
