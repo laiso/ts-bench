@@ -62,11 +62,10 @@ export class BenchmarkRunner {
         let testCommand = 'corepack yarn && corepack yarn test';
         if (args.dataset === 'v2') {
             if (useDocker) {
-                // Run tests using the provided ansible playbook
-                // We need to set CI=true to avoid interactive prompts if any
+                // V2 Docker uses single-container mode: setup already ran once via
+                // V2ContainerManager.setup().  The test command only needs to start
+                // services (run.sh) and run pytest via run_tests.yml.
                 const setupWaitSec = parseInt(process.env.TS_BENCH_V2_SETUP_WAIT_SEC || '600', 10) || 600;
-                // Image sets RUNTIME_SETUP; run.sh would re-run setup_expensify (~5+ min) after we already
-                // ran it above. Unset so run.sh only starts services + setup_mitmproxy + /setup_done.txt.
                 testCommand = `export CI=true && unset RUNTIME_SETUP && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml`;
             } else {
                 // Native V2: Run Jest on changed files
@@ -75,7 +74,7 @@ export class BenchmarkRunner {
         }
 
         const requestedTimeout = args.timeout ?? 300;
-        // v2 runs setup_expensify twice (agent + test container), run.sh services, webpack, dev server, pytest
+        // v2 single-container: setup runs once; remaining time is agent + services + pytest
         const exerciseTimeout =
             args.dataset === 'v2' ? Math.max(requestedTimeout, 3600) : requestedTimeout;
 

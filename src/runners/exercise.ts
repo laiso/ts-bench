@@ -4,12 +4,13 @@ import { TestRunner } from './test';
 import { ExerciseResetter } from '../exercises/reset';
 import type { Logger } from '../utils/logger';
 import { join } from 'path';
-import { SWELANCER_REPO_PATH } from '../config/constants';
+import { SWELANCER_IMAGE, SWELANCER_REPO_PATH } from '../config/constants';
 
 import type { DatasetReader } from '../datasets/types';
 import type { TestContext } from './test';
 
 import type { CommandExecutor } from '../utils/shell';
+import { V2ContainerManager, V2DockerExecStrategy } from '../execution/v2-container';
 
 export class ExerciseRunner {
     constructor(
@@ -65,11 +66,17 @@ export class ExerciseRunner {
 
         const useDocker = config.useDocker ?? true; // Default is to use Docker
 
+        // ── V2 Docker: single-container path (setup runs once) ──────────
+        if (config.dataset === 'v2' && useDocker) {
+            return this.runV2Docker(config, exercise, exercisePath, metadata.commitId);
+        }
+
+        // ── V1 / local path (unchanged) ─────────────────────────────────
+
         // Phase 1: Run AI Agent
         const agentResult = await this.agentRunner.run(config, exercise, exercisePath, useDocker);
 
         // Phase 1.5: Restore test files when running locally (in case the agent modified them)
-        // Only for V1 where test files are on host
         if (config.dataset !== 'v2') {
             const testFiles = await this.agentRunner.getTestFiles(exercise);
             await this.exerciseResetter.restoreTestFiles(exercisePath, testFiles);
@@ -80,27 +87,13 @@ export class ExerciseRunner {
             await this.exerciseResetter.logDiffAfterAgent(exercisePath);
         }
 
-        // Get metadata for TestRunner
-        // metadata is already fetched at start
-
         let applyPatchPath: string | undefined;
         let commitId: string | undefined = metadata.commitId;
 
         if (config.dataset === 'v2') {
-            if (useDocker) {
-                applyPatchPath = `/patches/${exercise}.patch`;
-            } else {
-                // Native mode: Agent modified files in place.
-                // Do NOT apply patch, and do NOT reset commit (preserve changes).
-                applyPatchPath = undefined;
-                commitId = undefined;
-
-                // Note: patches are still generated in Phase 1.6 for record keeping if verbose
-                const patchDir = join(process.cwd(), '.patches');
-            }
-        } else {
-            // V1 logic handles restore via exerciseResetter, so commitId/patch logic here isn't used usually
-            // unless we want to support it. 
+            // Native (non-Docker) v2: agent modified files in place
+            applyPatchPath = undefined;
+            commitId = undefined;
         }
 
         const testContext: TestContext = {
@@ -128,5 +121,77 @@ export class ExerciseRunner {
             testDuration: testResult.duration,
             totalDuration
         };
+    }
+
+    // ------------------------------------------------------------------
+    // V2 Docker: single-container execution (setup runs once)
+    // ------------------------------------------------------------------
+
+    private async runV2Docker(
+        config: BenchmarkConfig,
+        exercise: string,
+        exercisePath: string,
+        _commitId?: string,
+    ): Promise<TestResult> {
+        const startTime = Date.now();
+        const container = new V2ContainerManager(this.executor, this.logger, SWELANCER_IMAGE);
+        const containerOpts = { issueId: exercise, timeout: config.timeout, verbose: config.verbose };
+
+        try {
+            // Phase 0: Create container & run setup (ONCE)
+            await container.create(containerOpts);
+            const setupResult = await container.setup(containerOpts);
+            if (setupResult.exitCode !== 0) {
+                const duration = Date.now() - startTime;
+                this.logger.info(`[v2] Setup failed for ${exercise}`);
+                return {
+                    exercise,
+                    agentSuccess: false,
+                    testSuccess: false,
+                    overallSuccess: false,
+                    agentError: `Setup failed: ${setupResult.stderr}`,
+                    agentDuration: duration,
+                    testDuration: 0,
+                    totalDuration: duration,
+                };
+            }
+
+            // Build strategy that targets this container via `docker exec`
+            const containerId = container.getId()!;
+            const execStrategy = new V2DockerExecStrategy(containerId);
+
+            // Phase 1: Run AI Agent (inside the already-set-up container)
+            const agentResult = await this.agentRunner.run(
+                config, exercise, exercisePath, true, execStrategy,
+            );
+
+            // Phase 2: Run Tests (same container, no second setup)
+            const testContext: TestContext = {
+                datasetType: 'v2',
+                // No applyPatchPath: agent changes are already in the working tree
+                // No commitId: container is already at the right commit from setup
+            };
+            const testResult = await this.testRunner.run(
+                config, exercise, exercisePath, true, testContext, execStrategy,
+            );
+
+            const totalDuration = Date.now() - startTime;
+            const overallSuccess = agentResult.success && testResult.success;
+            this.logger.logExerciseResult(exercise, overallSuccess, totalDuration);
+
+            return {
+                exercise,
+                agentSuccess: agentResult.success,
+                testSuccess: testResult.success,
+                overallSuccess,
+                agentError: agentResult.error,
+                testError: testResult.error,
+                agentDuration: agentResult.duration,
+                testDuration: testResult.duration,
+                totalDuration,
+            };
+        } finally {
+            await container.destroy();
+        }
     }
 }

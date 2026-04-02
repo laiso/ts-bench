@@ -3,6 +3,7 @@ import type { CommandExecutor } from '../utils/shell';
 import type { Logger } from '../utils/logger';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
 import { DockerExecutionStrategy } from '../execution/docker-strategy';
+import type { ExecutionStrategy } from '../execution/types';
 
 export interface TestContext {
     commitId?: string;
@@ -17,20 +18,20 @@ export class TestRunner {
         private containerName: string
     ) {}
 
-    async run(config: BenchmarkConfig, exercise: string, exercisePath: string, useDocker: boolean = true, context?: TestContext): Promise<AgentResult> {
+    async run(config: BenchmarkConfig, exercise: string, exercisePath: string, useDocker: boolean = true, context?: TestContext, strategy?: ExecutionStrategy): Promise<AgentResult> {
         const startTime = Date.now();
 
         try {
-            const strategy = useDocker
+            const resolvedStrategy = strategy ?? (useDocker
                 ? new DockerExecutionStrategy(this.containerName)
-                : new LocalExecutionStrategy();
+                : new LocalExecutionStrategy());
 
             const coreCommand = {
                 args: ['bash', '-c', config.testCommand],
                 env: {}
             };
 
-            const prepared = strategy.prepare(coreCommand, { 
+            const prepared = resolvedStrategy.prepare(coreCommand, { 
                 exercisePath,
                 datasetType: context?.datasetType,
                 issueId: context?.datasetType === 'v2' ? exercise : undefined,
