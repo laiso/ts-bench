@@ -53,7 +53,7 @@ const AGENT_PROMPTS_CONTAINER_DIR = '/tmp/ts-bench-agent-prompts';
 export interface V2ContainerOptions {
     /** Task / issue ID (e.g. "15815_1") */
     issueId: string;
-    /** Timeout in ms for long-running exec calls */
+    /** Timeout in seconds for long-running exec calls */
     timeout?: number;
     verbose?: boolean;
 }
