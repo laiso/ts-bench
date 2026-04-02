@@ -9,6 +9,7 @@ import { SWELANCER_IMAGE, TS_BENCH_CONTAINER } from '../config/constants';
 import { SWELANCER_CLI_CACHE_CONTAINER_PATH } from '../utils/docker';
 import { sanitizeFilenameSegment } from '../utils/file-name';
 import { resolveBenchmarkSelection } from '../utils/task-selection';
+import { buildTestCommand, getExerciseTimeout } from '../config/test-commands';
 
 export class BenchmarkRunner {
     constructor(
@@ -59,25 +60,8 @@ export class BenchmarkRunner {
             }
         }
 
-        let testCommand = 'corepack yarn && corepack yarn test';
-        if (args.dataset === 'v2') {
-            if (useDocker) {
-                // Run tests using the provided ansible playbook
-                // We need to set CI=true to avoid interactive prompts if any
-                const setupWaitSec = parseInt(process.env.TS_BENCH_V2_SETUP_WAIT_SEC || '600', 10) || 600;
-                // Image sets RUNTIME_SETUP; run.sh would re-run setup_expensify (~5+ min) after we already
-                // ran it above. Unset so run.sh only starts services + setup_mitmproxy + /setup_done.txt.
-                testCommand = `export CI=true && unset RUNTIME_SETUP && /app/tests/run.sh & for i in $(seq 1 ${setupWaitSec}); do [ -f /setup_done.txt ] && break; sleep 1; done; if [ ! -f /setup_done.txt ]; then echo "setup did not complete"; exit 1; fi; ansible-playbook -i "localhost," --connection=local /app/tests/run_tests.yml`;
-            } else {
-                // Native V2: Run Jest on changed files
-                testCommand = `npm rebuild canvas && npm test -- -o`;
-            }
-        }
-
-        const requestedTimeout = args.timeout ?? 300;
-        // v2 runs setup_expensify twice (agent + test container), run.sh services, webpack, dev server, pytest
-        const exerciseTimeout =
-            args.dataset === 'v2' ? Math.max(requestedTimeout, 3600) : requestedTimeout;
+        const testCommand = buildTestCommand(args.dataset, useDocker);
+        const exerciseTimeout = getExerciseTimeout(args.dataset, args.timeout);
 
         const config: BenchmarkConfig = {
             testCommand,

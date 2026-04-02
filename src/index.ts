@@ -17,6 +17,7 @@ import { ExerciseRunner } from './runners/exercise';
 import { BenchmarkRunner } from './benchmark/runner';
 import { BenchmarkReporter } from './benchmark/reporter';
 import type { CLIArgs, TestOnlyResult } from './config/types';
+import { buildTestCommand, getExerciseTimeout } from './config/test-commands';
 
 async function main(): Promise<void> {
     // Display help if requested
@@ -103,14 +104,7 @@ async function runTestOnlyMode(
     datasetReader: DatasetReader,
     testOnlyRunner: TestOnlyRunner
 ): Promise<void> {
-    let testCommand = 'corepack yarn && corepack yarn test';
-    if (args.dataset === 'v2') {
-        if (args.useDocker) {
-            testCommand = 'bash /patches/v2-test-runner.sh';
-        } else {
-            testCommand = 'npm rebuild canvas && npm test -- -o';
-        }
-    }
+    const testCommand = buildTestCommand(args.dataset, args.useDocker ?? false);
     const config = {
         testCommand,
         agent: args.agent,
@@ -118,7 +112,7 @@ async function runTestOnlyMode(
         provider: args.provider,
         verbose: args.verbose,
         useDocker: args.useDocker,
-        timeout: args.timeout
+        timeout: getExerciseTimeout(args.dataset, args.timeout)
     };
 
     const allIds = await datasetReader.getTasks();

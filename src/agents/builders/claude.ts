@@ -68,14 +68,13 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
     }
 
     protected getCoreArgs(instructions: string, _fileList?: FileList): string[] {
-        const permissionArgs = this.config.useDocker ? [] : ['--dangerously-skip-permissions'];
         return [
             'bash',
             this.config.agentScriptPath,
             'claude',
             '--debug',
             '--verbose',
-            ...permissionArgs,
+            '--dangerously-skip-permissions',
             '--model', this.config.model,
             '-p', instructions
         ];

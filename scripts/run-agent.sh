@@ -78,45 +78,45 @@ case "$AGENT" in
       echo "[run-agent] Installing aider via official script" >&2
       curl -LsSf https://aider.chat/install.sh | bash
     fi
-    aider "$@"
+    exec aider "$@"
     ;;
   goose)
     if ! command -v "goose" >/dev/null 2>&1; then
       echo "[run-agent] Installing goose CLI" >&2
       env CONFIGURE=false curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | bash
     fi
-    goose "$@"
+    exec goose "$@"
     ;;
   cursor | cursor-agent)
     if ! command -v "cursor-agent" >/dev/null 2>&1; then
       echo "[run-agent] Installing cursor agent" >&2
       curl -fsS https://cursor.com/install | bash
     fi
-    cursor-agent "$@"
+    exec cursor-agent "$@"
     ;;
   opencode)
     ensure_node_cli "opencode" "opencode-ai"
-    opencode "$@"
+    exec opencode "$@"
     ;;
   codex)
     ensure_node_cli "codex" "@openai/codex"
-    codex "$@"
+    exec codex "$@"
     ;;
   claude)
     ensure_node_cli "claude" "@anthropic-ai/claude-code"
-    claude "$@"
+    exec claude "$@"
     ;;
   gemini)
     ensure_node_cli "gemini" "@google/gemini-cli"
-    gemini "$@"
+    exec gemini "$@"
     ;;
   qwen)
     ensure_node_cli "qwen" "@qwen-code/qwen-code"
-    qwen "$@"
+    exec qwen "$@"
     ;;
   copilot)
     ensure_node_cli "copilot" "@github/copilot"
-    copilot "$@"
+    exec copilot "$@"
     ;;
   kimi)
     if command -v "kimi" >/dev/null 2>&1; then
@@ -137,11 +137,11 @@ case "$AGENT" in
       echo "[run-agent] Installing mistral-vibe" >&2
       pip install mistral-vibe
     fi
-    vibe "$@"
+    exec vibe "$@"
     ;;
   *)
     if command -v "$AGENT" >/dev/null 2>&1; then
-      "$AGENT" "$@"
+      exec "$AGENT" "$@"
     else
       echo "[run-agent] Unsupported agent '${AGENT}'. Please install the CLI manually." >&2
       exit 1
