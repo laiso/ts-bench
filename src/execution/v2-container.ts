@@ -173,9 +173,10 @@ export class V2ContainerManager {
             'mkcert -cert-file certificate.pem -key-file key.pem dev.new.expensify.com localhost 127.0.0.1',
 
             // 2. Checkout commit (no task-specific patch)
+            // Use git checkout -f directly; origin/master may not exist
+            // if the image was built without fetching remote refs.
             'cd /app/expensify',
-            'git reset --hard origin/master',
-            `git checkout ${opts.commitId}`,
+            'git checkout -f ' + opts.commitId,
 
             // 3. npm_fix, clean, nvm install
             'python3.12 /app/expensify/npm_fix.py',

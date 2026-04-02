@@ -154,7 +154,7 @@ describe('V2ContainerManager', () => {
 
             const call = executor.calls[2]!;
             const bashCmd = call.args[call.args.length - 1]!;
-            expect(bashCmd).toContain('git checkout abc123');
+            expect(bashCmd).toContain('git checkout -f abc123');
             expect(bashCmd).toContain('npm install');
             expect(bashCmd).toContain('webpack');
             expect(bashCmd).toContain('"base setup"');
