@@ -12,6 +12,9 @@ const BASE_CONFIG = {
     agentScriptPath: '/tmp/scripts/run-agent.sh'
 };
 
+/** Config with Docker enabled — subscription auth only applies in Docker mode. */
+const DOCKER_CONFIG = { ...BASE_CONFIG, useDocker: true };
+
 /**
  * Helper: create a fake auth-cache directory with a dummy credentials file
  * to simulate a successful --setup-auth run.
@@ -57,7 +60,7 @@ describe('Subscription auth: Claude', () => {
         originals = clearEnvKeys(envKeys);
         seedAuthCache('claude');
 
-        const builder = new ClaudeAgentBuilder(BASE_CONFIG);
+        const builder = new ClaudeAgentBuilder(DOCKER_CONFIG);
         const cmd = await builder.buildCommand('test');
 
         // No API key in env — subscription auth will be used
@@ -68,7 +71,7 @@ describe('Subscription auth: Claude', () => {
         originals = clearEnvKeys(envKeys);
         clearAuthCache('claude');
 
-        const builder = new ClaudeAgentBuilder(BASE_CONFIG);
+        const builder = new ClaudeAgentBuilder(DOCKER_CONFIG);
         expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth claude/);
     });
 
@@ -77,7 +80,7 @@ describe('Subscription auth: Claude', () => {
         process.env.ANTHROPIC_API_KEY = 'test-key';
         seedAuthCache('claude');
 
-        const builder = new ClaudeAgentBuilder(BASE_CONFIG);
+        const builder = new ClaudeAgentBuilder(DOCKER_CONFIG);
         const cmd = await builder.buildCommand('test');
 
         expect(cmd.env?.ANTHROPIC_API_KEY).toBe('test-key');
@@ -97,7 +100,7 @@ describe('Subscription auth: Gemini', () => {
         originals = clearEnvKeys(envKeys);
         seedAuthCache('gemini');
 
-        const builder = new GeminiAgentBuilder(BASE_CONFIG);
+        const builder = new GeminiAgentBuilder(DOCKER_CONFIG);
         const cmd = await builder.buildCommand('test');
 
         expect(cmd.env?.GEMINI_API_KEY).toBeUndefined();
@@ -107,7 +110,7 @@ describe('Subscription auth: Gemini', () => {
         originals = clearEnvKeys(envKeys);
         clearAuthCache('gemini');
 
-        const builder = new GeminiAgentBuilder(BASE_CONFIG);
+        const builder = new GeminiAgentBuilder(DOCKER_CONFIG);
         expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth gemini/);
     });
 
@@ -116,7 +119,7 @@ describe('Subscription auth: Gemini', () => {
         process.env.GEMINI_API_KEY = 'test-key';
         seedAuthCache('gemini');
 
-        const builder = new GeminiAgentBuilder(BASE_CONFIG);
+        const builder = new GeminiAgentBuilder(DOCKER_CONFIG);
         const cmd = await builder.buildCommand('test');
 
         expect(cmd.env?.GEMINI_API_KEY).toBe('test-key');
@@ -136,7 +139,7 @@ describe('Subscription auth: Codex', () => {
         originals = clearEnvKeys(envKeys);
         seedAuthCache('codex');
 
-        const builder = new CodexAgentBuilder(BASE_CONFIG);
+        const builder = new CodexAgentBuilder(DOCKER_CONFIG);
         const cmd = await builder.buildCommand('test');
 
         expect(cmd.env?.CODEX_API_KEY).toBeUndefined();
@@ -146,7 +149,7 @@ describe('Subscription auth: Codex', () => {
         originals = clearEnvKeys(envKeys);
         clearAuthCache('codex');
 
-        const builder = new CodexAgentBuilder(BASE_CONFIG);
+        const builder = new CodexAgentBuilder(DOCKER_CONFIG);
         expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth codex/);
     });
 
@@ -155,7 +158,7 @@ describe('Subscription auth: Codex', () => {
         process.env.OPENAI_API_KEY = 'test-key';
         seedAuthCache('codex');
 
-        const builder = new CodexAgentBuilder(BASE_CONFIG);
+        const builder = new CodexAgentBuilder(DOCKER_CONFIG);
         const cmd = await builder.buildCommand('test');
 
         expect(cmd.env?.CODEX_API_KEY).toBe('test-key');

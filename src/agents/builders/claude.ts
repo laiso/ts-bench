@@ -52,7 +52,7 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
                 const found = tryAnyEnv(['ANTHROPIC_API_KEY', 'DASHSCOPE_API_KEY']);
                 if (found) {
                     env.ANTHROPIC_API_KEY = found.value;
-                } else if (!hasAuthCache('claude')) {
+                } else if (!(this.config.useDocker && hasAuthCache('claude'))) {
                     throw new Error(
                         'Missing ANTHROPIC_API_KEY or DASHSCOPE_API_KEY for Claude. ' +
                         'Set an API key or run: bun src/index.ts --setup-auth claude'

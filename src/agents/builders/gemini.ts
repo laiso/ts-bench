@@ -21,7 +21,7 @@ export class GeminiAgentBuilder extends BaseAgentBuilder implements AgentBuilder
             return env;
         }
 
-        if (!hasAuthCache('gemini')) {
+        if (!(this.config.useDocker && hasAuthCache('gemini'))) {
             throw new Error(
                 'Missing GEMINI_API_KEY or GOOGLE_API_KEY for Gemini. ' +
                 'Set an API key or run: bun src/index.ts --setup-auth gemini'
