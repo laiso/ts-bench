@@ -11,113 +11,204 @@
 <meta name="twitter:card" content="summary">
 <style>
 :root {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --border: #30363d;
-  --text: #e6edf3;
-  --text-muted: #8b949e;
-  --accent: #58a6ff;
-  --green: #3fb950;
-  --red: #f85149;
-  --yellow: #d29922;
-  --orange: #db6d28;
-  --purple: #bc8cff;
+  --bg: #000;
+  --surface: #111;
+  --surface-2: #1a1a1a;
+  --border: #333;
+  --text: #ededed;
+  --text-secondary: #888;
+  --accent: #0070f3;
+  --green: #50e3c2;
+  --red: #ee0000;
+  --link: #888;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.6;
-  padding: 0 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { max-width: 1200px; margin: 0 auto; padding: 32px 0; }
-header { text-align: center; margin-bottom: 40px; }
-header h1 { font-size: 2rem; margin-bottom: 8px; }
-header p { color: var(--text-muted); font-size: 1.1rem; }
-.updated { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; }
+a { color: var(--text); text-decoration: none; }
+a:hover { color: #fff; }
+.container { max-width: 960px; margin: 0 auto; padding: 48px 24px; }
 
-/* Tabs */
-.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+/* Header — Vercel style */
+header { margin-bottom: 48px; }
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+header p { color: var(--text-secondary); font-size: 1rem; }
+.updated { color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px; }
+
+/* Nav tabs — Vercel style underline */
+.tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
 .tab {
-  padding: 10px 20px;
+  padding: 12px 0;
   cursor: pointer;
-  border: 1px solid transparent;
-  border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  color: var(--text-muted);
-  background: transparent;
-  font-size: 0.95rem;
-  transition: background 0.15s;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s;
 }
 .tab:hover { color: var(--text); }
 .tab.active {
   color: var(--text);
-  background: var(--surface);
-  border-color: var(--border);
-  border-bottom: 1px solid var(--surface);
-  margin-bottom: -1px;
+  border-bottom-color: var(--text);
 }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-/* Tables */
-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 8px; overflow: hidden; }
-th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-th { background: var(--bg); font-weight: 600; color: var(--text-muted); white-space: nowrap; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(88,166,255,0.04); }
+/* ============ TIER LIST (tiermaker style) ============ */
+.tier-list { display: flex; flex-direction: column; gap: 4px; }
+.tier-row {
+  display: flex;
+  min-height: 72px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.tier-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  min-width: 72px;
+  font-weight: 800;
+  font-size: 1.75rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.tier-label-S { background: #ff7f7f; }
+.tier-label-A { background: #ffbf7f; }
+.tier-label-B { background: #ffdf7f; }
+.tier-label-C { background: #ffff7f; }
+.tier-label-D { background: #bfff7f; }
+.tier-label-F { background: #7fffff; }
+.tier-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  flex: 1;
+  min-height: 72px;
+}
 
-/* Tier badge */
-.tier {
-  display: inline-block;
-  width: 32px; height: 32px;
-  line-height: 32px;
-  text-align: center;
+/* Agent card inside tier row */
+.agent-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  min-width: 120px;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.agent-card:hover {
+  border-color: #555;
+  background: #222;
+  color: #fff;
+}
+.agent-card .agent-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+.agent-card .agent-model {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.agent-card .agent-meta {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Small tier badge (for tables) */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.85rem;
   border-radius: 6px;
   color: #fff;
 }
-.tier-S { background: #c9a000; }
-.tier-A { background: #3fb950; }
-.tier-B { background: #58a6ff; }
-.tier-C { background: #bc8cff; }
-.tier-D { background: #db6d28; }
-.tier-F { background: #f85149; }
+.tier-badge-S { background: #ff7f7f; }
+.tier-badge-A { background: #ffbf7f; }
+.tier-badge-B { background: #ffdf7f; }
+.tier-badge-C { background: #ffff7f; color: #333; }
+.tier-badge-D { background: #bfff7f; color: #333; }
+.tier-badge-F { background: #7fffff; color: #333; }
+
+/* Tables — Vercel style */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px 16px; text-align: left; font-size: 0.875rem; }
+th {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+}
+td { border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface); }
 
 /* Pass / fail */
-.pass { color: var(--green); }
-.fail { color: var(--red); }
+.pass { color: var(--green); font-weight: 500; }
+.fail { color: var(--red); font-weight: 500; }
 
 /* Task breakdown grid */
 .breakdown-grid { overflow-x: auto; }
 
-/* Links */
-.result-link { font-size: 0.85rem; }
-
 /* Loading */
-.loading { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+.loading { text-align: center; padding: 80px 20px; color: var(--text-secondary); font-size: 0.9rem; }
 
 /* Empty */
-.empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+.empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
 
 /* Responsive */
 @media (max-width: 768px) {
-  th, td { padding: 8px 10px; font-size: 0.82rem; }
-  .tab { padding: 8px 12px; font-size: 0.85rem; }
+  header h1 { font-size: 1.75rem; }
+  .tier-label { width: 52px; min-width: 52px; font-size: 1.25rem; }
+  .agent-card { min-width: 90px; padding: 8px 10px; }
+  .agent-card .agent-name { font-size: 0.78rem; }
+  .agent-card .agent-model { font-size: 0.68rem; }
+  th, td { padding: 8px 12px; font-size: 0.82rem; }
+  .tab { font-size: 0.82rem; }
 }
 
-/* Tier legend */
-.tier-legend {
-  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
-  margin-bottom: 32px; font-size: 0.85rem; color: var(--text-muted);
+footer {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 40px 0 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
 }
-.tier-legend span { display: inline-flex; align-items: center; gap: 4px; }
-
-footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 40px 0 24px; border-top: 1px solid var(--border); margin-top: 40px; }
+footer a { color: var(--text-secondary); }
+footer a:hover { color: var(--text); }
 </style>
 </head>
 <body>
@@ -128,15 +219,6 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
     <div class="updated" id="lastUpdated"></div>
   </header>
 
-  <div class="tier-legend">
-    <span><span class="tier tier-S">S</span> 5/5</span>
-    <span><span class="tier tier-A">A</span> 4/5</span>
-    <span><span class="tier tier-B">B</span> 3/5</span>
-    <span><span class="tier tier-C">C</span> 2/5</span>
-    <span><span class="tier tier-D">D</span> 1/5</span>
-    <span><span class="tier tier-F">F</span> 0/5</span>
-  </div>
-
   <div class="tabs">
     <div class="tab active" data-tab="leaderboard">Tier List</div>
     <div class="tab" data-tab="history">Historical Runs</div>
@@ -145,22 +227,7 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
 
   <div id="leaderboard" class="tab-content active">
     <div class="loading" id="leaderboardLoading">Loading results&hellip;</div>
-    <table id="leaderboardTable" style="display:none">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Tier</th>
-          <th>Agent</th>
-          <th>Model</th>
-          <th>Provider</th>
-          <th>Solved</th>
-          <th>Avg Time</th>
-          <th>Date</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="leaderboardBody"></tbody>
-    </table>
+    <div id="tierListContainer" style="display:none"></div>
   </div>
 
   <div id="history" class="tab-content">
@@ -236,9 +303,9 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
   }
 
   function tierBadge(tier) {
-    if (!tier) return '<span style="color:var(--text-muted)">-</span>';
-    if (!TIER_ALLOW[tier]) return '<span style="color:var(--text-muted)">' + esc(tier) + '</span>';
-    return '<span class="tier tier-' + tier + '">' + tier + '</span>';
+    if (!tier) return '<span style="color:var(--text-secondary)">-</span>';
+    if (!TIER_ALLOW[tier]) return '<span style="color:var(--text-secondary)">' + esc(tier) + '</span>';
+    return '<span class="tier-badge tier-badge-' + tier + '">' + tier + '</span>';
   }
 
   function fmtDuration(ms) {
@@ -313,44 +380,53 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
   }
 
   function renderLeaderboard(entries) {
-    var tbody = document.getElementById('leaderboardBody');
+    var container = document.getElementById('tierListContainer');
     if (entries.length === 0) {
       document.getElementById('leaderboardLoading').innerHTML =
-        'No v2 benchmark results yet.<br><small style="color:var(--text-muted)">Run <code>bun src/index.ts --dataset v2</code> and update the leaderboard to see tier ratings here.</small>';
+        'No v2 benchmark results yet.<br><small style="color:var(--text-secondary)">Run <code style="background:var(--surface-2);padding:2px 6px;border-radius:4px;font-size:0.85em">bun src/index.ts --dataset v2</code> and update the leaderboard to see tier ratings here.</small>';
       return;
     }
 
-    entries.forEach(function(entry, idx) {
-      var d = entry.data;
-      var meta = d.metadata || {};
-      var summary = d.summary || {};
-      var tier = tierFromEntry(d);
-      var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
-      var key = resultKey(d);
-      var detailHref = RESULTS_DIR + key + '.html';
-
-      var tr = document.createElement('tr');
-      tr.innerHTML =
-        '<td>' + (idx + 1) + '</td>' +
-        '<td>' + tierBadge(tier) + '</td>' +
-        '<td><strong>' + esc(meta.agent || entry.key) + '</strong></td>' +
-        '<td>' + esc(meta.model || '-') + '</td>' +
-        '<td>' + esc(meta.provider || '-') + '</td>' +
-        '<td>' + solved + '/' + V2_TOTAL + '</td>' +
-        '<td>' + fmtDuration(summary.avgDuration) + '</td>' +
-        '<td>' + fmtDate(meta.timestamp) + '</td>' +
-        '<td><a class="result-link" href="' + detailHref + '">Details</a></td>';
-      tbody.appendChild(tr);
+    // Group entries by tier
+    var TIERS = ['S','A','B','C','D','F'];
+    var groups = {};
+    TIERS.forEach(function(t) { groups[t] = []; });
+    entries.forEach(function(entry) {
+      var tier = tierFromEntry(entry.data);
+      if (tier && groups[tier]) groups[tier].push(entry);
     });
 
+    var html = '<div class="tier-list">';
+    TIERS.forEach(function(t) {
+      html += '<div class="tier-row">';
+      html += '<div class="tier-label tier-label-' + t + '">' + t + '</div>';
+      html += '<div class="tier-items">';
+      groups[t].forEach(function(entry) {
+        var d = entry.data;
+        var meta = d.metadata || {};
+        var summary = d.summary || {};
+        var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
+        var key = resultKey(d);
+        var detailHref = RESULTS_DIR + key + '.html';
+        html += '<a class="agent-card" href="' + detailHref + '">';
+        html += '<span class="agent-name">' + esc(meta.agent || entry.key) + '</span>';
+        html += '<span class="agent-model">' + esc(meta.model || '') + '</span>';
+        html += '<span class="agent-meta">' + solved + '/5 &middot; ' + fmtDuration(summary.avgDuration) + '</span>';
+        html += '</a>';
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+
     document.getElementById('leaderboardLoading').style.display = 'none';
-    document.getElementById('leaderboardTable').style.display = '';
+    container.innerHTML = html;
+    container.style.display = '';
   }
 
   function renderHistory(entries) {
     var tbody = document.getElementById('historyBody');
     if (entries.length === 0) {
-      document.getElementById('historyLoading').textContent = 'No v2 results yet.';
+      document.getElementById('historyLoading').innerHTML = 'No v2 results yet.';
       return;
     }
 
