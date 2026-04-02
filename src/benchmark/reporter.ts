@@ -207,7 +207,9 @@ export class BenchmarkReporter {
         const solved = results
             .filter(r => defaultIds.has(r.exercise) && r.overallSuccess)
             .length;
-        const entry = V2_TIER_THRESHOLDS.find(t => solved >= t.minCorrect);
+        // Sort descending by minCorrect so .find() returns the highest matching tier
+        const sorted = [...V2_TIER_THRESHOLDS].sort((a, b) => b.minCorrect - a.minCorrect);
+        const entry = sorted.find(t => solved >= t.minCorrect);
         if (!entry) return undefined;
         return { tier: entry.tier, label: entry.label, solved, total: defaultIds.size };
     }
