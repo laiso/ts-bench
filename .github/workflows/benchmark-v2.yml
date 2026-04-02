@@ -11,7 +11,7 @@ on:
         description: "v2 task id(s), comma-separated (e.g. 16912_4 or 16912_4,28565_1001). CSV/issue folder names, not Exercism slugs."
         required: true
         type: string
-        default: "16912_4"
+        default: "14958,15815_1,15193,14268,20079"
       job_timeout_minutes:
         description: "Max wall-clock minutes for the whole job (raise when running many tasks; each task can take 1h+)"
         required: false

@@ -1,6 +1,7 @@
 import { describe, expect, it, beforeEach, afterEach, mock, spyOn } from 'bun:test';
 import { BenchmarkReporter } from '../reporter';
 import type { BenchmarkConfig, TestResult } from '../../config/types';
+import { V2_DEFAULT_TASKS } from '../../config/constants';
 
 describe('BenchmarkReporter', () => {
     let reporter: BenchmarkReporter;
@@ -118,6 +119,82 @@ describe('BenchmarkReporter', () => {
             expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('50.0%'));
             
             consoleSpy.mockRestore();
+        });
+    });
+
+    describe('tier rating', () => {
+        function makeDefaultResults(passCount: number): TestResult[] {
+            const taskIds = V2_DEFAULT_TASKS.split(',').map(t => t.trim());
+            return taskIds.map((id, i) => ({
+                exercise: id,
+                agentSuccess: i < passCount,
+                testSuccess: i < passCount,
+                overallSuccess: i < passCount,
+                agentDuration: 5000,
+                testDuration: 2000,
+                totalDuration: 7000,
+            }));
+        }
+
+        it('prints tier S when all 5 default tasks pass', () => {
+            const consoleSpy = spyOn(console, 'log').mockImplementation(() => {});
+            reporter.printResults(makeDefaultResults(5));
+            expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Tier S'));
+            consoleSpy.mockRestore();
+        });
+
+        it('prints tier C when 2 default tasks pass', () => {
+            const consoleSpy = spyOn(console, 'log').mockImplementation(() => {});
+            reporter.printResults(makeDefaultResults(2));
+            expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Tier C'));
+            consoleSpy.mockRestore();
+        });
+
+        it('prints tier F when 0 default tasks pass', () => {
+            const consoleSpy = spyOn(console, 'log').mockImplementation(() => {});
+            reporter.printResults(makeDefaultResults(0));
+            expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Tier F'));
+            consoleSpy.mockRestore();
+        });
+
+        it('does not print tier for non-default task sets', () => {
+            const consoleSpy = spyOn(console, 'log').mockImplementation(() => {});
+            reporter.printResults(mockResults);  // hello-world, two-fer
+            const tierCalls = consoleSpy.mock.calls.filter(
+                (args: unknown[]) => typeof args[0] === 'string' && (args[0] as string).includes('Tier ')
+            );
+            expect(tierCalls).toHaveLength(0);
+            consoleSpy.mockRestore();
+        });
+
+        it('computeTier returns correct tier object', () => {
+            const privateReporter = reporter as any;
+            const result = privateReporter.computeTier(makeDefaultResults(4));
+            expect(result).toEqual({ tier: 'A', label: '4/5', solved: 4, total: 5 });
+        });
+
+        it('computeTier returns undefined for non-default results', () => {
+            const privateReporter = reporter as any;
+            const result = privateReporter.computeTier(mockResults);
+            expect(result).toBeUndefined();
+        });
+
+        it('computeTier returns undefined when results are a superset of default tasks', () => {
+            const privateReporter = reporter as any;
+            const defaultPlusExtra = [
+                ...makeDefaultResults(5),
+                {
+                    exercise: 'extra_task',
+                    agentSuccess: true,
+                    testSuccess: true,
+                    overallSuccess: true,
+                    agentDuration: 5000,
+                    testDuration: 2000,
+                    totalDuration: 7000,
+                },
+            ];
+            const result = privateReporter.computeTier(defaultPlusExtra);
+            expect(result).toBeUndefined();
         });
     });
 
