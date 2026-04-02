@@ -63,8 +63,6 @@ export class BenchmarkRunner {
 
         const testCommand = buildTestCommand(args.dataset, useDocker);
         const exerciseTimeout = getExerciseTimeout(args.dataset, args.timeout);
-        const testCommand = buildTestCommand(args.dataset, useDocker);
-        const exerciseTimeout = getExerciseTimeout(args.dataset, args.timeout);
 
         const config: BenchmarkConfig = {
             testCommand,
