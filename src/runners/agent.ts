@@ -9,6 +9,7 @@ import { ProgressMonitor } from '../utils/progress-monitor';
 import { join } from 'path';
 import { LocalExecutionStrategy } from '../execution/local-strategy';
 import { DockerExecutionStrategy } from '../execution/docker-strategy';
+import type { ExecutionStrategy } from '../execution/types';
 
 export class AgentRunner {
     constructor(
@@ -20,7 +21,7 @@ export class AgentRunner {
         private customInstruction?: string
     ) {}
 
-    async run(config: BenchmarkConfig, exercise: string, exercisePath: string, useDocker: boolean = true): Promise<AgentResult> {
+    async run(config: BenchmarkConfig, exercise: string, exercisePath: string, useDocker: boolean = true, strategy?: ExecutionStrategy): Promise<AgentResult> {
         const startTime = Date.now();
 
         let progressMonitor: ProgressMonitor | null = null;
@@ -54,11 +55,11 @@ export class AgentRunner {
                 }
             }
 
-            const strategy = useDocker
+            const resolvedStrategy = strategy ?? (useDocker
                 ? new DockerExecutionStrategy(this.containerName)
-                : new LocalExecutionStrategy();
+                : new LocalExecutionStrategy());
             
-            const prepared = strategy.prepare(coreCommand, { 
+            const prepared = resolvedStrategy.prepare(coreCommand, { 
                 exercisePath, 
                 testFiles: fileList.testFiles,
                 datasetType: config.dataset,

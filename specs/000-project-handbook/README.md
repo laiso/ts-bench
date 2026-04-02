@@ -12,5 +12,6 @@
 | [ci-regression.md](ci-regression.md) | CI regression notes |
 | [agentlog-collector.md](agentlog-collector.md) | Agent log collection |
 | [METHODOLOGY.md](METHODOLOGY.md) | Benchmark methodology |
+| [v2-grouped-execution.md](v2-grouped-execution.md) | V2 commit-grouped container reuse |
 
 **GitHub Pages (SWE-Lancer task browser):** built output lives under `docs/swelancer-tasks/` (`bun run build:swelancer-pages`). See root `README.md`.

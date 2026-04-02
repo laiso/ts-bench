@@ -30,6 +30,13 @@ export interface DatasetReader {
     getTaskMetadata(taskId: string): Promise<{ commitId?: string; title?: string }>;
 
     /**
+     * Get commit IDs for multiple tasks at once (for grouping).
+     * Returns a map of taskId → commitId.  Tasks whose commit cannot be
+     * determined are omitted from the map.
+     */
+    getCommitIds?(taskIds: string[]): Promise<Map<string, string>>;
+
+    /**
      * Get the formatted instructions for a specific task
      */
     getInstructions(taskId: string, baseInstruction: string, customInstruction?: string): Promise<string>;
