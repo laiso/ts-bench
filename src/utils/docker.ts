@@ -25,9 +25,10 @@ export function createWorkspaceArgs(options: DockerWorkspaceOptions): string[] {
 }
 
 export function createEnvironmentArgs(envVars: Record<string, string>): string[] {
-    // These keys are passed as empty strings on purpose to unset asdf/mise/nvm prefix
-    // overrides inside the container, preventing conflicts with the image's own Node setup.
-    const allowEmptyKeys = new Set(['NPM_CONFIG_PREFIX', 'npm_config_prefix', 'NPM_PREFIX']);
+    // These keys are passed as empty strings on purpose:
+    // - NPM_* clears host prefix overrides so the container can use its own Node setup.
+    // - ANTHROPIC_API_KEY clears any inherited Anthropic key when Claude is configured for OpenRouter.
+    const allowEmptyKeys = new Set(['NPM_CONFIG_PREFIX', 'npm_config_prefix', 'NPM_PREFIX', 'ANTHROPIC_API_KEY']);
     return Object.entries(envVars)
         // Security hardening: only pass variables that have explicit values set
         // Avoid implicit host env pass-through with `-e KEY` which can leak secrets unexpectedly
