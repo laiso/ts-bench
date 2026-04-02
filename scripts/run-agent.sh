@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Bypass asdf/mise/rtx tool version checks if we are inside a repo with .tool-versions
-export ASDF_SKIP_RESHIM=1
-
 # Determine default prefix based on environment
 if [[ "$OSTYPE" == "darwin"* ]] || [[ "$OSTYPE" == "linux-gnu"* && "$EUID" -ne 0 ]]; then
     # User mode (macOS or non-root Linux)
@@ -22,16 +19,6 @@ if [[ -z "$AGENT" ]]; then
   exit 1
 fi
 shift || true
-
-# Hide .tool-versions if present to avoid version manager conflicts (asdf/mise)
-if [ -f .tool-versions ]; then
-    # Try to rename, but don't fail if we can't (e.g. read-only)
-    if mv .tool-versions .tool-versions.hidden 2>/dev/null; then
-        trap 'mv .tool-versions.hidden .tool-versions' EXIT
-    else
-        echo "[run-agent] Warning: Could not hide .tool-versions. Agent might fail due to version mismatch." >&2
-    fi
-fi
 
 # Try to load nvm if available (common in swelancer images)
 export NVM_DIR="/root/.nvm"
