@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { resolveBenchmarkSelection } from '../task-selection';
 import type { CLIArgs } from '../../config/types';
+import { V2_DEFAULT_TASKS } from '../../config/constants';
 
 function baseArgs(overrides: Partial<CLIArgs>): CLIArgs {
     return {
@@ -59,5 +60,19 @@ describe('resolveBenchmarkSelection', () => {
             ['x', 'y', 'z']
         );
         expect(ids).toEqual(['x', 'y']);
+    });
+
+    test('v2: default benchmark set when no task selection specified', () => {
+        const defaultTaskIds = V2_DEFAULT_TASKS.split(',').map(t => t.trim());
+        const allIds = [...defaultTaskIds, 'extra_task_1', 'extra_task_2'];
+        const ids = resolveBenchmarkSelection(
+            baseArgs({
+                dataset: 'v2',
+                taskList: defaultTaskIds,
+            }),
+            allIds
+        );
+        expect(ids).toEqual(defaultTaskIds);
+        expect(ids).toHaveLength(5);
     });
 });
