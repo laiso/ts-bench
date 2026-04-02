@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ts-bench &mdash; TypeScript AI Agent Benchmark</title>
-<meta name="description" content="Reproducible benchmark results for AI coding agents on TypeScript workloads.">
-<meta property="og:title" content="ts-bench &mdash; TypeScript AI Agent Benchmark">
-<meta property="og:description" content="Reproducible benchmark results for AI coding agents on TypeScript workloads.">
+<title>ts-bench &mdash; SWE-Lancer AI Agent Benchmark</title>
+<meta name="description" content="Tier ratings and benchmark results for AI coding agents on the SWE-Lancer v2 task set.">
+<meta property="og:title" content="ts-bench &mdash; SWE-Lancer AI Agent Benchmark">
+<meta property="og:description" content="Tier ratings (S/A/B/C/D/F) for AI coding agents on the SWE-Lancer v2 benchmark (5 tasks).">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://laiso.github.io/ts-bench/og-default.png">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <style>
 :root {
   --bg: #0d1117;
@@ -111,6 +110,13 @@ tr:hover td { background: rgba(88,166,255,0.04); }
   .tab { padding: 8px 12px; font-size: 0.85rem; }
 }
 
+/* Tier legend */
+.tier-legend {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  margin-bottom: 32px; font-size: 0.85rem; color: var(--text-muted);
+}
+.tier-legend span { display: inline-flex; align-items: center; gap: 4px; }
+
 footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 40px 0 24px; border-top: 1px solid var(--border); margin-top: 40px; }
 </style>
 </head>
@@ -118,12 +124,21 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
 <div class="container">
   <header>
     <h1>ts-bench</h1>
-    <p>Reproducible benchmark for AI coding agents on TypeScript workloads</p>
+    <p>SWE-Lancer v2 benchmark &mdash; tier ratings for AI coding agents</p>
     <div class="updated" id="lastUpdated"></div>
   </header>
 
+  <div class="tier-legend">
+    <span><span class="tier tier-S">S</span> 5/5</span>
+    <span><span class="tier tier-A">A</span> 4/5</span>
+    <span><span class="tier tier-B">B</span> 3/5</span>
+    <span><span class="tier tier-C">C</span> 2/5</span>
+    <span><span class="tier tier-D">D</span> 1/5</span>
+    <span><span class="tier tier-F">F</span> 0/5</span>
+  </div>
+
   <div class="tabs">
-    <div class="tab active" data-tab="leaderboard">Leaderboard</div>
+    <div class="tab active" data-tab="leaderboard">Tier List</div>
     <div class="tab" data-tab="history">Historical Runs</div>
     <div class="tab" data-tab="breakdown">Task Breakdown</div>
   </div>
@@ -139,7 +154,6 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
           <th>Model</th>
           <th>Provider</th>
           <th>Solved</th>
-          <th>Success Rate</th>
           <th>Avg Time</th>
           <th>Date</th>
           <th></th>
@@ -159,7 +173,6 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
           <th>Provider</th>
           <th>Tier</th>
           <th>Solved</th>
-          <th>Success Rate</th>
           <th>Total Time</th>
           <th>Date</th>
           <th></th>
@@ -182,46 +195,49 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
 
 <script>
 (function() {
-  // Base URL for data files — works for both GH Pages and local preview
-  const BASE = (function() {
-    // If running from docs/ on GH Pages, data is at ../public/data/
-    // Or served from the same origin
-    const loc = window.location;
-    // Try relative paths: first the GH Pages layout, then local dev
-    return '';
-  })();
+  var BASE = '';
+  var LEADERBOARD_URL = BASE + 'data/leaderboard.json';
+  var RESULTS_DIR = BASE + 'results/';
 
-  const LEADERBOARD_URL = BASE + 'data/leaderboard.json';
-  const RESULTS_DIR = BASE + 'results/';
+  // V2 default task set (5 tasks)
+  var V2_DEFAULT_TASKS = ['14958','15815_1','15193','14268','20079'];
+  var V2_SET = {};
+  V2_DEFAULT_TASKS.forEach(function(t) { V2_SET[t] = true; });
+  var V2_TOTAL = V2_DEFAULT_TASKS.length;
 
-  // Tier thresholds (mirror of V2_TIER_THRESHOLDS from constants.ts)
-  const TIER_THRESHOLDS = [
-    { tier: 'S', minCorrect: 5 },
-    { tier: 'A', minCorrect: 4 },
-    { tier: 'B', minCorrect: 3 },
-    { tier: 'C', minCorrect: 2 },
-    { tier: 'D', minCorrect: 1 },
-    { tier: 'F', minCorrect: 0 },
-  ];
-  const V2_DEFAULT_TASKS = new Set(['14958','15815_1','15193','14268','20079']);
+  // Allowed tier values (XSS prevention)
+  var TIER_ALLOW = {S:1,A:1,B:1,C:1,D:1,F:1};
 
-  function computeTier(results) {
-    if (!results || results.length === 0) return null;
-    var resultIds = new Set(results.map(function(r) { return r.exercise; }));
-    var isDefault = V2_DEFAULT_TASKS.size > 0
-      && resultIds.size === V2_DEFAULT_TASKS.size
-      && Array.from(V2_DEFAULT_TASKS).every(function(id) { return resultIds.has(id); });
-    if (!isDefault) return null;
-    var solved = results.filter(function(r) { return V2_DEFAULT_TASKS.has(r.exercise) && r.overallSuccess; }).length;
-    var sorted = TIER_THRESHOLDS.slice().sort(function(a, b) { return b.minCorrect - a.minCorrect; });
-    for (var i = 0; i < sorted.length; i++) {
-      if (solved >= sorted[i].minCorrect) return sorted[i].tier;
+  function isV2Entry(d) {
+    if (d.tier && d.tier.tier) return true;
+    if (d.results && d.results.length === V2_TOTAL) {
+      var allMatch = true;
+      for (var i = 0; i < d.results.length; i++) {
+        if (!V2_SET[d.results[i].exercise]) { allMatch = false; break; }
+      }
+      if (allMatch) return true;
     }
+    return false;
+  }
+
+  function tierFromEntry(d) {
+    if (d.tier && d.tier.tier) return d.tier.tier;
+    if (!d.results || d.results.length === 0) return null;
+    var solved = 0;
+    for (var i = 0; i < d.results.length; i++) {
+      if (V2_SET[d.results[i].exercise] && d.results[i].overallSuccess) solved++;
+    }
+    if (solved >= 5) return 'S';
+    if (solved >= 4) return 'A';
+    if (solved >= 3) return 'B';
+    if (solved >= 2) return 'C';
+    if (solved >= 1) return 'D';
     return 'F';
   }
 
   function tierBadge(tier) {
     if (!tier) return '<span style="color:var(--text-muted)">-</span>';
+    if (!TIER_ALLOW[tier]) return '<span style="color:var(--text-muted)">' + esc(tier) + '</span>';
     return '<span class="tier tier-' + tier + '">' + tier + '</span>';
   }
 
@@ -273,15 +289,19 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
       document.getElementById('lastUpdated').textContent = 'Last updated: ' + fmtDate(data.lastUpdated);
     }
 
-    var entries = Object.entries(data.results || {}).map(function(pair) {
-      return { key: pair[0], data: pair[1] };
-    });
+    // Filter to v2 entries only
+    var entries = Object.entries(data.results || {})
+      .map(function(pair) { return { key: pair[0], data: pair[1] }; })
+      .filter(function(e) { return isV2Entry(e.data); });
 
-    // Sort by success rate desc, then avg duration asc
+    // Sort by tier rank (S > A > B > ... > F), then avg duration asc
+    var tierRank = {S:0,A:1,B:2,C:3,D:4,F:5};
     entries.sort(function(a, b) {
-      var rateA = a.data.summary ? a.data.summary.successRate : 0;
-      var rateB = b.data.summary ? b.data.summary.successRate : 0;
-      if (rateB !== rateA) return rateB - rateA;
+      var tA = tierFromEntry(a.data);
+      var tB = tierFromEntry(b.data);
+      var rA = tA ? (tierRank[tA] != null ? tierRank[tA] : 99) : 99;
+      var rB = tB ? (tierRank[tB] != null ? tierRank[tB] : 99) : 99;
+      if (rA !== rB) return rA - rB;
       var durA = a.data.summary ? a.data.summary.avgDuration : 0;
       var durB = b.data.summary ? b.data.summary.avgDuration : 0;
       return durA - durB;
@@ -295,7 +315,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
   function renderLeaderboard(entries) {
     var tbody = document.getElementById('leaderboardBody');
     if (entries.length === 0) {
-      document.getElementById('leaderboardLoading').textContent = 'No results yet.';
+      document.getElementById('leaderboardLoading').innerHTML =
+        'No v2 benchmark results yet.<br><small style="color:var(--text-muted)">Run <code>bun src/index.ts --dataset v2</code> and update the leaderboard to see tier ratings here.</small>';
       return;
     }
 
@@ -303,9 +324,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
       var d = entry.data;
       var meta = d.metadata || {};
       var summary = d.summary || {};
-      var tier = (d.tier && d.tier.tier) ? d.tier.tier : computeTier(d.results || []);
-      var solved = summary.successCount != null ? summary.successCount : 0;
-      var total = summary.totalCount != null ? summary.totalCount : 0;
+      var tier = tierFromEntry(d);
+      var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
       var key = resultKey(d);
       var detailHref = RESULTS_DIR + key + '.html';
 
@@ -316,8 +336,7 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
         '<td><strong>' + esc(meta.agent || entry.key) + '</strong></td>' +
         '<td>' + esc(meta.model || '-') + '</td>' +
         '<td>' + esc(meta.provider || '-') + '</td>' +
-        '<td>' + solved + '/' + total + '</td>' +
-        '<td>' + (summary.successRate != null ? summary.successRate.toFixed(1) + '%' : '-') + '</td>' +
+        '<td>' + solved + '/' + V2_TOTAL + '</td>' +
         '<td>' + fmtDuration(summary.avgDuration) + '</td>' +
         '<td>' + fmtDate(meta.timestamp) + '</td>' +
         '<td><a class="result-link" href="' + detailHref + '">Details</a></td>';
@@ -331,11 +350,10 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
   function renderHistory(entries) {
     var tbody = document.getElementById('historyBody');
     if (entries.length === 0) {
-      document.getElementById('historyLoading').textContent = 'No results yet.';
+      document.getElementById('historyLoading').textContent = 'No v2 results yet.';
       return;
     }
 
-    // Show all entries chronologically (newest first)
     var sorted = entries.slice().sort(function(a, b) {
       var tA = a.data.metadata ? a.data.metadata.timestamp : '';
       var tB = b.data.metadata ? b.data.metadata.timestamp : '';
@@ -346,9 +364,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
       var d = entry.data;
       var meta = d.metadata || {};
       var summary = d.summary || {};
-      var tier = (d.tier && d.tier.tier) ? d.tier.tier : computeTier(d.results || []);
-      var solved = summary.successCount != null ? summary.successCount : 0;
-      var total = summary.totalCount != null ? summary.totalCount : 0;
+      var tier = tierFromEntry(d);
+      var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
       var key = resultKey(d);
       var detailHref = RESULTS_DIR + key + '.html';
 
@@ -358,8 +375,7 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
         '<td>' + esc(meta.model || '-') + '</td>' +
         '<td>' + esc(meta.provider || '-') + '</td>' +
         '<td>' + tierBadge(tier) + '</td>' +
-        '<td>' + solved + '/' + total + '</td>' +
-        '<td>' + (summary.successRate != null ? summary.successRate.toFixed(1) + '%' : '-') + '</td>' +
+        '<td>' + solved + '/' + V2_TOTAL + '</td>' +
         '<td>' + fmtDuration(summary.totalDuration) + '</td>' +
         '<td>' + fmtDate(meta.timestamp) + '</td>' +
         '<td><a class="result-link" href="' + detailHref + '">Details</a></td>';
@@ -371,36 +387,31 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
   }
 
   function renderBreakdown(entries) {
-    // Only show entries that have task-level results
     var withResults = entries.filter(function(e) { return e.data.results && e.data.results.length > 0; });
     if (withResults.length === 0) {
-      document.getElementById('breakdownLoading').textContent = 'No task-level data available.';
+      document.getElementById('breakdownLoading').textContent = 'No v2 task-level data available.';
       return;
     }
 
-    // Collect all exercise names
-    var exerciseSet = new Set();
-    withResults.forEach(function(e) {
-      (e.data.results || []).forEach(function(r) { exerciseSet.add(r.exercise); });
-    });
-    var exercises = Array.from(exerciseSet).sort();
-
-    // Build table
-    var html = '<table><thead><tr><th>Task</th>';
-    withResults.forEach(function(e) {
-      var meta = e.data.metadata || {};
-      html += '<th>' + esc(meta.agent || e.key) + '<br><small>' + esc(meta.model || '') + '</small></th>';
+    // Use the fixed v2 task list as columns
+    var html = '<table><thead><tr><th>Agent / Model</th>';
+    V2_DEFAULT_TASKS.forEach(function(task) {
+      html += '<th>' + esc(task) + '</th>';
     });
     html += '</tr></thead><tbody>';
 
-    exercises.forEach(function(ex) {
-      html += '<tr><td>' + esc(ex) + '</td>';
-      withResults.forEach(function(e) {
-        var found = (e.data.results || []).find(function(r) { return r.exercise === ex; });
+    withResults.forEach(function(e) {
+      var meta = e.data.metadata || {};
+      html += '<tr><td><strong>' + esc(meta.agent || e.key) + '</strong><br><small>' + esc(meta.model || '') + '</small></td>';
+      V2_DEFAULT_TASKS.forEach(function(task) {
+        var found = null;
+        for (var i = 0; i < (e.data.results || []).length; i++) {
+          if (e.data.results[i].exercise === task) { found = e.data.results[i]; break; }
+        }
         if (!found) {
           html += '<td style="color:var(--text-muted)">-</td>';
         } else if (found.overallSuccess) {
-          html += '<td class="pass" title="' + fmtDuration(found.totalDuration) + '">Pass ' + fmtDuration(found.totalDuration) + '</td>';
+          html += '<td class="pass" title="' + fmtDuration(found.totalDuration) + '">Pass</td>';
         } else {
           html += '<td class="fail">Fail</td>';
         }

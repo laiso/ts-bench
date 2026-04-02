@@ -1,6 +1,7 @@
 /**
  * Reads public/data/leaderboard.json and generates individual HTML result pages
  * under docs/results/<key>.html with OGP metadata for each agent/model entry.
+ * Only v2 (SWE-Lancer) entries are included — v1 Exercism entries are skipped.
  *
  * Run: bun scripts/build-results-pages.ts
  */
@@ -88,6 +89,15 @@ function computeTier(results: ResultEntry[]): string | null {
     const sorted = [...TIER_THRESHOLDS].sort((a, b) => b.minCorrect - a.minCorrect);
     const entry = sorted.find(t => solved >= t.minCorrect);
     return entry ? entry.tier : 'F';
+}
+
+/** Check if a leaderboard entry is a v2 (SWE-Lancer) result. */
+function isV2Entry(entry: SavedResult): boolean {
+    if (entry.tier) return true;
+    if (entry.results && entry.results.length === V2_DEFAULT_TASKS.size) {
+        return entry.results.every(r => V2_DEFAULT_TASKS.has(r.exercise));
+    }
+    return false;
 }
 
 function fmtDuration(ms: number): string {
@@ -298,9 +308,11 @@ async function main(): Promise<void> {
     console.log(`Copied leaderboard.json to ${DATA_OUT_DIR}/leaderboard.json`);
 
     const entries = Object.entries(leaderboard.results);
+    // Only generate pages for v2 (SWE-Lancer) entries
+    const v2Entries = entries.filter(([, entry]) => isV2Entry(entry));
     let count = 0;
 
-    for (const [_key, entry] of entries) {
+    for (const [_key, entry] of v2Entries) {
         const safeKey = sanitizeKey(entry.metadata.agent, entry.metadata.model);
         const html = generateResultPage(safeKey, entry);
         const outPath = join(RESULTS_DIR, `${safeKey}.html`);
@@ -308,7 +320,7 @@ async function main(): Promise<void> {
         count++;
     }
 
-    console.log(`Generated ${count} result pages in ${RESULTS_DIR}`);
+    console.log(`Generated ${count} v2 result pages in ${RESULTS_DIR} (skipped ${entries.length - v2Entries.length} non-v2 entries)`);
 }
 
 main().catch(err => {
