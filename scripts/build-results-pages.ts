@@ -93,7 +93,7 @@ function computeTier(results: ResultEntry[]): string | null {
 
 /** Check if a leaderboard entry is a v2 (SWE-Lancer) result. */
 function isV2Entry(entry: SavedResult): boolean {
-    if (entry.tier) return true;
+    if (entry.tier?.tier) return true;
     if (entry.results && entry.results.length === V2_DEFAULT_TASKS.size) {
         return entry.results.every(r => V2_DEFAULT_TASKS.has(r.exercise));
     }
