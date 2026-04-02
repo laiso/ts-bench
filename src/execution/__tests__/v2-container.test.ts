@@ -141,7 +141,7 @@ describe('V2ContainerManager', () => {
     });
 
     describe('setupBase()', () => {
-        it('should checkout the given commitId', async () => {
+        it('should use ansible-playbook and revert task-specific patch', async () => {
             executor.push(ok('cid\n'));
             executor.push(ok());
             await mgr.create({ issueId: '15815_1' });
@@ -154,9 +154,11 @@ describe('V2ContainerManager', () => {
 
             const call = executor.calls[2]!;
             const bashCmd = call.args[call.args.length - 1]!;
-            expect(bashCmd).toContain('git checkout -f abc123');
-            expect(bashCmd).toContain('npm install');
-            expect(bashCmd).toContain('webpack');
+            expect(bashCmd).toContain('ISSUE_ID=15815_1');
+            expect(bashCmd).toContain('ansible-playbook');
+            expect(bashCmd).toContain('setup_expensify');
+            // Reverts task-specific patch after ansible
+            expect(bashCmd).toContain('git checkout -- .');
             expect(bashCmd).toContain('"base setup"');
         });
     });

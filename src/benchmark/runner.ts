@@ -207,7 +207,7 @@ export class BenchmarkRunner {
                         agentSuccess: false,
                         testSuccess: false,
                         overallSuccess: false,
-                        agentError: `Base setup failed for commit ${commitId}: ${setupResult.stderr}`,
+                        agentError: `Base setup failed for commit ${commitId}: ${setupResult.stderr || setupResult.stdout}`,
                         agentDuration: 0,
                         testDuration: 0,
                         totalDuration: 0,

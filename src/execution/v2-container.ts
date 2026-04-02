@@ -158,42 +158,28 @@ export class V2ContainerManager {
      * Task-specific patches are NOT applied here — use `prepareTask()`.
      */
     async setupBase(opts: V2BaseSetupOptions): Promise<CommandResult> {
-        // We run the steps from setup_expensify.yml manually, skipping
-        // the task-specific patch/revert steps.
+        // Reuse the proven ansible-playbook path (same as setup()).
+        // The playbook handles certs, git checkout, npm_fix, nvm,
+        // npm install, webpack — AND applies the task-specific
+        // bug_reintroduce.patch for firstIssueId.
+        //
+        // After ansible finishes we revert tracked-file changes so the
+        // baseline is commit-clean (no task-specific patch).  Build
+        // artifacts (node_modules, dist/) are untracked and stay put.
+        // prepareTask() will apply each task's patch individually.
         const setupCmd = [
             `export ISSUE_ID=${opts.firstIssueId}`,
             'export CI=true',
             'export NPM_CONFIG_YES=true',
-
-            // 1. Certs
-            'mkdir -p /root/.pki/nssdb',
-            'certutil --empty-password -d $HOME/.pki/nssdb -N',
-            'cd /app/expensify/config/webpack/',
-            'mkcert -install',
-            'mkcert -cert-file certificate.pem -key-file key.pem dev.new.expensify.com localhost 127.0.0.1',
-
-            // 2. Checkout commit (no task-specific patch)
-            // Use git checkout -f directly; origin/master may not exist
-            // if the image was built without fetching remote refs.
+            // Fix nvm NPM_CONFIG_PREFIX conflict (same sed as setup())
+            `sed 's|source /root/.nvm/nvm.sh|unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX; source /root/.nvm/nvm.sh|g' /app/tests/setup_expensify.yml > /tmp/setup_expensify_unset.yml`,
+            'ansible-playbook -i "localhost," --connection=local /tmp/setup_expensify_unset.yml',
+            // Undo the task-specific patch that ansible applied — revert
+            // tracked source files to the checked-out commit state while
+            // keeping untracked build artifacts (node_modules, dist, etc.)
             'cd /app/expensify',
-            'git checkout -f ' + opts.commitId,
-
-            // 3. npm_fix, clean, nvm install
-            'python3.12 /app/expensify/npm_fix.py',
-            'rm -rf /app/expensify/node_modules',
-            'rm -f /app/expensify/.npmrc',
-            'unset NPM_CONFIG_PREFIX npm_config_prefix NPM_PREFIX',
-            'source /root/.nvm/nvm.sh && nvm install',
-
-            // 4. npm install
-            'source /root/.nvm/nvm.sh && npm install --no-cache',
-
-            // 5. Webpack
-            'source /root/.nvm/nvm.sh && ' +
-                '([ -f config/webpack/webpack.dev.ts ] && npx webpack --config ./config/webpack/webpack.dev.ts || ' +
-                '([ -f config/webpack/webpack.dev.js ] && npx webpack --config ./config/webpack/webpack.dev.js || true))',
-
-            // 6. Commit baseline (before any task patches)
+            'git checkout -- .',
+            // Commit the clean baseline
             'git add -A',
             'git -c user.email=ts-bench@local -c user.name=ts-bench commit -m "base setup" --no-gpg-sign --allow-empty',
         ].join(' && ');
