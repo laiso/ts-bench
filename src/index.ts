@@ -105,7 +105,6 @@ async function runTestOnlyMode(
     testOnlyRunner: TestOnlyRunner
 ): Promise<void> {
     const testCommand = buildTestCommand(args.dataset, args.useDocker ?? false);
-    const testCommand = buildTestCommand(args.dataset, args.useDocker ?? false);
     const config = {
         testCommand,
         agent: args.agent,
