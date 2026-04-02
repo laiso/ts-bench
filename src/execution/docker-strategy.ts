@@ -1,5 +1,6 @@
 import {
   DOCKER_BASE_ARGS,
+  createAuthCacheArgs,
   createCliCacheArgs,
   createEnvironmentArgs,
   createNpmCacheArgs,
@@ -32,8 +33,8 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
           ? ['-v', `${core.promptFileHostPath}:${core.promptFileContainerPath}:ro`]
           : [];
 
-      // Mount local .claude directory to capture logs
-      const claudeMount = ['-v', `${join(process.env.HOME || '/root', '.claude')}:/root/.claude`];
+      // Mount agent auth cache (subscription-auth + log capture)
+      const authMount = createAuthCacheArgs(ctx.agentName ?? 'claude');
 
       // Mount patches directory for write access
       const patchesMount = ['-v', `${join(process.cwd(), '.patches')}:/patches`];
@@ -106,7 +107,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
         "--platform", "linux/amd64",
         ...hostMount,
         ...promptMount,
-        ...claudeMount,
+        ...authMount,
         ...npmCacheMount,
         ...patchesMount,
         ...issuesMount,
@@ -140,6 +141,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
     const command = [
       ...DOCKER_BASE_ARGS,
       ...createCliCacheArgs(),
+      ...createAuthCacheArgs(ctx.agentName ?? 'claude'),
       ...createEnvironmentArgs(core.env || {}),
       ...createWorkspaceArgs({ workspacePath }),
       ...testMountArgs,

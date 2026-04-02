@@ -129,7 +129,7 @@ export class ExerciseRunner {
         exercisePath: string,
     ): Promise<TestResult> {
         const startTime = Date.now();
-        const container = new V2ContainerManager(this.executor, this.logger, SWELANCER_IMAGE);
+        const container = new V2ContainerManager(this.executor, this.logger, SWELANCER_IMAGE, config.agent);
         const containerOpts = { issueId: exercise, timeout: config.timeout, verbose: config.verbose };
 
         try {

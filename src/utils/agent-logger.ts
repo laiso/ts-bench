@@ -6,6 +6,7 @@ import type { AgentType, BenchmarkConfig } from '../config/types';
 import { SWELANCER_REPO_PATH } from '../config/constants';
 import type { CommandResult } from './shell';
 import { extractLastAgentMessageFromStdout, extractLastAssistantFromClaudeJsonl } from './agent-last-message';
+import { resolveAuthCachePath } from './docker';
 
 const logger = new ConsoleLogger();
 
@@ -55,7 +56,13 @@ class ClaudeLogCollector implements LogCollector {
         const logFile = join(logDir, `${exercise}.log`);
 
         try {
-            const claudeProjects = join(homedir(), '.claude', 'projects');
+            // In Docker mode, Claude logs are written to /root/.claude inside the
+            // container which is mounted to the auth cache volume on the host.
+            // In native mode, logs are in the user's home ~/.claude.
+            const claudeBase = config.useDocker
+                ? resolveAuthCachePath('claude')
+                : join(homedir(), '.claude');
+            const claudeProjects = join(claudeBase, 'projects');
 
             let candidateProject: string;
             if (config.dataset === 'v2' && config.useDocker) {

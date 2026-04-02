@@ -53,7 +53,46 @@
 - Common test command: `corepack yarn && corepack yarn test`
 - Exercism exercises assume Yarn v4 (e.g., `packageManager: yarn@4.5.1`).
 - In the container, `corepack@0.29.4` is enabled (compatible with Node 20).
-- Each agent requires the appropriate API key for its provider; if a required key is missing (e.g., `OPENAI_API_KEY` for OpenAI agents), execution will immediately fail with an error.
+- Each agent requires the appropriate API key for its provider; if a required key is missing (e.g., `OPENAI_API_KEY` for OpenAI agents), execution will immediately fail with an error — unless subscription-based authentication has been set up for that agent (see below).
+
+---
+
+## Subscription-based Authentication
+
+Agents that support local login sessions (Claude Code, Gemini CLI, Codex) can run **without API keys** after a one-time setup.
+
+### Setup
+
+```bash
+# Authenticate an agent inside Docker (one-time per agent)
+bun src/index.ts --setup-auth claude
+bun src/index.ts --setup-auth gemini
+bun src/index.ts --setup-auth codex
+```
+
+This starts an interactive Docker container, runs the agent's login command, and persists auth state in a Docker volume at `~/.cache/ts-bench/auth/<agent>/`.
+
+### How it works
+
+| Priority | Condition | Behaviour |
+|---|---|---|
+| 1 | API key env var is set | Use API key (GHA, explicit key) |
+| 2 | Auth cache volume has credentials | Use subscription auth (local Docker) |
+| 3 | Neither | Error with suggestion to set API key or run `--setup-auth` |
+
+### Auth volume mounts
+
+| Agent | Host path | Container path |
+|---|---|---|
+| Claude | `~/.cache/ts-bench/auth/claude` | `/root/.claude` |
+| Gemini | `~/.cache/ts-bench/auth/gemini` | `/root/.gemini` |
+| Codex | `~/.cache/ts-bench/auth/codex` | `/root/.codex` |
+
+**GitHub Actions is unaffected** — workflows always provide API keys via `${{ secrets.* }}`, so priority 1 applies. Subscription auth is for local development only.
+
+Implementation: `src/utils/docker.ts` (`createAuthCacheArgs`, `hasAuthCache`), agent builders (`claude.ts`, `gemini.ts`, `codex.ts`), `src/index.ts` (`runSetupAuth`).
+
+Spec: `specs/000-project-handbook/subscription-auth.md`
 
 ---
 
