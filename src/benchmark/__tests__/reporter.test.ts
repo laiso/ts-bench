@@ -178,6 +178,24 @@ describe('BenchmarkReporter', () => {
             const result = privateReporter.computeTier(mockResults);
             expect(result).toBeUndefined();
         });
+
+        it('computeTier returns undefined when results are a superset of default tasks', () => {
+            const privateReporter = reporter as any;
+            const defaultPlusExtra = [
+                ...makeDefaultResults(5),
+                {
+                    exercise: 'extra_task',
+                    agentSuccess: true,
+                    testSuccess: true,
+                    overallSuccess: true,
+                    agentDuration: 5000,
+                    testDuration: 2000,
+                    totalDuration: 7000,
+                },
+            ];
+            const result = privateReporter.computeTier(defaultPlusExtra);
+            expect(result).toBeUndefined();
+        });
     });
 
 });

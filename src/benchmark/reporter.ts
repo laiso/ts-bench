@@ -45,27 +45,14 @@ export class BenchmarkReporter {
 
     /**
      * Print tier rating when running the default v2 benchmark set.
-     * Compares solved task IDs against V2_DEFAULT_TASKS.
      */
     private printTier(results: TestResult[]): void {
-        const defaultIds = new Set(V2_DEFAULT_TASKS.split(',').map(t => t.trim()));
-        const resultIds = new Set(results.map(r => r.exercise));
+        const tier = this.computeTier(results);
+        if (!tier) return;
 
-        // Only show tier when all default tasks are present in the results
-        const isDefaultSet = defaultIds.size > 0
-            && [...defaultIds].every(id => resultIds.has(id));
-        if (!isDefaultSet) return;
-
-        const successCount = results
-            .filter(r => defaultIds.has(r.exercise) && r.overallSuccess)
-            .length;
-
-        const entry = V2_TIER_THRESHOLDS.find(t => successCount >= t.minCorrect);
-        if (entry) {
-            console.log(`\n${'='.repeat(50)}`);
-            console.log(`Tier ${entry.tier}  (${entry.label})`);
-            console.log(`${'='.repeat(50)}`);
-        }
+        console.log(`\n${'='.repeat(50)}`);
+        console.log(`Tier ${tier.tier}  (${tier.label})`);
+        console.log(`${'='.repeat(50)}`);
     }
 
     private printErrors(results: TestResult[]): void {
@@ -205,12 +192,15 @@ export class BenchmarkReporter {
     
     /**
      * Compute tier rating for saved JSON when running the default v2 set.
-     * Returns `undefined` when the result set doesn't match the default tasks.
+     * Returns `undefined` when the result set doesn't exactly match the default tasks.
      */
     private computeTier(results: TestResult[]): { tier: string; label: string; solved: number; total: number } | undefined {
         const defaultIds = new Set(V2_DEFAULT_TASKS.split(',').map(t => t.trim()));
         const resultIds = new Set(results.map(r => r.exercise));
+
+        // Require exact set match — tier only applies to the default 5-task run
         const isDefaultSet = defaultIds.size > 0
+            && resultIds.size === defaultIds.size
             && [...defaultIds].every(id => resultIds.has(id));
         if (!isDefaultSet) return undefined;
 
