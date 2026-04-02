@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach, afterEach } from 'bun:test';
+import { describe, expect, it, afterEach } from 'bun:test';
 import { createEnvironmentArgs, createAuthCacheArgs, hasAuthCache } from '../docker';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';

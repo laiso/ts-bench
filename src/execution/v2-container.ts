@@ -75,6 +75,8 @@ export class V2ContainerManager {
         private executor: CommandExecutor,
         private logger: Logger,
         private containerImage: string,
+        /** Agent name for auth cache mounts (defaults to 'claude') */
+        private agentName: string = 'claude',
     ) {}
 
     // ------------------------------------------------------------------
@@ -307,7 +309,7 @@ export class V2ContainerManager {
         // ts-bench root (read-only)
         const hostMount = ['-v', `${cwd}:/ts-bench-host:ro`];
         // Agent auth cache (subscription-auth + log capture)
-        const authMount = createAuthCacheArgs('claude');
+        const authMount = createAuthCacheArgs(this.agentName);
         // Patches directory (read-write: agent writes, test reads)
         const patchesDir = join(cwd, '.patches');
         mkdirSync(patchesDir, { recursive: true });

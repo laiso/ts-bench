@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { TS_BENCH_CONTAINER, EXERCISM_PRACTICE_PATH, HEADER_INSTRUCTION, SWELANCER_IMAGE } from './config/constants';
-import { createAuthCacheArgs, createCliCacheArgs } from './utils/docker';
+import { AUTH_CACHE_AGENTS, createAuthCacheArgs, createCliCacheArgs } from './utils/docker';
 import { BunCommandExecutor } from './utils/shell';
 import { ConsoleLogger } from './utils/logger';
 import { parseCommandLineArgs, printHelp } from './utils/cli';
@@ -194,7 +194,7 @@ async function runPrintInstructionsMode(
  * future benchmark runs can use subscription auth without API keys.
  */
 async function runSetupAuth(agent: string): Promise<void> {
-    const supportedAgents = ['claude', 'gemini', 'codex'];
+    const supportedAgents = Object.keys(AUTH_CACHE_AGENTS);
     if (!supportedAgents.includes(agent)) {
         console.error(`Unsupported agent for --setup-auth: ${agent}`);
         console.error(`Supported agents: ${supportedAgents.join(', ')}`);

@@ -65,7 +65,7 @@ function resolveNpmCachePath(): string {
 }
 
 /** Mapping of agent names to their auth config directory inside the container. */
-const AUTH_CACHE_AGENTS: Record<string, string> = {
+export const AUTH_CACHE_AGENTS: Record<string, string> = {
   claude: '/root/.claude',
   gemini: '/root/.gemini',
   codex: '/root/.codex',
