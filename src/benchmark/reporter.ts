@@ -4,6 +4,7 @@ import { getPackageVersion } from '../utils/package-version';
 import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { sanitizeFilenameSegment } from '../utils/file-name';
+import { V2_DEFAULT_TASKS, V2_TIER_THRESHOLDS } from '../config/constants';
 
 export class BenchmarkReporter {
     printResults(results: TestResult[]): void {
@@ -27,6 +28,7 @@ export class BenchmarkReporter {
         console.log(`❌ Test Failed: ${testFailedCount}`);
 
         this.printDetailedResults(results);
+        this.printTier(results);
         this.printErrors(results);
     }
 
@@ -39,6 +41,31 @@ export class BenchmarkReporter {
             const duration = formatDuration(result.totalDuration);
             console.log(`  ${overallStatus} ${result.exercise.padEnd(25)} ${duration} (${agentStatus}${testStatus})`);
         });
+    }
+
+    /**
+     * Print tier rating when running the default v2 benchmark set.
+     * Compares solved task IDs against V2_DEFAULT_TASKS.
+     */
+    private printTier(results: TestResult[]): void {
+        const defaultIds = new Set(V2_DEFAULT_TASKS.split(',').map(t => t.trim()));
+        const resultIds = new Set(results.map(r => r.exercise));
+
+        // Only show tier when all default tasks are present in the results
+        const isDefaultSet = defaultIds.size > 0
+            && [...defaultIds].every(id => resultIds.has(id));
+        if (!isDefaultSet) return;
+
+        const successCount = results
+            .filter(r => defaultIds.has(r.exercise) && r.overallSuccess)
+            .length;
+
+        const entry = V2_TIER_THRESHOLDS.find(t => successCount >= t.minCorrect);
+        if (entry) {
+            console.log(`\n${'='.repeat(50)}`);
+            console.log(`Tier ${entry.tier}  (${entry.label})`);
+            console.log(`${'='.repeat(50)}`);
+        }
     }
 
     private printErrors(results: TestResult[]): void {
@@ -146,6 +173,9 @@ export class BenchmarkReporter {
         
         const benchmarkVersion = await getPackageVersion();
         
+        const summary = this.generateSummaryData(results);
+        const tier = this.computeTier(results);
+
         const data = {
             metadata: {
                 agent: config.agent,
@@ -157,7 +187,8 @@ export class BenchmarkReporter {
                 benchmarkVersion,
                 generatedBy: "ts-bench"
             },
-            summary: this.generateSummaryData(results),
+            summary,
+            ...(tier ? { tier } : {}),
             results
         };
         
@@ -172,6 +203,25 @@ export class BenchmarkReporter {
         console.log(`🔗 Latest results updated: ${latestPath}`);
     }
     
+    /**
+     * Compute tier rating for saved JSON when running the default v2 set.
+     * Returns `undefined` when the result set doesn't match the default tasks.
+     */
+    private computeTier(results: TestResult[]): { tier: string; label: string; solved: number; total: number } | undefined {
+        const defaultIds = new Set(V2_DEFAULT_TASKS.split(',').map(t => t.trim()));
+        const resultIds = new Set(results.map(r => r.exercise));
+        const isDefaultSet = defaultIds.size > 0
+            && [...defaultIds].every(id => resultIds.has(id));
+        if (!isDefaultSet) return undefined;
+
+        const solved = results
+            .filter(r => defaultIds.has(r.exercise) && r.overallSuccess)
+            .length;
+        const entry = V2_TIER_THRESHOLDS.find(t => solved >= t.minCorrect);
+        if (!entry) return undefined;
+        return { tier: entry.tier, label: entry.label, solved, total: defaultIds.size };
+    }
+
     private generateSummaryData(results: TestResult[]) {
         const successCount = results.filter(r => r.overallSuccess).length;
         const totalCount = results.length;

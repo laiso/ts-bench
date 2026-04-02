@@ -243,6 +243,10 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
                 die('❌ --task-limit must be a positive integer');
             }
             taskLimit = n;
+        } else {
+            // No task selection specified — use the default v2 benchmark set
+            const { V2_DEFAULT_TASKS } = await import('../config/constants');
+            taskList = V2_DEFAULT_TASKS.split(',').map(t => t.trim());
         }
     }
 
