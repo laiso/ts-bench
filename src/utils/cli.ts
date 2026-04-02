@@ -35,6 +35,11 @@ Execution Options:
   --custom-instruction   Add custom instruction to the end of the prompt
   --timeout <seconds>    Per-exercise timeout in seconds [default: 300]
 
+Subscription Auth:
+  --setup-auth <agent>   Authenticate an agent inside Docker (claude, gemini, codex).
+                         Starts an interactive container, runs the agent's login command,
+                         and persists auth state for future --docker runs without API keys.
+
 Output Options:
   --output-format <fmt>  Output format (console, json) [default: console]
   --output-dir <dir>     Output directory for files
@@ -63,6 +68,7 @@ Examples:
   bun src/index.ts --agent claude --model sonnet --version 1.2.3 --save-result
   bun src/index.ts --agent kimi --provider moonshot --model kimi-k2.5 --save-result
   bun src/index.ts --print-instructions --   acronym      # v1: show instructions for one exercise
+  bun src/index.ts --setup-auth claude                    # authenticate Claude inside Docker
 
 Help:
   --help                 Show this help message

@@ -1,6 +1,7 @@
 import type { AgentBuilder, AgentConfig } from '../types';
 import { BaseAgentBuilder } from '../base';
-import { requireAnyEnv, requireEnv } from '../../utils/env';
+import { requireEnv, tryAnyEnv } from '../../utils/env';
+import { hasAuthCache } from '../../utils/docker';
 
 export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
     constructor(agentConfig: AgentConfig) {
@@ -16,13 +17,19 @@ export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
                     OPENROUTER_API_KEY: requireEnv('OPENROUTER_API_KEY', 'Missing OPENROUTER_API_KEY for Codex (OpenRouter) provider')
                 };
             case 'openai': {
-                const { value } = requireAnyEnv(
-                    ['CODEX_API_KEY', 'OPENAI_API_KEY'],
-                    'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider'
+                const found = tryAnyEnv(['CODEX_API_KEY', 'OPENAI_API_KEY']);
+                if (found) {
+                    console.log(`[auth] Codex: using API key (${found.key})`);
+                    return { CODEX_API_KEY: found.value };
+                }
+                if (this.config.useDocker && hasAuthCache('codex')) {
+                    console.log('[auth] Codex: using subscription auth (no API key, auth cache found)');
+                    return {};
+                }
+                throw new Error(
+                    'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider. ' +
+                    'Set an API key or run: bun src/index.ts --setup-auth codex'
                 );
-                return {
-                    CODEX_API_KEY: value
-                };
             }
             default:
                 throw new Error(`Unsupported provider for Codex: ${provider}`);

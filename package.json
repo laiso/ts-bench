@@ -7,7 +7,8 @@
   "scripts": {
     "test": "bun test ./src",
     "typecheck": "bunx --bun tsc -p . --noEmit",
-    "build:swelancer-pages": "bun scripts/build-swelancer-pages.ts"
+    "build:swelancer-pages": "bun scripts/build-swelancer-pages.ts",
+    "build:results-pages": "bun scripts/build-results-pages.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

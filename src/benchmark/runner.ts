@@ -163,7 +163,7 @@ export class BenchmarkRunner {
         const results: TestResult[] = [];
         const executor = this.exerciseRunner.getExecutor();
         const logger = this.exerciseRunner.getLogger();
-        const container = new V2ContainerManager(executor, logger, SWELANCER_IMAGE);
+        const container = new V2ContainerManager(executor, logger, SWELANCER_IMAGE, config.agent);
 
         const firstTask = taskIds[0]!;
         console.log(

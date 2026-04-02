@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync, unlinkSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { homedir, tmpdir } from 'os';
 
@@ -88,4 +88,94 @@ function resolveNpmCachePath(): string {
     : join(homedir(), '.cache', 'ts-bench', 'npm');
   mkdirSync(base, { recursive: true });
   return base;
+}
+
+/** Mapping of agent names to their auth config directory inside the container. */
+export const AUTH_CACHE_AGENTS: Record<string, string> = {
+  claude: '/root/.claude',
+  gemini: '/root/.gemini',
+  codex: '/root/.codex',
+};
+
+/**
+ * Arguments appended to `bash /app/scripts/run-agent.sh <agent>` to trigger
+ * the agent's login flow.
+ *
+ * - Claude / Gemini: authenticate interactively on first launch (no extra args).
+ * - Codex: requires `codex login --device-auth` for headless Device-Code flow.
+ */
+export const AUTH_LOGIN_ARGS: Record<string, string[]> = {
+  claude: [],
+  gemini: [],
+  codex: ['login', '--device-auth'],
+};
+
+/**
+ * Known credential files written by each agent CLI after a successful login.
+ * Used by `--setup-auth` to detect whether auth succeeded even when the CLI
+ * exits with a non-zero code (e.g. Claude/Gemini enter interactive mode and
+ * the user presses Ctrl-C to quit).
+ */
+export const AUTH_CREDENTIAL_FILES: Record<string, string> = {
+  claude: '.credentials.json',
+  gemini: 'oauth_creds.json',
+  codex: 'auth.json',
+};
+
+/**
+ * Create Docker volume mount arguments for an agent's subscription-auth
+ * state directory.  Returns an empty array for unknown agents.
+ */
+export function createAuthCacheArgs(agent: string): string[] {
+  const containerPath = AUTH_CACHE_AGENTS[agent];
+  if (!containerPath) return [];
+  const hostPath = resolveAuthCachePath(agent);
+  return ['-v', `${hostPath}:${containerPath}`];
+}
+
+/**
+ * Return the host-side auth cache directory for an agent, creating it
+ * if it does not exist.
+ */
+export function resolveAuthCachePath(agent: string): string {
+  const base = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
+  mkdirSync(base, { recursive: true });
+  return base;
+}
+
+/**
+ * Sentinel file written by `--setup-auth` to indicate that a successful
+ * login was completed.  We check for this instead of "any file" because
+ * the auth cache directory is mounted as the agent's config root inside
+ * Docker, so the agent may also write non-auth files (e.g. Claude's
+ * conversation logs under `projects/`) during normal API-key runs.
+ */
+export const AUTH_SENTINEL = '.ts-bench-auth';
+
+/** Return true when the host-side auth cache for `agent` contains the sentinel written by `--setup-auth`. */
+export function hasAuthCache(agent: string): boolean {
+  try {
+    const dir = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
+    return existsSync(join(dir, AUTH_SENTINEL));
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Return true when the host-side auth cache for `agent` contains the
+ * agent-specific credential file (e.g. `.credentials.json` for Claude).
+ * This is more reliable than checking the exit code because some CLIs
+ * (Claude, Gemini) enter interactive mode after login and exit non-zero
+ * when the user presses Ctrl-C.
+ */
+export function hasCredentialFile(agent: string): boolean {
+  const fileName = AUTH_CREDENTIAL_FILES[agent];
+  if (!fileName) return false;
+  try {
+    const dir = join(homedir(), '.cache', 'ts-bench', 'auth', agent);
+    return existsSync(join(dir, fileName));
+  } catch {
+    return false;
+  }
 }

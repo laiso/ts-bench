@@ -31,6 +31,7 @@ import {
     SWELANCER_SETUP_MITMPROXY_HOST,
 } from '../config/constants';
 import {
+    createAuthCacheArgs,
     createCliCacheArgs,
     createEnvironmentArgs,
     createEnvironmentFile,
@@ -75,6 +76,8 @@ export class V2ContainerManager {
         private executor: CommandExecutor,
         private logger: Logger,
         private containerImage: string,
+        /** Agent name for auth cache mounts (defaults to 'claude') */
+        private agentName: string = 'claude',
     ) {}
 
     // ------------------------------------------------------------------
@@ -310,12 +313,10 @@ export class V2ContainerManager {
 
     private buildMounts(): string[] {
         const cwd = process.cwd();
-        const home = process.env.HOME || '/root';
-
         // ts-bench root (read-only)
         const hostMount = ['-v', `${cwd}:/ts-bench-host:ro`];
-        // Claude config (for agent log capture)
-        const claudeMount = ['-v', `${join(home, '.claude')}:/root/.claude`];
+        // Agent auth cache (subscription-auth + log capture)
+        const authMount = createAuthCacheArgs(this.agentName);
         // Patches directory (read-write: agent writes, test reads)
         const patchesDir = join(cwd, '.patches');
         mkdirSync(patchesDir, { recursive: true });
@@ -338,7 +339,7 @@ export class V2ContainerManager {
 
         return [
             ...hostMount,
-            ...claudeMount,
+            ...authMount,
             ...npmCacheMount,
             ...patchesMount,
             ...promptsMount,
