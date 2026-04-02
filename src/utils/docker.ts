@@ -25,6 +25,8 @@ export function createWorkspaceArgs(options: DockerWorkspaceOptions): string[] {
 }
 
 export function createEnvironmentArgs(envVars: Record<string, string>): string[] {
+    // These keys are passed as empty strings on purpose to unset asdf/mise/nvm prefix
+    // overrides inside the container, preventing conflicts with the image's own Node setup.
     const allowEmptyKeys = new Set(['NPM_CONFIG_PREFIX', 'npm_config_prefix', 'NPM_PREFIX']);
     return Object.entries(envVars)
         // Security hardening: only pass variables that have explicit values set

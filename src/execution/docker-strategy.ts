@@ -15,7 +15,7 @@ import {
   SWELANCER_SETUP_MITMPROXY_HOST
 } from '../config/constants';
 import { mkdirSync } from 'fs';
-import { join } from 'path';
+import { basename, join } from 'path';
 import { PROMPT_PLACEHOLDER } from '../agents/prompt-files';
 
 export class DockerExecutionStrategy implements ExecutionStrategy {
@@ -48,7 +48,7 @@ export class DockerExecutionStrategy implements ExecutionStrategy {
       const npmCacheMount = createNpmCacheArgs();
 
       // Extract ISSUE_ID from context (fallback to exercise path basename)
-      const issueId = ctx.issueId ?? require('path').basename(ctx.exercisePath);
+      const issueId = ctx.issueId ?? basename(ctx.exercisePath);
 
       // Use setup_expensify.yml for setup. This handles git checkout, dependencies, etc.
       // We explicitly set ISSUE_ID env var for the command

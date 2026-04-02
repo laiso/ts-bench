@@ -1,3 +1,4 @@
+import { existsSync, statSync } from 'fs';
 import type { TestResult, BenchmarkConfig } from '../config/types';
 import { AgentRunner } from './agent';
 import { TestRunner } from './test';
@@ -5,10 +6,8 @@ import { ExerciseResetter } from '../exercises/reset';
 import type { Logger } from '../utils/logger';
 import { join } from 'path';
 import { SWELANCER_REPO_PATH } from '../config/constants';
-
 import type { DatasetReader } from '../datasets/types';
 import type { TestContext } from './test';
-
 import type { CommandExecutor } from '../utils/shell';
 
 export class ExerciseRunner {
@@ -41,13 +40,10 @@ export class ExerciseRunner {
                 await this.executor.execute(['git', 'submodule', 'update', '--init', '--recursive'], { cwd: exercisePath });
             }
 
-            // Import fs dynamically or check existence
-            const fs = await import('fs');
             const patchPath = join(process.cwd(), 'repos/frontier-evals/project/swelancer/issues', exercise, 'bug_reintroduce.patch');
-            if (fs.existsSync(patchPath)) {
-                // Check if patch content is not empty
-                const stat = fs.statSync(patchPath);
-                if (stat.size > 0) {
+            if (existsSync(patchPath)) {
+                const patchStat = statSync(patchPath);
+                if (patchStat.size > 0) {
                     console.log(`Applying bug reintroduce patch: ${patchPath}`);
                     try {
                         await this.executor.execute(['git', 'apply', patchPath], { cwd: exercisePath });
@@ -94,13 +90,7 @@ export class ExerciseRunner {
                 // Do NOT apply patch, and do NOT reset commit (preserve changes).
                 applyPatchPath = undefined;
                 commitId = undefined;
-
-                // Note: patches are still generated in Phase 1.6 for record keeping if verbose
-                const patchDir = join(process.cwd(), '.patches');
             }
-        } else {
-            // V1 logic handles restore via exerciseResetter, so commitId/patch logic here isn't used usually
-            // unless we want to support it. 
         }
 
         const testContext: TestContext = {

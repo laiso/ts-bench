@@ -3,6 +3,7 @@ import { join, resolve } from 'path';
 import { homedir } from 'os';
 import { ConsoleLogger } from './logger';
 import type { AgentType, BenchmarkConfig } from '../config/types';
+import { SWELANCER_REPO_PATH } from '../config/constants';
 import type { CommandResult } from './shell';
 import { extractLastAgentMessageFromStdout, extractLastAssistantFromClaudeJsonl } from './agent-last-message';
 
@@ -70,7 +71,6 @@ class ClaudeLogCollector implements LogCollector {
                 // We should use the actual CWD used in strategy.
                 let targetPath = absExercisePath;
                 if (config.dataset === 'v2' && !config.useDocker) {
-                    const { SWELANCER_REPO_PATH } = require('../config/constants');
                     targetPath = resolve(SWELANCER_REPO_PATH.replace(/^~/, homedir()));
                 }
                 
