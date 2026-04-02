@@ -4,10 +4,13 @@ const DEFAULT_ANY_ENV_MESSAGE = 'Please set at least one of the following enviro
 
 export function requireEnv(key: string, message?: string): string {
     const value = process.env[key];
-    if (value && value.trim().length > 0) {
-        return value;
+    if (!value || value.trim().length === 0) {
+        throw new Error(message ?? `Environment variable ${key} is not set`);
     }
-    throw new Error(message ?? `Environment variable ${key} is not set`);
+    if (/^<[^>]+>$/.test(value) || value === 'your-api-key-here' || value === 'CHANGE_ME') {
+        throw new Error(`Environment variable ${key} appears to contain a placeholder value`);
+    }
+    return value;
 }
 
 export function requireAnyEnv(keys: string[], message?: string): { key: string; value: string } {
