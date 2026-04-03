@@ -2,6 +2,7 @@ import type { AgentBuilder, AgentConfig } from '../types';
 import { BaseAgentBuilder } from '../base';
 import { requireEnv, tryAnyEnv } from '../../utils/env';
 import { hasAuthCache } from '../../utils/docker';
+import { AGENT_DEFAULT_PROVIDER } from '../../config/types';
 
 export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
     constructor(agentConfig: AgentConfig) {
@@ -9,7 +10,7 @@ export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
     }
 
     protected getEnvironmentVariables(): Record<string, string> {
-        const provider = this.config.provider ?? 'openai';
+        const provider = this.config.provider ?? AGENT_DEFAULT_PROVIDER['codex'];
 
         switch (provider) {
             case 'openrouter':

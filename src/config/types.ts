@@ -2,6 +2,20 @@ export type AgentType = 'claude' | 'goose' | 'aider' | 'codex' | 'copilot' | 'ge
 export type DatasetType = 'v1' | 'v2'; // v1 = exercism, v2 = swelancer
 export type ProviderType = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'dashscope' | 'xai' | 'deepseek' | 'github' | 'cerebras' | 'mistral' | 'moonshot';
 
+export const AGENT_DEFAULT_PROVIDER: Record<AgentType, ProviderType> = {
+    claude: 'anthropic',
+    goose: 'anthropic',
+    qwen: 'dashscope',
+    kimi: 'moonshot',
+    opencode: 'openai',
+    codex: 'openai',
+    gemini: 'google',
+    vibe: 'mistral',
+    aider: 'openai',
+    cursor: 'openai',
+    copilot: 'openai',
+};
+
 export interface AgentResult {
     exercise: string;
     success: boolean;

@@ -1,4 +1,5 @@
 import type { ProviderType } from '../../config/types';
+import { AGENT_DEFAULT_PROVIDER } from '../../config/types';
 import type { AgentBuilder, AgentConfig } from '../types';
 import { BaseAgentBuilder } from '../base';
 import { requireAnyEnv, requireEnv } from '../../utils/env';
@@ -9,7 +10,7 @@ export class OpenCodeAgentBuilder extends BaseAgentBuilder implements AgentBuild
     }
 
     protected getEnvironmentVariables(): Record<string, string> {
-        const provider = (this.config.provider ?? 'openai') as ProviderType;
+        const provider = (this.config.provider ?? AGENT_DEFAULT_PROVIDER['opencode']) as ProviderType;
 
         switch (provider) {
             case 'openai':

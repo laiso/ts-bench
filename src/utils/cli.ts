@@ -1,4 +1,5 @@
 import type { CLIArgs, AgentType, ProviderType } from '../config/types';
+import { AGENT_DEFAULT_PROVIDER } from '../config/types';
 
 export function printHelp(): void {
     console.log(`
@@ -11,7 +12,7 @@ Basic Options:
   --agent <agent>        Agent to use (claude, goose, aider, codex, copilot, gemini, opencode, qwen, cursor, kimi) [default: claude]
   --dataset <v1|v2>      Dataset to use (v1: Exercism, v2: SWE-Lancer) [default: v1]
   --model <model>        Model to use [default: sonnet]
-  --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, moonshot) [default: openai; kimi defaults to moonshot]
+  --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, moonshot) [default: agent-specific; see AGENT_DEFAULT_PROVIDER]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
   --verbose              Show detailed output
   --list                 List available exercises (v1) or tasks (v2)
@@ -99,7 +100,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
     const providerIndex = process.argv.indexOf('--provider');
     const provider = (providerIndex !== -1 && providerIndex + 1 < process.argv.length
         ? process.argv[providerIndex + 1]!
-        : (agent === 'kimi' ? 'moonshot' : 'openai')) as ProviderType;
+        : AGENT_DEFAULT_PROVIDER[agent]) as ProviderType;
 
     const verbose = process.argv.includes('--verbose');
     const listExercises = process.argv.includes('--list');
