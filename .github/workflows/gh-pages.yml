@@ -13,6 +13,9 @@ on:
       # Benchmark results
       - 'public/data/leaderboard.json'
       - 'scripts/build-results-pages.ts'
+      # Main leaderboard site
+      - 'scripts/build-site.ts'
+      - 'src/site/**'
       # SWE-Lancer task browser
       - 'repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv'
       - 'scripts/build-swelancer-pages.ts'
@@ -53,6 +56,9 @@ jobs:
 
       - name: Build benchmark result pages
         run: bun scripts/build-results-pages.ts
+
+      - name: Build main leaderboard site
+        run: bun scripts/build-site.ts
 
       - name: Build SWE-Lancer task pages
         run: bun run build:swelancer-pages

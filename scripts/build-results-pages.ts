@@ -9,6 +9,10 @@ import { readFile, writeFile, mkdir, cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
+import type { ResultEntry, SavedResult, LeaderboardData } from '../src/site/shared/types.ts';
+import { V2_DEFAULT_TASKS } from '../src/site/shared/types.ts';
+import { isV2Entry } from '../src/site/shared/tier.ts';
+import { fmtDuration, fmtDate, esc } from '../src/site/shared/format.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
@@ -17,116 +21,29 @@ const DOCS_DIR = join(REPO_ROOT, 'docs');
 const RESULTS_DIR = join(DOCS_DIR, 'results');
 const DATA_OUT_DIR = join(DOCS_DIR, 'data');
 
-// Mirror of V2_TIER_THRESHOLDS from src/config/constants.ts
-const V2_DEFAULT_TASKS = new Set(['14958', '15815_1', '15193', '14268', '20079']);
-const TIER_THRESHOLDS: ReadonlyArray<{ tier: string; minCorrect: number }> = [
-    { tier: 'S', minCorrect: 5 },
-    { tier: 'A', minCorrect: 4 },
-    { tier: 'B', minCorrect: 3 },
-    { tier: 'C', minCorrect: 2 },
-    { tier: 'D', minCorrect: 1 },
-    { tier: 'F', minCorrect: 0 },
-];
-
-interface ResultEntry {
-    exercise: string;
-    agentSuccess: boolean;
-    testSuccess: boolean;
-    overallSuccess: boolean;
-    agentError?: string;
-    testError?: string;
-    agentDuration: number;
-    testDuration: number;
-    totalDuration: number;
-}
-
-interface SavedResult {
-    metadata: {
-        agent: string;
-        model: string;
-        provider: string;
-        version?: string;
-        timestamp: string;
-        exerciseCount?: number;
-        benchmarkVersion?: string;
-        generatedBy?: string;
-        runUrl?: string;
-        runId?: string;
-        artifactName?: string;
-    };
-    summary: {
-        successRate: number;
-        totalDuration: number;
-        avgDuration: number;
-        successCount: number;
-        totalCount: number;
-        agentSuccessCount: number;
-        testSuccessCount: number;
-        testFailedCount: number;
-    };
-    tier?: { tier: string; label: string; solved: number; total: number };
-    results: ResultEntry[];
-}
-
-interface LeaderboardData {
-    lastUpdated: string;
-    results: Record<string, SavedResult>;
-}
-
 function sanitizeKey(agent: string, model: string): string {
     return `${agent}-${model}`.replace(/[^a-zA-Z0-9._-]/g, '_');
 }
 
 function computeTier(results: ResultEntry[]): string | null {
     if (!results || results.length === 0) return null;
-    const resultIds = new Set(results.map(r => r.exercise));
-    const isDefault = V2_DEFAULT_TASKS.size > 0
-        && resultIds.size === V2_DEFAULT_TASKS.size
-        && [...V2_DEFAULT_TASKS].every(id => resultIds.has(id));
+    const resultIds = new Set(results.map((r) => r.exercise));
+    const isDefault = V2_DEFAULT_TASKS.length > 0
+        && resultIds.size === V2_DEFAULT_TASKS.length
+        && [...V2_DEFAULT_TASKS].every((id) => resultIds.has(id));
     if (!isDefault) return null;
 
-    const solved = results.filter(r => V2_DEFAULT_TASKS.has(r.exercise) && r.overallSuccess).length;
-    const sorted = [...TIER_THRESHOLDS].sort((a, b) => b.minCorrect - a.minCorrect);
-    const entry = sorted.find(t => solved >= t.minCorrect);
-    return entry ? entry.tier : 'F';
-}
-
-/** Check if a leaderboard entry is a v2 (SWE-Lancer) result. */
-function isV2Entry(entry: SavedResult): boolean {
-    if (entry.tier?.tier) return true;
-    if (entry.results && entry.results.length === V2_DEFAULT_TASKS.size) {
-        return entry.results.every(r => V2_DEFAULT_TASKS.has(r.exercise));
-    }
-    return false;
-}
-
-function fmtDuration(ms: number): string {
-    if (!ms || ms <= 0) return '-';
-    const sec = ms / 1000;
-    if (sec < 60) return sec.toFixed(1) + 's';
-    const min = sec / 60;
-    if (min < 60) return min.toFixed(1) + 'm';
-    const hr = min / 60;
-    return hr.toFixed(1) + 'h';
-}
-
-function fmtDate(ts: string): string {
-    if (!ts) return '-';
-    return ts.split('T')[0] ?? '-';
-}
-
-function escapeHtml(s: string): string {
-    return s
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    const solved = results.filter((r) => (V2_DEFAULT_TASKS as readonly string[]).includes(r.exercise) && r.overallSuccess).length;
+    if (solved >= 5) return 'S';
+    if (solved >= 4) return 'A';
+    if (solved >= 3) return 'B';
+    if (solved >= 2) return 'C';
+    if (solved >= 1) return 'D';
+    return 'F';
 }
 
 function tierClass(tier: string | null): string {
     if (!tier) return '';
-    // Only allow known tier letters to prevent class injection
     const allowed = new Set(['S', 'A', 'B', 'C', 'D', 'F']);
     if (!allowed.has(tier)) return '';
     return `tier-${tier}`;
@@ -139,13 +56,13 @@ function generateResultPage(key: string, entry: SavedResult): string {
     const solved = summary.successCount ?? 0;
     const total = summary.totalCount ?? 0;
 
-    const pageTitle = `${escapeHtml(meta.agent)} / ${escapeHtml(meta.model)} - ts-bench`;
-    const escapedTier = escapeHtml(tier ?? '-');
-    const ogDescription = `Tier ${escapedTier} | ${solved}/${total} solved | ${summary.successRate?.toFixed(1) ?? 0}% success rate | ${escapeHtml(meta.provider)}`;
+    const pageTitle = `${esc(meta.agent)} / ${esc(meta.model)} - ts-bench`;
+    const escapedTier = esc(tier ?? '-');
+    const ogDescription = `Tier ${escapedTier} | ${solved}/${total} solved | ${summary.successRate?.toFixed(1) ?? 0}% success rate | ${esc(meta.provider)}`;
 
     let resultsRows = '';
     if (entry.results && entry.results.length > 0) {
-        entry.results.forEach(r => {
+        entry.results.forEach((r) => {
             const status = r.overallSuccess
                 ? '<span class="pass">Pass</span>'
                 : '<span class="fail">Fail</span>';
@@ -153,7 +70,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
             const testStatus = r.testSuccess ? '<span class="pass">OK</span>' : '<span class="fail">Fail</span>';
             resultsRows += `
         <tr>
-          <td>${escapeHtml(r.exercise)}</td>
+          <td>${esc(r.exercise)}</td>
           <td>${status}</td>
           <td>${agentStatus}</td>
           <td>${testStatus}</td>
@@ -167,7 +84,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
     }
 
     const runUrlHtml = meta.runUrl
-        ? `<a href="${escapeHtml(meta.runUrl)}" target="_blank">View GHA Run</a>`
+        ? `<a href="${esc(meta.runUrl)}" target="_blank">View GHA Run</a>`
         : '';
 
     return `<!DOCTYPE html>
@@ -221,12 +138,12 @@ a:hover { text-decoration: underline; }
   border-radius: 8px;
   color: #fff;
 }
-.tier-S { background: #c9a000; }
-.tier-A { background: #3fb950; }
-.tier-B { background: #58a6ff; }
-.tier-C { background: #bc8cff; }
-.tier-D { background: #db6d28; }
-.tier-F { background: #f85149; }
+.tier-S { background: #ffd700; color: #000; }
+.tier-A { background: #87c0ff; }
+.tier-B { background: #b0e070; color: #000; }
+.tier-C { background: #f0a030; }
+.tier-D { background: #e06040; }
+.tier-F { background: #cc2222; }
 table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 8px; overflow: hidden; margin-top: 24px; }
 th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
 th { background: var(--bg); font-weight: 600; color: var(--text-muted); }
@@ -247,10 +164,10 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
 
   <div class="hero">
     <div style="display:flex;align-items:center;gap:16px">
-      ${tier ? `<span class="tier ${tierClass(tier)}">${escapeHtml(tier)}</span>` : ''}
+      ${tier ? `<span class="tier ${tierClass(tier)}">${esc(tier)}</span>` : ''}
       <div>
-        <h1>${escapeHtml(meta.agent)} / ${escapeHtml(meta.model)}</h1>
-        <div style="color:var(--text-muted);font-size:0.9rem">${escapeHtml(meta.provider)} &middot; ${fmtDate(meta.timestamp)}</div>
+        <h1>${esc(meta.agent)} / ${esc(meta.model)}</h1>
+        <div style="color:var(--text-muted);font-size:0.9rem">${esc(meta.provider)} &middot; ${fmtDate(meta.timestamp)}</div>
       </div>
     </div>
     <div class="hero-meta">
@@ -258,8 +175,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
       <div><strong>${summary.successRate?.toFixed(1) ?? 0}%</strong> success</div>
       <div>Avg <strong>${fmtDuration(summary.avgDuration)}</strong></div>
       <div>Total <strong>${fmtDuration(summary.totalDuration)}</strong></div>
-      ${meta.version ? `<div>Version <strong>${escapeHtml(meta.version)}</strong></div>` : ''}
-      ${meta.benchmarkVersion ? `<div>Bench <strong>${escapeHtml(meta.benchmarkVersion)}</strong></div>` : ''}
+      ${meta.version ? `<div>Version <strong>${esc(meta.version)}</strong></div>` : ''}
+      ${meta.benchmarkVersion ? `<div>Bench <strong>${esc(meta.benchmarkVersion)}</strong></div>` : ''}
     </div>
     ${runUrlHtml ? `<div style="margin-top:12px">${runUrlHtml}</div>` : ''}
   </div>
@@ -302,13 +219,11 @@ async function main(): Promise<void> {
 
     await mkdir(RESULTS_DIR, { recursive: true });
 
-    // Copy leaderboard.json to docs/data/ so the static site can read it
     await mkdir(DATA_OUT_DIR, { recursive: true });
     await cp(LEADERBOARD_PATH, join(DATA_OUT_DIR, 'leaderboard.json'));
     console.log(`Copied leaderboard.json to ${DATA_OUT_DIR}/leaderboard.json`);
 
     const entries = Object.entries(leaderboard.results);
-    // Only generate pages for v2 (SWE-Lancer) entries
     const v2Entries = entries.filter(([, entry]) => isV2Entry(entry));
     let count = 0;
 
@@ -323,7 +238,7 @@ async function main(): Promise<void> {
     console.log(`Generated ${count} v2 result pages in ${RESULTS_DIR} (skipped ${entries.length - v2Entries.length} non-v2 entries)`);
 }
 
-main().catch(err => {
+main().catch((err) => {
     console.error(err);
     process.exit(1);
 });

@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ts-bench &mdash; SWE-Lancer AI Agent Benchmark</title>
-<meta name="description" content="Tier ratings and benchmark results for AI coding agents on the SWE-Lancer v2 task set.">
-<meta property="og:title" content="ts-bench &mdash; SWE-Lancer AI Agent Benchmark">
+<title>ts-bench — SWE-Lancer AI Agent Benchmark</title>
+<meta name="description" content="Tier ratings (S/A/B/C/D/F) for AI coding agents on the SWE-Lancer v2 benchmark (5 tasks).">
+<meta property="og:title" content="ts-bench — SWE-Lancer AI Agent Benchmark">
 <meta property="og:description" content="Tier ratings (S/A/B/C/D/F) for AI coding agents on the SWE-Lancer v2 benchmark (5 tasks).">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <style>
+
 :root {
   --bg: #000;
   --surface: #111;
@@ -34,7 +35,7 @@ a { color: var(--text); text-decoration: none; }
 a:hover { color: #fff; }
 .container { max-width: 960px; margin: 0 auto; padding: 48px 24px; }
 
-/* Header — Vercel style */
+/* Header */
 header { margin-bottom: 48px; }
 header h1 {
   font-size: 2.5rem;
@@ -45,7 +46,41 @@ header h1 {
 header p { color: var(--text-secondary); font-size: 1rem; }
 .updated { color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px; }
 
-/* Nav tabs — Vercel style underline */
+/* Preview badge */
+.preview-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 165, 0, 0.15);
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+  border-radius: 999px;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+/* Preview banner */
+.preview-banner {
+  background: linear-gradient(90deg, #1a1a2e, #16213e);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px 24px;
+  margin-bottom: 32px;
+}
+.preview-banner .banner-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.preview-banner .banner-text strong {
+  color: var(--text);
+}
+
+/* Tabs */
 .tabs {
   display: flex;
   gap: 24px;
@@ -70,7 +105,7 @@ header p { color: var(--text-secondary); font-size: 1rem; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-/* ============ TIER LIST (tiermaker style) ============ */
+/* Tier list */
 .tier-list { display: flex; flex-direction: column; gap: 4px; }
 .tier-row {
   display: flex;
@@ -79,23 +114,37 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   overflow: hidden;
   background: var(--surface);
 }
+.tier-row.tier-empty { display: none; }
+.tier-sort-hint {
+  display: block;
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 400;
+  margin-top: 2px;
+  text-align: center;
+  line-height: 1;
+  letter-spacing: 0;
+}
 .tier-label {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 72px;
   min-width: 72px;
   font-weight: 800;
   font-size: 1.75rem;
-  color: #fff;
+  line-height: 1;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
-.tier-label-S { background: #ff7f7f; }
-.tier-label-A { background: #ffbf7f; }
-.tier-label-B { background: #ffdf7f; }
-.tier-label-C { background: #ffff7f; }
-.tier-label-D { background: #bfff7f; }
-.tier-label-F { background: #7fffff; }
+.tier-label-S { background: #ffd700; color: #000; }
+.tier-label-A { background: #87c0ff; }
+.tier-label-B { background: #b0e070; color: #000; }
+.tier-label-C { background: #f0a030; }
+.tier-label-D { background: #e06040; }
+.tier-label-F { background: #cc2222; }
 .tier-items {
   display: flex;
   flex-wrap: wrap;
@@ -106,7 +155,7 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   min-height: 72px;
 }
 
-/* Agent card inside tier row */
+/* Agent card */
 .agent-card {
   display: flex;
   flex-direction: column;
@@ -119,6 +168,7 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   min-width: 130px;
   text-decoration: none;
   transition: border-color 0.15s, background 0.15s;
+  position: relative;
 }
 .agent-card:hover {
   border-color: #555;
@@ -133,16 +183,18 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   margin-bottom: 6px;
   background: #222;
 }
-.agent-card .agent-name {
+.agent-card .agent-name-model {
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text);
   white-space: nowrap;
+  text-align: center;
+  line-height: 1.3;
 }
-.agent-card .agent-model {
+.agent-card .agent-name-model .model-part {
+  font-weight: 400;
   font-size: 0.75rem;
   color: var(--text-secondary);
-  white-space: nowrap;
 }
 .agent-card .agent-meta {
   font-size: 0.7rem;
@@ -150,7 +202,47 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   margin-top: 2px;
 }
 
-/* Small tier badge (for tables) */
+/* Tooltip */
+.card-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  min-width: 180px;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+.card-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #222;
+}
+.agent-card:hover .card-tooltip { display: block; }
+.tooltip-title {
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.tooltip-task {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  padding: 2px 0;
+}
+.tooltip-task .task-id { color: var(--text-secondary); }
+
+/* Tier badge (for tables) */
 .tier-badge {
   display: inline-flex;
   align-items: center;
@@ -161,14 +253,14 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   border-radius: 6px;
   color: #fff;
 }
-.tier-badge-S { background: #ff7f7f; }
-.tier-badge-A { background: #ffbf7f; }
-.tier-badge-B { background: #ffdf7f; }
-.tier-badge-C { background: #ffff7f; color: #333; }
-.tier-badge-D { background: #bfff7f; color: #333; }
-.tier-badge-F { background: #7fffff; color: #333; }
+.tier-badge-S { background: #ffd700; color: #000; }
+.tier-badge-A { background: #87c0ff; }
+.tier-badge-B { background: #b0e070; color: #000; }
+.tier-badge-C { background: #f0a030; }
+.tier-badge-D { background: #e06040; }
+.tier-badge-F { background: #cc2222; }
 
-/* Tables — Vercel style */
+/* Tables */
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 12px 16px; text-align: left; font-size: 0.875rem; }
 th {
@@ -187,24 +279,23 @@ tr:hover td { background: var(--surface); }
 .pass { color: var(--green); font-weight: 500; }
 .fail { color: var(--red); font-weight: 500; }
 
-/* Task breakdown grid */
 .breakdown-grid { overflow-x: auto; }
-
-/* Loading */
 .loading { text-align: center; padding: 80px 20px; color: var(--text-secondary); font-size: 0.9rem; }
-
-/* Empty */
 .empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
 
 /* Responsive */
 @media (max-width: 768px) {
   header h1 { font-size: 1.75rem; }
   .tier-label { width: 52px; min-width: 52px; font-size: 1.25rem; }
+  .tier-sort-hint { display: none; }
   .agent-card { min-width: 90px; padding: 8px 10px; }
-  .agent-card .agent-name { font-size: 0.78rem; }
-  .agent-card .agent-model { font-size: 0.68rem; }
+  .agent-card .agent-name-model { font-size: 0.78rem; }
+  .agent-card .agent-name-model .model-part { font-size: 0.68rem; }
   th, td { padding: 8px 12px; font-size: 0.82rem; }
   .tab { font-size: 0.82rem; }
+  .tier-items { flex-direction: column; align-items: flex-start; }
+  .agent-card { min-width: 100%; }
+  .card-tooltip { display: none !important; }
 }
 
 footer {
@@ -217,15 +308,23 @@ footer {
 }
 footer a { color: var(--text-secondary); }
 footer a:hover { color: var(--text); }
+
 </style>
 </head>
 <body>
 <div class="container">
+
   <header>
-    <h1>ts-bench</h1>
+    <h1>ts-bench <span class="preview-badge">Preview</span></h1>
     <p>SWE-Lancer v2 benchmark &mdash; tier ratings for AI coding agents</p>
-    <div class="updated" id="lastUpdated"></div>
+    <div class="updated" id="lastUpdated">Last updated: 2026-04-03</div>
   </header>
+
+  <div class="preview-banner">
+    <div class="banner-text">
+      <strong>Preview</strong> &mdash; This page is displayed with sample data. Actual benchmark results are in preparation.
+    </div>
+  </div>
 
   <div class="tabs">
     <div class="tab active" data-tab="leaderboard">Tier List</div>
@@ -234,32 +333,15 @@ footer a:hover { color: var(--text); }
   </div>
 
   <div id="leaderboard" class="tab-content active">
-    <div class="loading" id="leaderboardLoading">Loading results&hellip;</div>
-    <div id="tierListContainer" style="display:none"></div>
+    <div class="tier-list"><div class="tier-row"><div class="tier-label tier-label-S">S<span class="tier-sort-hint">sorted by time</span></div><div class="tier-items"><a class="agent-card" href="results/claude-claude-opus-4-6-adaptive.html"><img class="agent-icon" src="assets/icons/claude.png" alt="claude" onerror="this.style.display='none'"><span class="agent-name-model">claude <span class="model-part">(claude-opus-4-6-adaptive)</span></span><span class="agent-meta">5/5 &middot; 5.0m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a></div></div><div class="tier-row"><div class="tier-label tier-label-A">A<span class="tier-sort-hint">sorted by time</span></div><div class="tier-items"><a class="agent-card" href="results/codex-gpt-5.3-codex.html"><img class="agent-icon" src="assets/icons/codex.png" alt="codex" onerror="this.style.display='none'"><span class="agent-name-model">codex <span class="model-part">(gpt-5.3-codex)</span></span><span class="agent-meta">4/5 &middot; 5.8m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a><a class="agent-card" href="results/claude-claude-sonnet-4-6-adaptive.html"><img class="agent-icon" src="assets/icons/claude.png" alt="claude" onerror="this.style.display='none'"><span class="agent-name-model">claude <span class="model-part">(claude-sonnet-4-6-adaptive)</span></span><span class="agent-meta">4/5 &middot; 6.2m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a></div></div><div class="tier-row"><div class="tier-label tier-label-B">B<span class="tier-sort-hint">sorted by time</span></div><div class="tier-items"><a class="agent-card" href="results/gemini-gemini-3.1-pro-preview.html"><img class="agent-icon" src="assets/icons/gemini.png" alt="gemini" onerror="this.style.display='none'"><span class="agent-name-model">gemini <span class="model-part">(gemini-3.1-pro-preview)</span></span><span class="agent-meta">3/5 &middot; 7.0m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a><a class="agent-card" href="results/cursor-gpt-5.4.html"><img class="agent-icon" src="assets/icons/cursor.png" alt="cursor" onerror="this.style.display='none'"><span class="agent-name-model">cursor <span class="model-part">(gpt-5.4)</span></span><span class="agent-meta">3/5 &middot; 7.3m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a></div></div><div class="tier-row"><div class="tier-label tier-label-C">C<span class="tier-sort-hint">sorted by time</span></div><div class="tier-items"><a class="agent-card" href="results/aider-claude-opus-4-5-reasoning.html"><img class="agent-icon" src="assets/icons/aider.png" alt="aider" onerror="this.style.display='none'"><span class="agent-name-model">aider <span class="model-part">(claude-opus-4-5-reasoning)</span></span><span class="agent-meta">2/5 &middot; 8.3m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a><a class="agent-card" href="results/opencode-gpt-5.2.html"><img class="agent-icon" src="assets/icons/opencode.png" alt="opencode" onerror="this.style.display='none'"><span class="agent-name-model">opencode <span class="model-part">(gpt-5.2)</span></span><span class="agent-meta">2/5 &middot; 8.7m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="pass">Pass</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a></div></div><div class="tier-row"><div class="tier-label tier-label-D">D<span class="tier-sort-hint">sorted by time</span></div><div class="tier-items"><a class="agent-card" href="results/goose-glm-5-reasoning.html"><img class="agent-icon" src="assets/icons/goose.png" alt="goose" onerror="this.style.display='none'"><span class="agent-name-model">goose <span class="model-part">(glm-5-reasoning)</span></span><span class="agent-meta">1/5 &middot; 9.3m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="pass">Pass</span></div></div></a></div></div><div class="tier-row"><div class="tier-label tier-label-F">F<span class="tier-sort-hint">sorted by time</span></div><div class="tier-items"><a class="agent-card" href="results/opencode-mimo-v2-pro.html"><img class="agent-icon" src="assets/icons/opencode.png" alt="opencode" onerror="this.style.display='none'"><span class="agent-name-model">opencode <span class="model-part">(mimo-v2-pro)</span></span><span class="agent-meta">0/5 &middot; 10.0m</span><div class="card-tooltip"><div class="tooltip-title">Task Breakdown</div><div class="tooltip-task"><span class="task-id">14958</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15815_1</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">15193</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">14268</span><span class="fail">Fail</span></div><div class="tooltip-task"><span class="task-id">20079</span><span class="fail">Fail</span></div></div></a></div></div></div>
   </div>
 
   <div id="history" class="tab-content">
-    <div class="loading" id="historyLoading">Loading history&hellip;</div>
-    <table id="historyTable" style="display:none">
-      <thead>
-        <tr>
-          <th>Agent</th>
-          <th>Model</th>
-          <th>Provider</th>
-          <th>Tier</th>
-          <th>Solved</th>
-          <th>Total Time</th>
-          <th>Date</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="historyBody"></tbody>
-    </table>
+    <table><thead><tr><th>Agent</th><th>Model</th><th>Provider</th><th>Tier</th><th>Solved</th><th>Total Time</th><th>Date</th><th></th></tr></thead><tbody><tr><td>opencode</td><td>mimo-v2-pro</td><td>xiaomi</td><td><span class="tier-badge tier-badge-F" style="background:#cc2222;">F</span></td><td>0/5</td><td>50.0m</td><td>2026-04-01</td><td><a href="results/opencode-mimo-v2-pro.html">Details</a></td></tr><tr><td>goose</td><td>glm-5-reasoning</td><td>z-ai</td><td><span class="tier-badge tier-badge-D" style="background:#e06040;">D</span></td><td>1/5</td><td>46.7m</td><td>2026-04-01</td><td><a href="results/goose-glm-5-reasoning.html">Details</a></td></tr><tr><td>opencode</td><td>gpt-5.2</td><td>openai</td><td><span class="tier-badge tier-badge-C" style="background:#f0a030;">C</span></td><td>2/5</td><td>43.3m</td><td>2026-04-01</td><td><a href="results/opencode-gpt-5.2.html">Details</a></td></tr><tr><td>aider</td><td>claude-opus-4-5-reasoning</td><td>anthropic</td><td><span class="tier-badge tier-badge-C" style="background:#f0a030;">C</span></td><td>2/5</td><td>41.7m</td><td>2026-04-01</td><td><a href="results/aider-claude-opus-4-5-reasoning.html">Details</a></td></tr><tr><td>cursor</td><td>gpt-5.4</td><td>openai</td><td><span class="tier-badge tier-badge-B" style="background:#b0e070;color:#000;">B</span></td><td>3/5</td><td>36.7m</td><td>2026-04-01</td><td><a href="results/cursor-gpt-5.4.html">Details</a></td></tr><tr><td>gemini</td><td>gemini-3.1-pro-preview</td><td>google</td><td><span class="tier-badge tier-badge-B" style="background:#b0e070;color:#000;">B</span></td><td>3/5</td><td>35.0m</td><td>2026-04-01</td><td><a href="results/gemini-gemini-3.1-pro-preview.html">Details</a></td></tr><tr><td>claude</td><td>claude-sonnet-4-6-adaptive</td><td>anthropic</td><td><span class="tier-badge tier-badge-A" style="background:#87c0ff;">A</span></td><td>4/5</td><td>30.8m</td><td>2026-04-01</td><td><a href="results/claude-claude-sonnet-4-6-adaptive.html">Details</a></td></tr><tr><td>codex</td><td>gpt-5.3-codex</td><td>openai</td><td><span class="tier-badge tier-badge-A" style="background:#87c0ff;">A</span></td><td>4/5</td><td>29.2m</td><td>2026-04-01</td><td><a href="results/codex-gpt-5.3-codex.html">Details</a></td></tr><tr><td>claude</td><td>claude-opus-4-6-adaptive</td><td>anthropic</td><td><span class="tier-badge tier-badge-S" style="background:#ffd700;color:#000;">S</span></td><td>5/5</td><td>25.0m</td><td>2026-04-01</td><td><a href="results/claude-claude-opus-4-6-adaptive.html">Details</a></td></tr></tbody></table>
   </div>
 
   <div id="breakdown" class="tab-content">
-    <div class="loading" id="breakdownLoading">Loading breakdown&hellip;</div>
-    <div class="breakdown-grid" id="breakdownGrid" style="display:none"></div>
+    <table><thead><tr><th>Agent / Model</th><th>14958</th><th>15815_1</th><th>15193</th><th>14268</th><th>20079</th></tr></thead><tbody><tr><td><strong>claude</strong><br><small>claude-opus-4-6-adaptive</small></td><td class="pass" title="5.0m">Pass</td><td class="pass" title="4.8m">Pass</td><td class="pass" title="5.2m">Pass</td><td class="pass" title="4.7m">Pass</td><td class="pass" title="5.3m">Pass</td></tr><tr><td><strong>codex</strong><br><small>gpt-5.3-codex</small></td><td class="fail">Fail</td><td class="pass" title="5.4m">Pass</td><td class="pass" title="5.6m">Pass</td><td class="pass" title="5.1m">Pass</td><td class="pass" title="4.4m">Pass</td></tr><tr><td><strong>claude</strong><br><small>claude-sonnet-4-6-adaptive</small></td><td class="fail">Fail</td><td class="pass" title="5.8m">Pass</td><td class="pass" title="6.0m">Pass</td><td class="pass" title="5.3m">Pass</td><td class="pass" title="4.8m">Pass</td></tr><tr><td><strong>gemini</strong><br><small>gemini-3.1-pro-preview</small></td><td class="fail">Fail</td><td class="pass" title="6.4m">Pass</td><td class="fail">Fail</td><td class="pass" title="5.5m">Pass</td><td class="pass" title="5.0m">Pass</td></tr><tr><td><strong>cursor</strong><br><small>gpt-5.4</small></td><td class="fail">Fail</td><td class="fail">Fail</td><td class="pass" title="6.7m">Pass</td><td class="pass" title="5.8m">Pass</td><td class="pass" title="4.9m">Pass</td></tr><tr><td><strong>aider</strong><br><small>claude-opus-4-5-reasoning</small></td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="pass" title="6.1m">Pass</td><td class="pass" title="5.4m">Pass</td></tr><tr><td><strong>opencode</strong><br><small>gpt-5.2</small></td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="pass" title="6.4m">Pass</td><td class="pass" title="5.7m">Pass</td></tr><tr><td><strong>goose</strong><br><small>glm-5-reasoning</small></td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="pass" title="5.9m">Pass</td></tr><tr><td><strong>opencode</strong><br><small>mimo-v2-pro</small></td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Fail</td><td class="fail">Fail</td></tr></tbody></table>
   </div>
 
   <footer>
@@ -267,79 +349,12 @@ footer a:hover { color: var(--text); }
     <a href="auth/">Subscription Auth</a> &middot;
     Powered by <a href="https://github.com/laiso/ts-bench">ts-bench</a>
   </footer>
-</div>
 
+</div>
 <script>
 (function() {
-  var BASE = '';
-  var LEADERBOARD_URL = BASE + 'data/leaderboard.json';
-  var RESULTS_DIR = BASE + 'results/';
-
-  // V2 default task set (5 tasks)
-  var V2_DEFAULT_TASKS = ['14958','15815_1','15193','14268','20079'];
-  var V2_SET = {};
-  V2_DEFAULT_TASKS.forEach(function(t) { V2_SET[t] = true; });
-  var V2_TOTAL = V2_DEFAULT_TASKS.length;
-
-  // Allowed tier values (XSS prevention)
-  var TIER_ALLOW = {S:1,A:1,B:1,C:1,D:1,F:1};
-
-  function isV2Entry(d) {
-    if (d.tier && d.tier.tier) return true;
-    if (d.results && d.results.length === V2_TOTAL) {
-      var allMatch = true;
-      for (var i = 0; i < d.results.length; i++) {
-        if (!V2_SET[d.results[i].exercise]) { allMatch = false; break; }
-      }
-      if (allMatch) return true;
-    }
-    return false;
-  }
-
-  function tierFromEntry(d) {
-    if (d.tier && d.tier.tier) return d.tier.tier;
-    if (!d.results || d.results.length === 0) return null;
-    var solved = 0;
-    for (var i = 0; i < d.results.length; i++) {
-      if (V2_SET[d.results[i].exercise] && d.results[i].overallSuccess) solved++;
-    }
-    if (solved >= 5) return 'S';
-    if (solved >= 4) return 'A';
-    if (solved >= 3) return 'B';
-    if (solved >= 2) return 'C';
-    if (solved >= 1) return 'D';
-    return 'F';
-  }
-
-  function tierBadge(tier) {
-    if (!tier) return '<span style="color:var(--text-secondary)">-</span>';
-    if (!TIER_ALLOW[tier]) return '<span style="color:var(--text-secondary)">' + esc(tier) + '</span>';
-    return '<span class="tier-badge tier-badge-' + tier + '">' + tier + '</span>';
-  }
-
-  function fmtDuration(ms) {
-    if (!ms || ms <= 0) return '-';
-    var sec = ms / 1000;
-    if (sec < 60) return sec.toFixed(1) + 's';
-    var min = sec / 60;
-    if (min < 60) return min.toFixed(1) + 'm';
-    var hr = min / 60;
-    return hr.toFixed(1) + 'h';
-  }
-
-  function fmtDate(ts) {
-    if (!ts) return '-';
-    return ts.split('T')[0];
-  }
-
-  function resultKey(entry) {
-    var a = (entry.metadata ? entry.metadata.agent : entry.agent) || '';
-    var m = (entry.metadata ? entry.metadata.model : entry.model) || '';
-    return (a + '-' + m).replace(/[^a-zA-Z0-9._-]/g, '_');
-  }
-
-  // Tab switching
-  document.querySelectorAll('.tab').forEach(function(tab) {
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function(tab) {
     tab.addEventListener('click', function() {
       document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
       document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
@@ -347,183 +362,6 @@ footer a:hover { color: var(--text); }
       document.getElementById(tab.dataset.tab).classList.add('active');
     });
   });
-
-  // Fetch leaderboard data
-  fetch(LEADERBOARD_URL)
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      renderAll(data);
-    })
-    .catch(function(err) {
-      document.getElementById('leaderboardLoading').textContent = 'Failed to load results. ' + err;
-      document.getElementById('historyLoading').textContent = 'Failed to load results.';
-      document.getElementById('breakdownLoading').textContent = 'Failed to load results.';
-    });
-
-  function renderAll(data) {
-    if (data.lastUpdated) {
-      document.getElementById('lastUpdated').textContent = 'Last updated: ' + fmtDate(data.lastUpdated);
-    }
-
-    // Filter to v2 entries only
-    var entries = Object.entries(data.results || {})
-      .map(function(pair) { return { key: pair[0], data: pair[1] }; })
-      .filter(function(e) { return isV2Entry(e.data); });
-
-    // Sort by tier rank (S > A > B > ... > F), then avg duration asc
-    var tierRank = {S:0,A:1,B:2,C:3,D:4,F:5};
-    entries.sort(function(a, b) {
-      var tA = tierFromEntry(a.data);
-      var tB = tierFromEntry(b.data);
-      var rA = tA ? (tierRank[tA] != null ? tierRank[tA] : 99) : 99;
-      var rB = tB ? (tierRank[tB] != null ? tierRank[tB] : 99) : 99;
-      if (rA !== rB) return rA - rB;
-      var durA = a.data.summary ? a.data.summary.avgDuration : 0;
-      var durB = b.data.summary ? b.data.summary.avgDuration : 0;
-      return durA - durB;
-    });
-
-    renderLeaderboard(entries);
-    renderHistory(entries);
-    renderBreakdown(entries);
-  }
-
-  function renderLeaderboard(entries) {
-    var container = document.getElementById('tierListContainer');
-    if (entries.length === 0) {
-      document.getElementById('leaderboardLoading').innerHTML =
-        'No v2 benchmark results yet.<br><small style="color:var(--text-secondary)">Run <code style="background:var(--surface-2);padding:2px 6px;border-radius:4px;font-size:0.85em">bun src/index.ts --dataset v2</code> and update the leaderboard to see tier ratings here.</small>';
-      return;
-    }
-
-    // Group entries by tier
-    var TIERS = ['S','A','B','C','D','F'];
-    var groups = {};
-    TIERS.forEach(function(t) { groups[t] = []; });
-    entries.forEach(function(entry) {
-      var tier = tierFromEntry(entry.data);
-      if (tier && groups[tier]) groups[tier].push(entry);
-    });
-
-    var html = '<div class="tier-list">';
-    TIERS.forEach(function(t) {
-      html += '<div class="tier-row">';
-      html += '<div class="tier-label tier-label-' + t + '">' + t + '</div>';
-      html += '<div class="tier-items">';
-      groups[t].forEach(function(entry) {
-        var d = entry.data;
-        var meta = d.metadata || {};
-        var summary = d.summary || {};
-        var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
-        var key = resultKey(d);
-        var detailHref = RESULTS_DIR + key + '.html';
-        var agentName = (meta.agent || entry.key).toLowerCase();
-        var iconPath = 'assets/icons/' + esc(agentName) + '.png';
-        html += '<a class="agent-card" href="' + detailHref + '">';
-        html += '<img class="agent-icon" src="' + iconPath + '" alt="' + esc(meta.agent || entry.key) + '" onerror="this.style.display=\'none\'">';
-        html += '<span class="agent-name">' + esc(meta.agent || entry.key) + '</span>';
-        html += '<span class="agent-model">' + esc(meta.model || '') + '</span>';
-        html += '<span class="agent-meta">' + solved + '/5 &middot; ' + fmtDuration(summary.avgDuration) + '</span>';
-        html += '</a>';
-      });
-      html += '</div></div>';
-    });
-    html += '</div>';
-
-    document.getElementById('leaderboardLoading').style.display = 'none';
-    container.innerHTML = html;
-    container.style.display = '';
-  }
-
-  function renderHistory(entries) {
-    var tbody = document.getElementById('historyBody');
-    if (entries.length === 0) {
-      document.getElementById('historyLoading').innerHTML = 'No v2 results yet.';
-      return;
-    }
-
-    var sorted = entries.slice().sort(function(a, b) {
-      var tA = a.data.metadata ? a.data.metadata.timestamp : '';
-      var tB = b.data.metadata ? b.data.metadata.timestamp : '';
-      return tB.localeCompare(tA);
-    });
-
-    sorted.forEach(function(entry) {
-      var d = entry.data;
-      var meta = d.metadata || {};
-      var summary = d.summary || {};
-      var tier = tierFromEntry(d);
-      var solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
-      var key = resultKey(d);
-      var detailHref = RESULTS_DIR + key + '.html';
-
-      var tr = document.createElement('tr');
-      tr.innerHTML =
-        '<td>' + esc(meta.agent || entry.key) + '</td>' +
-        '<td>' + esc(meta.model || '-') + '</td>' +
-        '<td>' + esc(meta.provider || '-') + '</td>' +
-        '<td>' + tierBadge(tier) + '</td>' +
-        '<td>' + solved + '/' + V2_TOTAL + '</td>' +
-        '<td>' + fmtDuration(summary.totalDuration) + '</td>' +
-        '<td>' + fmtDate(meta.timestamp) + '</td>' +
-        '<td><a class="result-link" href="' + detailHref + '">Details</a></td>';
-      tbody.appendChild(tr);
-    });
-
-    document.getElementById('historyLoading').style.display = 'none';
-    document.getElementById('historyTable').style.display = '';
-  }
-
-  function renderBreakdown(entries) {
-    var withResults = entries.filter(function(e) { return e.data.results && e.data.results.length > 0; });
-    if (withResults.length === 0) {
-      document.getElementById('breakdownLoading').textContent = 'No v2 task-level data available.';
-      return;
-    }
-
-    // Use the fixed v2 task list as columns
-    var html = '<table><thead><tr><th>Agent / Model</th>';
-    V2_DEFAULT_TASKS.forEach(function(task) {
-      html += '<th>' + esc(task) + '</th>';
-    });
-    html += '</tr></thead><tbody>';
-
-    withResults.forEach(function(e) {
-      var meta = e.data.metadata || {};
-      html += '<tr><td><strong>' + esc(meta.agent || e.key) + '</strong><br><small>' + esc(meta.model || '') + '</small></td>';
-      V2_DEFAULT_TASKS.forEach(function(task) {
-        var found = null;
-        for (var i = 0; i < (e.data.results || []).length; i++) {
-          if (e.data.results[i].exercise === task) { found = e.data.results[i]; break; }
-        }
-        if (!found) {
-          html += '<td style="color:var(--text-secondary)">-</td>';
-        } else if (found.overallSuccess) {
-          html += '<td class="pass" title="' + fmtDuration(found.totalDuration) + '">Pass</td>';
-        } else {
-          html += '<td class="fail">Fail</td>';
-        }
-      });
-      html += '</tr>';
-    });
-
-    html += '</tbody></table>';
-
-    document.getElementById('breakdownLoading').style.display = 'none';
-    var grid = document.getElementById('breakdownGrid');
-    grid.innerHTML = html;
-    grid.style.display = '';
-  }
-
-  function esc(s) {
-    if (!s) return '';
-    return s
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
 })();
 </script>
 </body>
