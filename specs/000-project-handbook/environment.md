@@ -92,8 +92,6 @@ This starts an interactive Docker container, runs the agent's login command, and
 
 Implementation: `src/utils/docker.ts` (`createAuthCacheArgs`, `hasAuthCache`), agent builders (`claude.ts`, `gemini.ts`, `codex.ts`), `src/index.ts` (`runSetupAuth`).
 
-Spec: `specs/000-project-handbook/subscription-auth.md`
-
 ---
 
 ## GitHub Actions (Native Execution)

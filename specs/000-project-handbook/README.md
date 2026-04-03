@@ -7,10 +7,7 @@
 | Document | Topic |
 |----------|--------|
 | [environment.md](environment.md) | Local setup, Docker, v2 SWE-Lancer, secrets, GitHub Actions |
-| [phase-0-cursor-cloud.md](phase-0-cursor-cloud.md) | Cursor Cloud / constrained hosts for v2 |
 | [leaderboard.md](leaderboard.md) | Optional aggregated results JSON |
-| [ci-regression.md](ci-regression.md) | CI regression notes |
-| [agentlog-collector.md](agentlog-collector.md) | Agent log collection |
 | [METHODOLOGY.md](METHODOLOGY.md) | Benchmark methodology |
 | [v2-grouped-execution.md](v2-grouped-execution.md) | V2 commit-grouped container reuse |
 | [v2-default-benchmark-set.md](v2-default-benchmark-set.md) | Default 5-task benchmark set & tier rating |
