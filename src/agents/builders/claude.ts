@@ -2,6 +2,7 @@ import type { AgentBuilder, AgentConfig, FileList } from '../types';
 import { BaseAgentBuilder } from '../base';
 import { requireEnv, tryAnyEnv } from '../../utils/env';
 import { hasAuthCache } from '../../utils/docker';
+import { AGENT_DEFAULT_PROVIDER } from '../../config/types';
 
 export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
     constructor(agentConfig: AgentConfig) {
@@ -9,7 +10,7 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
     }
 
     protected getEnvironmentVariables(): Record<string, string> {
-        const provider = this.config.provider ?? 'anthropic';
+        const provider = this.config.provider ?? AGENT_DEFAULT_PROVIDER['claude'];
         const env: Record<string, string> = {};
 
         switch (provider) {

@@ -1,6 +1,7 @@
 import type { AgentBuilder, AgentConfig } from '../types';
 import { BaseAgentBuilder } from '../base';
 import { requireEnv } from '../../utils/env';
+import { AGENT_DEFAULT_PROVIDER } from '../../config/types';
 
 export class KimiAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
     constructor(agentConfig: AgentConfig) {
@@ -8,7 +9,7 @@ export class KimiAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
     }
 
     protected getEnvironmentVariables(): Record<string, string> {
-        const provider = this.config.provider ?? 'moonshot';
+        const provider = this.config.provider ?? AGENT_DEFAULT_PROVIDER['kimi'];
         if (provider !== 'moonshot') {
             throw new Error(`Unsupported provider for Kimi: ${provider}`);
         }
