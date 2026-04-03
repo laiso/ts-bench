@@ -19,4 +19,4 @@ bun src/index.ts --agent claude --model <model>              # v1 default
 bun src/index.ts --dataset v2 --task <id> --agent claude ...  # v2 (Docker)
 ```
 
-Workflows: [v1](.github/workflows/benchmark.yml) · [v2](.github/workflows/benchmark-v2.yml). **SWE-Lancer task UI:** `bun run build:swelancer-pages` then open `docs/swelancer-tasks/` (see [`docs/README.md`](docs/README.md)).
+Workflows: [v1](.github/workflows/benchmark.yml) · [v2](.github/workflows/benchmark-v2.yml). **SWE-Lancer task UI:** `bun run build:swelancer-pages` then open `docs/swelancer-tasks/` (see [`docs/README.md`](docs/README.md)). **Subscription Auth:** run agents without API keys — [guide](docs/auth/).
