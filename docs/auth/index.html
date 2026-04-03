@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ts-bench &mdash; Subscription Authentication</title>
+<meta name="description" content="Run AI coding agents without API keys using local login sessions.">
+<style>
+:root {
+  --bg: #000;
+  --surface: #111;
+  --surface-2: #1a1a1a;
+  --border: #333;
+  --text: #ededed;
+  --text-secondary: #888;
+  --accent: #0070f3;
+  --green: #50e3c2;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--text); text-decoration: none; }
+a:hover { color: #fff; }
+.container { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
+
+/* Header */
+header { margin-bottom: 48px; }
+header .back { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 16px; display: block; }
+header .back:hover { color: #fff; }
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+header p { color: var(--text-secondary); font-size: 1rem; }
+
+/* Sections */
+section { margin-bottom: 40px; }
+section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+/* Code blocks */
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin: 12px 0;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+code {
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+}
+p code, td code {
+  background: var(--surface-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th, td { padding: 12px 16px; text-align: left; font-size: 0.875rem; }
+th {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+}
+td { border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+
+/* FAQ */
+.faq-item { margin-bottom: 20px; }
+.faq-item h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.faq-item p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Badge */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  color: #fff;
+  background: var(--accent);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 40px 0 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+}
+footer a { color: var(--text-secondary); }
+footer a:hover { color: var(--text); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  header h1 { font-size: 1.5rem; }
+  th, td { padding: 8px 12px; font-size: 0.82rem; }
+  pre { font-size: 0.78rem; padding: 12px 14px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <a class="back" href="../">&larr; Back to results</a>
+    <h1>Subscription Authentication</h1>
+    <p>Run AI coding agents without API keys using local login sessions.</p>
+  </header>
+
+  <section>
+    <h2>Supported Agents</h2>
+    <ul>
+      <li>Claude Code</li>
+      <li>Gemini CLI</li>
+      <li>Codex</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Quick Start</h2>
+    <pre><code># One-time setup (choose your agent)
+bun src/index.ts --setup-auth claude
+bun src/index.ts --setup-auth gemini
+bun src/index.ts --setup-auth codex
+
+# Then run benchmarks — no API key needed
+bun src/index.ts --agent claude --exercise acronym --docker</code></pre>
+  </section>
+
+  <section>
+    <h2>How It Works</h2>
+    <p style="color:var(--text-secondary);margin-bottom:16px">Authentication happens inside a Docker container and persists on your machine.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Condition</th>
+          <th>Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="priority-badge">1</span></td>
+          <td>API key env var is set</td>
+          <td>Use API key (GitHub Actions, explicit key)</td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge">2</span></td>
+          <td>Auth cache exists</td>
+          <td>Use subscription auth (local Docker)</td>
+        </tr>
+        <tr>
+          <td><span class="priority-badge">3</span></td>
+          <td>Neither</td>
+          <td>Error with setup suggestion</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color:var(--text-secondary);font-size:0.85rem;margin-top:12px">
+      Auth state is stored at <code>~/.cache/ts-bench/auth/&lt;agent&gt;/</code> and mounted into containers automatically.
+    </p>
+  </section>
+
+  <section>
+    <h2>FAQ</h2>
+    <div class="faq-item">
+      <h3>Is this safe for GitHub Actions?</h3>
+      <p>GitHub Actions always uses API keys via secrets (priority 1). Subscription auth is for local development only.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do I need to re-authenticate?</h3>
+      <p>Auth state persists across container runs. Re-authenticate only if credentials expire.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Which agents support this?</h3>
+      <p>Only agents with built-in local login: Claude Code, Gemini CLI, and Codex. Other agents (aider, goose, etc.) still require API keys.</p>
+    </div>
+  </section>
+
+  <footer>
+    <a href="https://github.com/laiso/ts-bench">GitHub</a> &middot;
+    <a href="../">Benchmark Results</a> &middot;
+    Powered by <a href="https://github.com/laiso/ts-bench">ts-bench</a>
+  </footer>
+</div>
+</body>
+</html>
