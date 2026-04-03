@@ -99,7 +99,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
     const providerIndex = process.argv.indexOf('--provider');
     const provider = (providerIndex !== -1 && providerIndex + 1 < process.argv.length
         ? process.argv[providerIndex + 1]!
-        : (agent === 'kimi' ? 'moonshot' : 'openai')) as ProviderType;
+        : (agent === 'kimi' ? 'moonshot' : agent === 'claude' ? 'anthropic' : 'openai')) as ProviderType;
 
     const verbose = process.argv.includes('--verbose');
     const listExercises = process.argv.includes('--list');
