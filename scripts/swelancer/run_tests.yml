@@ -104,6 +104,12 @@
         chdir: /app/expensify/
         executable: /bin/bash
   
+    - name: Kill stale mitmdump from run.sh (frees port 8080 for replay.py)
+      shell: |
+        pkill -f mitmdump || true
+        sleep 1
+      failed_when: false
+
     - name: Start mitmdump in the background
       shell: |
         ISSUE_ID={{ lookup('env', 'ISSUE_ID') }}
