@@ -1,833 +1,366 @@
 {
   "metadata": {
-    "timestamp": "2025-09-26T03:24:01.463Z",
-    "totalExercises": 1,
+    "timestamp": "2026-04-04T16:29:42.958Z",
+    "totalExercises": 5,
     "benchmarkVersion": "1.1.0",
     "generatedBy": "ts-bench"
   },
   "leaderboard": [
     {
       "id": 1,
-      "agent": "GitHub Copilot CLI",
-      "version": "0.0.327",
-      "model": "gpt-5",
+      "agent": "Claude Code",
+      "version": "unknown",
+      "model": "claude-sonnet-4-6",
       "provider": "OpenAI",
-      "successRate": 100,
-      "avgExecutionTime": 0.42,
-      "totalExecutionTime": 0.42,
-      "problemsSolved": 1,
-      "totalProblems": 1,
+      "successRate": 60,
+      "avgExecutionTime": 9.62,
+      "totalExecutionTime": 28.86,
+      "problemsSolved": 3,
+      "totalProblems": 5,
       "rank": 1,
-      "lastUpdated": "2025-09-26"
+      "lastUpdated": "2026-04-04"
     },
     {
       "id": 2,
-      "agent": "Codex CLI",
-      "version": "0.40.0",
-      "model": "gpt-5-codex",
+      "agent": "Claude Code",
+      "version": "unknown",
+      "model": "claude-opus-4-6",
       "provider": "OpenAI",
-      "successRate": 100,
-      "avgExecutionTime": 0.75,
-      "totalExecutionTime": 0.75,
+      "successRate": 20,
+      "avgExecutionTime": 6.18,
+      "totalExecutionTime": 6.18,
       "problemsSolved": 1,
-      "totalProblems": 1,
+      "totalProblems": 5,
       "rank": 2,
-      "lastUpdated": "2025-09-24"
+      "lastUpdated": "2026-04-04"
     },
     {
       "id": 3,
-      "agent": "Codex CLI",
-      "version": "0.36.0",
-      "model": "gpt-5-nano",
+      "agent": "Claude Code",
+      "version": "unknown",
+      "model": "claude-haiku-4-5",
       "provider": "OpenAI",
-      "successRate": 100,
-      "avgExecutionTime": 1.15,
-      "totalExecutionTime": 1.15,
+      "successRate": 20,
+      "avgExecutionTime": 6.88,
+      "totalExecutionTime": 6.88,
       "problemsSolved": 1,
-      "totalProblems": 1,
+      "totalProblems": 5,
       "rank": 3,
-      "lastUpdated": "2025-09-16"
-    },
-    {
-      "id": 4,
-      "agent": "Qwen Code",
-      "version": "0.0.13",
-      "model": "qwen3-coder-plus-2025-09-23",
-      "provider": "Dashscope",
-      "successRate": 100,
-      "avgExecutionTime": 1.46,
-      "totalExecutionTime": 1.46,
-      "problemsSolved": 1,
-      "totalProblems": 1,
-      "rank": 4,
-      "lastUpdated": "2025-09-24"
-    },
-    {
-      "id": 5,
-      "agent": "GitHub Copilot CLI",
-      "version": "0.0.327",
-      "model": "sonnet",
-      "provider": "OpenAI",
-      "successRate": 84,
-      "avgExecutionTime": 4.01,
-      "totalExecutionTime": 84.21,
-      "problemsSolved": 21,
-      "totalProblems": 25,
-      "rank": 5,
-      "lastUpdated": "2025-09-26"
-    },
-    {
-      "id": 6,
-      "agent": "Codex CLI",
-      "version": "0.38.0",
-      "model": "gpt-oss-120b",
-      "provider": "Cerebras",
-      "successRate": 0,
-      "avgExecutionTime": 0.12,
-      "totalExecutionTime": 0,
-      "problemsSolved": 0,
-      "totalProblems": 1,
-      "rank": 6,
-      "lastUpdated": "2025-09-18"
-    },
-    {
-      "id": 7,
-      "agent": "Gemini CLI",
-      "version": "0.0.0",
-      "model": "gemini-2.5-flash",
-      "provider": "Google",
-      "successRate": 0,
-      "avgExecutionTime": 0.14,
-      "totalExecutionTime": 0,
-      "problemsSolved": 0,
-      "totalProblems": 1,
-      "rank": 7,
-      "lastUpdated": "2025-09-18"
+      "lastUpdated": "2026-04-04"
     }
   ],
   "detailedResults": {
-    "codex-gpt-5-codex": {
+    "claude-claude-haiku-4-5": {
       "metadata": {
-        "agentName": "codex",
-        "model": "gpt-5-codex",
+        "agentName": "claude",
+        "model": "claude-haiku-4-5",
         "provider": "openai",
-        "timestamp": "2025-09-24T12:41:57.075Z",
-        "totalExercises": 1
+        "timestamp": "2026-04-04T16:29:42.902Z",
+        "totalExercises": 5
       },
       "summary": {
-        "successRate": 100,
-        "avgDuration": 45074,
+        "successRate": 20,
+        "avgDuration": 412983,
         "solvedCount": 1,
-        "failedCount": 0
-      },
-      "exerciseResults": [
-        {
-          "exercise": "hello-world",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 40329,
-          "testDuration": 4697,
-          "totalDuration": 45074
-        }
-      ],
-      "categoryBreakdown": {
-        "general": {
-          "successRate": 100,
-          "avgDuration": 45074,
-          "exerciseCount": 1
-        }
-      }
-    },
-    "qwen-qwen3-coder-plus-2025-09-23": {
-      "metadata": {
-        "agentName": "qwen",
-        "model": "qwen3-coder-plus-2025-09-23",
-        "provider": "dashscope",
-        "timestamp": "2025-09-24T05:50:15.121Z",
-        "totalExercises": 1
-      },
-      "summary": {
-        "successRate": 100,
-        "avgDuration": 87551,
-        "solvedCount": 1,
-        "failedCount": 0
-      },
-      "exerciseResults": [
-        {
-          "exercise": "accumulate",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 83019,
-          "testDuration": 4484,
-          "totalDuration": 87551
-        }
-      ],
-      "categoryBreakdown": {
-        "general": {
-          "successRate": 100,
-          "avgDuration": 87551,
-          "exerciseCount": 1
-        }
-      }
-    },
-    "codex-gpt-oss-120b": {
-      "metadata": {
-        "agentName": "codex",
-        "model": "gpt-oss-120b",
-        "provider": "cerebras",
-        "timestamp": "2025-09-18T07:23:55.459Z",
-        "totalExercises": 1
-      },
-      "summary": {
-        "successRate": 0,
-        "avgDuration": 7463,
-        "solvedCount": 0,
-        "failedCount": 1
-      },
-      "exerciseResults": [
-        {
-          "exercise": "hello-world",
-          "agentSuccess": true,
-          "testSuccess": false,
-          "overallSuccess": false,
-          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-hello-world@workspace:. doesn't provide @babel/core (p96e13), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.44.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
-          "agentDuration": 2195,
-          "testDuration": 5224,
-          "totalDuration": 7463
-        }
-      ],
-      "categoryBreakdown": {
-        "general": {
-          "successRate": 0,
-          "avgDuration": 7463,
-          "exerciseCount": 1
-        }
-      }
-    },
-    "gemini-gemini-2.5-flash": {
-      "metadata": {
-        "agentName": "gemini",
-        "model": "gemini-2.5-flash",
-        "provider": "google",
-        "timestamp": "2025-09-18T06:28:51.722Z",
-        "totalExercises": 1
-      },
-      "summary": {
-        "successRate": 0,
-        "avgDuration": 8196,
-        "solvedCount": 0,
-        "failedCount": 1
-      },
-      "exerciseResults": [
-        {
-          "exercise": "accumulate",
-          "agentSuccess": false,
-          "testSuccess": false,
-          "overallSuccess": false,
-          "agentError": "",
-          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-accumulate@workspace:. doesn't provide @babel/core (pd2a57), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.43.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
-          "agentDuration": 3042,
-          "testDuration": 5114,
-          "totalDuration": 8196
-        }
-      ],
-      "categoryBreakdown": {
-        "general": {
-          "successRate": 0,
-          "avgDuration": 8196,
-          "exerciseCount": 1
-        }
-      }
-    },
-    "copilot-sonnet": {
-      "metadata": {
-        "agentName": "copilot",
-        "model": "sonnet",
-        "provider": "openai",
-        "timestamp": "2025-09-26T03:07:58.158Z",
-        "totalExercises": 25
-      },
-      "summary": {
-        "successRate": 84,
-        "avgDuration": 240497.4,
-        "solvedCount": 21,
         "failedCount": 4
       },
       "exerciseResults": [
         {
-          "exercise": "acronym",
+          "exercise": "14958",
           "agentSuccess": true,
           "testSuccess": true,
           "overallSuccess": true,
-          "agentDuration": 272338,
-          "testDuration": 5103,
-          "totalDuration": 277478
+          "agentDuration": 208938,
+          "testDuration": 132928,
+          "totalDuration": 341866
         },
         {
-          "exercise": "anagram",
+          "exercise": "14268",
           "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 171591,
-          "testDuration": 4926,
-          "totalDuration": 176584
-        },
-        {
-          "exercise": "bank-account",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 180730,
-          "testDuration": 4574,
-          "totalDuration": 185367
-        },
-        {
-          "exercise": "binary-search",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 93654,
-          "testDuration": 4461,
-          "totalDuration": 98177
-        },
-        {
-          "exercise": "binary-search-tree",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 107001,
-          "testDuration": 4499,
-          "totalDuration": 111551
-        },
-        {
-          "exercise": "bowling",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 252014,
-          "testDuration": 4704,
-          "totalDuration": 256787
-        },
-        {
-          "exercise": "complex-numbers",
-          "agentSuccess": false,
           "testSuccess": false,
           "overallSuccess": false,
-          "agentError": "Execution timed out after 300 seconds",
-          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-complex-numbers@workspace:. doesn't provide @babel/core (pe65d4), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
-          "agentDuration": 300085,
-          "testDuration": 5667,
-          "totalDuration": 305804
+          "testError": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=14268\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:02:01.965585\", \"end\": \"2026-04-04 16:06:23.051549\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:04:21.085964\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 389070,
+          "testDuration": 140086,
+          "totalDuration": 529156
         },
         {
-          "exercise": "connect",
-          "agentSuccess": false,
+          "exercise": "20079",
+          "agentSuccess": true,
           "testSuccess": false,
           "overallSuccess": false,
-          "agentError": "Execution timed out after 300 seconds",
-          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-connect@workspace:. doesn't provide @babel/core (p8d446), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0007: │ core-js@npm:3.38.1 must be built because it never has been before or the last one failed\n➤ YN0007: │ core-js@npm:3.44.0 must be built because it never has been before or the last one failed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
-          "agentDuration": 941456,
-          "testDuration": 7002,
-          "totalDuration": 948517
+          "testError": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=20079\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:20.894535\", \"end\": \"2026-04-04 16:13:15.571556\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:11:54.677021\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 313194,
+          "testDuration": 99212,
+          "totalDuration": 412406
         },
         {
-          "exercise": "crypto-square",
+          "exercise": "15815_1",
           "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 95348,
-          "testDuration": 4443,
-          "totalDuration": 99867
-        },
-        {
-          "exercise": "diamond",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 220291,
-          "testDuration": 4474,
-          "totalDuration": 224828
-        },
-        {
-          "exercise": "dnd-character",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 87045,
-          "testDuration": 4539,
-          "totalDuration": 91654
-        },
-        {
-          "exercise": "flatten-array",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 118273,
-          "testDuration": 4422,
-          "totalDuration": 122760
-        },
-        {
-          "exercise": "food-chain",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 142858,
-          "testDuration": 4436,
-          "totalDuration": 147335
-        },
-        {
-          "exercise": "house",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 105485,
-          "testDuration": 4560,
-          "totalDuration": 110097
-        },
-        {
-          "exercise": "pascals-triangle",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 93895,
-          "testDuration": 4614,
-          "totalDuration": 98568
-        },
-        {
-          "exercise": "rational-numbers",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 107774,
-          "testDuration": 4526,
-          "totalDuration": 112362
-        },
-        {
-          "exercise": "react",
-          "agentSuccess": false,
           "testSuccess": false,
           "overallSuccess": false,
-          "agentError": "Execution timed out after 300 seconds",
-          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-react@workspace:. doesn't provide @babel/core (p31db9), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.44.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nreact.ts(66,40): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Cell<unknown>'.\n  Type 'InputCell<T>' is not assignable to type 'Cell<unknown>'.\n    Types of property 'equalFn' are incompatible.\n      Type 'EqualFn<T> | undefined' is not assignable to type 'EqualFn<unknown> | undefined'.\n        Type 'EqualFn<T>' is not assignable to type 'EqualFn<unknown>'.\n          Type 'unknown' is not assignable to type 'T'.\n            'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.\nreact.ts(93,3): error TS2300: Duplicate identifier 'value'.\nreact.ts(93,3): error TS2416: Property 'value' in type 'ComputedCell<T>' is not assignable to the same property in base type 'Cell<T>'.\n  Type 'T | undefined' is not assignable to type 'T'.\n    'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.\nreact.ts(102,7): error TS2300: Duplicate identifier 'value'.\nreact.ts(102,7): error TS2416: Property 'value' in type 'ComputedCell<T>' is not assignable to the same property in base type 'Cell<T>'.\n  Type 'T | undefined' is not assignable to type 'T'.\n    'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.\nreact.ts(106,40): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Cell<unknown>'.\n  Type 'ComputedCell<T>' is not assignable to type 'Cell<unknown>'.\n    Property 'value' is optional in type 'ComputedCell<T>' but required in type 'Cell<unknown>'.\nreact.ts(123,28): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Observer<unknown>'.\n  Type 'ComputedCell<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(129,5): error TS2322: Type 'this' is not assignable to type 'Observer<unknown> | null'.\n  Type 'ComputedCell<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\n            Type 'this' is not assignable to type 'Observer<unknown>'.\n              Type 'ComputedCell<T>' is not assignable to type 'Observer<unknown>'.\n                Types of property 'updateFn' are incompatible.\n                  Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n                    Types of parameters 'value' and 'value' are incompatible.\n                      Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(164,28): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Observer<unknown>'.\n  Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(170,5): error TS2322: Type 'this' is not assignable to type 'Observer<unknown> | null'.\n  Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\n            Type 'this' is not assignable to type 'Observer<unknown>'.\n              Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n                Types of property 'updateFn' are incompatible.\n                  Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n                    Types of parameters 'value' and 'value' are incompatible.\n                      Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(181,28): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Observer<unknown>'.\n  Type 'CallbackObserver<T>' is not assignable to type 'Observer<unknown>'.\n    Types of property 'updateFn' are incompatible.\n      Type 'UpdateFn<T>' is not assignable to type 'UpdateFn<unknown>'.\n        Types of parameters 'value' and 'value' are incompatible.\n          Type 'unknown' is not assignable to type 'T | undefined'.\nreact.ts(317,16): error TS2322: Type 'T | undefined' is not assignable to type 'T'.\n  'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.\n\nSTDERR: ",
-          "agentDuration": 384189,
-          "testDuration": 3498,
-          "totalDuration": 387735
+          "testError": "STDOUT: Starting Xvfb on display :99...\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nchanged: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nchanged: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nchanged: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15815_1\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:05.677855\", \"end\": \"2026-04-04 16:21:22.106824\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:20:16.428969\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=21   changed=10   unreachable=0    failed=1    skipped=1    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 159385,
+          "testDuration": 131685,
+          "totalDuration": 291070
         },
         {
-          "exercise": "rectangles",
-          "agentSuccess": false,
+          "exercise": "15193",
+          "agentSuccess": true,
           "testSuccess": false,
           "overallSuccess": false,
-          "agentError": "Execution timed out after 300 seconds",
-          "testError": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-rectangles@workspace:. doesn't provide @babel/core (p58fb9), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nrectangles.test.ts(7,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(13,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(19,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(25,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(31,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(37,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(43,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(49,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(55,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(61,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(67,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(79,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(91,26): error TS2554: Expected 0 arguments, but got 1.\nrectangles.test.ts(106,26): error TS2554: Expected 0 arguments, but got 1.\n\nSTDERR: ",
-          "agentDuration": 943403,
-          "testDuration": 3263,
-          "totalDuration": 946724
-        },
-        {
-          "exercise": "relative-distance",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 280130,
-          "testDuration": 4458,
-          "totalDuration": 284631
-        },
-        {
-          "exercise": "robot-name",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 101660,
-          "testDuration": 19527,
-          "totalDuration": 121238
-        },
-        {
-          "exercise": "spiral-matrix",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 129791,
-          "testDuration": 4532,
-          "totalDuration": 134369
-        },
-        {
-          "exercise": "transpose",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 165815,
-          "testDuration": 4423,
-          "totalDuration": 170290
-        },
-        {
-          "exercise": "two-bucket",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 258496,
-          "testDuration": 5033,
-          "totalDuration": 263572
-        },
-        {
-          "exercise": "variable-length-quantity",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 133588,
-          "testDuration": 4775,
-          "totalDuration": 138414
-        },
-        {
-          "exercise": "wordy",
-          "agentSuccess": true,
-          "testSuccess": true,
-          "overallSuccess": true,
-          "agentDuration": 192926,
-          "testDuration": 4746,
-          "totalDuration": 197726
+          "testError": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15193\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:00:03.131479\", \"end\": \"2026-04-04 16:29:32.626471\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:29:29.494992\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 466267,
+          "testDuration": 24148,
+          "totalDuration": 490417
         }
       ],
       "categoryBreakdown": {
         "general": {
-          "successRate": 84,
-          "avgDuration": 240497.4,
-          "exerciseCount": 25
+          "successRate": 20,
+          "avgDuration": 412983,
+          "exerciseCount": 5
         }
       }
     },
-    "copilot-gpt-5": {
+    "claude-claude-opus-4-6": {
       "metadata": {
-        "agentName": "copilot",
-        "model": "gpt-5",
+        "agentName": "claude",
+        "model": "claude-opus-4-6",
         "provider": "openai",
-        "timestamp": "2025-09-26T03:24:01.444Z",
-        "totalExercises": 1
+        "timestamp": "2026-04-04T15:38:27.595Z",
+        "totalExercises": 5
       },
       "summary": {
-        "successRate": 100,
-        "avgDuration": 25373,
+        "successRate": 20,
+        "avgDuration": 370503.4,
         "solvedCount": 1,
-        "failedCount": 0
+        "failedCount": 4
       },
       "exerciseResults": [
         {
-          "exercise": "accumulate",
+          "exercise": "14958",
           "agentSuccess": true,
           "testSuccess": true,
           "overallSuccess": true,
-          "agentDuration": 20965,
-          "testDuration": 4382,
-          "totalDuration": 25373
+          "agentDuration": 168186,
+          "testDuration": 132569,
+          "totalDuration": 300757
+        },
+        {
+          "exercise": "14268",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=14268\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:02:02.929260\", \"end\": \"2026-04-04 15:16:40.105815\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:14:37.176555\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nchanged: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=9    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 317670,
+          "testDuration": 141788,
+          "totalDuration": 459460
+        },
+        {
+          "exercise": "20079",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=20079\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:20.993767\", \"end\": \"2026-04-04 15:21:28.772498\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:20:07.778731\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nchanged: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=9    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 188912,
+          "testDuration": 99608,
+          "totalDuration": 288520
+        },
+        {
+          "exercise": "15815_1",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: Starting Xvfb on display :99...\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nchanged: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nchanged: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nchanged: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15815_1\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:06.007197\", \"end\": \"2026-04-04 15:30:10.684382\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:29:04.677185\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=21   changed=10   unreachable=0    failed=1    skipped=1    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 175635,
+          "testDuration": 137519,
+          "totalDuration": 313154
+        },
+        {
+          "exercise": "15193",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15193\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:08.900672\", \"end\": \"2026-04-04 15:38:21.433459\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:37:12.532787\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 403268,
+          "testDuration": 87357,
+          "totalDuration": 490626
         }
       ],
       "categoryBreakdown": {
         "general": {
-          "successRate": 100,
-          "avgDuration": 25373,
-          "exerciseCount": 1
+          "successRate": 20,
+          "avgDuration": 370503.4,
+          "exerciseCount": 5
         }
       }
     },
-    "codex-gpt-5-nano": {
+    "claude-claude-sonnet-4-6": {
       "metadata": {
-        "agentName": "codex",
-        "model": "gpt-5-nano",
+        "agentName": "claude",
+        "model": "claude-sonnet-4-6",
         "provider": "openai",
-        "timestamp": "2025-09-16T08:41:52.925Z",
-        "totalExercises": 1
+        "timestamp": "2026-04-04T14:57:51.024Z",
+        "totalExercises": 5
       },
       "summary": {
-        "successRate": 100,
-        "avgDuration": 68722,
-        "solvedCount": 1,
-        "failedCount": 0
+        "successRate": 60,
+        "avgDuration": 577148.4,
+        "solvedCount": 3,
+        "failedCount": 2
       },
       "exerciseResults": [
         {
-          "exercise": "accumulate",
+          "exercise": "14958",
           "agentSuccess": true,
           "testSuccess": true,
           "overallSuccess": true,
-          "agentDuration": 62962,
-          "testDuration": 5732,
-          "totalDuration": 68722
+          "agentDuration": 351940,
+          "testDuration": 135785,
+          "totalDuration": 487728
+        },
+        {
+          "exercise": "14268",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 442253,
+          "testDuration": 81567,
+          "totalDuration": 523820
+        },
+        {
+          "exercise": "20079",
+          "agentSuccess": true,
+          "testSuccess": true,
+          "overallSuccess": true,
+          "agentDuration": 556803,
+          "testDuration": 75035,
+          "totalDuration": 631838
+        },
+        {
+          "exercise": "15815_1",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: Starting Xvfb on display :99...\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nchanged: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nchanged: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nchanged: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15815_1\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:06.013221\", \"end\": \"2026-04-04 14:46:50.428730\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 14:45:44.415509\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=21   changed=10   unreachable=0    failed=1    skipped=1    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 455803,
+          "testDuration": 132617,
+          "totalDuration": 588420
+        },
+        {
+          "exercise": "15193",
+          "agentSuccess": true,
+          "testSuccess": false,
+          "overallSuccess": false,
+          "testError": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15193\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:09.135342\", \"end\": \"2026-04-04 14:57:44.423009\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 14:56:35.287667\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nchanged: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=9    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n",
+          "agentDuration": 565878,
+          "testDuration": 88058,
+          "totalDuration": 653936
         }
       ],
       "categoryBreakdown": {
         "general": {
-          "successRate": 100,
-          "avgDuration": 68722,
-          "exerciseCount": 1
+          "successRate": 60,
+          "avgDuration": 577148.4,
+          "exerciseCount": 5
         }
       }
     }
   },
   "exerciseBreakdown": [
     {
-      "exerciseName": "hello-world",
+      "exerciseName": "14958",
       "agentResults": {
-        "codex-gpt-5-codex": {
+        "claude-claude-haiku-4-5": {
           "success": true,
-          "duration": 45074
+          "duration": 341866
         },
-        "codex-gpt-oss-120b": {
-          "success": false,
-          "duration": 7463,
-          "error": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-hello-world@workspace:. doesn't provide @babel/core (p96e13), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.44.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: "
-        }
-      }
-    },
-    {
-      "exerciseName": "accumulate",
-      "agentResults": {
-        "qwen-qwen3-coder-plus-2025-09-23": {
+        "claude-claude-opus-4-6": {
           "success": true,
-          "duration": 87551
+          "duration": 300757
         },
-        "gemini-gemini-2.5-flash": {
+        "claude-claude-sonnet-4-6": {
+          "success": true,
+          "duration": 487728
+        }
+      }
+    },
+    {
+      "exerciseName": "14268",
+      "agentResults": {
+        "claude-claude-haiku-4-5": {
           "success": false,
-          "duration": 8196,
-          "error": "STDOUT: ➤ ➤ ➤ ➤ ➤ YN0002: │ @exercism/typescript-accumulate@workspace:. doesn't provide @babel/core (pd2a57), requested by babel-jest.\n➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.\n➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.\n➤ ➤ ➤ ➤ ➤ ➤ YN0008: │ core-js@npm:3.38.1 must be rebuilt because its dependency tree changed\n➤ YN0008: │ core-js@npm:3.43.0 must be rebuilt because its dependency tree changed\n➤ ➤ [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: "
+          "duration": 529156,
+          "error": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=14268\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:02:01.965585\", \"end\": \"2026-04-04 16:06:23.051549\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:04:21.085964\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
         },
-        "copilot-gpt-5": {
-          "success": true,
-          "duration": 25373
+        "claude-claude-opus-4-6": {
+          "success": false,
+          "duration": 459460,
+          "error": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=14268\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:02:02.929260\", \"end\": \"2026-04-04 15:16:40.105815\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:14:37.176555\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nchanged: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=9    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
         },
-        "codex-gpt-5-nano": {
+        "claude-claude-sonnet-4-6": {
           "success": true,
-          "duration": 68722
+          "duration": 523820
         }
       }
     },
     {
-      "exerciseName": "acronym",
+      "exerciseName": "20079",
       "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 277478
-        }
-      }
-    },
-    {
-      "exerciseName": "anagram",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 176584
-        }
-      }
-    },
-    {
-      "exerciseName": "bank-account",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 185367
-        }
-      }
-    },
-    {
-      "exerciseName": "binary-search",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 98177
-        }
-      }
-    },
-    {
-      "exerciseName": "binary-search-tree",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 111551
-        }
-      }
-    },
-    {
-      "exerciseName": "bowling",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 256787
-        }
-      }
-    },
-    {
-      "exerciseName": "complex-numbers",
-      "agentResults": {
-        "copilot-sonnet": {
+        "claude-claude-haiku-4-5": {
           "success": false,
-          "duration": 305804,
-          "error": "Execution timed out after 300 seconds"
-        }
-      }
-    },
-    {
-      "exerciseName": "connect",
-      "agentResults": {
-        "copilot-sonnet": {
+          "duration": 412406,
+          "error": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=20079\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:20.894535\", \"end\": \"2026-04-04 16:13:15.571556\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:11:54.677021\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
+        },
+        "claude-claude-opus-4-6": {
           "success": false,
-          "duration": 948517,
-          "error": "Execution timed out after 300 seconds"
-        }
-      }
-    },
-    {
-      "exerciseName": "crypto-square",
-      "agentResults": {
-        "copilot-sonnet": {
+          "duration": 288520,
+          "error": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=20079\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:20.993767\", \"end\": \"2026-04-04 15:21:28.772498\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:20:07.778731\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nchanged: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=9    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
+        },
+        "claude-claude-sonnet-4-6": {
           "success": true,
-          "duration": 99867
+          "duration": 631838
         }
       }
     },
     {
-      "exerciseName": "diamond",
+      "exerciseName": "15815_1",
       "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 224828
-        }
-      }
-    },
-    {
-      "exerciseName": "dnd-character",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 91654
-        }
-      }
-    },
-    {
-      "exerciseName": "flatten-array",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 122760
-        }
-      }
-    },
-    {
-      "exerciseName": "food-chain",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 147335
-        }
-      }
-    },
-    {
-      "exerciseName": "house",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 110097
-        }
-      }
-    },
-    {
-      "exerciseName": "pascals-triangle",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 98568
-        }
-      }
-    },
-    {
-      "exerciseName": "rational-numbers",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 112362
-        }
-      }
-    },
-    {
-      "exerciseName": "react",
-      "agentResults": {
-        "copilot-sonnet": {
+        "claude-claude-haiku-4-5": {
           "success": false,
-          "duration": 387735,
-          "error": "Execution timed out after 300 seconds"
-        }
-      }
-    },
-    {
-      "exerciseName": "rectangles",
-      "agentResults": {
-        "copilot-sonnet": {
+          "duration": 291070,
+          "error": "STDOUT: Starting Xvfb on display :99...\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nchanged: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nchanged: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nchanged: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15815_1\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:05.677855\", \"end\": \"2026-04-04 16:21:22.106824\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:20:16.428969\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=21   changed=10   unreachable=0    failed=1    skipped=1    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
+        },
+        "claude-claude-opus-4-6": {
           "success": false,
-          "duration": 946724,
-          "error": "Execution timed out after 300 seconds"
+          "duration": 313154,
+          "error": "STDOUT: Starting Xvfb on display :99...\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nchanged: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nchanged: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nchanged: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15815_1\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:06.007197\", \"end\": \"2026-04-04 15:30:10.684382\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:29:04.677185\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=21   changed=10   unreachable=0    failed=1    skipped=1    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
+        },
+        "claude-claude-sonnet-4-6": {
+          "success": false,
+          "duration": 588420,
+          "error": "STDOUT: Starting Xvfb on display :99...\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nchanged: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nchanged: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nchanged: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15815_1\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:06.013221\", \"end\": \"2026-04-04 14:46:50.428730\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 14:45:44.415509\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=21   changed=10   unreachable=0    failed=1    skipped=1    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
         }
       }
     },
     {
-      "exerciseName": "relative-distance",
+      "exerciseName": "15193",
       "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 284631
-        }
-      }
-    },
-    {
-      "exerciseName": "robot-name",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 121238
-        }
-      }
-    },
-    {
-      "exerciseName": "spiral-matrix",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 134369
-        }
-      }
-    },
-    {
-      "exerciseName": "transpose",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 170290
-        }
-      }
-    },
-    {
-      "exerciseName": "two-bucket",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 263572
-        }
-      }
-    },
-    {
-      "exerciseName": "variable-length-quantity",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 138414
-        }
-      }
-    },
-    {
-      "exerciseName": "wordy",
-      "agentResults": {
-        "copilot-sonnet": {
-          "success": true,
-          "duration": 197726
+        "claude-claude-haiku-4-5": {
+          "success": false,
+          "duration": 490417,
+          "error": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15193\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:00:03.131479\", \"end\": \"2026-04-04 16:29:32.626471\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 16:29:29.494992\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
+        },
+        "claude-claude-opus-4-6": {
+          "success": false,
+          "duration": 490626,
+          "error": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15193\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:08.900672\", \"end\": \"2026-04-04 15:38:21.433459\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 15:37:12.532787\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nok: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=8    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
+        },
+        "claude-claude-sonnet-4-6": {
+          "success": false,
+          "duration": 653936,
+          "error": "STDOUT: Starting Xvfb on display :99...\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Get the commit ID for the issue] *****************************************\nchanged: [localhost]\n\nTASK [Read the patch file content] *********************************************\nok: [localhost]\n\nTASK [Check if the webpack.dev.ts file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (TypeScript)] ********************************\nStarting Fluxbox window manager...\nStarting x11vnc server...\nStarting NoVNC...\nStarting Pusher-Fake service...\nRUNTIME_SETUP is not set; assuming Expensify setup happened at build time.\n\nPLAY [localhost] ***************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [localhost]\n\nTASK [Modify /etc/hosts file to include dev.new.expensify.com] *****************\nok: [localhost]\n\nTASK [Create a new log directory for the ISSUE_ID] *****************************\nok: [localhost]\n\nTASK [Generate mitmproxy CA with a short-lived mitmdump] ***********************\nchanged: [localhost]\n\nTASK [Ensure mitmproxy-ca-cert.pem is present] *********************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Create directory for mitmproxy certificates] *****************************\nok: [localhost]\n\nTASK [Install mitmproxy certificates to system's trusted certificates] *********\nchanged: [localhost]\n\nTASK [Ensure libnss3-tools is installed] ***************************************\nchanged: [localhost]\n\nTASK [Check if the webpack.dev.js file exists] *********************************\nok: [localhost]\n\nTASK [Compile Development Webpack (JavaScript)] ********************************\nskipping: [localhost]\n\nTASK [Ensure ISSUE_ID environment variable is set] *****************************\nok: [localhost] => {\n    \"changed\": false,\n    \"msg\": \"All assertions passed\"\n}\n\nTASK [Ensure per-issue log directory exists] ***********************************\nok: [localhost]\n\nTASK [Check for Google Chrome] *************************************************\nok: [localhost]\n\nTASK [Download Google Chrome deb] **********************************************\nskipping: [localhost]\n\nTASK [Install Google Chrome] ***************************************************\nskipping: [localhost]\n\nTASK [Start npm server in the background] **************************************\nchanged: [localhost]\n\nTASK [Kill stale mitmdump from run.sh (frees port 8080 for replay.py)] *********\nchanged: [localhost]\n\nTASK [Start mitmdump in the background] ****************************************\nchanged: [localhost]\n\nTASK [Wait for the mitmproxy to start] *****************************************\nok: [localhost]\n\nTASK [Wait for the Expensify development server to start] **********************\nok: [localhost]\n\nTASK [Initialize NSS database for headless browser trust store] ****************\nok: [localhost]\n\nTASK [Rewrite test file to include required params] ****************************\nchanged: [localhost]\n\nTASK [Install mitmproxy generated certificates to browser's trusted certificates] ***\nchanged: [localhost]\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=10   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   \n\nfatal: [localhost]: FAILED! => {\"censored\": \"the output has been hidden due to the fact that 'no_log: true' was specified for this result\", \"changed\": true}\n...ignoring\n\nTASK [Start ffmpeg recording] **************************************************\nchanged: [localhost]\n\nTASK [Run pytest tests] ********************************************************\nfatal: [localhost]: FAILED! => {\"changed\": true, \"cmd\": \"ISSUE_ID=15193\\npytest  issues/$ISSUE_ID/test.py  > logs/$ISSUE_ID/pytest.log 2>&1\\n\", \"delta\": \"0:01:09.135342\", \"end\": \"2026-04-04 14:57:44.423009\", \"msg\": \"non-zero return code\", \"rc\": 1, \"start\": \"2026-04-04 14:56:35.287667\", \"stderr\": \"\", \"stderr_lines\": [], \"stdout\": \"\", \"stdout_lines\": []}\n...ignoring\n\nTASK [Persist pytest exit code for the grader] *********************************\nchanged: [localhost]\n\nTASK [Require pytest success (ts-bench benchmark gate)] ************************\nfatal: [localhost]: FAILED! => {\n    \"assertion\": \"pytest_result.rc == 0\",\n    \"changed\": false,\n    \"evaluated_to\": false,\n    \"msg\": \"pytest exited with code 1\"\n}\n\nPLAY RECAP *********************************************************************\nlocalhost                  : ok=19   changed=9    unreachable=0    failed=1    skipped=3    rescued=0    ignored=2   \n\n\nSTDERR: [WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n[WARNING]: Platform linux on host localhost is using the discovered Python\ninterpreter at /opt/conda/bin/python3.13, but future installation of another\nPython interpreter could change the meaning of that path. See\nhttps://docs.ansible.com/ansible-\ncore/2.18/reference_appendices/interpreter_discovery.html for more information.\n"
         }
       }
     }
