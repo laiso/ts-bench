@@ -173,9 +173,8 @@ async function main(): Promise<void> {
     let count = 0;
 
     for (const [_key, entry] of v2Entries) {
-        const safeKey = sanitizeKey(entry.metadata.agent, entry.metadata.model);
-        const html = generateResultPage(safeKey, entry);
-        const outPath = join(RESULTS_DIR, `${safeKey}.html`);
+        const html = generateResultPage(_key, entry);
+        const outPath = join(RESULTS_DIR, `${_key}.html`);
         await writeFile(outPath, html, 'utf-8');
         count++;
     }

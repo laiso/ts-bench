@@ -93,18 +93,18 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   position: relative;
   z-index: 1;
 }
-.tier-label-S { background: #ffd700; color: #000; }
-.tier-label-A { background: #87c0ff; }
-.tier-label-B { background: #b0e070; color: #000; }
-.tier-label-C { background: #f0a030; }
-.tier-label-D { background: #e06040; }
-.tier-label-F { background: #cc2222; }
+.tier-label-S { background: #EBB305; color: #111; }
+.tier-label-A { background: #4D96FF; color: #fff; }
+.tier-label-B { background: #6BCB77; color: #111; }
+.tier-label-C { background: #F4A261; color: #111; }
+.tier-label-D { background: #E76F51; color: #fff; }
+.tier-label-F { background: #E63946; color: #fff; }
 .tier-items {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 12px;
+  padding: 12px 16px;
   flex: 1;
   min-height: 72px;
 }
@@ -113,47 +113,71 @@ header p { color: var(--text-secondary); font-size: 1rem; }
 .agent-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 10px 16px;
-  min-width: 130px;
+  padding: 10px 14px;
+  min-width: 150px;
+  max-width: fit-content;
   text-decoration: none;
-  transition: border-color 0.15s, background 0.15s;
+  transition: all 0.2s ease;
   position: relative;
 }
 .agent-card:hover {
   border-color: #555;
-  background: #222;
-  color: #fff;
+  background: #242424;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.agent-card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 .agent-card .agent-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
   object-fit: contain;
-  margin-bottom: 6px;
-  background: #222;
+  background: transparent;
+  flex-shrink: 0;
 }
-.agent-card .agent-name-model {
+.agent-card .agent-name {
   font-weight: 600;
-  font-size: 0.82rem;
-  color: var(--text);
+  font-size: 0.95rem;
+  color: #fff;
   white-space: nowrap;
-  text-align: center;
-  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.agent-card .agent-name-model .model-part {
-  font-weight: 400;
+.agent-card-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 10px;
+  gap: 8px;
+}
+.agent-card .model-badge {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.7rem;
+  color: #bbb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+.agent-card .time-meta {
   font-size: 0.75rem;
   color: var(--text-secondary);
-}
-.agent-card .agent-meta {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  margin-top: 2px;
+  font-weight: 500;
 }
 
 /* Tooltip */

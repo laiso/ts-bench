@@ -27,7 +27,7 @@ export function renderTierList(entries: LeaderboardEntry[]): string {
     TIERS.forEach((t) => {
         const isEmpty = groups[t]!.length === 0;
         html += `<div class="tier-row${isEmpty ? ' tier-empty' : ''}">`;
-        html += `<div class="tier-label tier-label-${t}">${t}<span class="tier-sort-hint">sorted by time</span></div>`;
+        html += `<div class="tier-label tier-label-${t}">${t}</div>`;
         html += '<div class="tier-items">';
         groups[t]!.forEach((entry) => {
             const d = entry.data;
@@ -38,14 +38,19 @@ export function renderTierList(entries: LeaderboardEntry[]): string {
             const modelDisplay = meta.model || '';
             const agentName = (meta.agent || entry.key).toLowerCase();
             const iconPath = `assets/icons/${esc(agentName)}.png`;
-            const nameModelHtml = modelDisplay
-                ? `<span class="agent-name-model">${esc(agentDisplay)} <span class="model-part">(${esc(modelDisplay)})</span></span>`
-                : `<span class="agent-name-model">${esc(agentDisplay)}</span>`;
-
             html += `<a class="agent-card" href="results/${esc(entry.key)}.html">`;
-            html += `<img class="agent-icon" src="${iconPath}" alt="${esc(agentDisplay)}" onerror="this.style.display='none'">`;
-            html += nameModelHtml;
-            html += `<span class="agent-meta">${solved}/5 &middot; ${fmtDuration(summary.avgDuration)}</span>`;
+            html +=   `<div class="agent-card-header">`;
+            html +=     `<img class="agent-icon" src="${iconPath}" alt="${esc(agentDisplay)}" onerror="this.style.display='none'">`;
+            html +=     `<span class="agent-name">${esc(agentDisplay)}</span>`;
+            html +=   `</div>`;
+            html +=   `<div class="agent-card-body">`;
+            if (modelDisplay) {
+                html += `<span class="model-badge">${esc(modelDisplay)}</span>`;
+            } else {
+                html += `<span></span>`;
+            }
+            html +=     `<span class="time-meta">${fmtDuration(summary.avgDuration)}</span>`;
+            html +=   `</div>`;
 
             const breakdown = getTaskBreakdown(d);
             if (breakdown.length > 0) {
