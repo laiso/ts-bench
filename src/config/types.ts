@@ -1,20 +1,7 @@
-export type AgentType = 'claude' | 'goose' | 'aider' | 'codex' | 'copilot' | 'gemini' | 'opencode' | 'qwen' | 'cursor' | 'vibe' | 'kimi';
-export type DatasetType = 'v1' | 'v2'; // v1 = exercism, v2 = swelancer
-export type ProviderType = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'dashscope' | 'xai' | 'deepseek' | 'github' | 'cerebras' | 'mistral' | 'moonshot';
-
-export const AGENT_DEFAULT_PROVIDER: Record<AgentType, ProviderType> = {
-    claude: 'anthropic',
-    goose: 'anthropic',
-    qwen: 'dashscope',
-    kimi: 'moonshot',
-    opencode: 'openai',
-    codex: 'openai',
-    gemini: 'google',
-    vibe: 'mistral',
-    aider: 'openai',
-    cursor: 'openai',
-    copilot: 'openai',
-};
+import type { DatasetType, ProviderType } from './base-types';
+import type { AgentType } from '../agents/registry';
+export type { DatasetType, ProviderType, AgentType };
+export { AGENT_DEFAULT_PROVIDER } from '../agents/registry';
 
 export interface AgentResult {
     exercise: string;

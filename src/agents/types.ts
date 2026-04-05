@@ -1,5 +1,5 @@
 import type { Command } from '../execution/types';
-import type { DatasetType } from '../config/types';
+import type { DatasetType } from '../config/base-types';
 
 export interface AgentBuilder {
     buildCommand(instructions: string, fileList?: FileList): Promise<Command>;

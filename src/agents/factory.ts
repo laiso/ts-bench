@@ -1,16 +1,7 @@
 import type { BenchmarkConfig } from '../config/types';
 import type { AgentBuilder } from './types';
-import { ClaudeAgentBuilder } from './builders/claude';
-import { GooseAgentBuilder } from './builders/goose';
-import { AiderAgentBuilder } from './builders/aider';
-import { CodexAgentBuilder } from './builders/codex';
-import { GeminiAgentBuilder } from './builders/gemini';
-import { OpenCodeAgentBuilder } from './builders/opencode';
-import { QwenAgentBuilder } from './builders/qwen';
-import { CursorAgentBuilder } from './builders/cursor';
-import { CopilotAgentBuilder } from './builders/copilot';
-import { VibeAgentBuilder } from './builders/vibe';
-import { KimiAgentBuilder } from './builders/kimi';
+import { AGENT_REGISTRY } from './registry';
+import { GenericAgentBuilder } from './builders/generic';
 
 export class AgentFactory {
     static create(
@@ -29,31 +20,10 @@ export class AgentFactory {
             exercise
         };
 
-        switch (config.agent) {
-            case 'claude':
-                return new ClaudeAgentBuilder(agentConfig);
-            case 'goose':
-                return new GooseAgentBuilder(agentConfig);
-            case 'aider':
-                return new AiderAgentBuilder(agentConfig);
-            case 'codex':
-                return new CodexAgentBuilder(agentConfig);
-            case 'copilot':
-                return new CopilotAgentBuilder(agentConfig);
-            case 'gemini':
-                return new GeminiAgentBuilder(agentConfig);
-            case 'opencode':
-                return new OpenCodeAgentBuilder(agentConfig);
-            case 'qwen':
-                return new QwenAgentBuilder(agentConfig);
-            case 'cursor':
-                return new CursorAgentBuilder(agentConfig);
-            case 'vibe':
-                return new VibeAgentBuilder(agentConfig);
-            case 'kimi':
-                return new KimiAgentBuilder(agentConfig);
-            default:
-                throw new Error(`Unknown agent: ${config.agent}`);
+        const definition = AGENT_REGISTRY[config.agent as keyof typeof AGENT_REGISTRY];
+        if (!definition) {
+            throw new Error(`Unknown agent: ${config.agent}`);
         }
+        return new GenericAgentBuilder(agentConfig, definition);
     }
 }

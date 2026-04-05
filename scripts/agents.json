@@ -1,0 +1,13 @@
+{
+  "claude":    { "bin": "claude",       "method": "npm",      "package": "@anthropic-ai/claude-code" },
+  "goose":     { "bin": "goose",        "method": "curl",     "url": "https://github.com/block/goose/releases/download/stable/download_cli.sh", "cmdPrefix": "CONFIGURE=false" },
+  "aider":     { "bin": "aider",        "method": "curl",     "url": "https://aider.chat/install.sh" },
+  "codex":     { "bin": "codex",        "method": "npm",      "package": "@openai/codex" },
+  "copilot":   { "bin": "copilot",      "method": "npm",      "package": "@github/copilot" },
+  "gemini":    { "bin": "gemini",       "method": "npm",      "package": "@google/gemini-cli" },
+  "opencode":  { "bin": "opencode",     "method": "npm",      "package": "opencode-ai" },
+  "qwen":      { "bin": "qwen",         "method": "npm",      "package": "@qwen-code/qwen-code" },
+  "cursor":    { "bin": "cursor-agent", "method": "curl",     "url": "https://cursor.com/install" },
+  "vibe":      { "bin": "vibe",         "method": "pip",      "package": "mistral-vibe" },
+  "kimi":      { "bin": "kimi",         "method": "uv_tool",  "package": "kimi-cli",  "python": "3.13" }
+}
