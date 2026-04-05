@@ -64,7 +64,7 @@ jobs:
         run: bun scripts/build-site.ts
 
       - name: Build SWE-Lancer task pages
-        run: bun run build:swelancer-pages
+        run: bun run scripts/build-swelancer-pages.ts repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
