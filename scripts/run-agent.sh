@@ -192,6 +192,25 @@ case "$AGENT" in
     ensure_node_cli "copilot" "@github/copilot"
     exec copilot "$@"
     ;;
+  cline)
+    ensure_node_cli "cline" "cline"
+    if [ "${1:-}" != "--version" ]; then
+      if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
+        cline auth -p anthropic -k "$ANTHROPIC_API_KEY"
+      elif [ -n "${OPENAI_API_KEY:-}" ]; then
+        cline auth -p openai-native -k "$OPENAI_API_KEY"
+      elif [ -n "${OPENROUTER_API_KEY:-}" ]; then
+        cline auth -p openrouter -k "$OPENROUTER_API_KEY"
+      elif [ -n "${MOONSHOT_API_KEY:-}" ]; then
+        cline auth -p moonshot -k "$MOONSHOT_API_KEY"
+      elif [ -n "${XAI_API_KEY:-}" ]; then
+        cline auth -p xai -k "$XAI_API_KEY"
+      elif [ -n "${DEEPSEEK_API_KEY:-}" ]; then
+        cline auth -p deepseek -k "$DEEPSEEK_API_KEY"
+      fi
+    fi
+    exec cline "$@"
+    ;;
   kimi)
     if command -v "kimi" >/dev/null 2>&1; then
       exec kimi "$@"

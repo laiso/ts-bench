@@ -48,7 +48,8 @@ describe('v2 Docker: all agents use mounted prompt file', () => {
             builder: new GenericAgentBuilder({ ...baseV2, provider: 'dashscope' }, AGENT_REGISTRY.qwen),
             env: [['DASHSCOPE_API_KEY', 'x']]
         },
-        { name: 'copilot', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.copilot), env: [] },
+        { name: 'copilot', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.copilot), env: [['COPILOT_GITHUB_TOKEN', 'x']] },
+        { name: 'cline', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.cline), env: [['ANTHROPIC_API_KEY', 'x']] },
         { name: 'vibe', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.vibe), env: [['MISTRAL_API_KEY', 'x']] },
         { name: 'kimi', builder: new GenericAgentBuilder({ ...baseV2, provider: 'moonshot' }, AGENT_REGISTRY.kimi), env: [['KIMI_API_KEY', 'x']] }
     ];

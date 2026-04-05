@@ -9,5 +9,6 @@
   "qwen":      { "bin": "qwen",         "method": "npm",      "package": "@qwen-code/qwen-code" },
   "cursor":    { "bin": "cursor-agent", "method": "curl",     "url": "https://cursor.com/install" },
   "vibe":      { "bin": "vibe",         "method": "pip",      "package": "mistral-vibe" },
-  "kimi":      { "bin": "kimi",         "method": "uv_tool",  "package": "kimi-cli",  "python": "3.13" }
+  "kimi":      { "bin": "kimi",         "method": "uv_tool",  "package": "kimi-cli",  "python": "3.13" },
+  "cline":     { "bin": "cline",        "method": "npm",      "package": "cline" }
 }

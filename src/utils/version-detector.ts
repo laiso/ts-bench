@@ -45,39 +45,25 @@ export class VersionDetector {
         const { useDocker, containerName, agentScriptPath, dockerCliCacheMount } = options;
         const cliMount = dockerCliCacheMount ?? undefined;
 
-        if (agentScriptPath) {
-            if (useDocker && containerName) {
-                const hostMount = agentScriptPath.startsWith('/ts-bench-host/')
-                    ? ['-v', `${join(process.cwd())}:/ts-bench-host:ro`]
-                    : [];
-                return [
-                    ...DOCKER_BASE_ARGS,
-                    ...createCliCacheArgs(cliMount),
-                    ...hostMount,
-                    containerName,
-                    'bash',
-                    agentScriptPath,
-                    agent,
-                    '--version'
-                ];
-            }
-
-            return ['bash', agentScriptPath, agent, '--version'];
-        }
-
-        const baseCommand = this.getAgentVersionCommand(agent);
-
-        if (useDocker) {
-            const container = containerName || TS_BENCH_CONTAINER;
+        if (useDocker && agentScriptPath && containerName) {
+            const hostMount = agentScriptPath.startsWith('/ts-bench-host/')
+                ? ['-v', `${join(process.cwd())}:/ts-bench-host:ro`]
+                : [];
             return [
                 ...DOCKER_BASE_ARGS,
                 ...createCliCacheArgs(cliMount),
-                container,
-                ...baseCommand
+                ...hostMount,
+                containerName,
+                'bash',
+                agentScriptPath,
+                agent,
+                '--version'
             ];
         }
 
-        return baseCommand;
+        // For local execution, call the agent binary directly rather than
+        // routing through run-agent.sh (which may trigger interactive auth setup).
+        return this.getAgentVersionCommand(agent);
     }
 
     private getAgentVersionCommand(agent: AgentType): string[] {
@@ -100,6 +86,8 @@ export class VersionDetector {
                 return ['cursor-agent', '--version'];
             case 'copilot':
                 return ['copilot', '--version'];
+            case 'cline':
+                return ['cline', '--version'];
             case 'vibe':
                 // vibe doesn't support --version flag, use --help and parse or return default
                 return ['vibe', '--help'];
@@ -152,6 +140,8 @@ export class VersionDetector {
                 // Copilot output: "copilot 1.0.0" or "1.0.0"
                 const copilotMatch = cleanOutput.match(/(?:copilot\s+)?(\d+\.\d+\.\d+)/i);
                 return copilotMatch && copilotMatch[1] ? copilotMatch[1] : this.extractGenericVersion(cleanOutput);
+            case 'cline':
+                return this.extractGenericVersion(cleanOutput);
             case 'vibe':
                 // vibe doesn't have version in --help output, use default
                 return this.extractGenericVersion(cleanOutput) || '0.1.0';
