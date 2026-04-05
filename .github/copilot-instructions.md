@@ -86,6 +86,7 @@ Subscription-based auth (no API key) is supported for Claude, Gemini, and Codex 
 
 ## Testing notes
 
+- **Any new or changed code must be accompanied by tests. Always run `bun test ./src` after writing tests and confirm all tests pass before finishing.**
 - Exercise tests use **Yarn v4** (`corepack yarn`). Install corepack if missing: `npm install -g corepack@0.29.4 && corepack enable`.
 - Exercism placeholder code is **intentionally broken**; `--test-only` failures on unmodified exercises are expected.
 - Unit tests for the CLI itself live under `src/**/__tests__/` and run with `bun test ./src`.
