@@ -11,5 +11,6 @@
 | [METHODOLOGY.md](METHODOLOGY.md) | Benchmark methodology |
 | [v2-grouped-execution.md](v2-grouped-execution.md) | V2 commit-grouped container reuse |
 | [v2-default-benchmark-set.md](v2-default-benchmark-set.md) | Default 5-task benchmark set & tier rating |
+| [parallelization.md](parallelization.md) | Parallelization levels, trade-offs, and practical speedup options |
 
 **GitHub Pages (SWE-Lancer task browser):** built output lives under `docs/swelancer-tasks/` (`bun run build:swelancer-pages`). See root `README.md`.
