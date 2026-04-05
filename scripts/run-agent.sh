@@ -88,8 +88,9 @@ install_from_registry() {
         url=$(jq -r --arg a "$agent_name" '.[$a].url' "$AGENTS_JSON")
         cmd_prefix=$(jq -r --arg a "$agent_name" '.[$a].cmdPrefix // empty' "$AGENTS_JSON")
         echo "[run-agent] Installing ${bin} via curl" >&2
-        if [[ -n "$cmd_prefix" ]]; then
-          env $cmd_prefix curl -fsSL "$url" | bash
+        # Only allow simple KEY=VALUE env var prefixes (no arbitrary commands)
+        if [[ -n "$cmd_prefix" ]] && [[ "$cmd_prefix" =~ ^[A-Z_][A-Z0-9_]*=[^[:space:]]*$ ]]; then
+          env "$cmd_prefix" curl -fsSL "$url" | bash
         else
           curl -fsSL "$url" | bash
         fi
