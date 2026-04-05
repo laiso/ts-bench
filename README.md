@@ -34,7 +34,7 @@ bun src/index.ts --dataset v2 --task <id> --agent claude ...  # run
 
 Workflow runs: [v1](.github/workflows/benchmark.yml) · [v2](.github/workflows/benchmark-v2.yml) · [Releases](https://github.com/laiso/ts-bench/releases)
 
-Task browser: `bun run build:swelancer-pages` then open `docs/swelancer-tasks/`. See [`docs/README.md`](docs/README.md).
+Task browser: `bun run build:swelancer-pages` then open `docs/swelancer-tasks/`. The script accepts a CSV path as an argument: `bun run scripts/build-swelancer-pages.ts <path-to-csv>` (defaults to `repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv` when invoked via the npm script). See [`docs/README.md`](docs/README.md).
 
 ## Docs
 

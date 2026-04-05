@@ -2,16 +2,23 @@
  * Reads SWE-Lancer task CSV (RFC 4180-style) and writes a JSON file for the static task browser.
  */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'csv-parse/sync';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const CSV_PATH = join(
-    REPO_ROOT,
-    'repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv'
-);
+
+const csvArg = process.argv[2];
+if (!csvArg) {
+    console.warn(
+        '⚠ No CSV path provided. Skipping SWE-Lancer page build.\n' +
+        '  Usage: bun run scripts/build-swelancer-pages.ts <path-to-csv>'
+    );
+    process.exit(0);
+}
+const CSV_PATH = resolve(csvArg);
+
 const OUT_DIR = join(REPO_ROOT, 'docs/swelancer-tasks');
 const OUT_FILE = join(OUT_DIR, 'tasks.json');
 
