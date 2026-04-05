@@ -95,3 +95,92 @@ If an agent genuinely requires a custom `BaseAgentBuilder` subclass (e.g. for a
 completely different `buildCommand` lifecycle), create a builder in
 `src/agents/builders/<name>.ts` and export it; then call it from the `AgentFactory`
 instead of using `GenericAgentBuilder` for that agent.
+
+---
+
+## Agent complexity classification (3-layer model)
+
+Agents fall into three layers based on the complexity of their CLI and environment
+setup. The **core principle** is: *declare what you can; use a function for what you
+can't.*
+
+### Layer 1 — Declarative (most new agents)
+
+The only differences are flag names. Express everything as fields in the registry
+entry and rely on the generic builder to assemble the command:
+
+| Field | Purpose | Example values |
+|---|---|---|
+| `cliBin` | Executable name | `'gemini'`, `'opencode'` |
+| `subcommand` | Optional CLI subcommand | `'run'` (goose), `'exec'` (codex) |
+| `autoApproveFlag` | Skip confirmation prompt | `'--yolo'`, `'--dangerously-skip-permissions'`, `'--auto-approve'` |
+| `modelFlag` | Model flag name | `'--model'` (default), `'-m'` |
+| `instructionFlag` | Prompt flag name | `'-p'`, `'--message'`, `'--text'`, `'--prompt'`, `null` (positional) |
+| `extraStaticArgs` | Additional fixed flags | `['--debug']` |
+| `envKeys` | Env vars required | `['MISTRAL_API_KEY']` |
+
+Agents that fit entirely in Layer 1: **vibe, copilot, gemini, qwen, opencode, cursor**.
+
+Example:
+
+```typescript
+vibe: {
+    defaultProvider: 'mistral',
+    install: { method: 'pip', bin: 'vibe', package: 'mistral-vibe' },
+    // layer-1 declarative fields:
+    autoApproveFlag: '--auto-approve',
+    instructionFlag: '--prompt',
+    getEnv(config) { return { MISTRAL_API_KEY: requireEnv('MISTRAL_API_KEY') }; },
+    buildArgs(config, instructions) { /* assembled by generic builder */ return []; }
+}
+```
+
+### Layer 2 — Function hooks (moderate complexity)
+
+When `fileList` handling or dynamic config generation is needed, define custom
+`buildArgs` / `getEnv` functions inline in the registry entry.
+The generic builder calls these when present; otherwise it falls back to the
+Layer 1 field-based assembly.
+
+Agents in this layer: **aider** (per-file `--file`/`--read` flags), **kimi** (JSON
+config passed via `--config`), **codex** (provider-specific env).
+
+Example — aider's fileList handling:
+
+```typescript
+buildArgs(config, instructions, fileList) {
+    const args = ['bash', config.agentScriptPath, 'aider',
+                  '--yes-always', '--no-auto-commits', '--model', config.model];
+    const src = fileList?.sourceFiles ?? [];
+    (src.length > 0 ? src : ['*.ts']).forEach(f => args.push('--file', f));
+    const test = fileList?.testFiles ?? [];
+    (test.length > 0 ? test : ['*.test.ts']).forEach(f => args.push('--read', f));
+    args.push('--message', instructions);
+    return args;
+}
+```
+
+### Layer 3 — Existing builder class (most complex)
+
+**claude** and **goose** have non-trivial provider-switching logic and auth-cache
+handling that would be cumbersome to express as a function hook.  Keep their
+dedicated `*AgentBuilder` classes and reference them from the registry:
+
+```typescript
+claude: { builderClass: ClaudeAgentBuilder, defaultProvider: 'anthropic', install: ... },
+goose:  { builderClass: GooseAgentBuilder,  defaultProvider: 'anthropic', install: ... },
+```
+
+`AgentFactory` checks for `builderClass` first and instantiates it directly;
+otherwise it uses `GenericAgentBuilder`.
+
+### Summary
+
+| Layer | When to use | Agents |
+|---|---|---|
+| **1 — Declarative** | Only flag names differ | vibe, copilot, gemini, qwen, opencode, cursor |
+| **2 — Function hooks** | Custom fileList or dynamic config | aider, kimi, codex |
+| **3 — Builder class** | Provider switching + auth cache | claude, goose |
+
+Most future agents will be Layer 1 — a single registry object with no code beyond
+`getEnv`. Only reach for Layer 2 or 3 when genuinely needed.
