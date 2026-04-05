@@ -133,6 +133,20 @@ install_from_registry() {
   return 0
 }
 
+# Return the binary name for an agent from agents.json, or the agent key if not found.
+get_agent_bin() {
+  local agent_name="$1"
+  local bin
+  if command -v jq >/dev/null 2>&1 && [[ -f "$AGENTS_JSON" ]]; then
+    bin=$(jq -r --arg a "$agent_name" '.[$a].bin // empty' "$AGENTS_JSON")
+    if [[ -n "$bin" ]]; then
+      echo "$bin"
+      return 0
+    fi
+  fi
+  echo "$agent_name"
+}
+
 case "$AGENT" in
   aider)
     if ! command -v "aider" >/dev/null 2>&1; then
@@ -204,7 +218,7 @@ case "$AGENT" in
     # Try data-driven install from agents.json registry, then fall back to
     # running the binary directly if it is already installed.
     if install_from_registry "$AGENT"; then
-      exec "$AGENT" "$@"
+      exec "$(get_agent_bin "$AGENT")" "$@"
     elif command -v "$AGENT" >/dev/null 2>&1; then
       exec "$AGENT" "$@"
     else
