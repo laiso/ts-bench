@@ -27,6 +27,10 @@ interface SavedBenchmarkResult {
     agentSuccessCount: number;
     testSuccessCount: number;
     testFailedCount: number;
+    totalInputTokens?: number;
+    totalOutputTokens?: number;
+    totalTokens?: number;
+    totalCost?: number;
   };
   results: unknown[];
 }

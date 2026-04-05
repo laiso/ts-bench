@@ -29,7 +29,13 @@ describe('BenchmarkReporter', () => {
                 testDuration: 2000,
                 totalDuration: 7000,
                 agentError: undefined,
-                testError: undefined
+                testError: undefined,
+                tokenUsage: {
+                    inputTokens: 1000,
+                    outputTokens: 500,
+                    totalTokens: 1500,
+                    cost: 0.001,
+                }
             },
             {
                 exercise: 'two-fer',
@@ -40,7 +46,13 @@ describe('BenchmarkReporter', () => {
                 testDuration: 1000,
                 totalDuration: 4000,
                 agentError: 'Syntax error in generated code',
-                testError: 'Tests failed with compilation error'
+                testError: 'Tests failed with compilation error',
+                tokenUsage: {
+                    inputTokens: 800,
+                    outputTokens: 300,
+                    totalTokens: 1100,
+                    cost: 0.0008,
+                }
             }
         ];
     });
@@ -85,6 +97,54 @@ describe('BenchmarkReporter', () => {
             expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Tests failed with compilation error'));
             
             consoleSpy.mockRestore();
+        });
+
+        it('displays token totals when tokenUsage is present', () => {
+            const consoleSpy = spyOn(console, 'log').mockImplementation(() => {});
+
+            reporter.printResults(mockResults);
+
+            expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Total Tokens:'));
+            expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('2,600'));
+            expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Estimated Cost:'));
+
+            consoleSpy.mockRestore();
+        });
+
+        it('does not display token totals when tokenUsage is absent', () => {
+            const consoleSpy = spyOn(console, 'log').mockImplementation(() => {});
+            const resultsWithoutTokens = mockResults.map(r => ({ ...r, tokenUsage: undefined }));
+
+            reporter.printResults(resultsWithoutTokens);
+
+            const tokenCalls = consoleSpy.mock.calls.filter(
+                (args: unknown[]) => typeof args[0] === 'string' && (args[0] as string).includes('Total Tokens:')
+            );
+            expect(tokenCalls).toHaveLength(0);
+
+            consoleSpy.mockRestore();
+        });
+    });
+
+    describe('token usage in generateBasicJSONData', () => {
+        it('includes token totals in summary when tokenUsage is present', async () => {
+            const privateReporter = reporter as any;
+            const jsonData = await privateReporter.generateBasicJSONData(mockResults, mockConfig);
+
+            expect(jsonData.summary.totalInputTokens).toBe(1800);
+            expect(jsonData.summary.totalOutputTokens).toBe(800);
+            expect(jsonData.summary.totalTokens).toBe(2600);
+            expect(jsonData.summary.totalCost).toBeCloseTo(0.0018, 6);
+        });
+
+        it('omits token totals in summary when tokenUsage is absent', async () => {
+            const privateReporter = reporter as any;
+            const resultsWithoutTokens = mockResults.map(r => ({ ...r, tokenUsage: undefined }));
+            const jsonData = await privateReporter.generateBasicJSONData(resultsWithoutTokens, mockConfig);
+
+            expect(jsonData.summary.totalInputTokens).toBeUndefined();
+            expect(jsonData.summary.totalTokens).toBeUndefined();
+            expect(jsonData.summary.totalCost).toBeUndefined();
         });
     });
 

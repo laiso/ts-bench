@@ -45,7 +45,10 @@ export function renderTierList(entries: LeaderboardEntry[]): string {
             html += `<a class="agent-card" href="results/${esc(entry.key)}.html">`;
             html += `<img class="agent-icon" src="${iconPath}" alt="${esc(agentDisplay)}" onerror="this.style.display='none'">`;
             html += nameModelHtml;
-            html += `<span class="agent-meta">${solved}/5 &middot; ${fmtDuration(summary.avgDuration)}</span>`;
+            const costDisplay = summary.totalCost !== undefined
+                ? ` &middot; $${summary.totalCost.toFixed(4)}`
+                : '';
+            html += `<span class="agent-meta">${solved}/5 &middot; ${fmtDuration(summary.avgDuration)}${costDisplay}</span>`;
 
             const breakdown = getTaskBreakdown(d);
             if (breakdown.length > 0) {

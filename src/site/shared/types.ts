@@ -8,6 +8,12 @@ export interface ResultEntry {
     agentDuration: number;
     testDuration: number;
     totalDuration: number;
+    tokenUsage?: {
+        inputTokens?: number;
+        outputTokens?: number;
+        totalTokens?: number;
+        cost?: number;
+    };
 }
 
 export interface SavedResult {
@@ -33,6 +39,10 @@ export interface SavedResult {
         agentSuccessCount: number;
         testSuccessCount: number;
         testFailedCount: number;
+        totalInputTokens?: number;
+        totalOutputTokens?: number;
+        totalTokens?: number;
+        totalCost?: number;
     };
     tier?: { tier: string; label: string; solved: number; total: number };
     results: ResultEntry[];

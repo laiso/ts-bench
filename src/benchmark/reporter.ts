@@ -5,6 +5,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { sanitizeFilenameSegment } from '../utils/file-name';
 import { V2_DEFAULT_TASKS, V2_TIER_THRESHOLDS } from '../config/constants';
+import { sumTokenUsages } from '../utils/token-parser';
 
 export class BenchmarkReporter {
     printResults(results: TestResult[]): void {
@@ -26,6 +27,14 @@ export class BenchmarkReporter {
         console.log(`🤖 Agent Success: ${agentSuccessCount}`);
         console.log(`✅ Test Success: ${testSuccessCount}`);
         console.log(`❌ Test Failed: ${testFailedCount}`);
+
+        const totalUsage = sumTokenUsages(results.map((r) => r.tokenUsage));
+        if (totalUsage) {
+            console.log(`🔤 Total Tokens: ${(totalUsage.totalTokens ?? 0).toLocaleString()} (input: ${(totalUsage.inputTokens ?? 0).toLocaleString()} / output: ${(totalUsage.outputTokens ?? 0).toLocaleString()})`);
+            if (totalUsage.cost !== undefined) {
+                console.log(`💰 Estimated Cost: $${totalUsage.cost.toFixed(4)}`);
+            }
+        }
 
         this.printDetailedResults(results);
         this.printTier(results);
@@ -112,6 +121,7 @@ export class BenchmarkReporter {
         const testFailedCount = totalCount - testSuccessCount;
 
         const benchmarkVersion = await getPackageVersion();
+        const totalUsage = sumTokenUsages(results.map((r) => r.tokenUsage));
 
         return {
             metadata: {
@@ -131,7 +141,13 @@ export class BenchmarkReporter {
                 totalCount,
                 agentSuccessCount,
                 testSuccessCount,
-                testFailedCount
+                testFailedCount,
+                ...(totalUsage ? {
+                    totalInputTokens: totalUsage.inputTokens ?? 0,
+                    totalOutputTokens: totalUsage.outputTokens ?? 0,
+                    totalTokens: totalUsage.totalTokens ?? 0,
+                    ...(totalUsage.cost !== undefined ? { totalCost: totalUsage.cost } : {}),
+                } : {}),
             },
             results
         };
@@ -223,6 +239,8 @@ export class BenchmarkReporter {
         const agentSuccessCount = results.filter(r => r.agentSuccess).length;
         const testSuccessCount = results.filter(r => r.testSuccess).length;
         const testFailedCount = totalCount - testSuccessCount;
+
+        const totalUsage = sumTokenUsages(results.map((r) => r.tokenUsage));
         
         return {
             successRate: Number(successRate.toFixed(1)),
@@ -232,7 +250,13 @@ export class BenchmarkReporter {
             totalCount,
             agentSuccessCount,
             testSuccessCount,
-            testFailedCount
+            testFailedCount,
+            ...(totalUsage ? {
+                totalInputTokens: totalUsage.inputTokens ?? 0,
+                totalOutputTokens: totalUsage.outputTokens ?? 0,
+                totalTokens: totalUsage.totalTokens ?? 0,
+                ...(totalUsage.cost !== undefined ? { totalCost: totalUsage.cost } : {}),
+            } : {}),
         };
     }
 

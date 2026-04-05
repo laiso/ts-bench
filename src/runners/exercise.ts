@@ -115,7 +115,8 @@ export class ExerciseRunner {
             testError: testResult.error,
             agentDuration: agentResult.duration,
             testDuration: testResult.duration,
-            totalDuration
+            totalDuration,
+            tokenUsage: agentResult.tokenUsage,
         };
     }
 
@@ -207,6 +208,7 @@ export class ExerciseRunner {
             agentDuration: agentResult.duration,
             testDuration: testResult.duration,
             totalDuration,
+            tokenUsage: agentResult.tokenUsage,
         };
     }
 

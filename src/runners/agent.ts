@@ -1,6 +1,7 @@
 import type { AgentResult, BenchmarkConfig } from '../config/types';
 import { AgentFactory } from '../agents/factory';
 import { AgentLoggerFactory } from '../utils/agent-logger';
+import { extractTokenUsage } from '../utils/token-parser';
 import { getAgentScriptPath } from '../config/paths';
 import type { DatasetReader } from '../datasets/types';
 import type { CommandExecutor } from '../utils/shell';
@@ -88,6 +89,8 @@ export class AgentRunner {
             const logCollector = AgentLoggerFactory.create(config.agent);
             await logCollector.collect(config, exercise, exercisePath, result);
 
+            const tokenUsage = await extractTokenUsage(config, exercisePath, result.stdout, result.stderr);
+
             const duration = Date.now() - startTime;
 
             if (progressMonitor) {
@@ -96,13 +99,13 @@ export class AgentRunner {
 
             if (result.exitCode === 0) {
                 this.logger.logAgentSuccess(exercise, duration, config.verbose, result);
-                return { exercise, success: true, duration, output: result.stdout };
+                return { exercise, success: true, duration, output: result.stdout, tokenUsage };
             } else {
                 this.logger.logAgentFailure(exercise, duration, config.verbose, result);
 
                 // Agent failed - exit immediately
                 console.error(`❌ Agent failed for ${exercise}. Exiting immediately.`);
-                return { exercise, success: false, duration, error: result.stderr, output: result.stdout };
+                return { exercise, success: false, duration, error: result.stderr, output: result.stdout, tokenUsage };
             }
         } catch (error) {
             if (progressMonitor) {

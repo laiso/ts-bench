@@ -16,12 +16,20 @@ export const AGENT_DEFAULT_PROVIDER: Record<AgentType, ProviderType> = {
     copilot: 'openai',
 };
 
+export interface TokenUsage {
+    inputTokens?: number;
+    outputTokens?: number;
+    totalTokens?: number;
+    cost?: number; // USD
+}
+
 export interface AgentResult {
     exercise: string;
     success: boolean;
     error?: string;
     duration: number;
     output?: string;
+    tokenUsage?: TokenUsage;
 }
 
 export interface TestResult {
@@ -34,6 +42,7 @@ export interface TestResult {
     agentDuration: number;
     testDuration: number;
     totalDuration: number;
+    tokenUsage?: TokenUsage;
 }
 
 export interface TestOnlyResult {

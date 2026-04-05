@@ -68,6 +68,12 @@ function generateResultPage(key: string, entry: SavedResult): string {
                 : '<span class="fail">Fail</span>';
             const agentStatus = r.agentSuccess ? '<span class="pass">OK</span>' : '<span class="fail">Fail</span>';
             const testStatus = r.testSuccess ? '<span class="pass">OK</span>' : '<span class="fail">Fail</span>';
+            const tokensCell = r.tokenUsage?.totalTokens !== undefined
+                ? r.tokenUsage.totalTokens.toLocaleString()
+                : '-';
+            const costCell = r.tokenUsage?.cost !== undefined
+                ? `$${r.tokenUsage.cost.toFixed(4)}`
+                : '-';
             resultsRows += `
         <tr>
           <td>${esc(r.exercise)}</td>
@@ -77,10 +83,12 @@ function generateResultPage(key: string, entry: SavedResult): string {
           <td>${fmtDuration(r.agentDuration)}</td>
           <td>${fmtDuration(r.testDuration)}</td>
           <td>${fmtDuration(r.totalDuration)}</td>
+          <td>${tokensCell}</td>
+          <td>${costCell}</td>
         </tr>`;
         });
     } else {
-        resultsRows = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">No task-level results available</td></tr>';
+        resultsRows = '<tr><td colspan="9" style="text-align:center;color:var(--text-muted)">No task-level results available</td></tr>';
     }
 
     const runUrlHtml = meta.runUrl
@@ -177,6 +185,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
       <div>Total <strong>${fmtDuration(summary.totalDuration)}</strong></div>
       ${meta.version ? `<div>Version <strong>${esc(meta.version)}</strong></div>` : ''}
       ${meta.benchmarkVersion ? `<div>Bench <strong>${esc(meta.benchmarkVersion)}</strong></div>` : ''}
+      ${summary.totalTokens !== undefined ? `<div>Tokens <strong>${summary.totalTokens.toLocaleString()}</strong></div>` : ''}
+      ${summary.totalCost !== undefined ? `<div>Cost <strong>$${summary.totalCost.toFixed(4)}</strong></div>` : ''}
     </div>
     ${runUrlHtml ? `<div style="margin-top:12px">${runUrlHtml}</div>` : ''}
   </div>
@@ -192,6 +202,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
         <th>Agent Time</th>
         <th>Test Time</th>
         <th>Total</th>
+        <th>Tokens</th>
+        <th>Cost</th>
       </tr>
     </thead>
     <tbody>

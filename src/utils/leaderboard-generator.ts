@@ -26,6 +26,10 @@ interface SavedBenchmarkResult {
         agentSuccessCount: number;
         testSuccessCount: number;
         testFailedCount: number;
+        totalInputTokens?: number;
+        totalOutputTokens?: number;
+        totalTokens?: number;
+        totalCost?: number;
     };
     results: TestResult[];
 }
@@ -43,6 +47,8 @@ interface LeaderboardEntry {
     totalProblems: number;
     rank: number;
     lastUpdated: string;
+    totalTokens?: number;
+    totalCost?: number;
 }
 
 interface LeaderboardOutput {
@@ -193,7 +199,9 @@ export class LeaderboardGenerator {
                 problemsSolved: result.summary.successCount,
                 totalProblems: result.summary.totalCount,
                 rank: 0, // Will be set after sorting
-                lastUpdated: (result.metadata.timestamp?.split('T')[0] ?? new Date().toISOString().split('T')[0]) as string
+                lastUpdated: (result.metadata.timestamp?.split('T')[0] ?? new Date().toISOString().split('T')[0]) as string,
+                ...(result.summary.totalTokens !== undefined ? { totalTokens: result.summary.totalTokens } : {}),
+                ...(result.summary.totalCost !== undefined ? { totalCost: result.summary.totalCost } : {}),
             });
         }
         
