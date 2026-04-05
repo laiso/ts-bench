@@ -122,7 +122,7 @@ install_from_registry() {
           curl -LsSf "$url" | bash
         else
           echo "[run-agent] uv not found and no fallback URL for ${bin}. Please install manually." >&2
-          exit 1
+          return 1
         fi
       fi
       ;;
