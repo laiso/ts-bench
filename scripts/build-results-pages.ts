@@ -164,9 +164,12 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
 
   <div class="hero">
     <div style="display:flex;align-items:center;gap:16px">
-      ${tier ? `<span class="tier ${tierClass(tier)}">${esc(tier)}</span>` : ''}
+      <img src="../assets/icons/${esc(meta.agent.toLowerCase())}.png" alt="${esc(agentDisplayName(meta.agent))}" width="48" height="48" style="border-radius:8px" onerror="this.style.display='none'">
       <div>
-        <h1>${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)}</h1>
+        <div style="display:flex;align-items:center;gap:10px">
+          <h1>${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)}</h1>
+          ${tier ? `<span class="tier ${tierClass(tier)}">${esc(tier)}</span>` : ''}
+        </div>
         <div style="color:var(--text-muted);font-size:0.9rem">${esc(meta.provider)} &middot; ${fmtDate(meta.timestamp)}</div>
       </div>
     </div>

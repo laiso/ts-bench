@@ -102,7 +102,7 @@ header p { color: var(--text-secondary); font-size: 1rem; }
   overflow: hidden;
   background: var(--surface);
 }
-.tier-row.tier-empty { display: none; }
+.tier-row.tier-empty { opacity: 0.4; }
 .tier-sort-hint {
   display: block;
   font-size: 0.55rem;
