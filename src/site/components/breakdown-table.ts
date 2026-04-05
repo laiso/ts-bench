@@ -1,6 +1,6 @@
 import type { LeaderboardEntry } from '../shared/types.ts';
 import { V2_DEFAULT_TASKS } from '../shared/types.ts';
-import { esc, fmtDuration } from '../shared/format.ts';
+import { esc, fmtDuration, agentDisplayName } from '../shared/format.ts';
 
 export function renderBreakdownTable(entries: LeaderboardEntry[]): string {
     const withResults = entries.filter((e) => e.data.results && e.data.results.length > 0);
@@ -16,7 +16,7 @@ export function renderBreakdownTable(entries: LeaderboardEntry[]): string {
 
     withResults.forEach((e) => {
         const meta = e.data.metadata;
-        html += `<tr><td><strong>${esc(meta.agent || e.key)}</strong><br><small>${esc(meta.model || '')}</small></td>`;
+        html += `<tr><td><strong>${esc(agentDisplayName(meta.agent || e.key))}</strong><br><small>${esc(meta.model || '')}</small></td>`;
         V2_DEFAULT_TASKS.forEach((task) => {
             let found: { overallSuccess: boolean; totalDuration: number } | null = null;
             for (let i = 0; i < (e.data.results || []).length; i++) {

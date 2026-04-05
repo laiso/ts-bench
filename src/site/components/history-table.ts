@@ -1,7 +1,7 @@
 import type { LeaderboardEntry } from '../shared/types.ts';
 import { V2_TOTAL } from '../shared/types.ts';
 import { tierFromEntry } from '../shared/tier.ts';
-import { esc, fmtDate, fmtDuration } from '../shared/format.ts';
+import { esc, fmtDate, fmtDuration, agentDisplayName } from '../shared/format.ts';
 
 export function renderHistoryTable(entries: LeaderboardEntry[]): string {
     if (entries.length === 0) {
@@ -33,7 +33,7 @@ export function renderHistoryTable(entries: LeaderboardEntry[]): string {
         const tierBg = tier ? tierColors[tier] : 'transparent';
 
         html += '<tr>';
-        html += `<td>${esc(meta.agent || entry.key)}</td>`;
+        html += `<td>${esc(agentDisplayName(meta.agent || entry.key))}</td>`;
         html += `<td>${esc(meta.model || '-')}</td>`;
         html += `<td>${esc(meta.provider || '-')}</td>`;
         html += `<td><span class="tier-badge tier-badge-${tier || ''}" style="background:${tierBg};${tier === 'S' || tier === 'B' ? 'color:#000;' : ''}">${esc(tier || '-')}</span></td>`;

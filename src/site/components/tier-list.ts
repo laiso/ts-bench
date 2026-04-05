@@ -1,7 +1,7 @@
 import type { LeaderboardEntry, SavedResult } from '../shared/types.ts';
 import { TIERS } from '../shared/types.ts';
 import { tierFromEntry } from '../shared/tier.ts';
-import { esc, fmtDuration } from '../shared/format.ts';
+import { esc, fmtDuration, agentDisplayName } from '../shared/format.ts';
 
 function getTaskBreakdown(entry: SavedResult): Array<{ exercise: string; overallSuccess: boolean }> {
     if (!entry.results || entry.results.length === 0) return [];
@@ -34,9 +34,9 @@ export function renderTierList(entries: LeaderboardEntry[]): string {
             const meta = d.metadata;
             const summary = d.summary;
             const solved = d.tier ? d.tier.solved : (summary.successCount != null ? summary.successCount : 0);
-            const agentDisplay = meta.agent || entry.key;
+            const agentDisplay = agentDisplayName(meta.agent || entry.key);
             const modelDisplay = meta.model || '';
-            const agentName = agentDisplay.toLowerCase();
+            const agentName = (meta.agent || entry.key).toLowerCase();
             const iconPath = `assets/icons/${esc(agentName)}.png`;
             const nameModelHtml = modelDisplay
                 ? `<span class="agent-name-model">${esc(agentDisplay)} <span class="model-part">(${esc(modelDisplay)})</span></span>`
