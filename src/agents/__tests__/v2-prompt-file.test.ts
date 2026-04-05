@@ -1,16 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { ClaudeAgentBuilder } from '../builders/claude';
-import { CursorAgentBuilder } from '../builders/cursor';
-import { AiderAgentBuilder } from '../builders/aider';
-import { CodexAgentBuilder } from '../builders/codex';
-import { GeminiAgentBuilder } from '../builders/gemini';
-import { GooseAgentBuilder } from '../builders/goose';
-import { OpenCodeAgentBuilder } from '../builders/opencode';
-import { QwenAgentBuilder } from '../builders/qwen';
-import { CopilotAgentBuilder } from '../builders/copilot';
-import { VibeAgentBuilder } from '../builders/vibe';
-import { KimiAgentBuilder } from '../builders/kimi';
-import type { AgentBuilder } from '../types';
+import { AGENT_REGISTRY } from '../registry';
+import { GenericAgentBuilder } from '../builders/generic';
 import { PROMPT_MOUNT_CONTAINER, PROMPT_PLACEHOLDER } from '../prompt-files';
 
 const V2_EXERCISE = '16912_4';
@@ -41,26 +31,26 @@ describe('v2 Docker: all agents use mounted prompt file', () => {
         };
     };
 
-    const cases: { name: string; builder: AgentBuilder; env: [string, string][] }[] = [
-        { name: 'claude', builder: new ClaudeAgentBuilder(baseV2), env: [['ANTHROPIC_API_KEY', 'x']] },
-        { name: 'cursor', builder: new CursorAgentBuilder(baseV2), env: [['CURSOR_API_KEY', 'x']] },
-        { name: 'aider', builder: new AiderAgentBuilder(baseV2), env: [['OPENAI_API_KEY', 'x']] },
+    const cases: { name: string; builder: GenericAgentBuilder; env: [string, string][] }[] = [
+        { name: 'claude', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.claude), env: [['ANTHROPIC_API_KEY', 'x']] },
+        { name: 'cursor', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.cursor), env: [['CURSOR_API_KEY', 'x']] },
+        { name: 'aider', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.aider), env: [['OPENAI_API_KEY', 'x']] },
         {
             name: 'codex',
-            builder: new CodexAgentBuilder({ ...baseV2, provider: 'openai' }),
+            builder: new GenericAgentBuilder({ ...baseV2, provider: 'openai' }, AGENT_REGISTRY.codex),
             env: [['OPENAI_API_KEY', 'x']]
         },
-        { name: 'gemini', builder: new GeminiAgentBuilder(baseV2), env: [['GEMINI_API_KEY', 'x']] },
-        { name: 'goose', builder: new GooseAgentBuilder({ ...baseV2, provider: 'anthropic' }), env: [['ANTHROPIC_API_KEY', 'x']] },
-        { name: 'opencode', builder: new OpenCodeAgentBuilder({ ...baseV2, provider: 'openai' }), env: [['OPENAI_API_KEY', 'x']] },
+        { name: 'gemini', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.gemini), env: [['GEMINI_API_KEY', 'x']] },
+        { name: 'goose', builder: new GenericAgentBuilder({ ...baseV2, provider: 'anthropic' }, AGENT_REGISTRY.goose), env: [['ANTHROPIC_API_KEY', 'x']] },
+        { name: 'opencode', builder: new GenericAgentBuilder({ ...baseV2, provider: 'openai' }, AGENT_REGISTRY.opencode), env: [['OPENAI_API_KEY', 'x']] },
         {
             name: 'qwen',
-            builder: new QwenAgentBuilder({ ...baseV2, provider: 'dashscope' }),
+            builder: new GenericAgentBuilder({ ...baseV2, provider: 'dashscope' }, AGENT_REGISTRY.qwen),
             env: [['DASHSCOPE_API_KEY', 'x']]
         },
-        { name: 'copilot', builder: new CopilotAgentBuilder(baseV2), env: [] },
-        { name: 'vibe', builder: new VibeAgentBuilder(baseV2), env: [['MISTRAL_API_KEY', 'x']] },
-        { name: 'kimi', builder: new KimiAgentBuilder({ ...baseV2, provider: 'moonshot' }), env: [['KIMI_API_KEY', 'x']] }
+        { name: 'copilot', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.copilot), env: [] },
+        { name: 'vibe', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.vibe), env: [['MISTRAL_API_KEY', 'x']] },
+        { name: 'kimi', builder: new GenericAgentBuilder({ ...baseV2, provider: 'moonshot' }, AGENT_REGISTRY.kimi), env: [['KIMI_API_KEY', 'x']] }
     ];
 
     const body = '## Step (parens)\n`code` --- "quotes"';
