@@ -19,6 +19,7 @@ permissions:
   contents: write
   issues: write
   actions: read
+  pull-requests: write
 
 concurrency:
   group: leaderboard-update
@@ -105,3 +106,23 @@ jobs:
           git checkout -B "$BRANCH"
           git commit -F commit-message.txt
           git push -u origin "$BRANCH" --force-with-lease
+
+      - name: Create Pull Request
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.inputs.run_id }}
+        run: |
+          BRANCH="leaderboard-update/${RUN_ID}"
+          # Check if PR already exists
+          EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' || true)
+          if [ -n "$EXISTING" ]; then
+            echo "PR #$EXISTING already exists for branch $BRANCH"
+          else
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "feat(leaderboard): Update with results from run ${RUN_ID}" \
+              --body-file commit-body.md \
+              --label "leaderboard"
+          fi
