@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "agent": "gemini",
+    "model": "gemini-3-flash-preview",
+    "provider": "google",
+    "version": "0.3.0",
+    "timestamp": "2026-04-01T19:00:00.000Z",
+    "exerciseCount": 5,
+    "benchmarkVersion": "2.0.0",
+    "generatedBy": "ts-bench"
+  },
+  "summary": {
+    "successRate": 20,
+    "totalDuration": 1500000,
+    "avgDuration": 300000,
+    "successCount": 1,
+    "totalCount": 5,
+    "agentSuccessCount": 1,
+    "testSuccessCount": 1,
+    "testFailedCount": 4
+  },
+  "tier": {
+    "tier": "D",
+    "label": "D — Poor",
+    "solved": 1,
+    "total": 5
+  },
+  "results": [
+    {
+      "exercise": "14958",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 180000,
+      "testDuration": 120000,
+      "totalDuration": 300000
+    },
+    {
+      "exercise": "15815_1",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 190000,
+      "testDuration": 125000,
+      "totalDuration": 315000
+    },
+    {
+      "exercise": "15193",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 200000,
+      "testDuration": 130000,
+      "totalDuration": 330000
+    },
+    {
+      "exercise": "14268",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 210000,
+      "testDuration": 135000,
+      "totalDuration": 345000
+    },
+    {
+      "exercise": "20079",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 220000,
+      "testDuration": 140000,
+      "totalDuration": 360000
+    }
+  ]
+}

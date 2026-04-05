@@ -1,0 +1,255 @@
+{
+  "metadata": {
+    "agent": "opencode",
+    "model": "opencode/grok-code",
+    "provider": "xai",
+    "version": "0.5.29",
+    "timestamp": "2025-08-31T09:53:32.454Z",
+    "exerciseCount": 25,
+    "benchmarkVersion": "1.0.0",
+    "generatedBy": "ts-bench",
+    "runUrl": "https://github.com/laiso/ts-bench/actions/runs/17355083421",
+    "runId": "17355083421",
+    "artifactName": "benchmark-results"
+  },
+  "summary": {
+    "successRate": 88,
+    "totalDuration": 2425115,
+    "avgDuration": 97004.6,
+    "successCount": 22,
+    "totalCount": 25,
+    "agentSuccessCount": 25,
+    "testSuccessCount": 22,
+    "testFailedCount": 3
+  },
+  "results": [
+    {
+      "exercise": "acronym",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 54742,
+      "testDuration": 7202,
+      "totalDuration": 62048
+    },
+    {
+      "exercise": "anagram",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 30520,
+      "testDuration": 7515,
+      "totalDuration": 38046
+    },
+    {
+      "exercise": "bank-account",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 27975,
+      "testDuration": 7272,
+      "totalDuration": 35259
+    },
+    {
+      "exercise": "binary-search",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 19444,
+      "testDuration": 7257,
+      "totalDuration": 26713
+    },
+    {
+      "exercise": "binary-search-tree",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 46681,
+      "testDuration": 7250,
+      "totalDuration": 53942
+    },
+    {
+      "exercise": "bowling",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 62759,
+      "testDuration": 7435,
+      "totalDuration": 70205
+    },
+    {
+      "exercise": "complex-numbers",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 162070,
+      "testDuration": 7302,
+      "totalDuration": 169384
+    },
+    {
+      "exercise": "connect",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 62975,
+      "testDuration": 7348,
+      "totalDuration": 70335
+    },
+    {
+      "exercise": "crypto-square",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 41156,
+      "testDuration": 7260,
+      "totalDuration": 48428
+    },
+    {
+      "exercise": "diamond",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 37107,
+      "testDuration": 7282,
+      "totalDuration": 44399
+    },
+    {
+      "exercise": "dnd-character",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 42428,
+      "testDuration": 7329,
+      "totalDuration": 49768
+    },
+    {
+      "exercise": "flatten-array",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 62431,
+      "testDuration": 7295,
+      "totalDuration": 69737
+    },
+    {
+      "exercise": "food-chain",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 43435,
+      "testDuration": 7215,
+      "totalDuration": 50663
+    },
+    {
+      "exercise": "house",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 67093,
+      "testDuration": 7496,
+      "totalDuration": 74600
+    },
+    {
+      "exercise": "pascals-triangle",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 34607,
+      "testDuration": 7759,
+      "totalDuration": 42377
+    },
+    {
+      "exercise": "rational-numbers",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 34427,
+      "testDuration": 7631,
+      "totalDuration": 42070
+    },
+    {
+      "exercise": "react",
+      "agentSuccess": true,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-react\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp31db9\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+      "agentDuration": 384392,
+      "testDuration": 7842,
+      "totalDuration": 392246
+    },
+    {
+      "exercise": "rectangles",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 55264,
+      "testDuration": 7506,
+      "totalDuration": 62785
+    },
+    {
+      "exercise": "relative-distance",
+      "agentSuccess": true,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-relative-distance\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp51e15\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m ::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\n[tests] tstyche (implementation tests)\n\nSTDERR: ",
+      "agentDuration": 187932,
+      "testDuration": 7538,
+      "totalDuration": 195483
+    },
+    {
+      "exercise": "robot-name",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 108178,
+      "testDuration": 24281,
+      "totalDuration": 132471
+    },
+    {
+      "exercise": "spiral-matrix",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 51161,
+      "testDuration": 7369,
+      "totalDuration": 58541
+    },
+    {
+      "exercise": "transpose",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 262265,
+      "testDuration": 7525,
+      "totalDuration": 269802
+    },
+    {
+      "exercise": "two-bucket",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 58709,
+      "testDuration": 7514,
+      "totalDuration": 66235
+    },
+    {
+      "exercise": "variable-length-quantity",
+      "agentSuccess": true,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "testError": "STDOUT: \u001b[94m➤\u001b[39m \u001b[94m➤\u001b[39m \u001b[90m::group::Resolution step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Post-resolution validation\n\u001b[93m➤\u001b[39m YN0002: │ \u001b[38;5;166m@exercism/\u001b[39m\u001b[38;5;173mtypescript-variable-length-quantity\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mworkspace:.\u001b[39m doesn't provide \u001b[38;5;166m@babel/\u001b[39m\u001b[38;5;173mcore\u001b[39m (\u001b[38;5;111mp877a6\u001b[39m), requested by \u001b[38;5;173mbabel-jest\u001b[39m.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run \u001b[38;5;111myarn explain peer-requirements <hash>\u001b[39m for details, where \u001b[38;5;111m<hash>\u001b[39m is the six-letter p-prefixed code.\n\u001b[93m➤\u001b[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run \u001b[38;5;111myarn explain peer-requirements\u001b[39m for details.\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Fetch step\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[94m➤\u001b[39m \u001b[90m::group::Link step\n\u001b[93m➤\u001b[39m \u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.38.1\u001b[39m must be built because it never has been before or the last one failed\n\u001b[94m➤\u001b[39m YN0007: │ \u001b[38;5;173mcore-js\u001b[39m\u001b[38;5;111m@\u001b[39m\u001b[38;5;111mnpm:3.44.0\u001b[39m must be built because it never has been before or the last one failed\n::endgroup::\n\u001b[94m➤\u001b[39m \u001b[90m\u001b[93m➤\u001b[39m [tests] tsc: ✅, tstyche: ❌, jest: ✅, \n[tests] tsc (compile)\nvariable-length-quantity.test.ts(7,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(11,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(15,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(19,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(23,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(27,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(31,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(35,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(39,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(43,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(47,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(51,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(55,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(59,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(63,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(67,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(71,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(82,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(88,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(92,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(96,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(100,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(104,21): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(109,16): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(115,16): error TS2554: Expected 0 arguments, but got 1.\nvariable-length-quantity.test.ts(125,21): error TS2554: Expected 0 arguments, but got 1.\n\nSTDERR: ",
+      "agentDuration": 116138,
+      "testDuration": 6428,
+      "totalDuration": 122577
+    },
+    {
+      "exercise": "wordy",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 169502,
+      "testDuration": 7488,
+      "totalDuration": 177001
+    }
+  ]
+}

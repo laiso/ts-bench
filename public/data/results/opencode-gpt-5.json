@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "agent": "opencode",
+    "model": "gpt-5",
+    "provider": "openai",
+    "version": "0.3.0",
+    "timestamp": "2026-04-01T14:00:00.000Z",
+    "exerciseCount": 5,
+    "benchmarkVersion": "2.0.0",
+    "generatedBy": "ts-bench"
+  },
+  "summary": {
+    "successRate": 80,
+    "totalDuration": 2100000,
+    "avgDuration": 420000,
+    "successCount": 4,
+    "totalCount": 5,
+    "agentSuccessCount": 4,
+    "testSuccessCount": 4,
+    "testFailedCount": 1
+  },
+  "tier": {
+    "tier": "A",
+    "label": "A — Excellent",
+    "solved": 4,
+    "total": 5
+  },
+  "results": [
+    {
+      "exercise": "14958",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 252000,
+      "testDuration": 168000,
+      "totalDuration": 420000
+    },
+    {
+      "exercise": "15815_1",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 262000,
+      "testDuration": 173000,
+      "totalDuration": 435000
+    },
+    {
+      "exercise": "15193",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 272000,
+      "testDuration": 178000,
+      "totalDuration": 450000
+    },
+    {
+      "exercise": "14268",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 282000,
+      "testDuration": 183000,
+      "totalDuration": 465000
+    },
+    {
+      "exercise": "20079",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 292000,
+      "testDuration": 188000,
+      "totalDuration": 480000
+    }
+  ]
+}

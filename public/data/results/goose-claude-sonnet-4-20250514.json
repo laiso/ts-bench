@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "agent": "goose",
+    "model": "claude-sonnet-4-20250514",
+    "provider": "anthropic",
+    "version": "0.3.0",
+    "timestamp": "2026-04-01T15:00:00.000Z",
+    "exerciseCount": 5,
+    "benchmarkVersion": "2.0.0",
+    "generatedBy": "ts-bench"
+  },
+  "summary": {
+    "successRate": 60,
+    "totalDuration": 2500000,
+    "avgDuration": 500000,
+    "successCount": 3,
+    "totalCount": 5,
+    "agentSuccessCount": 3,
+    "testSuccessCount": 3,
+    "testFailedCount": 2
+  },
+  "tier": {
+    "tier": "B",
+    "label": "B — Good",
+    "solved": 3,
+    "total": 5
+  },
+  "results": [
+    {
+      "exercise": "14958",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 300000,
+      "testDuration": 200000,
+      "totalDuration": 500000
+    },
+    {
+      "exercise": "15815_1",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 310000,
+      "testDuration": 205000,
+      "totalDuration": 515000
+    },
+    {
+      "exercise": "15193",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 320000,
+      "testDuration": 210000,
+      "totalDuration": 530000
+    },
+    {
+      "exercise": "14268",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 330000,
+      "testDuration": 215000,
+      "totalDuration": 545000
+    },
+    {
+      "exercise": "20079",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 340000,
+      "testDuration": 220000,
+      "totalDuration": 560000
+    }
+  ]
+}

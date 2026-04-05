@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "agent": "windsurf",
+    "model": "claude-3.5-sonnet",
+    "provider": "anthropic",
+    "version": "0.3.0",
+    "timestamp": "2026-04-01T15:00:00.000Z",
+    "exerciseCount": 5,
+    "benchmarkVersion": "2.0.0",
+    "generatedBy": "ts-bench"
+  },
+  "summary": {
+    "successRate": 0,
+    "totalDuration": 3150000,
+    "avgDuration": 630000,
+    "successCount": 0,
+    "totalCount": 5,
+    "agentSuccessCount": 0,
+    "testSuccessCount": 0,
+    "testFailedCount": 5
+  },
+  "tier": {
+    "tier": "F",
+    "label": "F — Failing",
+    "solved": 0,
+    "total": 5
+  },
+  "results": [
+    {
+      "exercise": "14958",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 510000,
+      "testDuration": 120000,
+      "totalDuration": 630000
+    },
+    {
+      "exercise": "15815_1",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 510000,
+      "testDuration": 120000,
+      "totalDuration": 630000
+    },
+    {
+      "exercise": "15193",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 510000,
+      "testDuration": 120000,
+      "totalDuration": 630000
+    },
+    {
+      "exercise": "14268",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 510000,
+      "testDuration": 120000,
+      "totalDuration": 630000
+    },
+    {
+      "exercise": "20079",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 510000,
+      "testDuration": 120000,
+      "totalDuration": 630000
+    }
+  ]
+}

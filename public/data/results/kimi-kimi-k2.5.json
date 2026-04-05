@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "agent": "kimi",
+    "model": "kimi-k2.5",
+    "provider": "moonshot",
+    "version": "0.3.0",
+    "timestamp": "2026-04-01T16:00:00.000Z",
+    "exerciseCount": 5,
+    "benchmarkVersion": "2.0.0",
+    "generatedBy": "ts-bench"
+  },
+  "summary": {
+    "successRate": 60,
+    "totalDuration": 2300000,
+    "avgDuration": 460000,
+    "successCount": 3,
+    "totalCount": 5,
+    "agentSuccessCount": 3,
+    "testSuccessCount": 3,
+    "testFailedCount": 2
+  },
+  "tier": {
+    "tier": "B",
+    "label": "B — Good",
+    "solved": 3,
+    "total": 5
+  },
+  "results": [
+    {
+      "exercise": "14958",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 276000,
+      "testDuration": 184000,
+      "totalDuration": 460000
+    },
+    {
+      "exercise": "15815_1",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 286000,
+      "testDuration": 189000,
+      "totalDuration": 475000
+    },
+    {
+      "exercise": "15193",
+      "agentSuccess": true,
+      "testSuccess": true,
+      "overallSuccess": true,
+      "agentDuration": 296000,
+      "testDuration": 194000,
+      "totalDuration": 490000
+    },
+    {
+      "exercise": "14268",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 306000,
+      "testDuration": 199000,
+      "totalDuration": 505000
+    },
+    {
+      "exercise": "20079",
+      "agentSuccess": false,
+      "testSuccess": false,
+      "overallSuccess": false,
+      "agentDuration": 316000,
+      "testDuration": 204000,
+      "totalDuration": 520000
+    }
+  ]
+}
