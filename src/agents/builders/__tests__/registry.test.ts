@@ -44,7 +44,7 @@ function restoreEnvKeys(originals: Record<string, string | undefined>): void {
 
 describe('AGENT_REGISTRY', () => {
     it('has entries for all known agents', () => {
-        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'gemini', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi'];
+        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'cline', 'gemini', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi'];
         for (const agent of agents) {
             expect(AGENT_REGISTRY[agent]).toBeDefined();
         }
@@ -85,11 +85,35 @@ describe('GenericAgentBuilder via registry', () => {
     });
 
     it('copilot: sets COPILOT_ALLOW_ALL and COPILOT_MODEL', async () => {
-        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.copilot);
-        const command = await builder.buildCommand('instructions');
-        expect(command.args[2]).toBe('copilot');
-        expect(command.env?.COPILOT_ALLOW_ALL).toBe('1');
-        expect(command.env?.COPILOT_MODEL).toBe('test-model');
+        const origToken = process.env.COPILOT_GITHUB_TOKEN;
+        process.env.COPILOT_GITHUB_TOKEN = 'test-github-token';
+        try {
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.copilot);
+            const command = await builder.buildCommand('instructions');
+            expect(command.args[2]).toBe('copilot');
+            expect(command.env?.COPILOT_ALLOW_ALL).toBe('1');
+            expect(command.env?.COPILOT_MODEL).toBe('test-model');
+            expect(command.env?.COPILOT_GITHUB_TOKEN).toBe('test-github-token');
+        } finally {
+            if (origToken === undefined) delete process.env.COPILOT_GITHUB_TOKEN;
+            else process.env.COPILOT_GITHUB_TOKEN = origToken;
+        }
+    });
+
+    it('cline: sets ANTHROPIC_API_KEY and passes -m model', async () => {
+        const origKey = process.env.ANTHROPIC_API_KEY;
+        process.env.ANTHROPIC_API_KEY = 'test-anthropic-key';
+        try {
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.cline);
+            const command = await builder.buildCommand('instructions');
+            expect(command.args[2]).toBe('cline');
+            expect(command.args).toContain('-m');
+            expect(command.args).toContain('test-model');
+            expect(command.env?.ANTHROPIC_API_KEY).toBe('test-anthropic-key');
+        } finally {
+            if (origKey === undefined) delete process.env.ANTHROPIC_API_KEY;
+            else process.env.ANTHROPIC_API_KEY = origKey;
+        }
     });
 
     it('vibe: requires MISTRAL_API_KEY', async () => {

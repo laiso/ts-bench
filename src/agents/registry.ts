@@ -276,7 +276,7 @@ export const AGENT_REGISTRY = {
     },
 
     copilot: {
-        defaultProvider: 'openai' as ProviderType,
+        defaultProvider: 'github' as ProviderType,
         install: { method: 'npm', bin: 'copilot', package: '@github/copilot' },
         getEnv(config: AgentConfig): Record<string, string> {
             const env: Record<string, string> = {
@@ -285,6 +285,16 @@ export const AGENT_REGISTRY = {
 
             if (config.model) {
                 env.COPILOT_MODEL = config.model;
+            }
+
+            const found = tryAnyEnv(['COPILOT_GITHUB_TOKEN', 'GH_TOKEN', 'GITHUB_TOKEN']);
+            if (found) {
+                env.COPILOT_GITHUB_TOKEN = found.value;
+            } else if (!config.useDocker || !hasAuthCache('copilot')) {
+                throw new Error(
+                    'Missing COPILOT_GITHUB_TOKEN, GH_TOKEN, or GITHUB_TOKEN for Copilot. ' +
+                    'Set a token or run: bun src/index.ts --setup-auth copilot'
+                );
             }
 
             return env;
@@ -299,6 +309,71 @@ export const AGENT_REGISTRY = {
                 '--add-dir',
                 '.',
                 '-p',
+                instructions
+            ];
+        }
+    },
+
+    cline: {
+        defaultProvider: 'anthropic' as ProviderType,
+        install: { method: 'npm', bin: 'cline', package: 'cline' },
+        getEnv(config: AgentConfig): Record<string, string> {
+            const provider = config.provider ?? 'anthropic';
+
+            switch (provider) {
+                case 'anthropic': {
+                    const found = tryAnyEnv(['ANTHROPIC_API_KEY']);
+                    if (found) {
+                        console.log('[auth] Cline: using Anthropic API key');
+                        return { ANTHROPIC_API_KEY: found.value };
+                    }
+                    if (config.useDocker && hasAuthCache('cline')) {
+                        console.log('[auth] Cline: using subscription auth (no API key, auth cache found)');
+                        return {};
+                    }
+                    throw new Error(
+                        'Missing ANTHROPIC_API_KEY for Cline (Anthropic) provider. ' +
+                        'Set an API key or run: bun src/index.ts --setup-auth cline'
+                    );
+                }
+                case 'openai': {
+                    const { value } = requireAnyEnv(
+                        ['OPENAI_API_KEY'],
+                        'Missing OPENAI_API_KEY for Cline (OpenAI) provider'
+                    );
+                    return { OPENAI_API_KEY: value };
+                }
+                case 'openrouter':
+                    return {
+                        OPENROUTER_API_KEY: requireEnv('OPENROUTER_API_KEY', 'Missing OPENROUTER_API_KEY for Cline (OpenRouter) provider')
+                    };
+                case 'moonshot':
+                    return {
+                        MOONSHOT_API_KEY: requireEnv('MOONSHOT_API_KEY', 'Missing MOONSHOT_API_KEY for Cline (Moonshot) provider')
+                    };
+                case 'xai':
+                    return {
+                        XAI_API_KEY: requireEnv('XAI_API_KEY', 'Missing XAI_API_KEY for Cline (xAI) provider')
+                    };
+                case 'deepseek':
+                    return {
+                        DEEPSEEK_API_KEY: requireEnv('DEEPSEEK_API_KEY', 'Missing DEEPSEEK_API_KEY for Cline (DeepSeek) provider')
+                    };
+                case 'cline':
+                    // Use cline's own stored auth (~/.cline/config) — no env vars needed.
+                    console.log('[auth] Cline: using native cline auth (~/.cline/config)');
+                    return {};
+                default:
+                    throw new Error(`Unsupported provider for Cline: ${provider}`);
+            }
+        },
+        buildArgs(config: AgentConfig, instructions: string): string[] {
+            return [
+                'bash',
+                config.agentScriptPath,
+                'cline',
+                '-y',
+                '-m', config.model,
                 instructions
             ];
         }
