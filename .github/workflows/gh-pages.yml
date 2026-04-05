@@ -11,7 +11,7 @@ on:
     branches: [main, master]
     paths:
       # Benchmark results
-      - 'public/data/leaderboard.json'
+      - 'public/data/results/**'
       - 'scripts/build-results-pages.ts'
       # Main leaderboard site
       - 'scripts/build-site.ts'
@@ -53,6 +53,9 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+
+      - name: Aggregate leaderboard from individual result files
+        run: bun scripts/aggregate-leaderboard.ts
 
       - name: Build benchmark result pages
         run: bun scripts/build-results-pages.ts

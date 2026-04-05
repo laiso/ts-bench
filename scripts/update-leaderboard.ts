@@ -1,5 +1,5 @@
 import { readFile, writeFile, mkdir } from 'fs/promises';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 import { existsSync } from 'fs';
 import { EOL } from 'os';
 
@@ -31,13 +31,16 @@ interface SavedBenchmarkResult {
   results: unknown[];
 }
 
-interface LeaderboardData {
-  lastUpdated: string;
-  results: Record<string, SavedBenchmarkResult>; // key: agent-model
+const RESULTS_DIR = './public/data/results';
+const COMMIT_BODY_PATH = './commit-body.md';
+
+function sanitizeFilename(key: string): string {
+  return key.replace(/[^a-zA-Z0-9._-]/g, '_');
 }
 
-const LEADERBOARD_PATH = './public/data/leaderboard.json';
-const COMMIT_BODY_PATH = './commit-body.md';
+function resultFilePath(key: string): string {
+  return join(RESULTS_DIR, `${sanitizeFilename(key)}.json`);
+}
 
 async function main() {
   const newResultPath = process.argv[2];
@@ -46,17 +49,10 @@ async function main() {
     process.exit(1);
   }
 
-  let leaderboardData: LeaderboardData;
-  if (existsSync(LEADERBOARD_PATH)) {
-    leaderboardData = JSON.parse(await readFile(LEADERBOARD_PATH, 'utf-8')) as LeaderboardData;
-  } else {
-    leaderboardData = { lastUpdated: '', results: {} };
-  }
-  const oldLeaderboardData: LeaderboardData = JSON.parse(JSON.stringify(leaderboardData));
-
   const newResult: SavedBenchmarkResult = JSON.parse(await readFile(newResultPath, 'utf-8')) as SavedBenchmarkResult;
   validateResult(newResult);
   const key = `${newResult.metadata.agent}-${newResult.metadata.model}`;
+  const outPath = resultFilePath(key);
 
   const RUN_URL = process.env.RUN_URL;
   const RUN_ID = process.env.RUN_ID;
@@ -71,21 +67,20 @@ async function main() {
     },
   };
 
-  leaderboardData.results[key] = merged;
-  leaderboardData.lastUpdated = new Date().toISOString();
-
   try {
-    const diffMarkdown = generateDiffMarkdown(oldLeaderboardData, leaderboardData, key);
+    const oldResult: SavedBenchmarkResult | null = existsSync(outPath)
+      ? (JSON.parse(await readFile(outPath, 'utf-8')) as SavedBenchmarkResult)
+      : null;
+    const diffMarkdown = generateDiffMarkdown(oldResult, merged, key);
     await writeFile(COMMIT_BODY_PATH, diffMarkdown, 'utf-8');
     console.log(`📝 Commit body generated: ${COMMIT_BODY_PATH}`);
   } catch (e) {
     console.warn('Failed to generate commit body markdown:', e);
   }
 
-  await ensureDirectoryExists(LEADERBOARD_PATH);
-  await writeFile(LEADERBOARD_PATH, JSON.stringify(leaderboardData, null, 2), 'utf-8');
-  console.log(`✅ Updated: ${LEADERBOARD_PATH}`);
-  console.log('ℹ️ README no longer embeds a leaderboard table; only public/data/leaderboard.json is updated.');
+  await ensureDirectoryExists(outPath);
+  await writeFile(outPath, JSON.stringify(merged, null, 2), 'utf-8');
+  console.log(`✅ Updated: ${outPath}`);
 }
 
 function validateResult(r: SavedBenchmarkResult) {
@@ -102,59 +97,34 @@ function validateResult(r: SavedBenchmarkResult) {
   }
 }
 
-function getRankedList(data: LeaderboardData) {
-  type RankedResult = SavedBenchmarkResult & { key: string };
-  const records: RankedResult[] = Object.entries(data.results).map(([key, r]) => ({ key, ...r }));
-
-  return records
-    .sort((a, b) => {
-      if (b.summary.successRate !== a.summary.successRate) {
-        return b.summary.successRate - a.summary.successRate;
-      }
-      return a.summary.avgDuration - b.summary.avgDuration;
-    })
-    .map((r, i) => ({
-      key: r.key,
-      rank: i + 1,
-      metadata: r.metadata,
-      summary: r.summary,
-    }));
-}
-
-function generateDiffMarkdown(oldData: LeaderboardData, newData: LeaderboardData, updatedKey: string): string {
-  const oldRanks = getRankedList(oldData);
-  const newRanks = getRankedList(newData);
-
-  const oldRankMap = new Map(oldRanks.map((r) => [r.key, r]));
-  const updatedEntry = newRanks.find((r) => r.key === updatedKey);
-
-  if (!updatedEntry) return 'No changes detected.';
-
-  const oldEntry = oldRankMap.get(updatedKey);
+function generateDiffMarkdown(
+  oldResult: SavedBenchmarkResult | null,
+  newResult: SavedBenchmarkResult,
+  key: string,
+): string {
   const lines: string[] = [];
+  const keyLabel = `\`${key}\``;
 
-  const keyLabel = `\`${updatedKey}\``;
-  if (!oldEntry) {
-    lines.push(`🚀 New Entry: ${keyLabel} entered Leaderboard at rank ${updatedEntry.rank}`);
+  if (!oldResult) {
+    lines.push(`🚀 New Entry: ${keyLabel} added to results`);
   } else {
-    if (updatedEntry.rank < oldEntry.rank) {
-      lines.push(`🔼 Rank Up: ${keyLabel} from ${oldEntry.rank} → ${updatedEntry.rank}`);
-    } else if (updatedEntry.rank > oldEntry.rank) {
-      lines.push(`🔽 Rank Down: ${keyLabel} from ${oldEntry.rank} → ${updatedEntry.rank}`);
+    const oldRate = Number(oldResult.summary.successRate);
+    const newRate = Number(newResult.summary.successRate);
+    if (newRate > oldRate) {
+      lines.push(`🔼 Improved: ${keyLabel}`);
+    } else if (newRate < oldRate) {
+      lines.push(`🔽 Declined: ${keyLabel}`);
     } else {
-      lines.push(`🔄 Rank Unchanged: ${keyLabel} remains at ${updatedEntry.rank}`);
+      lines.push(`🔄 Updated: ${keyLabel}`);
     }
   }
 
-  const oldRankStr = oldEntry ? String(oldEntry.rank) : 'N/A';
-  lines.push(`- Leaderboard Rank: ${oldRankStr} -> ${updatedEntry.rank}`);
-
-  const oldRate = oldEntry ? Number(oldEntry.summary.successRate).toFixed(1) + '%' : 'N/A';
-  const newRate = Number(updatedEntry.summary.successRate).toFixed(1) + '%';
+  const oldRate = oldResult ? Number(oldResult.summary.successRate).toFixed(1) + '%' : 'N/A';
+  const newRate = Number(newResult.summary.successRate).toFixed(1) + '%';
   lines.push(`- Success Rate: ${newRate} (was ${oldRate})`);
 
-  const oldTime = oldEntry ? (Number(oldEntry.summary.avgDuration) / 1000).toFixed(1) + 's' : 'N/A';
-  const newTime = (Number(updatedEntry.summary.avgDuration) / 1000).toFixed(1) + 's';
+  const oldTime = oldResult ? (Number(oldResult.summary.avgDuration) / 1000).toFixed(1) + 's' : 'N/A';
+  const newTime = (Number(newResult.summary.avgDuration) / 1000).toFixed(1) + 's';
   lines.push(`- Avg Time: ${newTime} (was ${oldTime})`);
 
   return lines.join(EOL);

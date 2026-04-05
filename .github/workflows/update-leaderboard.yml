@@ -97,7 +97,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Stage only expected files
-          git add public/data/leaderboard.json || true
+          git add public/data/results/ || true
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
