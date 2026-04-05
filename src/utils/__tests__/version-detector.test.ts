@@ -84,6 +84,11 @@ describe('VersionDetector', () => {
             const detector = makeDetector({ exitCode: 0, stdout: 'gemini 2.0.0', stderr: 'some stderr noise 3.0.0' });
             expect(await detector.detectAgentVersion('gemini')).toBe('2.0.0');
         });
+
+        it('stdout takes precedence over stderr when both contain parseable versions', async () => {
+            const detector = makeDetector({ exitCode: 0, stdout: 'gemini 1.1.1', stderr: 'gemini 9.9.9' });
+            expect(await detector.detectAgentVersion('gemini')).toBe('1.1.1');
+        });
     });
 
     describe('detectAgentVersion – no version found', () => {
