@@ -1,5 +1,6 @@
 import type { AgentType } from '../config/types';
 import { TS_BENCH_CONTAINER } from '../config/constants';
+import type { CommandExecutor } from './shell';
 import { BunCommandExecutor } from './shell';
 import { DOCKER_BASE_ARGS, createCliCacheArgs } from './docker';
 import { join } from 'path';
@@ -13,10 +14,10 @@ interface DetectOptions {
 }
 
 export class VersionDetector {
-    private executor: BunCommandExecutor;
+    private executor: CommandExecutor;
 
-    constructor() {
-        this.executor = new BunCommandExecutor();
+    constructor(executor?: CommandExecutor) {
+        this.executor = executor ?? new BunCommandExecutor();
     }
 
     async detectAgentVersion(agent: AgentType, options: DetectOptions = {}): Promise<string> {
@@ -25,7 +26,11 @@ export class VersionDetector {
             const result = await this.executor.execute(versionArgs);
 
             if (result.exitCode === 0) {
-                return this.parseVersionOutput(agent, result.stdout);
+                const version = this.parseVersionOutput(agent, result.stdout);
+                if (version === 'unknown' && result.stderr) {
+                    return this.parseVersionOutput(agent, result.stderr);
+                }
+                return version;
             } else {
                 console.warn(`⚠️  Failed to detect ${agent} version: ${result.stderr || 'unknown error'}`);
                 return this.getDefaultVersion(agent);
