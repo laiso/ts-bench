@@ -60,6 +60,8 @@ function generateResultPage(key: string, entry: SavedResult): string {
     const pageTitle = `${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)} - ts-bench`;
     const escapedTier = esc(tier ?? '-');
     const ogDescription = `Tier ${escapedTier} | ${solved}/${total} solved | ${summary.successRate?.toFixed(1) ?? 0}% success rate | ${esc(meta.provider)}`;
+    const agentName = (meta.agent || '').toLowerCase();
+    const iconPath = `../assets/icons/${esc(agentName)}.png`;
 
     let resultsRows = '';
     if (entry.results && entry.results.length > 0) {
@@ -97,7 +99,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
 
   <div class="hero">
     <div style="display:flex;align-items:center;gap:16px">
-      <img src="../assets/icons/${esc(meta.agent.toLowerCase())}.png" alt="${esc(agentDisplayName(meta.agent))}" width="48" height="48" style="border-radius:8px" onerror="this.style.display='none'">
+      <img src="${iconPath}" alt="${esc(agentDisplayName(meta.agent))}" width="48" height="48" style="border-radius:8px;object-fit:contain;background:transparent" onerror="this.style.display='none'">
       <div>
         <div style="display:flex;align-items:center;gap:10px">
           <h1>${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)}</h1>
@@ -146,7 +148,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
         title: pageTitle,
         description: ogDescription,
         body,
-        faviconPath: '../favicon.png',
+        faviconPath: iconPath,
     });
 }
 
