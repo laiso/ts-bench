@@ -130,7 +130,6 @@ install_from_registry() {
       return 1
       ;;
   esac
-  return 0
 }
 
 # Return the binary name for an agent from agents.json, or the agent key if not found.
