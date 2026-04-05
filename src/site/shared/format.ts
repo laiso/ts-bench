@@ -13,6 +13,25 @@ export function fmtDate(ts: string): string {
     return ts.split('T')[0] ?? '-';
 }
 
+export function agentDisplayName(slug: string): string {
+    switch (slug.toLowerCase()) {
+        case 'claude': return 'Claude Code';
+        case 'codex': return 'Codex CLI';
+        case 'goose': return 'Goose CLI';
+        case 'aider': return 'Aider';
+        case 'gemini': return 'Gemini CLI';
+        case 'qwen': return 'Qwen Code';
+        case 'cursor': return 'Cursor Agent';
+        case 'copilot': return 'GitHub Copilot CLI';
+        case 'kimi': return 'Kimi Code CLI';
+        case 'cline': return 'Cline';
+        case 'windsurf': return 'Windsurf';
+        case 'devin': return 'Devin';
+        case 'opencode': return 'OpenCode';
+        default: return slug.charAt(0).toUpperCase() + slug.slice(1).toLowerCase();
+    }
+}
+
 export function esc(s: string): string {
     if (!s) return '';
     return s

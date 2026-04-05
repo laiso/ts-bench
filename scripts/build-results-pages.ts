@@ -12,7 +12,7 @@ import { existsSync } from 'node:fs';
 import type { ResultEntry, SavedResult, LeaderboardData } from '../src/site/shared/types.ts';
 import { V2_DEFAULT_TASKS } from '../src/site/shared/types.ts';
 import { isV2Entry } from '../src/site/shared/tier.ts';
-import { fmtDuration, fmtDate, esc } from '../src/site/shared/format.ts';
+import { fmtDuration, fmtDate, esc, agentDisplayName } from '../src/site/shared/format.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
@@ -56,7 +56,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
     const solved = summary.successCount ?? 0;
     const total = summary.totalCount ?? 0;
 
-    const pageTitle = `${esc(meta.agent)} / ${esc(meta.model)} - ts-bench`;
+    const pageTitle = `${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)} - ts-bench`;
     const escapedTier = esc(tier ?? '-');
     const ogDescription = `Tier ${escapedTier} | ${solved}/${total} solved | ${summary.successRate?.toFixed(1) ?? 0}% success rate | ${esc(meta.provider)}`;
 
@@ -166,7 +166,7 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
     <div style="display:flex;align-items:center;gap:16px">
       ${tier ? `<span class="tier ${tierClass(tier)}">${esc(tier)}</span>` : ''}
       <div>
-        <h1>${esc(meta.agent)} / ${esc(meta.model)}</h1>
+        <h1>${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)}</h1>
         <div style="color:var(--text-muted);font-size:0.9rem">${esc(meta.provider)} &middot; ${fmtDate(meta.timestamp)}</div>
       </div>
     </div>
