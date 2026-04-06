@@ -1,0 +1,91 @@
+name: "[v2] Analyze Benchmark Failures"
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'The ID of the benchmark workflow run to analyze'
+        required: true
+        type: string
+      artifact_name:
+        description: 'The name of the benchmark artifact'
+        required: true
+        type: string
+        default: 'benchmark-results'
+      pr_number:
+        description: 'PR number to post analysis comment (leave empty to write Job Summary only)'
+        required: false
+        type: string
+      analysis_model:
+        description: 'GitHub Models model to use for analysis'
+        required: false
+        type: string
+        default: 'openai/gpt-4o-mini'
+
+run-name: 'Analyze Failures from Run ${{ github.event.inputs.run_id }}'
+
+permissions:
+  models: read
+  pull-requests: write
+  actions: read
+
+jobs:
+  analyze-failures:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Download benchmark artifact
+        uses: dawidd6/action-download-artifact@v8
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          run_id: ${{ github.event.inputs.run_id }}
+          name: ${{ github.event.inputs.artifact_name }}
+          path: ./current-result
+
+      - name: Find the result file path
+        id: find_file
+        run: |
+          set -euo pipefail
+          FILE_PATH=""
+          if [ -f ./current-result/latest.json ]; then
+            FILE_PATH=./current-result/latest.json
+          else
+            FILE_PATH=$(find ./current-result -type f -name 'latest.json' -print -quit || true)
+            if [ -z "$FILE_PATH" ]; then
+              FILE_PATH=$(find ./current-result -type f -name '*.json' -print -quit || true)
+            fi
+          fi
+          if [ -z "$FILE_PATH" ]; then
+            echo "::error::No JSON file found in artifact" >&2
+            exit 1
+          fi
+          echo "Found result file: $FILE_PATH"
+          echo "result_path=$FILE_PATH" >> $GITHUB_OUTPUT
+
+      - name: Analyze failures with GitHub Models API
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANALYSIS_MODEL: ${{ github.event.inputs.analysis_model }}
+        run: bun scripts/analyze-failure.ts "${{ steps.find_file.outputs.result_path }}" ./current-result
+
+      - name: Comment on PR
+        if: ${{ github.event.inputs.pr_number != '' && hashFiles('failure-analysis.md') != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh pr comment "${{ github.event.inputs.pr_number }}" --body-file failure-analysis.md
+
+      - name: Write Job Summary
+        if: ${{ hashFiles('failure-analysis.md') != '' }}
+        run: cat failure-analysis.md >> "$GITHUB_STEP_SUMMARY"
