@@ -97,7 +97,7 @@ export class BenchmarkReporter {
         console.log("-".repeat(80));
         
         const version = config.version ?? 'unknown';
-        console.log(`${config.agent}\t\t${version}\t\t${config.model}\t\t${config.provider}\t${successRate.toFixed(1)}%\t\t${formatDuration(totalDuration)}\t\t${formatDuration(avgDuration)}\t${agentSuccessCount}\t\t${testSuccessCount}\t\t${testFailedCount}`);
+        console.log(`${config.agent}\t\t${version}\t\t${config.model ?? 'default'}\t\t${config.provider}\t${successRate.toFixed(1)}%\t\t${formatDuration(totalDuration)}\t\t${formatDuration(avgDuration)}\t${agentSuccessCount}\t\t${testSuccessCount}\t\t${testFailedCount}`);
     }
 
 
@@ -143,7 +143,7 @@ export class BenchmarkReporter {
     async saveResult(results: TestResult[], config: BenchmarkConfig, outputPath: string, resultName?: string): Promise<void> {
         const timestamp = new Date().toISOString();
         const safeAgent = sanitizeFilenameSegment(config.agent, 'agent');
-        const safeModel = sanitizeFilenameSegment(config.model, 'model');
+        const safeModel = sanitizeFilenameSegment(config.model ?? '', 'model');
         const safeProvider = sanitizeFilenameSegment(config.provider, 'provider');
         const rawTimestamp = timestamp.replace(/[:.]/g, '-').replace(/Z$/, '');
         const safeTimestamp = sanitizeFilenameSegment(rawTimestamp, 'timestamp');
