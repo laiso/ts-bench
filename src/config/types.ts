@@ -34,7 +34,7 @@ export interface TestOnlyResult {
 export interface BenchmarkConfig {
     testCommand: string;
     agent: AgentType;
-    model: string;
+    model: string | undefined;
     provider: ProviderType;
     verbose: boolean;
     useDocker?: boolean;
@@ -46,7 +46,7 @@ export interface BenchmarkConfig {
 }
 
 export interface CLIArgs {
-    model: string;
+    model: string | undefined;
     agent: AgentType;
     provider: ProviderType;
     verbose: boolean;
