@@ -2,7 +2,7 @@
 # One or more task ids: comma-separated (same as local `bun src/index.ts --dataset v2 --tasks a,b,c`).
 # See specs/000-project-handbook/environment.md § GitHub Actions (v2) and AGENTS.md v2 caveats.
 
-name: Manual Benchmark Run (v2 SWE-Lancer)
+name: "[v2] Manual Benchmark Run (SWE-Lancer)"
 
 on:
   workflow_dispatch:

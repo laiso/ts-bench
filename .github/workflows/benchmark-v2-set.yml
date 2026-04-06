@@ -2,7 +2,7 @@
 # Split the first N tasks into J roughly equal shards (no price grouping); each shard = one matrix job (--tasks ...).
 # See https://github.com/laiso/ts-bench/issues/73 and specs/000-project-handbook/environment.md (v2 set).
 
-name: Manual Benchmark Run (v2 set — top reward)
+name: "[v2] Manual Benchmark Run (set — top reward)"
 
 on:
   workflow_dispatch:

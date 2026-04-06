@@ -1,4 +1,4 @@
-name: Manual Benchmark Run
+name: "[v1] Manual Benchmark Run"
 
 on:
   workflow_dispatch:
@@ -341,15 +341,6 @@ jobs:
           if [ -f benchmark-summary.txt ]; then
             node scripts/append-gh-summary.mjs
           fi
-
-      - name: Trigger leaderboard update
-        if: success()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run update-leaderboard.yml \
-            -f run_id="${{ github.run_id }}" \
-            -f artifact_name="benchmark-results"
 
       - name: Upload artifacts (results + console)
         if: always()

@@ -1,4 +1,4 @@
-name: Propose Leaderboard Update from Artifact
+name: "[v2] Propose Tierlist Update from Artifact"
 
 on:
   workflow_dispatch:
