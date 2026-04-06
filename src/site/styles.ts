@@ -290,5 +290,10 @@ footer a:hover { color: var(--text); }
 .tier-D { background: #e06040; }
 .tier-F { background: #cc2222; }
 h2 { margin-top: 32px; margin-bottom: 8px; font-size: 1.15rem; }
+details { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-top: 12px; overflow: hidden; }
+details summary { padding: 10px 16px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+details pre { margin: 0; padding: 12px 16px; border-top: 1px solid var(--border); }
+.desc-html { font-size: 0.9rem; line-height: 1.6; }
+.desc-html p { margin-bottom: 8px; }
 `;
 

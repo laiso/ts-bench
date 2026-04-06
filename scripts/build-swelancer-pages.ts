@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
 import { parse } from 'csv-parse/sync';
 import { SWELANCER_ISSUES_PATH } from '../src/config/constants.ts';
+import { renderLayout } from '../src/site/templates/layout.ts';
+import { esc } from '../src/site/shared/format.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
@@ -41,13 +43,6 @@ function toNumberPrice(raw: string): number {
     return Number.isFinite(n) ? n : 0;
 }
 
-function esc(s: string): string {
-    return s
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-}
 
 /**
  * Convert description text to HTML:
@@ -138,73 +133,43 @@ function generateTaskPage(task: TaskRecord, issuesBasePath: string): Promise<str
 
         const descHtml = descriptionToHtml(task.description);
 
-        return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(task.question_id)} — SWE-Lancer task (ts-bench)</title>
-<link rel="icon" type="image/png" href="/favicon.png">
-<meta name="description" content="${esc(task.title.slice(0, 160))}">
-<link rel="stylesheet" href="styles.css">
-<style>
-.task-page { max-width: 900px; margin: 0 auto; }
-.back-link { font-size: 0.9rem; margin-bottom: 24px; display: block; }
-.task-meta { display: flex; flex-wrap: wrap; gap: 16px; margin: 12px 0 24px; font-size: 0.875rem; }
-.task-meta span { background: var(--surface, #1a2332); border: 1px solid var(--border, #2d3a4d); border-radius: 6px; padding: 4px 10px; }
-.task-meta strong { color: var(--accent, #6cb3f7); }
-.section { margin-bottom: 28px; }
-.section h2 { font-size: 1.05rem; margin-bottom: 10px; color: var(--muted, #8b9cb3); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
-.cli-block { display: flex; align-items: center; gap: 10px; background: var(--surface, #1a2332); border: 1px solid var(--border, #2d3a4d); border-radius: 8px; padding: 12px 16px; }
-.cli-block code { flex: 1; font-size: 0.85rem; word-break: break-all; }
-.btn-copy { flex-shrink: 0; background: var(--accent, #6cb3f7); color: #0f1419; border: none; border-radius: 6px; padding: 6px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
-.btn-copy:hover { opacity: 0.85; }
-details { background: var(--surface, #1a2332); border: 1px solid var(--border, #2d3a4d); border-radius: 8px; margin-top: 12px; overflow: hidden; }
-details summary { padding: 10px 16px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-details pre { margin: 0; padding: 12px 16px; border-top: 1px solid var(--border, #2d3a4d); }
-.desc-html { font-size: 0.9rem; line-height: 1.6; }
-.desc-html p { margin-bottom: 8px; }
-</style>
-</head>
-<body>
-<div class="task-page">
-  <a class="back-link" href="../">ts-bench</a>
-  <a class="back-link" href="index.html">&larr; Task Browser</a>
+        const body = `
+  <div class="breadcrumb"><a href="../">ts-bench</a> &rsaquo; <a href="index.html">Task Browser</a> &rsaquo; ${esc(task.question_id)}</div>
 
-  <h1 style="font-size:1.6rem;margin-bottom:8px">${esc(task.question_id)}</h1>
-
-  <div class="task-meta">
-    <span><strong>Price:</strong> $${esc(String(task.price))}</span>
-    <span><strong>Set:</strong> ${esc(task.set)}</span>
-    <span><strong>Variant:</strong> ${esc(task.variant)}</span>
-  </div>
-
-  <div class="section">
-    <h2>Title</h2>
-    <p style="font-size:1rem;line-height:1.5">${esc(task.title)}</p>
-  </div>
-
-  <div class="section">
-    <h2>Description</h2>
-    ${descHtml}
-  </div>
-
-  <div class="section">
-    <h2>CLI Command</h2>
-    <div class="cli-block">
-      <code id="cli-cmd">${esc(cliCommand)}</code>
-      <button class="btn-copy" onclick="(function(btn){var t=document.getElementById('cli-cmd').textContent;navigator.clipboard&&navigator.clipboard.writeText(t).then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy';},2000)}).catch(function(){btn.textContent='Failed';setTimeout(function(){btn.textContent='Copy';},2000)});})(this)">Copy</button>
+  <div class="hero">
+    <h1>${esc(task.question_id)}</h1>
+    <div class="hero-meta">
+      <div><strong>$${esc(String(task.price))}</strong> reward</div>
+      <div>Set <strong>${esc(task.set)}</strong></div>
+      <div>Variant <strong>${esc(task.variant)}</strong></div>
     </div>
+  </div>
+
+  <h2>Title</h2>
+  <p style="font-size:1rem;line-height:1.5;margin-bottom:24px">${esc(task.title)}</p>
+
+  <h2>Description</h2>
+  <div style="margin-bottom:24px">${descHtml}</div>
+
+  <h2>CLI Command</h2>
+  <div class="cli-block" style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:24px">
+    <code id="cli-cmd" style="flex:1;font-size:0.85rem;word-break:break-all">${esc(cliCommand)}</code>
+    <button style="flex-shrink:0;background:var(--accent);color:#0d1117;border:none;border-radius:6px;padding:6px 14px;font-size:0.8rem;font-weight:600;cursor:pointer" onclick="(function(btn){var t=document.getElementById('cli-cmd').textContent;navigator.clipboard&&navigator.clipboard.writeText(t).then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy';},2000)}).catch(function(){btn.textContent='Failed';setTimeout(function(){btn.textContent='Copy';},2000)});})(this)">Copy</button>
   </div>
 ${testPySection}${patchSection}
   <footer>
     <a href="../">ts-bench</a> &middot;
-    <a href="../swelancer-tasks/">Task Browser</a> &middot;
+    <a href="index.html">Task Browser</a> &middot;
     <a href="https://github.com/laiso/ts-bench">GitHub</a>
   </footer>
-</div>
-</body>
-</html>`;
+`;
+
+        return renderLayout({
+            title: `${task.question_id} — SWE-Lancer task (ts-bench)`,
+            description: task.title.slice(0, 160),
+            body,
+            faviconPath: '../favicon.png',
+        });
     })();
 }
 
