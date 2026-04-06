@@ -13,14 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
 
 const csvArg = process.argv[2];
-if (!csvArg) {
-    console.warn(
-        '⚠ No CSV path provided. Skipping SWE-Lancer page build.\n' +
-        '  Usage: bun run scripts/build-swelancer-pages.ts <path-to-csv>'
-    );
-    process.exit(0);
-}
-const CSV_PATH = resolve(csvArg);
+const CSV_PATH = csvArg ? resolve(csvArg) : '';
 
 const OUT_DIR = join(REPO_ROOT, 'docs/swelancer-tasks');
 const OUT_FILE = join(OUT_DIR, 'tasks.json');
@@ -62,39 +55,52 @@ function esc(s: string): string {
  * - Bare image URLs ending in .png/.jpg/.gif/.webp → `<img src="url">`
  * - Otherwise wrap in `<pre>` for plain text display
  */
-function descriptionToHtml(text: string): string {
+export function descriptionToHtml(text: string): string {
     if (!text) return '';
+
+    // Unescape literal \n sequences from CSV
+    const normalized = text.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
 
     const mdImageRe = /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g;
     const bareImageRe = /^https?:\/\/\S+\.(?:png|jpg|jpeg|gif|webp)$/i;
 
     // Check if the text is predominantly image references
-    const hasMdImage = mdImageRe.test(text);
+    const hasMdImage = mdImageRe.test(normalized);
     mdImageRe.lastIndex = 0;
 
+    const text2 = normalized;
+
     if (hasMdImage) {
-        const html = text.replace(mdImageRe, (_match, alt, url) => {
+        const replaced = text2.replace(mdImageRe, (_match, alt, url) => {
             return `<img src="${esc(url)}" alt="${esc(alt)}" style="max-width:100%;border-radius:4px;margin:8px 0">`;
         });
-        // Wrap remaining text lines as paragraph(s)
-        const wrapped = html
+        // Split each line on <img ...> boundaries so text parts get esc() but
+        // already-HTML <img> tags pass through unchanged.
+        const imgTagRe = /(<img\s[^>]*>)/g;
+        const wrapped = replaced
             .split('\n')
             .map((line) => {
                 const trimmed = line.trim();
                 if (!trimmed) return '';
-                if (trimmed.startsWith('<img')) return trimmed;
-                return `<p>${esc(trimmed)}</p>`;
+                const parts = trimmed.split(imgTagRe);
+                const inner = parts
+                    .map((part) => (part.startsWith('<img') ? part : esc(part)))
+                    .join('');
+                // If the whole line is just an img, don't wrap in <p>
+                return parts.every((p) => !p || p.startsWith('<img'))
+                    ? inner
+                    : `<p>${inner}</p>`;
             })
             .filter((l) => l !== '')
             .join('\n');
         return `<div class="desc-html">${wrapped}</div>`;
     }
 
-    if (bareImageRe.test(text.trim())) {
-        return `<img src="${esc(text.trim())}" alt="" style="max-width:100%;border-radius:4px">`;
+    if (bareImageRe.test(text2.trim())) {
+        return `<img src="${esc(text2.trim())}" alt="" style="max-width:100%;border-radius:4px">`;
     }
 
-    return `<pre style="white-space:pre-wrap;word-break:break-word;font-size:0.85rem;line-height:1.5;background:var(--surface-2,#1a1a1a);padding:12px 16px;border-radius:6px;overflow-x:auto">${esc(text)}</pre>`;
+    return `<pre style="white-space:pre-wrap;word-break:break-word;font-size:0.85rem;line-height:1.5;background:var(--surface-2,#1a1a1a);padding:12px 16px;border-radius:6px;overflow-x:auto">${esc(text2)}</pre>`;
 }
 
 function generateTaskPage(task: TaskRecord, issuesBasePath: string): Promise<string> {
@@ -229,7 +235,16 @@ async function main(): Promise<void> {
     console.log(`Generated ${pageCount} task pages in ${OUT_DIR}`);
 }
 
-main().catch(err => {
-    console.error(err);
-    process.exit(1);
-});
+if (import.meta.main) {
+    if (!csvArg) {
+        console.warn(
+            '⚠ No CSV path provided. Skipping SWE-Lancer page build.\n' +
+            '  Usage: bun run scripts/build-swelancer-pages.ts <path-to-csv>'
+        );
+        process.exit(0);
+    }
+    main().catch(err => {
+        console.error(err);
+        process.exit(1);
+    });
+}
