@@ -125,7 +125,7 @@ jobs:
             BODY_ARGS=(--body "")
           fi
           # Check if PR already exists
-          EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' || true)
+          EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty' || true)
           if [ -n "$EXISTING" ]; then
             echo "PR #$EXISTING already exists for branch $BRANCH"
           else
