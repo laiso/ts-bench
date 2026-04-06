@@ -88,6 +88,10 @@ function generateResultPage(key: string, entry: SavedResult): string {
         ? `<a href="${esc(meta.runUrl)}" target="_blank">View GHA Run</a>`
         : '';
 
+    const prSearchUrl = meta.runId
+        ? `<a href="https://github.com/laiso/ts-bench/pulls?q=${esc(String(meta.runId))}" target="_blank">View PR</a>`
+        : '';
+
     const body = `
   <div class="breadcrumb"><a href="../">ts-bench</a> &rsaquo; Result</div>
 
@@ -110,7 +114,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
       ${meta.version ? `<div>Version <strong>${esc(meta.version)}</strong></div>` : ''}
       ${meta.benchmarkVersion ? `<div>Bench <strong>${esc(meta.benchmarkVersion)}</strong></div>` : ''}
     </div>
-    ${runUrlHtml ? `<div style="margin-top:12px">${runUrlHtml}</div>` : ''}
+    ${(runUrlHtml || prSearchUrl) ? `<div style="margin-top:12px;display:flex;gap:12px">${runUrlHtml}${prSearchUrl}</div>` : ''}
   </div>
 
   <h2>Task Results</h2>

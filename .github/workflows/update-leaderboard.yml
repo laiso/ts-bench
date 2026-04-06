@@ -111,6 +111,7 @@ jobs:
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
+        id: create_pr
         if: success() && steps.push_branch.outputs.pushed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -128,6 +129,7 @@ jobs:
           EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty' || true)
           if [ -n "$EXISTING" ]; then
             echo "PR #$EXISTING already exists for branch $BRANCH"
+            PR_NUMBER="$EXISTING"
           else
             gh pr create \
               --base main \
@@ -135,4 +137,6 @@ jobs:
               --title "feat(leaderboard): Update with results from run ${RUN_ID}" \
               "${BODY_ARGS[@]}" \
               --label "leaderboard"
+            PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
           fi
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
