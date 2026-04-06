@@ -241,7 +241,7 @@ function countPatchLines(patch: string): number {
 
 // ---- Markdown output ------------------------------------------------------
 
-    const successRate = Number(summary.successRate).toFixed(1);
+export function buildMarkdownReport(
     metadata: BenchmarkMetadata,
     summary: BenchmarkSummary,
     analyses: AnalysisResult[],
