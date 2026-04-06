@@ -11,7 +11,7 @@ export interface FileList {
 }
 
 export interface AgentConfig {
-    model: string;
+    model: string | undefined;
     provider?: string;
     containerName: string;
     agentScriptPath: string;

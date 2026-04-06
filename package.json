@@ -3,14 +3,17 @@
   "version": "1.1.0",
   "module": "index.ts",
   "type": "module",
+  "bin": {
+    "ts-bench": "./src/index.ts"
+  },
   "private": true,
   "scripts": {
     "test": "bun test ./src",
     "typecheck": "bunx --bun tsc -p . --noEmit",
-    "build:swelancer-pages": "bun scripts/build-swelancer-pages.ts repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv",
+    "build:swelancer-pages": "bun scripts/build-swelancer-pages.ts",
     "build:results-pages": "bun scripts/build-results-pages.ts",
     "build:site": "bun scripts/build-site.ts",
-    "build:all": "bun scripts/build-results-pages.ts && bun scripts/build-swelancer-pages.ts repos/frontier-evals/project/swelancer/all_swelancer_tasks.csv && bun scripts/build-site.ts",
+    "build:all": "bun scripts/build-results-pages.ts && bun scripts/build-swelancer-pages.ts && bun scripts/build-site.ts",
     "serve": "bun x serve docs"
   },
   "devDependencies": {

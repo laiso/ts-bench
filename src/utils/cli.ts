@@ -7,12 +7,12 @@ export function printHelp(): void {
 CLI Agents Benchmark - AI coding agent comparison tool
 
 Usage:
-  bun src/index.ts [options]
+  ts-bench [options]
 
 Basic Options:
   --agent <agent>        Agent to use (${Object.keys(AGENT_REGISTRY).join(', ')}) [default: claude]
   --dataset <v1|v2>      Dataset to use (v1: Exercism, v2: SWE-Lancer) [default: v1]
-  --model <model>        Model to use [default: sonnet]
+  --model <model>        Model to use (omit to use the agent's default model)
   --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, moonshot) [default: agent-specific; see AGENT_DEFAULT_PROVIDER]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
   --verbose              Show detailed output
@@ -59,16 +59,16 @@ Batch Execution:
   --total-batches <num>  Total number of batches [default: 5]
 
 Examples:
-  bun src/index.ts --agent claude --model sonnet
-  bun src/index.ts --agent claude --export-web --output-dir ./public/data
-  bun src/index.ts --output-format json --output-dir ./results
-  bun src/index.ts --exercise acronym,anagram,bank-account
-  bun src/index.ts --dataset v2 --task 16912_4 --agent cursor --model sonnet
-  bun src/index.ts --list
-  bun src/index.ts --agent claude --model sonnet --save-result
-  bun src/index.ts --agent goose --model gemini --save-result
-  bun src/index.ts --agent claude --model sonnet --version 1.2.3 --save-result
-  bun src/index.ts --agent kimi --provider moonshot --model kimi-k2.5 --save-result
+  ts-bench --agent claude
+  ts-bench --agent claude --model sonnet
+  ts-bench --agent claude --export-web --output-dir ./public/data
+  ts-bench --output-format json --output-dir ./results
+  ts-bench --exercise acronym,anagram,bank-account
+  ts-bench --dataset v2 --task 16912_4 --agent cursor --model sonnet
+  ts-bench --list
+  ts-bench --agent claude --model sonnet --save-result
+  ts-bench --agent goose --model gemini --save-result
+  ts-bench --agent kimi --provider moonshot --model kimi-k2.5 --save-result
   bun src/index.ts --print-instructions --   acronym      # v1: show instructions for one exercise
   bun src/index.ts --setup-auth claude                    # authenticate Claude inside Docker
 
@@ -86,7 +86,7 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
     const modelIndex = process.argv.indexOf('--model');
     const model = modelIndex !== -1 && modelIndex + 1 < process.argv.length
         ? process.argv[modelIndex + 1]!
-        : 'sonnet';
+        : undefined;
 
     const agentIndex = process.argv.indexOf('--agent');
     const agent = (agentIndex !== -1 && agentIndex + 1 < process.argv.length

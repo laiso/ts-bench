@@ -71,6 +71,8 @@ export const AGENT_REGISTRY = {
                         console.log(`[auth] Claude: using API key (${found.key})`);
                     } else if (config.useDocker && hasAuthCache('claude')) {
                         console.log('[auth] Claude: using subscription auth (no API key, auth cache found)');
+                    } else if (!config.useDocker) {
+                        console.log('[auth] Claude: no API key set, relying on local claude auth');
                     } else {
                         throw new Error(
                             'Missing ANTHROPIC_API_KEY or DASHSCOPE_API_KEY for Claude. ' +
@@ -80,7 +82,7 @@ export const AGENT_REGISTRY = {
                 }
             }
 
-            if (provider !== 'anthropic') {
+            if (provider !== 'anthropic' && config.model) {
                 const model = config.model;
                 env.ANTHROPIC_DEFAULT_SONNET_MODEL = model;
                 env.ANTHROPIC_DEFAULT_OPUS_MODEL = model;
@@ -101,7 +103,7 @@ export const AGENT_REGISTRY = {
                 '--debug',
                 '--verbose',
                 '--dangerously-skip-permissions',
-                '--model', config.model,
+                ...(config.model ? ['--model', config.model] : []),
                 '-p', instructions
             ];
         }
@@ -207,7 +209,8 @@ export const AGENT_REGISTRY = {
                 'aider',
                 '--yes-always',
                 '--no-auto-commits',
-                '--model', config.model
+                '--no-check-update',
+                ...(config.model ? ['--model', config.model] : [])
             ];
 
             if (sourceFiles.length > 0) {
@@ -248,6 +251,10 @@ export const AGENT_REGISTRY = {
                         console.log('[auth] Codex: using subscription auth (no API key, auth cache found)');
                         return {};
                     }
+                    if (!config.useDocker) {
+                        console.log('[auth] Codex: no API key set, relying on local codex auth');
+                        return {};
+                    }
                     throw new Error(
                         'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider. ' +
                         'Set an API key or run: bun src/index.ts --setup-auth codex'
@@ -269,7 +276,7 @@ export const AGENT_REGISTRY = {
                 '-c', `model_provider=${provider}`,
                 '--yolo',
                 '--skip-git-repo-check',
-                '-m', config.model,
+                ...(config.model ? ['-m', config.model] : []),
                 instructions
             ];
         }
@@ -324,6 +331,11 @@ export const AGENT_REGISTRY = {
                 return {};
             }
 
+            if (!config.useDocker) {
+                console.log('[auth] Gemini: no API key set, relying on local gemini auth');
+                return {};
+            }
+
             throw new Error(
                 'Missing GEMINI_API_KEY or GOOGLE_API_KEY for Gemini. ' +
                 'Set an API key or run: bun src/index.ts --setup-auth gemini'
@@ -334,7 +346,7 @@ export const AGENT_REGISTRY = {
                 'bash',
                 config.agentScriptPath,
                 'gemini',
-                '--model', config.model,
+                ...(config.model ? ['--model', config.model] : []),
                 '-y',
                 '-p', instructions
             ];
@@ -486,8 +498,7 @@ export const AGENT_REGISTRY = {
                 config.agentScriptPath,
                 'cursor-agent',
                 '--yolo',
-                '--model',
-                config.model,
+                ...(config.model ? ['--model', config.model] : []),
                 '-p',
                 instructions
             ];
