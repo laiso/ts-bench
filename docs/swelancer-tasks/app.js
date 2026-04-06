@@ -92,7 +92,10 @@
       tdId.className = 'id-cell';
       const code = document.createElement('code');
       code.textContent = task.question_id;
-      tdId.appendChild(code);
+      const link = document.createElement('a');
+      link.href = task.question_id + '.html';
+      link.appendChild(code);
+      tdId.appendChild(link);
 
       const tdPrice = document.createElement('td');
       tdPrice.textContent =

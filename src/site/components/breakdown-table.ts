@@ -10,7 +10,7 @@ export function renderBreakdownTable(entries: LeaderboardEntry[]): string {
 
     let html = '<table><thead><tr><th>Agent / Model</th>';
     V2_DEFAULT_TASKS.forEach((task) => {
-        html += `<th>${esc(task)}</th>`;
+        html += `<th><a href="swelancer-tasks/${esc(task)}.html" style="color:var(--text-secondary)">${esc(task)}</a></th>`;
     });
     html += '</tr></thead><tbody>';
 

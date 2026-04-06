@@ -53,16 +53,10 @@ function buildBody(data: LeaderboardData): string {
 
     return `
   <header>
-    <h1>ts-bench <span class="preview-badge">Preview</span></h1>
-    <p>SWE-Lancer v2 benchmark &mdash; tier ratings for AI coding agents</p>
+    <h1><a href="./" style="color:inherit;text-decoration:none">ts-bench</a></h1>
+    <p>AI coding agent benchmark &mdash; SWE-Lancer &amp; Exercism TypeScript tasks</p>
     ${updatedHtml}
   </header>
-
-  <div class="preview-banner">
-    <div class="banner-text">
-      <strong>Preview</strong> &mdash; This page is displayed with sample data. Actual benchmark results are in preparation.
-    </div>
-  </div>
 
   <div class="tabs">
     <div class="tab active" data-tab="leaderboard">Tier List</div>
@@ -84,6 +78,7 @@ function buildBody(data: LeaderboardData): string {
 
   <footer>
     <a href="https://github.com/laiso/ts-bench">GitHub</a> &middot;
+    <a href="swelancer-tasks/">Task Browser</a> &middot;
     <a href="auth/">Subscription Auth</a> &middot;
     Powered by <a href="https://github.com/laiso/ts-bench">ts-bench</a>
   </footer>
@@ -104,7 +99,7 @@ async function main(): Promise<void> {
 
     const html = renderLayout({
         title: 'ts-bench — SWE-Lancer AI Agent Benchmark',
-        description: 'Tier ratings (S/A/B/C/D/F) for AI coding agents on the SWE-Lancer v2 benchmark (5 tasks).',
+        description: 'Benchmark results for AI coding agents on SWE-Lancer and Exercism TypeScript tasks.',
         body,
         clientScript,
     });
