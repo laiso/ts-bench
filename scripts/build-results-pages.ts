@@ -142,6 +142,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
         title: pageTitle,
         description: ogDescription,
         body,
+        faviconPath: '../favicon.png',
     });
 }
 

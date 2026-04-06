@@ -5,6 +5,7 @@ export interface LayoutOptions {
     description: string;
     body: string;
     clientScript?: string;
+    faviconPath?: string;
 }
 
 export function renderLayout(opts: LayoutOptions): string {
@@ -14,6 +15,7 @@ export function renderLayout(opts: LayoutOptions): string {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${opts.title}</title>
+<link rel="icon" type="image/png" href="${opts.faviconPath ?? 'favicon.png'}">
 <meta name="description" content="${opts.description}">
 <meta property="og:title" content="${opts.title}">
 <meta property="og:description" content="${opts.description}">
