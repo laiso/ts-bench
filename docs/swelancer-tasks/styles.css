@@ -226,3 +226,15 @@ select:focus {
 .hidden {
   display: none !important;
 }
+
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: 40px 0 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+  line-height: 2;
+}
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--text); }
