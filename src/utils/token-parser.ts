@@ -283,7 +283,7 @@ export async function extractTokenUsage(
         usage.inputTokens !== undefined &&
         usage.outputTokens !== undefined
     ) {
-        const cost = calculateCost(usage.inputTokens, usage.outputTokens, config.model);
+        const cost = config.model ? calculateCost(usage.inputTokens, usage.outputTokens, config.model) : undefined;
         if (cost !== undefined) {
             usage = { ...usage, cost };
         }
