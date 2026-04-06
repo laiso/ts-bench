@@ -1,4 +1,4 @@
-name: E2E CI Test
+name: "[v1] E2E CI Test"
 
 on:
   push:

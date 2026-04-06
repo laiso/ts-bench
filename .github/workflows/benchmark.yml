@@ -1,4 +1,4 @@
-name: Manual Benchmark Run
+name: "[v1] Manual Benchmark Run"
 
 on:
   workflow_dispatch:
@@ -64,6 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      actions: write
     timeout-minutes: 120
     env:
       RESULT_DIR: ./data/results
