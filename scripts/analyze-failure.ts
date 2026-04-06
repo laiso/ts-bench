@@ -302,7 +302,7 @@ async function main() {
         process.exit(1);
     }
 
-    const analysisModel = process.env.ANALYSIS_MODEL ?? 'openai/gpt-4o-mini';
+    const analysisModel = process.env.ANALYSIS_MODEL ?? 'openai/gpt-5';
     const outputPath = process.env.OUTPUT_PATH ?? 'failure-analysis.md';
 
     const data: SavedBenchmarkResult = JSON.parse(

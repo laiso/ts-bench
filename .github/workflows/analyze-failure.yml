@@ -20,7 +20,7 @@ on:
         description: 'GitHub Models model to use for analysis'
         required: false
         type: string
-        default: 'openai/gpt-4o-mini'
+        default: 'openai/gpt-5'
 
 run-name: 'Analyze Failures from Run ${{ github.event.inputs.run_id }}'
 
