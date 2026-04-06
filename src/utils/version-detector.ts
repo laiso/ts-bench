@@ -145,7 +145,8 @@ export class VersionDetector {
                 return qwenMatch && qwenMatch[1] ? qwenMatch[1] : this.extractGenericVersion(cleanOutput);
                 
             case 'opencode':
-                // OpenCode output: "opencode 1.0.0" or "1.0.0"
+                // OpenCode output: "1.0.0" (bare version, the actual real-world format)
+                // Also handles the legacy "opencode 1.0.0" prefix format
                 const opencodeMatch = cleanOutput.match(/(?:opencode\s+)?(\d+\.\d+\.\d+)/i);
                 return opencodeMatch && opencodeMatch[1] ? opencodeMatch[1] : this.extractGenericVersion(cleanOutput);
             case 'copilot':

@@ -46,7 +46,12 @@ describe('VersionDetector', () => {
             expect(await detector.detectAgentVersion('qwen')).toBe('2.0.1');
         });
 
-        it('parses opencode version from stdout', async () => {
+        it('parses opencode version from stdout (bare format)', async () => {
+            const detector = makeDetector({ exitCode: 0, stdout: '1.3.13', stderr: '' });
+            expect(await detector.detectAgentVersion('opencode')).toBe('1.3.13');
+        });
+
+        it('parses opencode version from stdout (prefixed format)', async () => {
             const detector = makeDetector({ exitCode: 0, stdout: 'opencode 0.3.0', stderr: '' });
             expect(await detector.detectAgentVersion('opencode')).toBe('0.3.0');
         });
@@ -107,6 +112,31 @@ describe('VersionDetector', () => {
         it('returns 0.0.0 for any non-zero exit code', async () => {
             const detector = makeDetector({ exitCode: 127, stdout: '', stderr: '' });
             expect(await detector.detectAgentVersion('claude')).toBe('0.0.0');
+        });
+    });
+
+    describe('detectAgentVersion – opencode real-world scenarios', () => {
+        it('parses opencode version when models.dev error appears on stderr', async () => {
+            const detector = makeDetector({
+                exitCode: 0,
+                stdout: '1.3.13',
+                stderr: 'ERROR 2026-04-06T09:07:24 +150ms service=models.dev error=Unable to connect. Is the computer able to access the url? Failed to fetch models.dev'
+            });
+            expect(await detector.detectAgentVersion('opencode')).toBe('1.3.13');
+        });
+
+        it('parses opencode version from stderr when stdout is empty', async () => {
+            const detector = makeDetector({
+                exitCode: 0,
+                stdout: '',
+                stderr: '1.3.13'
+            });
+            expect(await detector.detectAgentVersion('opencode')).toBe('1.3.13');
+        });
+
+        it('parses opencode pre-release version', async () => {
+            const detector = makeDetector({ exitCode: 0, stdout: '0.0.0-202506070331', stderr: '' });
+            expect(await detector.detectAgentVersion('opencode')).toBe('0.0.0');
         });
     });
 

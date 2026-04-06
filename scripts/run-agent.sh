@@ -56,7 +56,7 @@ ensure_node_cli() {
   fi
 
   echo "[run-agent] Installing ${bin_name} (package: ${package_name})" >&2
-  npm install -g --prefix "$CLI_PREFIX" "$package_name"
+  npm install -g --prefix "$CLI_PREFIX" "$package_name" >&2
 }
 
 # Resolve the directory containing this script so agents.json can be found

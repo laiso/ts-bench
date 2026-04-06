@@ -85,7 +85,7 @@ jobs:
           PR_NUMBER: ${{ github.event.inputs.pr_number }}
         run: |
           set -euo pipefail
-          gh pr comment "$PR_NUMBER" --body-file failure-analysis.md
+          gh pr comment "${{ github.event.inputs.pr_number }}" --body-file failure-analysis.md
 
       - name: Write Job Summary
         if: ${{ hashFiles('failure-analysis.md') != '' }}
