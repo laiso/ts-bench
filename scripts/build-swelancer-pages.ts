@@ -168,6 +168,7 @@ details pre { margin: 0; padding: 12px 16px; border-top: 1px solid var(--border,
 </head>
 <body>
 <div class="task-page">
+  <a class="back-link" href="../">ts-bench</a>
   <a class="back-link" href="index.html">&larr; Task Browser</a>
 
   <h1 style="font-size:1.6rem;margin-bottom:8px">${esc(task.question_id)}</h1>
@@ -196,6 +197,11 @@ details pre { margin: 0; padding: 12px 16px; border-top: 1px solid var(--border,
     </div>
   </div>
 ${testPySection}${patchSection}
+  <footer>
+    <a href="../">ts-bench</a> &middot;
+    <a href="../swelancer-tasks/">Task Browser</a> &middot;
+    <a href="https://github.com/laiso/ts-bench">GitHub</a>
+  </footer>
 </div>
 </body>
 </html>`;

@@ -53,7 +53,7 @@ function buildBody(data: LeaderboardData): string {
 
     return `
   <header>
-    <h1>ts-bench</h1>
+    <h1><a href="./" style="color:inherit;text-decoration:none">ts-bench</a></h1>
     <p>AI coding agent benchmark &mdash; SWE-Lancer &amp; Exercism TypeScript tasks</p>
     ${updatedHtml}
   </header>
