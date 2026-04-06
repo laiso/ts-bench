@@ -144,19 +144,22 @@ function generateResultPage(key: string, entry: SavedResult): string {
 }
 
 async function main(): Promise<void> {
-    if (!existsSync(LEADERBOARD_PATH)) {
-        console.error(`Leaderboard not found at ${LEADERBOARD_PATH}`);
-        process.exit(1);
+    let leaderboard: LeaderboardData = { results: {} };
+
+    if (existsSync(LEADERBOARD_PATH)) {
+        const raw = await readFile(LEADERBOARD_PATH, 'utf-8');
+        leaderboard = JSON.parse(raw) as LeaderboardData;
+    } else {
+        console.warn(`⚠ Leaderboard not found at ${LEADERBOARD_PATH}. Building with empty data.`);
     }
 
-    const raw = await readFile(LEADERBOARD_PATH, 'utf-8');
-    const leaderboard = JSON.parse(raw) as LeaderboardData;
-
     await mkdir(RESULTS_DIR, { recursive: true });
-
     await mkdir(DATA_OUT_DIR, { recursive: true });
-    await cp(LEADERBOARD_PATH, join(DATA_OUT_DIR, 'leaderboard.json'));
-    console.log(`Copied leaderboard.json to ${DATA_OUT_DIR}/leaderboard.json`);
+
+    if (existsSync(LEADERBOARD_PATH)) {
+        await cp(LEADERBOARD_PATH, join(DATA_OUT_DIR, 'leaderboard.json'));
+        console.log(`Copied leaderboard.json to ${DATA_OUT_DIR}/leaderboard.json`);
+    }
 
     const entries = Object.entries(leaderboard.results);
     const v2Entries = entries.filter(([, entry]) => isV2Entry(entry));
