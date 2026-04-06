@@ -62,17 +62,18 @@ export class OpenCodeAgentBuilder extends BaseAgentBuilder implements AgentBuild
     }
 
     protected getCoreArgs(instructions: string): string[] {
-        const model = this.config.provider && !this.config.model.includes('/')
-            ? `${this.config.provider}/${this.config.model}`
-            : this.config.model;
+        const model = this.config.model
+            ? (this.config.provider && !this.config.model.includes('/')
+                ? `${this.config.provider}/${this.config.model}`
+                : this.config.model)
+            : undefined;
 
         return [
             'bash',
             this.config.agentScriptPath,
             'opencode',
             'run',
-            '-m',
-            model,
+            ...(model ? ['-m', model] : []),
             instructions
         ];
     }

@@ -72,23 +72,25 @@ export function parseClaudeJsonl(content: string): TokenUsage | undefined {
         if (!trimmed) continue;
         try {
             const obj = JSON.parse(trimmed) as Record<string, unknown>;
-            // Direct usage at top level (e.g. API response events)
+            // Direct usage at top level (e.g. message_delta events).
+            // Use else-if so a line carrying both fields isn't double-counted.
             const usage = obj['usage'] as Record<string, unknown> | undefined;
             if (usage && typeof usage === 'object') {
                 const inp = usage['input_tokens'];
                 const out = usage['output_tokens'];
                 if (typeof inp === 'number') { totalInput += inp; found = true; }
                 if (typeof out === 'number') { totalOutput += out; found = true; }
-            }
-            // Nested under message.usage (assistant message events)
-            const message = obj['message'] as Record<string, unknown> | undefined;
-            if (message && typeof message === 'object') {
-                const mUsage = message['usage'] as Record<string, unknown> | undefined;
-                if (mUsage && typeof mUsage === 'object') {
-                    const inp = mUsage['input_tokens'];
-                    const out = mUsage['output_tokens'];
-                    if (typeof inp === 'number') { totalInput += inp; found = true; }
-                    if (typeof out === 'number') { totalOutput += out; found = true; }
+            } else {
+                // Nested under message.usage (e.g. message_start events)
+                const message = obj['message'] as Record<string, unknown> | undefined;
+                if (message && typeof message === 'object') {
+                    const mUsage = message['usage'] as Record<string, unknown> | undefined;
+                    if (mUsage && typeof mUsage === 'object') {
+                        const inp = mUsage['input_tokens'];
+                        const out = mUsage['output_tokens'];
+                        if (typeof inp === 'number') { totalInput += inp; found = true; }
+                        if (typeof out === 'number') { totalOutput += out; found = true; }
+                    }
                 }
             }
         } catch {
@@ -96,6 +98,43 @@ export function parseClaudeJsonl(content: string): TokenUsage | undefined {
         }
     }
 
+    if (!found) return undefined;
+    return {
+        inputTokens: totalInput,
+        outputTokens: totalOutput,
+        totalTokens: totalInput + totalOutput,
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Copilot stderr parser
+// ---------------------------------------------------------------------------
+
+/** Parse a token count that may have a k/m suffix, e.g. "237.9k" → 237900. */
+function parseTokenCount(raw: string): number {
+    const lower = raw.toLowerCase().replace(/,/g, '');
+    if (lower.endsWith('m')) return Math.round(parseFloat(lower) * 1_000_000);
+    if (lower.endsWith('k')) return Math.round(parseFloat(lower) * 1_000);
+    return parseInt(lower, 10);
+}
+
+/**
+ * Parse copilot's stderr summary lines.
+ * Sums all "Breakdown by AI model" lines of the form:
+ *   "  claude-sonnet-4.6   237.9k in, 2.0k out, 158.6k cached (Est. 1 Premium request)"
+ */
+export function parseCopilotStderr(stderr: string): TokenUsage | undefined {
+    // Match lines like: "  <model>   237.9k in, 2.0k out[, N cached]"
+    const lineRe = /[\w.+-]+\s+([\d.]+[km]?)\s+in,\s*([\d.]+[km]?)\s+out/gi;
+    let totalInput = 0;
+    let totalOutput = 0;
+    let found = false;
+    let m: RegExpExecArray | null;
+    while ((m = lineRe.exec(stderr)) !== null) {
+        totalInput += parseTokenCount(m[1]!);
+        totalOutput += parseTokenCount(m[2]!);
+        found = true;
+    }
     if (!found) return undefined;
     return {
         inputTokens: totalInput,
@@ -118,6 +157,7 @@ export function parseClaudeJsonl(content: string): TokenUsage | undefined {
  *  - "tokens_used: 1234"                      (some CLI tools)
  *  - JSON blobs like {"input_tokens":1234,"output_tokens":567}
  *  - Codex / opencode: "Usage: prompt=1234 completion=567"
+ *  - Copilot: "237.9k in, 2.0k out, 158.6k cached"
  */
 export function parseStdoutTokenUsage(output: string): TokenUsage | undefined {
     if (!output) return undefined;
@@ -176,6 +216,12 @@ export function parseStdoutTokenUsage(output: string): TokenUsage | undefined {
         }
     }
 
+    // "tokens used\n9,113" (Codex CLI summary)
+    if (totalTokens === undefined) {
+        const m = output.match(/tokens used\s*\n\s*([\d,]+)/i);
+        if (m) totalTokens = parseInt(m[1]!.replace(/,/g, ''), 10);
+    }
+
     if (inputTokens === undefined && outputTokens === undefined && totalTokens === undefined) {
         return undefined;
     }
@@ -221,6 +267,10 @@ export async function extractTokenUsage(
         }
     }
 
+    if (config.agent === 'copilot') {
+        usage = parseCopilotStderr(stderr);
+    }
+
     // Fallback: parse stdout / stderr
     if (!usage) {
         usage = parseStdoutTokenUsage(stdout) ?? parseStdoutTokenUsage(stderr);
@@ -249,24 +299,32 @@ export async function extractTokenUsage(
 export function sumTokenUsages(usages: (TokenUsage | undefined)[]): TokenUsage | undefined {
     let totalInput = 0;
     let totalOutput = 0;
+    let totalOnlyTokens = 0;
     let totalCost = 0;
     let hasAny = false;
+    let hasInput = false;
+    let hasOutput = false;
     let hasCost = false;
 
     for (const u of usages) {
         if (!u) continue;
         hasAny = true;
-        if (u.inputTokens !== undefined) totalInput += u.inputTokens;
-        if (u.outputTokens !== undefined) totalOutput += u.outputTokens;
+        if (u.inputTokens !== undefined) { totalInput += u.inputTokens; hasInput = true; }
+        if (u.outputTokens !== undefined) { totalOutput += u.outputTokens; hasOutput = true; }
+        // Entries with only totalTokens (no breakdown) are accumulated separately
+        // so they contribute to the grand total without masking as zeros.
+        if (u.inputTokens === undefined && u.outputTokens === undefined && u.totalTokens !== undefined) {
+            totalOnlyTokens += u.totalTokens;
+        }
         if (u.cost !== undefined) { totalCost += u.cost; hasCost = true; }
     }
 
     if (!hasAny) return undefined;
 
     return {
-        inputTokens: totalInput,
-        outputTokens: totalOutput,
-        totalTokens: totalInput + totalOutput,
+        ...(hasInput ? { inputTokens: totalInput } : {}),
+        ...(hasOutput ? { outputTokens: totalOutput } : {}),
+        totalTokens: totalInput + totalOutput + totalOnlyTokens,
         ...(hasCost ? { cost: totalCost } : {}),
     };
 }

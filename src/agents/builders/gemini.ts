@@ -22,23 +22,29 @@ export class GeminiAgentBuilder extends BaseAgentBuilder implements AgentBuilder
             return env;
         }
 
-        if (this.config.useDocker && hasAuthCache('gemini')) {
-            console.log('[auth] Gemini: using subscription auth (no API key, auth cache found)');
-            return {};
+        if (this.config.useDocker) {
+            if (hasAuthCache('gemini')) {
+                console.log('[auth] Gemini: using subscription auth (no API key, auth cache found)');
+                return {};
+            }
+            throw new Error(
+                'Missing GEMINI_API_KEY or GOOGLE_API_KEY for Gemini. ' +
+                'Set an API key or run: bun src/index.ts --setup-auth gemini'
+            );
         }
 
-        throw new Error(
-            'Missing GEMINI_API_KEY or GOOGLE_API_KEY for Gemini. ' +
-            'Set an API key or run: bun src/index.ts --setup-auth gemini'
-        );
+        // Non-Docker: gemini CLI manages its own auth.
+        console.log('[auth] Gemini: no API key set, relying on local gemini auth');
+        return {};
     }
 
     protected getCoreArgs(instructions: string): string[] {
+        const modelArgs = this.config.model ? ['--model', this.config.model] : [];
         return [
             'bash',
             this.config.agentScriptPath,
             'gemini',
-            '--model', this.config.model,
+            ...modelArgs,
             '-y',
             '-p', instructions
         ];

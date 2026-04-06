@@ -11,7 +11,7 @@ export class GooseAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
     protected getEnvironmentVariables(): Record<string, string> {
         const provider = this.config.provider ?? AGENT_DEFAULT_PROVIDER['goose'];
         const env: Record<string, string> = {
-            GOOSE_MODEL: this.config.model,
+            ...(this.config.model ? { GOOSE_MODEL: this.config.model } : {}),
             GOOSE_PROVIDER: provider,
             GOOSE_DISABLE_KEYRING: '1'
         };

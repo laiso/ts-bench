@@ -28,7 +28,8 @@ export class BenchmarkRunner {
         }
 
         console.log(`🚀 Starting Benchmark (Dataset: ${args.dataset || 'v1'})`);
-        console.log(`📋 Solving TypeScript problems with ${args.agent} agent (${args.model} model)\n`);
+        const modelLabel = args.model ? `${args.model} model` : 'default model';
+        console.log(`📋 Solving TypeScript problems with ${args.agent} agent (${modelLabel})\n`);
 
         const useDocker = args.useDocker ?? true;
         const agentScriptPath = getAgentScriptPath(useDocker, args.dataset);

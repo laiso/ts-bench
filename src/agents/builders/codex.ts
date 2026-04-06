@@ -23,14 +23,19 @@ export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
                     console.log(`[auth] Codex: using API key (${found.key})`);
                     return { CODEX_API_KEY: found.value };
                 }
-                if (this.config.useDocker && hasAuthCache('codex')) {
-                    console.log('[auth] Codex: using subscription auth (no API key, auth cache found)');
-                    return {};
+                if (this.config.useDocker) {
+                    if (hasAuthCache('codex')) {
+                        console.log('[auth] Codex: using subscription auth (no API key, auth cache found)');
+                        return {};
+                    }
+                    throw new Error(
+                        'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider. ' +
+                        'Set an API key or run: bun src/index.ts --setup-auth codex'
+                    );
                 }
-                throw new Error(
-                    'Missing CODEX_API_KEY or OPENAI_API_KEY for Codex (OpenAI) provider. ' +
-                    'Set an API key or run: bun src/index.ts --setup-auth codex'
-                );
+                // Non-Docker: codex manages its own auth (e.g. ChatGPT subscription via system keychain).
+                console.log('[auth] Codex: no API key set, relying on local codex auth');
+                return {};
             }
             default:
                 throw new Error(`Unsupported provider for Codex: ${provider}`);
@@ -49,7 +54,7 @@ export class CodexAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
             '-c', `model_provider=${provider}`,
             '--yolo',
             '--skip-git-repo-check',
-            '-m', this.config.model,
+            ...(this.config.model ? ['-m', this.config.model] : []),
             instructions
         ];
     }

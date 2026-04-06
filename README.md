@@ -4,10 +4,11 @@ Benchmark CLI for comparing AI coding agents on TypeScript workloads. Run an age
 
 ```bash
 bun install
-bun src/index.ts --agent claude --model <model>
+bun link          # installs the `ts-bench` command globally
+ts-bench --agent claude --model <model>
 ```
 
-`bun src/index.ts --help` for all options.
+`ts-bench --help` for all options.
 
 ## Datasets
 
@@ -16,8 +17,10 @@ bun src/index.ts --agent claude --model <model>
 25 self-contained TypeScript practice exercises. No Docker required.
 
 ```bash
-bun src/index.ts --agent claude --model <model>
+ts-bench --agent claude --model <model>
 ```
+
+Omit `--model` to use the agent's default model.
 
 Frozen baseline for reproducibility: tag [`v1-final`](https://github.com/laiso/ts-bench/releases/tag/v1-final)
 
@@ -26,8 +29,8 @@ Frozen baseline for reproducibility: tag [`v1-final`](https://github.com/laiso/t
 Real-world tasks from a large monorepo (Expensify). Requires Docker.
 
 ```bash
-./scripts/setup-v2-env.sh                                    # one-time setup
-bun src/index.ts --dataset v2 --task <id> --agent claude ...  # run
+./scripts/setup-v2-env.sh                               # one-time setup
+ts-bench --dataset v2 --task <id> --agent claude ...    # run
 ```
 
 ## Results
@@ -40,4 +43,5 @@ Task browser: `bun run build:swelancer-pages` then open `docs/swelancer-tasks/`.
 
 - **[Handbook](specs/000-project-handbook/README.md)** — setup, secrets, CI, methodology
 - **[AGENTS.md](AGENTS.md)** — runner caveats for Cursor and other agents
-- **[Subscription auth](docs/auth/)** — run agents without API keys
+- **[Subscription auth](docs/auth/)** — run agents without API keys (claude, gemini, codex, copilot)
+- **[Token usage](specs/000-project-handbook/token-usage.md)** — how token counts are collected per agent

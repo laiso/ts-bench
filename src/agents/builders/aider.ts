@@ -45,7 +45,8 @@ export class AiderAgentBuilder extends BaseAgentBuilder implements AgentBuilder 
             'aider',
             '--yes-always',
             '--no-auto-commits',
-            '--model', this.config.model
+            '--no-check-update',
+            ...(this.config.model ? ['--model', this.config.model] : []),
         ];
         
         if (sourceFiles.length > 0) {

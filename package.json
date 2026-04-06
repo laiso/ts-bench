@@ -3,6 +3,9 @@
   "version": "1.1.0",
   "module": "index.ts",
   "type": "module",
+  "bin": {
+    "ts-bench": "./src/index.ts"
+  },
   "private": true,
   "scripts": {
     "test": "bun test ./src",

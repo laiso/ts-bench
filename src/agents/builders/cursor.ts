@@ -22,8 +22,7 @@ export class CursorAgentBuilder extends BaseAgentBuilder implements AgentBuilder
             'cursor-agent',
             // Non-interactive / CI: trust workspace without prompting (see cursor-agent --help)
             '--yolo',
-            '--model',
-            this.config.model,
+            ...(this.config.model ? ['--model', this.config.model] : []),
             '-p',
             instructions
         ];

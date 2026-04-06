@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { parseClaudeJsonl, parseStdoutTokenUsage, sumTokenUsages } from '../token-parser';
+import { parseClaudeJsonl, parseCopilotStderr, parseStdoutTokenUsage, sumTokenUsages } from '../token-parser';
 import type { TokenUsage } from '../../config/types';
 
 describe('parseClaudeJsonl', () => {
@@ -64,6 +64,18 @@ describe('parseClaudeJsonl', () => {
     it('handles empty content', () => {
         expect(parseClaudeJsonl('')).toBeUndefined();
     });
+
+    it('does not double-count a line that carries both top-level usage and message.usage', () => {
+        const line = JSON.stringify({
+            usage: { input_tokens: 100, output_tokens: 50 },
+            message: { usage: { input_tokens: 200, output_tokens: 100 } },
+        });
+        const result = parseClaudeJsonl(line);
+        // Top-level usage takes precedence; message.usage on the same line is ignored.
+        expect(result!.inputTokens).toBe(100);
+        expect(result!.outputTokens).toBe(50);
+        expect(result!.totalTokens).toBe(150);
+    });
 });
 
 describe('parseStdoutTokenUsage', () => {
@@ -104,6 +116,14 @@ describe('parseStdoutTokenUsage', () => {
         expect(result!.outputTokens).toBe(200);
     });
 
+    it('parses Codex CLI "tokens used\\nN,NNN" summary', () => {
+        const stdout = '+  return \'Hello, World!\'\n }\n\ntokens used\n9,113\n';
+        const result = parseStdoutTokenUsage(stdout);
+        expect(result!.totalTokens).toBe(9113);
+        expect(result!.inputTokens).toBeUndefined();
+        expect(result!.outputTokens).toBeUndefined();
+    });
+
     it('returns undefined for empty output', () => {
         expect(parseStdoutTokenUsage('')).toBeUndefined();
     });
@@ -111,6 +131,37 @@ describe('parseStdoutTokenUsage', () => {
     it('returns undefined when no token patterns found', () => {
         const stdout = 'All tests passed successfully!\n';
         expect(parseStdoutTokenUsage(stdout)).toBeUndefined();
+    });
+});
+
+describe('parseCopilotStderr', () => {
+    it('parses single model line from copilot stderr', () => {
+        const stderr = [
+            '[run-agent] copilot found.',
+            'Total usage est:        1 Premium request',
+            'Breakdown by AI model:',
+            ' claude-sonnet-4.6        237.9k in, 2.0k out, 158.6k cached (Est. 1 Premium request)',
+        ].join('\n');
+        const result = parseCopilotStderr(stderr);
+        expect(result).not.toBeUndefined();
+        expect(result!.inputTokens).toBe(237900);
+        expect(result!.outputTokens).toBe(2000);
+        expect(result!.totalTokens).toBe(239900);
+    });
+
+    it('sums across multiple model lines', () => {
+        const stderr = [
+            'Breakdown by AI model:',
+            ' claude-sonnet-4.6   100k in, 1k out',
+            ' claude-haiku-3.5    50k in, 500 out',
+        ].join('\n');
+        const result = parseCopilotStderr(stderr);
+        expect(result!.inputTokens).toBe(150000);
+        expect(result!.outputTokens).toBe(1500);
+    });
+
+    it('returns undefined when no model lines present', () => {
+        expect(parseCopilotStderr('[run-agent] copilot found.')).toBeUndefined();
     });
 });
 
@@ -152,5 +203,25 @@ describe('sumTokenUsages', () => {
         ];
         const result = sumTokenUsages(usages);
         expect(result!.cost).toBeUndefined();
+    });
+
+    it('preserves totalTokens from total-only entries (no input/output breakdown)', () => {
+        const usages: TokenUsage[] = [{ totalTokens: 2000 }];
+        const result = sumTokenUsages(usages);
+        expect(result).not.toBeUndefined();
+        expect(result!.totalTokens).toBe(2000);
+        expect(result!.inputTokens).toBeUndefined();
+        expect(result!.outputTokens).toBeUndefined();
+    });
+
+    it('correctly combines breakdown entries with total-only entries', () => {
+        const usages: (TokenUsage | undefined)[] = [
+            { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
+            { totalTokens: 500 },
+        ];
+        const result = sumTokenUsages(usages);
+        expect(result!.inputTokens).toBe(100);
+        expect(result!.outputTokens).toBe(50);
+        expect(result!.totalTokens).toBe(650);
     });
 });

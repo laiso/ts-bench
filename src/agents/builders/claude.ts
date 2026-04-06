@@ -56,17 +56,20 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
                     console.log(`[auth] Claude: using API key (${found.key})`);
                 } else if (this.config.useDocker && hasAuthCache('claude')) {
                     console.log('[auth] Claude: using subscription auth (no API key, auth cache found)');
-                } else {
+                } else if (this.config.useDocker) {
                     throw new Error(
                         'Missing ANTHROPIC_API_KEY or DASHSCOPE_API_KEY for Claude. ' +
                         'Set an API key or run: bun src/index.ts --setup-auth claude'
                     );
+                } else {
+                    // Non-Docker: claude CLI manages its own auth.
+                    console.log('[auth] Claude: no API key set, relying on local claude auth');
                 }
             }
         }
 
         // Override model short names to prevent fallback to Anthropic API
-        if (provider !== 'anthropic') {
+        if (provider !== 'anthropic' && this.config.model) {
             const model = this.config.model;
             env.ANTHROPIC_DEFAULT_SONNET_MODEL = model;
             env.ANTHROPIC_DEFAULT_OPUS_MODEL = model;
@@ -91,7 +94,7 @@ export class ClaudeAgentBuilder extends BaseAgentBuilder implements AgentBuilder
             '--debug',
             '--verbose',
             '--dangerously-skip-permissions',
-            '--model', this.config.model,
+            ...(this.config.model ? ['--model', this.config.model] : []),
             '-p', instructions
         ];
     }

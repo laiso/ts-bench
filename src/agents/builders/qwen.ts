@@ -12,6 +12,7 @@ export class QwenAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
         const provider = this.config.provider ?? AGENT_DEFAULT_PROVIDER['qwen'];
 
         const env = (() => {
+            const modelEnv = this.config.model ? { OPENAI_MODEL: this.config.model } : {};
             switch (provider) {
                 case 'openrouter': {
                     const { value } = requireAnyEnv(
@@ -21,7 +22,7 @@ export class QwenAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
                     return {
                         OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
                         OPENAI_API_KEY: value,
-                        OPENAI_MODEL: this.config.model
+                        ...modelEnv
                     };
                 }
                 case 'openai': {
@@ -29,7 +30,7 @@ export class QwenAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
                     return {
                         OPENAI_BASE_URL: 'https://api.openai.com/v1',
                         OPENAI_API_KEY: value,
-                        OPENAI_MODEL: this.config.model
+                        ...modelEnv
                     };
                 }
                 default: {
@@ -37,7 +38,7 @@ export class QwenAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
                     return {
                         OPENAI_BASE_URL: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1',
                         OPENAI_API_KEY: value,
-                        OPENAI_MODEL: this.config.model
+                        ...modelEnv
                     };
                 }
             }
@@ -52,7 +53,7 @@ export class QwenAgentBuilder extends BaseAgentBuilder implements AgentBuilder {
             this.config.agentScriptPath,
             'qwen',
             '-y',
-            '-m', this.config.model,
+            ...(this.config.model ? ['-m', this.config.model] : []),
             '-p', instructions
         ];
     }
