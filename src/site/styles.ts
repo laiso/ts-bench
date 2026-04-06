@@ -253,16 +253,13 @@ tr:hover td { background: var(--surface); }
 }
 
 footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 16px;
+  text-align: center;
   color: var(--text-secondary);
   font-size: 0.8rem;
   padding: 40px 0 24px;
   border-top: 1px solid var(--border);
   margin-top: 48px;
+  line-height: 2;
 }
 footer a { color: var(--text-secondary); }
 footer a:hover { color: var(--text); }
