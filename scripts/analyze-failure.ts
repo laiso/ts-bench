@@ -237,7 +237,7 @@ async function readFileSafe(path: string): Promise<string | null> {
 }
 
 function countPatchLines(patch: string): number {
-    return patch.split('\n').filter((l) => l.startsWith('+') || l.startsWith('-')).length;
+    return patch.split('\n').filter((l) => (l.startsWith('+') && !l.startsWith('+++')) || (l.startsWith('-') && !l.startsWith('---'))).length;
 }
 
 // ---- Markdown output ------------------------------------------------------
