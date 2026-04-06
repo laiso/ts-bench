@@ -1,11 +1,12 @@
 :root {
-  --bg: #0f1419;
-  --surface: #1a2332;
-  --border: #2d3a4d;
-  --text: #e7ecf3;
-  --muted: #8b9cb3;
-  --accent: #6cb3f7;
-  --accent-hover: #8ec8ff;
+  --bg: #000;
+  --surface: #111;
+  --surface-2: #1a1a1a;
+  --border: #333;
+  --text: #ededed;
+  --muted: #888;
+  --accent: #0070f3;
+  --accent-hover: #3291ff;
   --row-alt: rgba(255, 255, 255, 0.03);
 }
 
