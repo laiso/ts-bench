@@ -54,7 +54,7 @@ function buildBody(data: LeaderboardData): string {
     return `
   <header>
     <h1>ts-bench</h1>
-    <p>SWE-Lancer v2 benchmark &mdash; tier ratings for AI coding agents</p>
+    <p>AI coding agent benchmark &mdash; SWE-Lancer &amp; Exercism TypeScript tasks</p>
     ${updatedHtml}
   </header>
 
@@ -99,7 +99,7 @@ async function main(): Promise<void> {
 
     const html = renderLayout({
         title: 'ts-bench — SWE-Lancer AI Agent Benchmark',
-        description: 'Tier ratings (S/A/B/C/D/F) for AI coding agents on the SWE-Lancer v2 benchmark (5 tasks).',
+        description: 'Benchmark results for AI coding agents on SWE-Lancer and Exercism TypeScript tasks.',
         body,
         clientScript,
     });

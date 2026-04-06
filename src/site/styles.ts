@@ -271,12 +271,12 @@ footer a:hover { color: var(--text); }
 .hero-meta strong { color: var(--text); }
 .tier {
   display: inline-block;
-  width: 40px; height: 40px;
-  line-height: 40px;
+  width: 28px; height: 28px;
+  line-height: 28px;
   text-align: center;
   font-weight: 700;
-  font-size: 1.2rem;
-  border-radius: 8px;
+  font-size: 0.9rem;
+  border-radius: 6px;
   color: #fff;
 }
 .tier-S { background: #ffd700; color: #000; }
