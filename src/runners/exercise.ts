@@ -1,8 +1,9 @@
 import { existsSync, statSync } from 'fs';
+import { readFile } from 'fs/promises';
 import type { TestResult, BenchmarkConfig } from '../config/types';
 import { AgentRunner } from './agent';
 import { TestRunner } from './test';
-import { ExerciseResetter } from '../exercises/reset';
+import { ExerciseResetter, summarizeDiff } from '../exercises/reset';
 import type { Logger } from '../utils/logger';
 import { join } from 'path';
 import { SWELANCER_IMAGE, SWELANCER_REPO_PATH } from '../config/constants';
@@ -184,6 +185,19 @@ export class ExerciseRunner {
         const agentResult = await this.agentRunner.run(
             config, exercise, exercisePath, true, execStrategy,
         );
+
+        // Phase 1.5: Show patch summary if the agent generated a patch
+        const patchPath = join(process.cwd(), '.patches', `${exercise}.patch`);
+        if (existsSync(patchPath)) {
+            try {
+                const patchContent = await readFile(patchPath, 'utf-8');
+                if (patchContent.trim()) {
+                    console.log(`📋 Patch summary: ${summarizeDiff(patchContent)}`);
+                }
+            } catch {
+                // ignore read errors
+            }
+        }
 
         // Phase 2: Run Tests (same container, no second setup)
         const testContext: TestContext = {
