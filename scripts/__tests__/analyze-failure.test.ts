@@ -184,6 +184,74 @@ describe('buildMarkdownReport', () => {
         expect(md).toContain('Wrong function modified.');
     });
 
+    it('renders patch inline in a details block when rawPatch is provided', () => {
+        const patch = `diff --git a/foo.ts b/foo.ts\n+added line\n-removed line\n`;
+        const analyses = [
+            {
+                taskId: 'task_patch',
+                classification: 'PARTIAL_FIX',
+                rootCause: 'Partial fix.',
+                testExpectation: 'Expected full fix.',
+                agentBehavior: 'Only part fixed.',
+                suggestion: 'Fix completely.',
+                patchLines: 2,
+                rawPatch: patch,
+                agentDuration: 60,
+                testDuration: 10,
+                agentSuccess: true,
+                testSuccess: false,
+            },
+        ];
+        const md = buildMarkdownReport(meta, summary, analyses, 'openai/gpt-4o-mini');
+        expect(md).toContain('<details>');
+        expect(md).toContain('📄 Patch');
+        expect(md).toContain('```diff');
+        expect(md).toContain('+added line');
+        expect(md).toContain('-removed line');
+        expect(md).toContain('</details>');
+    });
+
+    it('does not render details block when rawPatch is absent', () => {
+        const analyses = [
+            {
+                taskId: 'task_nopatch',
+                classification: 'NO_CHANGE',
+                rootCause: 'Nothing done.',
+                testExpectation: 'Expected fix.',
+                agentBehavior: 'No edits.',
+                suggestion: 'Edit something.',
+                patchLines: 0,
+                agentDuration: 30,
+                testDuration: 5,
+                agentSuccess: false,
+                testSuccess: false,
+            },
+        ];
+        const md = buildMarkdownReport(meta, summary, analyses, 'openai/gpt-4o-mini');
+        expect(md).not.toContain('<details>');
+    });
+
+    it('does not render details block when rawPatch is empty string', () => {
+        const analyses = [
+            {
+                taskId: 'task_emptypatch',
+                classification: 'NO_CHANGE',
+                rootCause: 'Nothing done.',
+                testExpectation: 'Expected fix.',
+                agentBehavior: 'No edits.',
+                suggestion: 'Edit something.',
+                patchLines: 0,
+                rawPatch: '   ',
+                agentDuration: 30,
+                testDuration: 5,
+                agentSuccess: false,
+                testSuccess: false,
+            },
+        ];
+        const md = buildMarkdownReport(meta, summary, analyses, 'openai/gpt-4o-mini');
+        expect(md).not.toContain('<details>');
+    });
+
     it('shows API error when present', () => {
         const analyses = [
             {

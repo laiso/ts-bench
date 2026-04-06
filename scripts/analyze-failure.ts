@@ -48,6 +48,7 @@ interface AnalysisResult {
     agentBehavior: string;
     suggestion: string;
     patchLines: number;
+    rawPatch?: string;
     agentDuration: number;
     testDuration: number;
     agentSuccess: boolean;
@@ -287,6 +288,17 @@ export function buildMarkdownReport(
             lines.push('');
             lines.push(`**Suggestion**: ${a.suggestion}`);
         }
+
+        if (a.rawPatch && a.rawPatch.trim().length > 0) {
+            lines.push('');
+            lines.push('<details>');
+            lines.push('<summary>📄 Patch</summary>');
+            lines.push('');
+            lines.push('```diff');
+            lines.push(a.rawPatch.trimEnd());
+            lines.push('```');
+            lines.push('</details>');
+        }
         lines.push('');
         lines.push('---');
         lines.push('');
@@ -368,6 +380,7 @@ async function main() {
                 taskId,
                 ...parsed,
                 patchLines,
+                rawPatch: rawPatch ?? undefined,
                 agentDuration: result.agentDuration,
                 testDuration: result.testDuration,
                 agentSuccess: result.agentSuccess,
@@ -384,6 +397,7 @@ async function main() {
                 agentBehavior: '',
                 suggestion: '',
                 patchLines,
+                rawPatch: rawPatch ?? undefined,
                 agentDuration: result.agentDuration,
                 testDuration: result.testDuration,
                 agentSuccess: result.agentSuccess,
