@@ -277,7 +277,7 @@ export class BenchmarkRunner {
     private generateOutputPath(args: CLIArgs, extension: string): string {
         const outputDir = args.outputDir || './results';
         const safeAgent = sanitizeFilenameSegment(args.agent, 'agent');
-        const safeModel = sanitizeFilenameSegment(args.model, 'model');
+        const safeModel = sanitizeFilenameSegment(args.model ?? '', 'model');
         const rawTimestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
         const safeTimestamp = sanitizeFilenameSegment(rawTimestamp, 'timestamp');
         const filename = `benchmark-${safeAgent}-${safeModel}-${safeTimestamp}.${extension}`;

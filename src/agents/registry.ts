@@ -115,7 +115,7 @@ export const AGENT_REGISTRY = {
         getEnv(config: AgentConfig): Record<string, string> {
             const provider = config.provider ?? 'anthropic';
             const env: Record<string, string> = {
-                GOOSE_MODEL: config.model,
+                ...(config.model ? { GOOSE_MODEL: config.model } : {}),
                 GOOSE_PROVIDER: provider,
                 GOOSE_DISABLE_KEYRING: '1'
             };
@@ -408,17 +408,18 @@ export const AGENT_REGISTRY = {
             }
         },
         buildArgs(config: AgentConfig, instructions: string): string[] {
-            const model = config.provider && !config.model.includes('/')
-                ? `${config.provider}/${config.model}`
-                : config.model;
+            const model = config.model
+                ? (config.provider && !config.model.includes('/')
+                    ? `${config.provider}/${config.model}`
+                    : config.model)
+                : undefined;
 
             return [
                 'bash',
                 config.agentScriptPath,
                 'opencode',
                 'run',
-                '-m',
-                model,
+                ...(model ? ['-m', model] : []),
                 instructions
             ];
         }
@@ -440,7 +441,7 @@ export const AGENT_REGISTRY = {
                         return {
                             OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
                             OPENAI_API_KEY: value,
-                            OPENAI_MODEL: config.model
+                            ...(config.model ? { OPENAI_MODEL: config.model } : {})
                         };
                     }
                     case 'openai': {
@@ -448,7 +449,7 @@ export const AGENT_REGISTRY = {
                         return {
                             OPENAI_BASE_URL: 'https://api.openai.com/v1',
                             OPENAI_API_KEY: value,
-                            OPENAI_MODEL: config.model
+                            ...(config.model ? { OPENAI_MODEL: config.model } : {})
                         };
                     }
                     default: {
@@ -456,7 +457,7 @@ export const AGENT_REGISTRY = {
                         return {
                             OPENAI_BASE_URL: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1',
                             OPENAI_API_KEY: value,
-                            OPENAI_MODEL: config.model
+                            ...(config.model ? { OPENAI_MODEL: config.model } : {})
                         };
                     }
                 }
@@ -476,7 +477,7 @@ export const AGENT_REGISTRY = {
                 config.agentScriptPath,
                 'qwen',
                 '-y',
-                '-m', config.model,
+                ...(config.model ? ['-m', config.model] : []),
                 '-p', instructions
             ];
         }
@@ -549,7 +550,7 @@ export const AGENT_REGISTRY = {
             const model = config.model;
             const baseUrl = process.env.KIMI_BASE_URL || 'https://api.moonshot.ai/v1';
             const kimiConfig = {
-                default_model: model,
+                ...(model ? { default_model: model } : {}),
                 providers: {
                     moonshot: {
                         type: 'kimi',
@@ -557,13 +558,15 @@ export const AGENT_REGISTRY = {
                         api_key: 'env'
                     }
                 },
-                models: {
-                    [model]: {
-                        provider: 'moonshot',
-                        model,
-                        max_context_size: 262144
+                ...(model ? {
+                    models: {
+                        [model]: {
+                            provider: 'moonshot',
+                            model,
+                            max_context_size: 262144
+                        }
                     }
-                }
+                } : {})
             };
 
             return [
@@ -575,8 +578,7 @@ export const AGENT_REGISTRY = {
                 'text',
                 '--config',
                 JSON.stringify(kimiConfig),
-                '--model',
-                model,
+                ...(model ? ['--model', model] : []),
                 '-p',
                 instructions
             ];
