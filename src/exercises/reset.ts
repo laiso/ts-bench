@@ -1,36 +1,6 @@
 import { spawn } from "bun";
 import { join } from 'path';
 
-/**
- * Parse a unified diff string and return a human-readable summary line such as:
- * "3 files changed, 10 insertions(+), 2 deletions(-)"
- */
-export function summarizeDiff(diff: string): string {
-    const lines = diff.split('\n');
-    const files = new Set<string>();
-    let insertions = 0;
-    let deletions = 0;
-
-    for (const line of lines) {
-        if (line.startsWith('diff --git ')) {
-            // e.g. "diff --git a/foo.ts b/foo.ts"
-            const match = line.match(/^diff --git a\/.+ b\/(.+)$/);
-            if (match) files.add(match[1]);
-        } else if (line.startsWith('+') && !line.startsWith('+++')) {
-            insertions++;
-        } else if (line.startsWith('-') && !line.startsWith('---')) {
-            deletions++;
-        }
-    }
-
-    const fileCount = files.size;
-    const parts: string[] = [
-        `${fileCount} ${fileCount === 1 ? 'file' : 'files'} changed`,
-    ];
-    if (insertions > 0) parts.push(`${insertions} insertion${insertions === 1 ? '' : 's'}(+)`);
-    if (deletions > 0) parts.push(`${deletions} deletion${deletions === 1 ? '' : 's'}(-)`);
-    return parts.join(', ');
-}
 
 export class ExerciseResetter {
     async reset(exercisePath: string, verbose: boolean = false): Promise<void> {
@@ -98,8 +68,6 @@ export class ExerciseResetter {
             if (proc.exitCode === 0) {
                 const stdout = await new Response(proc.stdout).text();
                 if (stdout.trim()) {
-                    const summary = summarizeDiff(stdout);
-                    console.log(`📋 Code changes made by agent: ${summary}`);
                     console.log(`--- Diff for ${exercisePath} ---`);
                     console.log(stdout);
                     console.log(`--- End of diff ---`);
