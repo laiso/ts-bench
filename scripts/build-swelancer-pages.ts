@@ -138,6 +138,7 @@ function generateTaskPage(task: TaskRecord, issuesBasePath: string): Promise<str
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(task.question_id)} — SWE-Lancer task (ts-bench)</title>
+<link rel="icon" type="image/png" href="/favicon.png">
 <meta name="description" content="${esc(task.title.slice(0, 160))}">
 <link rel="stylesheet" href="styles.css">
 <style>
