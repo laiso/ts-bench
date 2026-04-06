@@ -13,6 +13,7 @@ import type { ResultEntry, SavedResult, LeaderboardData } from '../src/site/shar
 import { V2_DEFAULT_TASKS } from '../src/site/shared/types.ts';
 import { isV2Entry } from '../src/site/shared/tier.ts';
 import { fmtDuration, fmtDate, esc, agentDisplayName } from '../src/site/shared/format.ts';
+import { renderLayout } from '../src/site/templates/layout.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
@@ -70,7 +71,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
             const testStatus = r.testSuccess ? '<span class="pass">OK</span>' : '<span class="fail">Fail</span>';
             resultsRows += `
         <tr>
-          <td>${esc(r.exercise)}</td>
+          <td><a href="../swelancer-tasks/${esc(r.exercise)}.html" style="color:var(--accent)">${esc(r.exercise)}</a></td>
           <td>${status}</td>
           <td>${agentStatus}</td>
           <td>${testStatus}</td>
@@ -80,97 +81,23 @@ function generateResultPage(key: string, entry: SavedResult): string {
         </tr>`;
         });
     } else {
-        resultsRows = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">No task-level results available</td></tr>';
+        resultsRows = '<tr><td colspan="7" style="text-align:center;color:var(--text-secondary)">No task-level results available</td></tr>';
     }
 
     const runUrlHtml = meta.runUrl
         ? `<a href="${esc(meta.runUrl)}" target="_blank">View GHA Run</a>`
         : '';
 
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${pageTitle}</title>
-<meta name="description" content="${ogDescription}">
-<meta property="og:title" content="${pageTitle}">
-<meta property="og:description" content="${ogDescription}">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="ts-bench">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="${pageTitle}">
-<meta name="twitter:description" content="${ogDescription}">
-<style>
-:root {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --border: #30363d;
-  --text: #e6edf3;
-  --text-muted: #8b949e;
-  --accent: #58a6ff;
-  --green: #3fb950;
-  --red: #f85149;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  padding: 0 16px;
-}
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { max-width: 1000px; margin: 0 auto; padding: 32px 0; }
-.breadcrumb { margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted); }
-.hero { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; }
-.hero h1 { font-size: 1.5rem; margin-bottom: 8px; }
-.hero-meta { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 12px; color: var(--text-muted); font-size: 0.9rem; }
-.hero-meta strong { color: var(--text); }
-.tier {
-  display: inline-block;
-  width: 40px; height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  color: #fff;
-}
-.tier-S { background: #ffd700; color: #000; }
-.tier-A { background: #87c0ff; }
-.tier-B { background: #b0e070; color: #000; }
-.tier-C { background: #f0a030; }
-.tier-D { background: #e06040; }
-.tier-F { background: #cc2222; }
-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 8px; overflow: hidden; margin-top: 24px; }
-th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-th { background: var(--bg); font-weight: 600; color: var(--text-muted); }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(88,166,255,0.04); }
-.pass { color: var(--green); font-weight: 600; }
-.fail { color: var(--red); font-weight: 600; }
-h2 { margin-top: 32px; margin-bottom: 8px; font-size: 1.15rem; }
-footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 40px 0 24px; border-top: 1px solid var(--border); margin-top: 40px; }
-@media (max-width: 768px) {
-  th, td { padding: 8px 10px; font-size: 0.82rem; }
-}
-</style>
-</head>
-<body>
-<div class="container">
+    const body = `
   <div class="breadcrumb"><a href="../">ts-bench</a> &rsaquo; Result</div>
 
   <div class="hero">
     <div style="display:flex;align-items:center;gap:16px">
+      ${tier ? `<span class="tier ${tierClass(tier)}">${esc(tier)}</span>` : ''}
       <img src="../assets/icons/${esc(meta.agent.toLowerCase())}.png" alt="${esc(agentDisplayName(meta.agent))}" width="48" height="48" style="border-radius:8px" onerror="this.style.display='none'">
       <div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <h1>${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)}</h1>
-          ${tier ? `<span class="tier ${tierClass(tier)}">${esc(tier)}</span>` : ''}
-        </div>
-        <div style="color:var(--text-muted);font-size:0.9rem">${esc(meta.provider)} &middot; ${fmtDate(meta.timestamp)}</div>
+        <h1>${esc(agentDisplayName(meta.agent))} / ${esc(meta.model)}</h1>
+        <div style="color:var(--text-secondary);font-size:0.9rem">${esc(meta.provider)} &middot; ${fmtDate(meta.timestamp)}</div>
       </div>
     </div>
     <div class="hero-meta">
@@ -204,11 +131,16 @@ footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; paddi
 
   <footer>
     <a href="../">Back to Leaderboard</a> &middot;
+    <a href="../swelancer-tasks/">Task Browser</a> &middot;
     <a href="https://github.com/laiso/ts-bench">GitHub</a>
   </footer>
-</div>
-</body>
-</html>`;
+`;
+
+    return renderLayout({
+        title: pageTitle,
+        description: ogDescription,
+        body,
+    });
 }
 
 async function main(): Promise<void> {

@@ -53,16 +53,10 @@ function buildBody(data: LeaderboardData): string {
 
     return `
   <header>
-    <h1>ts-bench <span class="preview-badge">Preview</span></h1>
+    <h1>ts-bench</h1>
     <p>SWE-Lancer v2 benchmark &mdash; tier ratings for AI coding agents</p>
     ${updatedHtml}
   </header>
-
-  <div class="preview-banner">
-    <div class="banner-text">
-      <strong>Preview</strong> &mdash; This page is displayed with sample data. Actual benchmark results are in preparation.
-    </div>
-  </div>
 
   <div class="tabs">
     <div class="tab active" data-tab="leaderboard">Tier List</div>
@@ -84,6 +78,7 @@ function buildBody(data: LeaderboardData): string {
 
   <footer>
     <a href="https://github.com/laiso/ts-bench">GitHub</a> &middot;
+    <a href="swelancer-tasks/">Task Browser</a> &middot;
     <a href="auth/">Subscription Auth</a> &middot;
     Powered by <a href="https://github.com/laiso/ts-bench">ts-bench</a>
   </footer>
