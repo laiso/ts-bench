@@ -86,7 +86,7 @@ export function compressDuplicateLines(text: string): string {
  * Returns everything from `=== FAILURES ===` onwards (up to maxLines lines).
  * Always includes `short test summary info` section when present.
  */
-export function extractPytestFailures(text: string, maxLines = 200): string {
+export function extractPytestFailures(text: string, maxLines = 80): string {
     const failuresIdx = text.indexOf('=== FAILURES ===');
     if (failuresIdx === -1) {
         // Fall back to last maxLines lines
@@ -101,7 +101,7 @@ export function extractPytestFailures(text: string, maxLines = 200): string {
 /**
  * Return head + tail of agent log with duplicate compression.
  */
-export function trimAgentLog(text: string, headLines = 50, tailLines = 50): string {
+export function trimAgentLog(text: string, headLines = 20, tailLines = 20): string {
     const compressed = compressDuplicateLines(text);
     const lines = compressed.split('\n');
     if (lines.length <= headLines + tailLines) {
@@ -114,6 +114,14 @@ export function trimAgentLog(text: string, headLines = 50, tailLines = 50): stri
         `... (${lines.length - headLines - tailLines} lines omitted) ...`,
         ...tail,
     ].join('\n');
+}
+
+/**
+ * Truncate text to at most maxChars characters, appending a marker when truncated.
+ */
+export function truncateToMaxChars(text: string, maxChars: number): string {
+    if (text.length <= maxChars) return text;
+    return text.slice(0, maxChars) + `\n... (truncated to ${maxChars} chars)`;
 }
 
 // ---- API call -------------------------------------------------------------
@@ -344,11 +352,14 @@ async function main() {
             ? extractPytestFailures(rawPytestLog)
             : '(pytest log not found)';
         const patch = rawPatch && rawPatch.trim().length > 0
-            ? rawPatch
+            ? truncateToMaxChars(rawPatch, 1500)
             : '(empty — no changes made)';
         const patchLines = rawPatch ? countPatchLines(rawPatch) : 0;
 
-        const userPrompt = buildUserPrompt(taskId, data.metadata, result, agentLog, pytestLog, patch);
+        const userPrompt = truncateToMaxChars(
+            buildUserPrompt(taskId, data.metadata, result, agentLog, pytestLog, patch),
+            8000,
+        );
 
         try {
             const responseText = await callGitHubModels(analysisModel, SYSTEM_PROMPT, userPrompt, token);

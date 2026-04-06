@@ -5,6 +5,7 @@ import {
     trimAgentLog,
     parseAnalysisResponse,
     buildMarkdownReport,
+    truncateToMaxChars,
 } from '../analyze-failure.ts';
 
 describe('compressDuplicateLines', () => {
@@ -113,6 +114,24 @@ describe('parseAnalysisResponse', () => {
         const parsed = parseAnalysisResponse('CLASSIFICATION: NO_CHANGE');
         expect(parsed.rootCause).toBe('(not provided)');
         expect(parsed.testExpectation).toBe('(not provided)');
+    });
+});
+
+describe('truncateToMaxChars', () => {
+    it('returns text unchanged when under limit', () => {
+        expect(truncateToMaxChars('hello', 100)).toBe('hello');
+    });
+
+    it('truncates and appends marker when over limit', () => {
+        const long = 'a'.repeat(200);
+        const result = truncateToMaxChars(long, 100);
+        expect(result.startsWith('a'.repeat(100))).toBe(true);
+        expect(result).toContain('truncated to 100 chars');
+    });
+
+    it('handles exact boundary without truncating', () => {
+        const text = 'x'.repeat(50);
+        expect(truncateToMaxChars(text, 50)).toBe(text);
     });
 });
 
