@@ -119,6 +119,7 @@ jobs:
         run: |
           set -euo pipefail
           BRANCH="leaderboard-update/${RUN_ID}"
+          PR_NUMBER=""
           # Resolve body file (may not exist if update-leaderboard.ts skipped diff)
           if [ -f commit-body.md ] && [ -s commit-body.md ]; then
             BODY_ARGS=(--body-file commit-body.md)
@@ -137,6 +138,10 @@ jobs:
               --title "feat(leaderboard): Update with results from run ${RUN_ID}" \
               "${BODY_ARGS[@]}" \
               --label "leaderboard"
-            PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
+            PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty' || true)
           fi
-          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          if [ -n "$PR_NUMBER" ]; then
+            echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Could not determine PR number — pr_number output will be empty"
+          fi

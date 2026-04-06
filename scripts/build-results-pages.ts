@@ -114,7 +114,7 @@ function generateResultPage(key: string, entry: SavedResult): string {
       ${meta.version ? `<div>Version <strong>${esc(meta.version)}</strong></div>` : ''}
       ${meta.benchmarkVersion ? `<div>Bench <strong>${esc(meta.benchmarkVersion)}</strong></div>` : ''}
     </div>
-    ${(runUrlHtml || prSearchUrl) ? `<div style="margin-top:12px;display:flex;gap:12px">${runUrlHtml}${prSearchUrl}</div>` : ''}
+    ${(runUrlHtml || prSearchUrl) ? `<div style="margin-top:12px;display:flex;gap:12px">${[runUrlHtml, prSearchUrl].filter(Boolean).join(' &middot; ')}</div>` : ''}
   </div>
 
   <h2>Task Results</h2>
