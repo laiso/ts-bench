@@ -90,6 +90,7 @@ jobs:
           echo "message_file=commit-message.txt" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push changes to a new branch
+        id: push_branch
         env:
           RUN_ID: ${{ github.event.inputs.run_id }}
         run: |
@@ -101,19 +102,28 @@ jobs:
           git add public/data/results/ || true
           if git diff --cached --quiet; then
             echo "No changes to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git checkout -B "$BRANCH"
           git commit -F commit-message.txt
           git push -u origin "$BRANCH" --force-with-lease
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
-        if: success()
+        if: success() && steps.push_branch.outputs.pushed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ID: ${{ github.event.inputs.run_id }}
         run: |
+          set -euo pipefail
           BRANCH="leaderboard-update/${RUN_ID}"
+          # Resolve body file (may not exist if update-leaderboard.ts skipped diff)
+          if [ -f commit-body.md ] && [ -s commit-body.md ]; then
+            BODY_ARGS=(--body-file commit-body.md)
+          else
+            BODY_ARGS=(--body "")
+          fi
           # Check if PR already exists
           EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' || true)
           if [ -n "$EXISTING" ]; then
@@ -123,6 +133,6 @@ jobs:
               --base main \
               --head "$BRANCH" \
               --title "feat(leaderboard): Update with results from run ${RUN_ID}" \
-              --body-file commit-body.md \
+              "${BODY_ARGS[@]}" \
               --label "leaderboard"
           fi
