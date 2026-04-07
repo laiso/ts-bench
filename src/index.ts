@@ -28,6 +28,21 @@ async function main(): Promise<void> {
         return;
     }
 
+    // --propose-update <path>: run update-leaderboard script and open a PR
+    const proposeUpdateIndex = process.argv.indexOf('--propose-update');
+    if (proposeUpdateIndex !== -1) {
+        const resultJsonPath = process.argv[proposeUpdateIndex + 1];
+        if (!resultJsonPath || resultJsonPath.startsWith('--')) {
+            console.error('Usage: --propose-update <path-to-result.json> [--source-label <label>]');
+            process.exit(1);
+        }
+        const sourceLabelIndex = process.argv.indexOf('--source-label');
+        const sourceLabelArg = sourceLabelIndex !== -1 ? process.argv[sourceLabelIndex + 1] : undefined;
+        const sourceLabel = (sourceLabelArg && !sourceLabelArg.startsWith('--')) ? sourceLabelArg : 'local';
+        await runProposeUpdate(resultJsonPath, sourceLabel);
+        return;
+    }
+
     // --setup-auth <agent>: interactive Docker login for subscription auth
     const setupAuthIndex = process.argv.indexOf('--setup-auth');
     if (setupAuthIndex !== -1) {
@@ -185,6 +200,120 @@ async function runPrintInstructionsMode(
 
         if (exercises.length > 1) {
             console.log(`\n${'='.repeat(60)}`);
+        }
+    }
+}
+
+/**
+ * --propose-update <path>: Run the leaderboard update script against the
+ * given result JSON, then create a git branch, commit, push, and open a PR.
+ */
+export async function runProposeUpdate(
+    resultJsonPath: string,
+    sourceLabel: string,
+    deps?: {
+        spawnSync?: typeof import('child_process').spawnSync;
+        existsSync?: typeof import('fs').existsSync;
+        readFileSync?: (path: string, enc: BufferEncoding) => string;
+        writeFileSync?: typeof import('fs').writeFileSync;
+    }
+): Promise<void> {
+    const { spawnSync: _spawnSync } = await import('child_process');
+    const { existsSync: _existsSync, readFileSync: _readFileSync, writeFileSync: _writeFileSync } = await import('fs');
+
+    const spawnSync = deps?.spawnSync ?? _spawnSync;
+    const existsSync = deps?.existsSync ?? _existsSync;
+    const readFileSync = deps?.readFileSync ?? ((p: string, enc: BufferEncoding) => _readFileSync(p, enc) as string);
+    const writeFileSync = deps?.writeFileSync ?? _writeFileSync;
+
+    // 1. Run update-leaderboard.ts
+    const updateResult = spawnSync('bun', ['scripts/update-leaderboard.ts', resultJsonPath], {
+        stdio: 'inherit',
+    });
+    if (updateResult.status !== 0) {
+        console.error(`update-leaderboard.ts failed with exit code ${updateResult.status}`);
+        process.exit(updateResult.status ?? 1);
+    }
+
+    // 2. Stage leaderboard result files
+    spawnSync('git', ['add', 'public/data/results/'], { stdio: 'inherit' });
+
+    // 3. Check for staged changes
+    const diffResult = spawnSync('git', ['diff', '--cached', '--quiet'], { stdio: 'inherit' });
+    if (diffResult.status === 0) {
+        console.log('No changes to commit.');
+        return;
+    }
+
+    // 4. Determine commit message
+    let prTitle = `feat(leaderboard): Update from ${sourceLabel} result`;
+    if (existsSync('pr-title.txt')) {
+        const titleFromFile = readFileSync('pr-title.txt', 'utf-8').trim();
+        if (titleFromFile) prTitle = titleFromFile;
+    }
+
+    let commitMessage = prTitle + '\n\n';
+    if (existsSync('commit-body.md')) {
+        const body = readFileSync('commit-body.md', 'utf-8').trim();
+        if (body) commitMessage += body;
+    } else {
+        commitMessage += 'No detailed diff generated.';
+    }
+
+    // 5. Create branch, commit, push
+    const timestamp = Math.floor(Date.now() / 1000);
+    const safeLabelPart = sourceLabel.replace(/[^a-zA-Z0-9._-]/g, '-');
+    const branch = `leaderboard-update/${safeLabelPart}-${timestamp}`;
+
+    const gitConfig = [
+        ['git', 'config', 'user.name', 'github-actions[bot]'],
+        ['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'],
+    ];
+    for (const [cmd, ...args] of gitConfig) {
+        spawnSync(cmd!, args, { stdio: 'inherit' });
+    }
+
+    const checkoutResult = spawnSync('git', ['checkout', '-B', branch], { stdio: 'inherit' });
+    if (checkoutResult.status !== 0) {
+        console.error('Failed to create git branch.');
+        process.exit(checkoutResult.status ?? 1);
+    }
+
+    const { tmpdir } = await import('os');
+    const msgFile = `${tmpdir()}/ts-bench-commit-message.txt`;
+    writeFileSync(msgFile, commitMessage, 'utf-8');
+
+    const commitResult = spawnSync('git', ['commit', '-F', msgFile], { stdio: 'inherit' });
+    if (commitResult.status !== 0) {
+        console.error('Failed to commit changes.');
+        process.exit(commitResult.status ?? 1);
+    }
+
+    const pushResult = spawnSync('git', ['push', '-u', 'origin', branch, '--force-with-lease'], { stdio: 'inherit' });
+    if (pushResult.status !== 0) {
+        console.error('Failed to push branch.');
+        process.exit(pushResult.status ?? 1);
+    }
+
+    // 6. Create pull request
+    const bodyArgs: string[] = existsSync('commit-body.md')
+        ? ['--body-file', 'commit-body.md']
+        : ['--body', ''];
+
+    const prResult = spawnSync(
+        'gh',
+        ['pr', 'create', '--base', 'main', '--head', branch, '--title', prTitle, ...bodyArgs, '--label', 'leaderboard'],
+        { stdio: 'inherit' }
+    );
+    if (prResult.status !== 0) {
+        const { execSync } = await import('child_process');
+        try {
+            const encoded = encodeURIComponent(branch);
+            const repo = execSync('gh repo view --json nameWithOwner --jq .nameWithOwner', { encoding: 'utf-8' }).trim();
+            console.warn('\n⚠ PR creation failed. Create manually:');
+            console.warn(`  https://github.com/${repo}/compare/main...${encoded}?expand=1`);
+        } catch {
+            console.warn('\n⚠ PR creation failed. Please create the PR manually.');
         }
     }
 }
