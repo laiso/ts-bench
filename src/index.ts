@@ -37,9 +37,8 @@ async function main(): Promise<void> {
             process.exit(1);
         }
         const sourceLabelIndex = process.argv.indexOf('--source-label');
-        const sourceLabel = (sourceLabelIndex !== -1 && process.argv[sourceLabelIndex + 1] && !process.argv[sourceLabelIndex + 1]!.startsWith('--'))
-            ? process.argv[sourceLabelIndex + 1]!
-            : 'local';
+        const sourceLabelArg = sourceLabelIndex !== -1 ? process.argv[sourceLabelIndex + 1] : undefined;
+        const sourceLabel = (sourceLabelArg && !sourceLabelArg.startsWith('--')) ? sourceLabelArg : 'local';
         await runProposeUpdate(resultJsonPath, sourceLabel);
         return;
     }
@@ -263,7 +262,8 @@ export async function runProposeUpdate(
 
     // 5. Create branch, commit, push
     const timestamp = Math.floor(Date.now() / 1000);
-    const branch = `leaderboard-update/local-${timestamp}`;
+    const safeLabelPart = sourceLabel.replace(/[^a-zA-Z0-9._-]/g, '-');
+    const branch = `leaderboard-update/${safeLabelPart}-${timestamp}`;
 
     const gitConfig = [
         ['git', 'config', 'user.name', 'github-actions[bot]'],
@@ -279,7 +279,8 @@ export async function runProposeUpdate(
         process.exit(checkoutResult.status ?? 1);
     }
 
-    const msgFile = '/tmp/ts-bench-commit-message.txt';
+    const { tmpdir } = await import('os');
+    const msgFile = `${tmpdir()}/ts-bench-commit-message.txt`;
     writeFileSync(msgFile, commitMessage, 'utf-8');
 
     const commitResult = spawnSync('git', ['commit', '-F', msgFile], { stdio: 'inherit' });
