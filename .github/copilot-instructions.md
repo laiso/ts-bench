@@ -8,3 +8,4 @@
 - To add an agent: add a builder in `src/agents/builders/` and register it in `src/agents/factory.ts`.
 - v2 (SWE-Lancer) requires Docker. One-time setup: `./scripts/setup-v2-env.sh`. Image: `swelancer/swelancer_x86_monolith:releasev1` (~15 GB).
 - Subscription-based auth (no API key) for Claude, Gemini, Codex: `bun src/index.ts --setup-auth <agent>`.
+- All pull request titles and descriptions must be written in English.
