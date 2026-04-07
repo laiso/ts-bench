@@ -1,6 +1,7 @@
 import { spawn } from "bun";
 import { join } from 'path';
 
+
 export class ExerciseResetter {
     async reset(exercisePath: string, verbose: boolean = false): Promise<void> {
         try {
@@ -67,7 +68,6 @@ export class ExerciseResetter {
             if (proc.exitCode === 0) {
                 const stdout = await new Response(proc.stdout).text();
                 if (stdout.trim()) {
-                    console.log(`📋 Code changes made by agent:`);
                     console.log(`--- Diff for ${exercisePath} ---`);
                     console.log(stdout);
                     console.log(`--- End of diff ---`);

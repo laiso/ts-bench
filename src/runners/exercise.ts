@@ -1,4 +1,5 @@
 import { existsSync, statSync } from 'fs';
+import { readFile } from 'fs/promises';
 import type { TestResult, BenchmarkConfig } from '../config/types';
 import { AgentRunner } from './agent';
 import { TestRunner } from './test';

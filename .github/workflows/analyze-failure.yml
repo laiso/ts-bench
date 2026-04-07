@@ -8,10 +8,10 @@ on:
         required: true
         type: string
       artifact_name:
-        description: 'The name of the benchmark artifact'
-        required: true
+        description: 'The name of the benchmark artifact (leave empty to auto-detect from the run)'
+        required: false
         type: string
-        default: 'benchmark-results'
+        default: ''
       pr_number:
         description: 'PR number to post analysis comment (leave empty to write Job Summary only)'
         required: false
@@ -44,12 +44,32 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Resolve artifact name
+        id: resolve_artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_ARTIFACT_NAME: ${{ github.event.inputs.artifact_name }}
+          INPUT_RUN_ID: ${{ github.event.inputs.run_id }}
+        run: |
+          set -euo pipefail
+          NAME="$INPUT_ARTIFACT_NAME"
+          if [ -z "$NAME" ]; then
+            NAME=$(gh api "repos/${{ github.repository }}/actions/runs/$INPUT_RUN_ID/artifacts" \
+              --jq '[.artifacts[] | select(.name | test("benchmark.*results"; "i"))] | first | .name')
+            if [ -z "$NAME" ] || [ "$NAME" = "null" ]; then
+              echo "::error::Could not auto-detect a benchmark artifact in run $INPUT_RUN_ID" >&2
+              exit 1
+            fi
+            echo "Auto-detected artifact: $NAME"
+          fi
+          echo "artifact_name=$NAME" >> "$GITHUB_OUTPUT"
+
       - name: Download benchmark artifact
         uses: dawidd6/action-download-artifact@v8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run_id: ${{ github.event.inputs.run_id }}
-          name: ${{ github.event.inputs.artifact_name }}
+          name: ${{ steps.resolve_artifact.outputs.artifact_name }}
           path: ./current-result
 
       - name: Find the result file path
@@ -82,9 +102,10 @@ jobs:
         if: ${{ github.event.inputs.pr_number != '' && hashFiles('failure-analysis.md') != '' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.inputs.pr_number }}
         run: |
           set -euo pipefail
-          gh pr comment "${{ github.event.inputs.pr_number }}" --body-file failure-analysis.md
+          gh pr comment "$PR_NUMBER" --body-file failure-analysis.md
 
       - name: Write Job Summary
         if: ${{ hashFiles('failure-analysis.md') != '' }}

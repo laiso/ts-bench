@@ -111,13 +111,16 @@ jobs:
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
+        id: create_pr
         if: success() && steps.push_branch.outputs.pushed == 'true'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ID: ${{ github.event.inputs.run_id }}
         run: |
           set -euo pipefail
           BRANCH="leaderboard-update/${RUN_ID}"
+          PR_NUMBER=""
           # Resolve body file (may not exist if update-leaderboard.ts skipped diff)
           if [ -f commit-body.md ] && [ -s commit-body.md ]; then
             BODY_ARGS=(--body-file commit-body.md)
@@ -128,6 +131,7 @@ jobs:
           EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty' || true)
           if [ -n "$EXISTING" ]; then
             echo "PR #$EXISTING already exists for branch $BRANCH"
+            PR_NUMBER="$EXISTING"
           else
             gh pr create \
               --base main \
@@ -135,4 +139,22 @@ jobs:
               --title "feat(leaderboard): Update with results from run ${RUN_ID}" \
               "${BODY_ARGS[@]}" \
               --label "leaderboard"
+            PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty' || true)
           fi
+          if [ -n "$PR_NUMBER" ]; then
+            echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Could not determine PR number — pr_number output will be empty"
+          fi
+
+      - name: Print manual PR URL if creation failed
+        if: steps.push_branch.outputs.pushed == 'true' && steps.create_pr.outcome == 'failure'
+        env:
+          RUN_ID: ${{ github.event.inputs.run_id }}
+        run: |
+          BRANCH="leaderboard-update/${RUN_ID}"
+          ENCODED_BRANCH=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${BRANCH}', safe=''))")
+          REPO="${{ github.repository }}"
+          echo "::warning::PR creation failed (GitHub Actions may not be permitted to create PRs in this repo)."
+          echo "::warning::To enable it: Settings → Actions → General → Allow GitHub Actions to create and approve pull requests"
+          echo "::notice::Or create the PR manually: https://github.com/${REPO}/compare/main...${ENCODED_BRANCH}?expand=1"
