@@ -8,10 +8,10 @@ on:
         required: true
         type: string
       artifact_name:
-        description: 'The name of the artifact to download (e.g., benchmark-results)'
-        required: true
+        description: 'The name of the artifact to download (leave empty to auto-detect from the run)'
+        required: false
         type: string
-        default: 'benchmark-results'
+        default: ''
 
 run-name: 'Propose Leaderboard Update from Run ${{ github.event.inputs.run_id }}'
 
@@ -40,12 +40,32 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Resolve artifact name
+        id: resolve_artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_ARTIFACT_NAME: ${{ github.event.inputs.artifact_name }}
+          INPUT_RUN_ID: ${{ github.event.inputs.run_id }}
+        run: |
+          set -euo pipefail
+          NAME="$INPUT_ARTIFACT_NAME"
+          if [ -z "$NAME" ]; then
+            NAME=$(gh api "repos/${{ github.repository }}/actions/runs/$INPUT_RUN_ID/artifacts" \
+              --jq '[.artifacts[] | select(.name | test("benchmark.*results"; "i"))] | first | .name')
+            if [ -z "$NAME" ] || [ "$NAME" = "null" ]; then
+              echo "::error::Could not auto-detect a benchmark artifact in run $INPUT_RUN_ID" >&2
+              exit 1
+            fi
+            echo "Auto-detected artifact: $NAME"
+          fi
+          echo "artifact_name=$NAME" >> "$GITHUB_OUTPUT"
+
       - name: Download benchmark artifact
         uses: dawidd6/action-download-artifact@v8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run_id: ${{ github.event.inputs.run_id }}
-          name: ${{ github.event.inputs.artifact_name }}
+          name: ${{ steps.resolve_artifact.outputs.artifact_name }}
           path: ./current-result
 
       - name: Find the result file path
@@ -72,7 +92,7 @@ jobs:
         env:
           RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.event.inputs.run_id }}
           RUN_ID: ${{ github.event.inputs.run_id }}
-          ARTIFACT_NAME: ${{ github.event.inputs.artifact_name }}
+          ARTIFACT_NAME: ${{ steps.resolve_artifact.outputs.artifact_name }}
         run: bun scripts/update-leaderboard.ts ${{ steps.find_file.outputs.result_path }}
       - name: Prepare commit message file
         id: prepare_commit
@@ -166,7 +186,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ID: ${{ github.event.inputs.run_id }}
-          ARTIFACT_NAME: ${{ github.event.inputs.artifact_name }}
+          ARTIFACT_NAME: ${{ steps.resolve_artifact.outputs.artifact_name }}
           PR_NUMBER: ${{ steps.create_pr.outputs.pr_number }}
         run: |
           set -euo pipefail
