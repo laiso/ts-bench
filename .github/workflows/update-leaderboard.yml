@@ -80,13 +80,14 @@ jobs:
           RUN_ID: ${{ github.event.inputs.run_id }}
         run: |
           set -euo pipefail
-          TITLE="feat(leaderboard): Update with results from run ${RUN_ID}"
-          printf "%s\n\n" "$TITLE" > commit-message.txt
+          PR_TITLE=$(cat pr-title.txt 2>/dev/null || echo "feat(leaderboard): Update with results from run ${RUN_ID}")
+          printf "%s\n\n" "$PR_TITLE" > commit-message.txt
           if [ -f commit-body.md ] && [ -s commit-body.md ]; then
             cat commit-body.md >> commit-message.txt
           else
             echo "No detailed diff generated." >> commit-message.txt
           fi
+          echo "pr_title=$PR_TITLE" >> "$GITHUB_OUTPUT"
           echo "message_file=commit-message.txt" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push changes to a new branch
@@ -136,7 +137,7 @@ jobs:
             gh pr create \
               --base main \
               --head "$BRANCH" \
-              --title "feat(leaderboard): Update with results from run ${RUN_ID}" \
+              --title "${{ steps.prepare_commit.outputs.pr_title }}" \
               "${BODY_ARGS[@]}" \
               --label "leaderboard"
             PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty' || true)
@@ -158,3 +159,22 @@ jobs:
           echo "::warning::PR creation failed (GitHub Actions may not be permitted to create PRs in this repo)."
           echo "::warning::To enable it: Settings → Actions → General → Allow GitHub Actions to create and approve pull requests"
           echo "::notice::Or create the PR manually: https://github.com/${REPO}/compare/main...${ENCODED_BRANCH}?expand=1"
+
+      - name: Trigger failure analysis
+        if: steps.create_pr.outputs.pr_number != '' && hashFiles('has-failures') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.inputs.run_id }}
+          ARTIFACT_NAME: ${{ github.event.inputs.artifact_name }}
+        run: |
+          set -euo pipefail
+          HAS_FAILURES=$(cat has-failures 2>/dev/null || echo "0")
+          if [ "$HAS_FAILURES" = "1" ]; then
+            gh workflow run analyze-failure.yml \
+              -f run_id="${RUN_ID}" \
+              -f artifact_name="${ARTIFACT_NAME}" \
+              -f pr_number="${{ steps.create_pr.outputs.pr_number }}"
+            echo "✅ Triggered analyze-failure.yml for PR #${{ steps.create_pr.outputs.pr_number }}"
+          else
+            echo "ℹ️ All tasks succeeded — skipping failure analysis"
+          fi
