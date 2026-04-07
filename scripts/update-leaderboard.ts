@@ -3,6 +3,16 @@ import { dirname, join } from 'path';
 import { existsSync } from 'fs';
 import { EOL } from 'os';
 
+interface BenchmarkResultItem {
+  exercise: string;
+  agentSuccess: boolean;
+  testSuccess: boolean;
+  overallSuccess: boolean;
+  agentDuration?: number;
+  testDuration?: number;
+  totalDuration?: number;
+}
+
 interface SavedBenchmarkResult {
   metadata: {
     agent: string;
@@ -28,11 +38,18 @@ interface SavedBenchmarkResult {
     testSuccessCount: number;
     testFailedCount: number;
   };
-  results: unknown[];
+  tier?: {
+    tier: string;
+    label: string;
+    solved: number;
+    total: number;
+  };
+  results: BenchmarkResultItem[];
 }
 
 const RESULTS_DIR = './public/data/results';
 const COMMIT_BODY_PATH = './commit-body.md';
+const PR_TITLE_PATH = './pr-title.txt';
 
 function sanitizeFilename(key: string): string {
   return key.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -78,6 +95,21 @@ async function main() {
     console.warn('Failed to generate commit body markdown:', e);
   }
 
+  try {
+    const prTitle = generatePrTitle(merged, RUN_ID);
+    await writeFile(PR_TITLE_PATH, prTitle, 'utf-8');
+    console.log(`📝 PR title generated: ${PR_TITLE_PATH}`);
+  } catch (e) {
+    console.warn('Failed to generate PR title:', e);
+  }
+
+  try {
+    const hasFailures = merged.summary.successRate < 100;
+    await writeFile('./has-failures', hasFailures ? '1' : '0', 'utf-8');
+  } catch (e) {
+    console.warn('Failed to write has-failures flag:', e);
+  }
+
   await ensureDirectoryExists(outPath);
   await writeFile(outPath, JSON.stringify(merged, null, 2), 'utf-8');
   console.log(`✅ Updated: ${outPath}`);
@@ -97,7 +129,7 @@ function validateResult(r: SavedBenchmarkResult) {
   }
 }
 
-function generateDiffMarkdown(
+export function generateDiffMarkdown(
   oldResult: SavedBenchmarkResult | null,
   newResult: SavedBenchmarkResult,
   key: string,
@@ -119,15 +151,62 @@ function generateDiffMarkdown(
     }
   }
 
+  lines.push('');
+
+  // Meta info
+  lines.push(`- **Agent**: ${newResult.metadata.agent}`);
+  lines.push(`- **Model**: ${newResult.metadata.model}`);
+  lines.push(`- **Provider**: ${newResult.metadata.provider}`);
+
+  // Run URL
+  if (newResult.metadata.runUrl) {
+    lines.push(`- **Run**: [View GitHub Actions Run](${newResult.metadata.runUrl})`);
+  }
+
+  lines.push('');
+
+  // Tier info
+  if (newResult.tier) {
+    const t = newResult.tier;
+    lines.push(`**Tier**: ${t.tier} (${t.solved}/${t.total})`);
+    lines.push('');
+  }
+
+  // Summary stats
   const oldRate = oldResult ? Number(oldResult.summary.successRate).toFixed(1) + '%' : 'N/A';
   const newRate = Number(newResult.summary.successRate).toFixed(1) + '%';
-  lines.push(`- Success Rate: ${newRate} (was ${oldRate})`);
+  lines.push(`- **Success Rate**: ${newRate} (was ${oldRate})`);
 
   const oldTime = oldResult ? (Number(oldResult.summary.avgDuration) / 1000).toFixed(1) + 's' : 'N/A';
   const newTime = (Number(newResult.summary.avgDuration) / 1000).toFixed(1) + 's';
-  lines.push(`- Avg Time: ${newTime} (was ${oldTime})`);
+  lines.push(`- **Avg Time**: ${newTime} (was ${oldTime})`);
+
+  // Task results table
+  if (newResult.results && newResult.results.length > 0) {
+    lines.push('');
+    lines.push('| Task | Agent | Test | Overall | Duration |');
+    lines.push('|------|-------|------|---------|----------|');
+    for (const r of newResult.results) {
+      const agent = r.agentSuccess ? '✅' : '❌';
+      const test = r.testSuccess ? '✅' : '❌';
+      const overall = r.overallSuccess ? '✅' : '❌';
+      const duration =
+        r.totalDuration !== undefined ? (r.totalDuration / 1000).toFixed(1) + 's' : 'N/A';
+      lines.push(`| ${r.exercise} | ${agent} | ${test} | ${overall} | ${duration} |`);
+    }
+  }
 
   return lines.join(EOL);
+}
+
+export function generatePrTitle(result: SavedBenchmarkResult, runId: string | undefined): string {
+  const agent = result.metadata.agent;
+  const model = result.metadata.model;
+  const tierPart = result.tier
+    ? `${result.tier.solved}/${result.tier.total} ${result.tier.tier} tier`
+    : `${result.summary.successCount}/${result.summary.totalCount}`;
+  const runPart = runId ? ` [run ${runId}]` : '';
+  return `feat(leaderboard): ${agent} / ${model} — ${tierPart}${runPart}`;
 }
 
 async function ensureDirectoryExists(filePath: string) {
@@ -137,7 +216,9 @@ async function ensureDirectoryExists(filePath: string) {
   }
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+if (import.meta.main) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
