@@ -7,20 +7,20 @@ on:
         description: 'The ID of the benchmark workflow run to analyze'
         required: true
         type: string
+      pr_number:
+        description: 'PR number to post analysis comment (leave empty to write Job Summary only)'
+        required: true
+        type: string
       artifact_name:
         description: 'The name of the benchmark artifact (leave empty to auto-detect from the run)'
         required: false
         type: string
         default: ''
-      pr_number:
-        description: 'PR number to post analysis comment (leave empty to write Job Summary only)'
-        required: false
-        type: string
       analysis_model:
         description: 'GitHub Models model to use for analysis'
         required: false
         type: string
-        default: 'openai/gpt-5'
+        default: 'deepseek/DeepSeek-V3-0324'
 
 run-name: 'Analyze Failures from Run ${{ github.event.inputs.run_id }}'
 
