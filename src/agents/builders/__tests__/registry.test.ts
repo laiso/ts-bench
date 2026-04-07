@@ -84,12 +84,36 @@ describe('GenericAgentBuilder via registry', () => {
         }
     });
 
-    it('copilot: sets COPILOT_ALLOW_ALL and COPILOT_MODEL', async () => {
-        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.copilot);
-        const command = await builder.buildCommand('instructions');
-        expect(command.args[2]).toBe('copilot');
-        expect(command.env?.COPILOT_ALLOW_ALL).toBe('1');
-        expect(command.env?.COPILOT_MODEL).toBe('test-model');
+    it('copilot: sets COPILOT_ALLOW_ALL, COPILOT_MODEL, and COPILOT_GITHUB_TOKEN', async () => {
+        const origToken = process.env.COPILOT_GITHUB_TOKEN;
+        process.env.COPILOT_GITHUB_TOKEN = 'test-copilot-token';
+        try {
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.copilot);
+            const command = await builder.buildCommand('instructions');
+            expect(command.args[2]).toBe('copilot');
+            expect(command.env?.COPILOT_ALLOW_ALL).toBe('1');
+            expect(command.env?.COPILOT_MODEL).toBe('test-model');
+            expect(command.env?.COPILOT_GITHUB_TOKEN).toBe('test-copilot-token');
+        } finally {
+            if (origToken === undefined) delete process.env.COPILOT_GITHUB_TOKEN;
+            else process.env.COPILOT_GITHUB_TOKEN = origToken;
+        }
+    });
+
+    it('copilot: works without token in local mode', async () => {
+        const origToken = process.env.COPILOT_GITHUB_TOKEN;
+        const origGhToken = process.env.GITHUB_TOKEN;
+        delete process.env.COPILOT_GITHUB_TOKEN;
+        delete process.env.GITHUB_TOKEN;
+        try {
+            const localConfig = { ...BASE_CONFIG, useDocker: false };
+            const builder = new GenericAgentBuilder(localConfig, AGENT_REGISTRY.copilot);
+            const command = await builder.buildCommand('instructions');
+            expect(command.env?.COPILOT_GITHUB_TOKEN).toBeUndefined();
+        } finally {
+            if (origToken !== undefined) process.env.COPILOT_GITHUB_TOKEN = origToken;
+            if (origGhToken !== undefined) process.env.GITHUB_TOKEN = origGhToken;
+        }
     });
 
     it('vibe: requires MISTRAL_API_KEY', async () => {

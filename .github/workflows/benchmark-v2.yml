@@ -154,6 +154,7 @@ jobs:
           KIMI_API_KEY: ${{ secrets.KIMI_API_KEY }}
           ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           mkdir -p "${{ env.RESULT_DIR }}"
