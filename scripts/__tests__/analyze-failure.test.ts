@@ -145,7 +145,7 @@ describe('buildMarkdownReport', () => {
         runId: '123',
     };
     const summary = {
-        successRate: 0.8,
+        successRate: 80.0,
         successCount: 4,
         totalCount: 5,
         avgDuration: 60000,
