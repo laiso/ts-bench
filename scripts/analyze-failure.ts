@@ -273,7 +273,7 @@ export function buildMarkdownReport(
         lines.push(`| testSuccess | ${a.testSuccess} |`);
         lines.push(`| Patch | ${a.patchLines > 0 ? `${a.patchLines} lines changed` : 'empty'} |`);
         lines.push(
-            `| Duration | agent ${Math.round(a.agentDuration)}s + test ${Math.round(a.testDuration)}s = ${Math.round(a.agentDuration + a.testDuration)}s |`,
+            `| Duration | agent ${Math.round(a.agentDuration / 1000)}s + test ${Math.round(a.testDuration / 1000)}s = ${Math.round((a.agentDuration + a.testDuration) / 1000)}s |`,
         );
         lines.push('');
 
