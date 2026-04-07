@@ -118,6 +118,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ID: ${{ github.event.inputs.run_id }}
+          PR_TITLE: ${{ steps.prepare_commit.outputs.pr_title }}
         run: |
           set -euo pipefail
           BRANCH="leaderboard-update/${RUN_ID}"
@@ -137,7 +138,7 @@ jobs:
             gh pr create \
               --base main \
               --head "$BRANCH" \
-              --title "${{ steps.prepare_commit.outputs.pr_title }}" \
+              --title "$PR_TITLE" \
               "${BODY_ARGS[@]}" \
               --label "leaderboard"
             PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty' || true)
@@ -166,6 +167,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ID: ${{ github.event.inputs.run_id }}
           ARTIFACT_NAME: ${{ github.event.inputs.artifact_name }}
+          PR_NUMBER: ${{ steps.create_pr.outputs.pr_number }}
         run: |
           set -euo pipefail
           HAS_FAILURES=$(cat has-failures 2>/dev/null || echo "0")
@@ -173,8 +175,8 @@ jobs:
             gh workflow run analyze-failure.yml \
               -f run_id="${RUN_ID}" \
               -f artifact_name="${ARTIFACT_NAME}" \
-              -f pr_number="${{ steps.create_pr.outputs.pr_number }}"
-            echo "✅ Triggered analyze-failure.yml for PR #${{ steps.create_pr.outputs.pr_number }}"
+              -f pr_number="${PR_NUMBER}"
+            echo "✅ Triggered analyze-failure.yml for PR #${PR_NUMBER}"
           else
             echo "ℹ️ All tasks succeeded — skipping failure analysis"
           fi
