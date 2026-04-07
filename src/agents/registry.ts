@@ -294,6 +294,19 @@ export const AGENT_REGISTRY = {
                 env.COPILOT_MODEL = config.model;
             }
 
+            const token = tryAnyEnv(['COPILOT_GITHUB_TOKEN', 'GITHUB_TOKEN']);
+            if (token) {
+                env.COPILOT_GITHUB_TOKEN = token.value;
+                console.log(`[auth] Copilot: using token (${token.key})`);
+            } else if (!config.useDocker) {
+                console.log('[auth] Copilot: no token set, relying on local copilot auth');
+            } else {
+                throw new Error(
+                    'Missing COPILOT_GITHUB_TOKEN for Copilot CLI. ' +
+                    'Create a fine-grained PAT with the "Copilot Requests" permission and set it as COPILOT_GITHUB_TOKEN.'
+                );
+            }
+
             return env;
         },
         buildArgs(config: AgentConfig, instructions: string): string[] {
