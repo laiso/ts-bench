@@ -48,14 +48,16 @@ jobs:
         id: resolve_artifact
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_ARTIFACT_NAME: ${{ github.event.inputs.artifact_name }}
+          INPUT_RUN_ID: ${{ github.event.inputs.run_id }}
         run: |
           set -euo pipefail
-          NAME="${{ github.event.inputs.artifact_name }}"
+          NAME="$INPUT_ARTIFACT_NAME"
           if [ -z "$NAME" ]; then
-            NAME=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.event.inputs.run_id }}/artifacts" \
+            NAME=$(gh api "repos/${{ github.repository }}/actions/runs/$INPUT_RUN_ID/artifacts" \
               --jq '[.artifacts[] | select(.name | test("benchmark.*results"; "i"))] | first | .name')
             if [ -z "$NAME" ] || [ "$NAME" = "null" ]; then
-              echo "::error::Could not auto-detect a benchmark artifact in run ${{ github.event.inputs.run_id }}" >&2
+              echo "::error::Could not auto-detect a benchmark artifact in run $INPUT_RUN_ID" >&2
               exit 1
             fi
             echo "Auto-detected artifact: $NAME"
