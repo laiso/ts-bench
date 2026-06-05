@@ -121,9 +121,9 @@ Implementation: `src/utils/docker.ts` (`createAuthCacheArgs`, `hasAuthCache`), a
 
 ## Main CLI Options
 
-- `--agent <agent>`: Agent to use (claude/goose/aider/codex/gemini/opencode/qwen/cursor/copilot/vibe/kimi)
+- `--agent <agent>`: Agent to use (claude/goose/aider/codex/gemini/grok/opencode/qwen/cursor/copilot/vibe/kimi)
 - `--model <model>`: Model to use
-- `--provider <provider>`: openai/anthropic/google/openrouter/dashscope/xai/deepseek/moonshot
+- `--provider <provider>`: openai/anthropic/google/openrouter/dashscope/xai/deepseek/github/cerebras/mistral/moonshot/zai
 - `--docker`: Switch to Docker execution
 - **v1**: `--exercise <name|N|a,b,c>` — single slug, first N exercises, or comma-separated slugs
 - **v2**: `--task <id>`, `--tasks id,id,...`, or `--task-limit <n>` — SWE-Lancer task ids only (`--exercise` is rejected with `--dataset v2`)
@@ -145,6 +145,22 @@ Example:
 ```
 export OPENROUTER_API_KEY=sk-or-...
 bun src/index.ts --agent claude --provider openrouter --model <openrouter-model-id> --exercise acronym --docker
+```
+
+---
+
+## Grok Build (xAI)
+
+- Required env: `XAI_API_KEY`
+- Default provider for `--agent grok` is `xai`
+- Recommended model from xAI Build docs: `grok-build-0.1`
+- The runner uses Grok's headless prompt mode: `grok -p <prompt>`
+
+Example:
+
+```
+export XAI_API_KEY=xai-...
+bun src/index.ts --agent grok --model grok-build-0.1 --exercise acronym
 ```
 
 ---

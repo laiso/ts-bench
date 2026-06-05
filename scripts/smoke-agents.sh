@@ -9,6 +9,7 @@ AGENTS=(
   claude
   codex
   gemini
+  grok
   opencode
   qwen
   aider

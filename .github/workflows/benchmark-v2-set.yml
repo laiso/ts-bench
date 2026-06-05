@@ -31,6 +31,7 @@ on:
           - claude
           - codex
           - gemini
+          - grok
           - opencode
           - goose
           - qwen

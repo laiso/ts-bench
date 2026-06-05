@@ -366,6 +366,31 @@ export const AGENT_REGISTRY = {
         }
     },
 
+    grok: {
+        defaultProvider: 'xai' as ProviderType,
+        install: { method: 'curl', bin: 'grok', url: 'https://x.ai/cli/install.sh' },
+        getEnv(config: AgentConfig): Record<string, string> {
+            const provider = config.provider ?? 'xai';
+            if (provider !== 'xai') {
+                throw new Error(`Unsupported provider for Grok Build: ${provider}`);
+            }
+
+            return {
+                XAI_API_KEY: requireEnv('XAI_API_KEY', 'Missing XAI_API_KEY for Grok Build (xAI) agent')
+            };
+        },
+        buildArgs(config: AgentConfig, instructions: string): string[] {
+            return [
+                'bash',
+                config.agentScriptPath,
+                'grok',
+                '-p',
+                instructions,
+                ...(config.model ? ['-m', config.model] : [])
+            ];
+        }
+    },
+
     opencode: {
         defaultProvider: 'openai' as ProviderType,
         install: { method: 'npm', bin: 'opencode', package: 'opencode-ai' },

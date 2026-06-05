@@ -12,6 +12,7 @@ on:
           - claude
           - codex
           - gemini
+          - grok
           - opencode
           - goose
           - qwen
@@ -120,6 +121,10 @@ jobs:
             gemini)
               npm install -g @google/gemini-cli
               ;;
+            grok)
+              curl -fsSL https://x.ai/cli/install.sh | bash
+              echo "PATH=$HOME/.local/bin:$PATH" >> "$GITHUB_ENV"
+              ;;
             qwen)
               npm install -g @qwen-code/qwen-code
               ;;
@@ -192,6 +197,7 @@ jobs:
             aider)    cmd=aider ;;
             codex)    cmd="codex --version" ;;
             gemini)   cmd=gemini ;;
+            grok)     cmd=grok ;;
             opencode) cmd=opencode ;;
             qwen)     cmd=qwen ;;
             cursor)   cmd=cursor-agent ;;

@@ -44,7 +44,7 @@ function restoreEnvKeys(originals: Record<string, string | undefined>): void {
 
 describe('AGENT_REGISTRY', () => {
     it('has entries for all known agents', () => {
-        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'gemini', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi'];
+        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'gemini', 'grok', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi'];
         for (const agent of agents) {
             expect(AGENT_REGISTRY[agent]).toBeDefined();
         }
@@ -142,6 +142,22 @@ describe('GenericAgentBuilder via registry', () => {
         } finally {
             if (origKey === undefined) delete process.env.OPENAI_API_KEY;
             else process.env.OPENAI_API_KEY = origKey;
+        }
+    });
+
+    it('grok: uses XAI_API_KEY and headless prompt mode', async () => {
+        const origKey = process.env.XAI_API_KEY;
+        process.env.XAI_API_KEY = 'test-xai-key';
+        try {
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.grok);
+            const command = await builder.buildCommand('instructions');
+            expect(command.args.slice(0, 3)).toEqual(['bash', SCRIPT_PATH, 'grok']);
+            expect(command.args).toContain('-p');
+            expect(command.args).toContain('-m');
+            expect(command.env?.XAI_API_KEY).toBe('test-xai-key');
+        } finally {
+            if (origKey === undefined) delete process.env.XAI_API_KEY;
+            else process.env.XAI_API_KEY = origKey;
         }
     });
 

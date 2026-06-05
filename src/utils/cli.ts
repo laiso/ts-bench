@@ -13,7 +13,7 @@ Basic Options:
   --agent <agent>        Agent to use (${Object.keys(AGENT_REGISTRY).join(', ')}) [default: claude]
   --dataset <v1|v2>      Dataset to use (v1: Exercism, v2: SWE-Lancer) [default: v1]
   --model <model>        Model to use (omit to use the agent's default model)
-  --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, moonshot) [default: agent-specific; see AGENT_DEFAULT_PROVIDER]
+  --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, cerebras, mistral, moonshot, zai) [default: agent-specific; see AGENT_DEFAULT_PROVIDER]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
   --verbose              Show detailed output
   --list                 List available exercises (v1) or tasks (v2)
@@ -67,6 +67,7 @@ Examples:
   ts-bench --dataset v2 --task 16912_4 --agent cursor --model sonnet
   ts-bench --list
   ts-bench --agent claude --model sonnet --save-result
+  ts-bench --agent grok --model grok-build-0.1 --save-result
   ts-bench --agent goose --model gemini --save-result
   ts-bench --agent kimi --provider moonshot --model kimi-k2.5 --save-result
   bun src/index.ts --print-instructions --   acronym      # v1: show instructions for one exercise

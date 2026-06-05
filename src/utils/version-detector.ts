@@ -92,6 +92,8 @@ export class VersionDetector {
                 return ['codex', '--version'];
             case 'gemini':
                 return ['gemini', '--version'];
+            case 'grok':
+                return ['grok', '--version'];
             case 'qwen':
                 return ['qwen', '--version'];
             case 'opencode':
@@ -138,6 +140,10 @@ export class VersionDetector {
                 // Gemini output: "gemini 1.0.0" or "1.0.0"
                 const geminiMatch = cleanOutput.match(/(?:gemini\s+)?(\d+\.\d+\.\d+)/i);
                 return geminiMatch && geminiMatch[1] ? geminiMatch[1] : this.extractGenericVersion(cleanOutput);
+            case 'grok':
+                // Grok output: "grok 0.1.0" or "0.1.0"
+                const grokMatch = cleanOutput.match(/(?:grok\s+)?(\d+\.\d+\.\d+)/i);
+                return grokMatch && grokMatch[1] ? grokMatch[1] : this.extractGenericVersion(cleanOutput);
                 
             case 'qwen':
                 // Qwen output: "qwen 1.0.0" or "1.0.0"
