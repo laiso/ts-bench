@@ -225,6 +225,25 @@ jobs:
             echo "Agent CLI '$agent' found."
           fi
 
+      - name: Setup Grok model config
+        if: ${{ github.event.inputs.agent == 'grok' && env.USE_DOCKER == 'false' }}
+        env:
+          MODEL: ${{ github.event.inputs.model }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.grok"
+
+          cat > "$HOME/.grok/config.toml" <<EOF
+          [model."${MODEL}"]
+          model = "${MODEL}"
+          base_url = "https://api.x.ai/v1"
+          name = "${MODEL}"
+          env_key = "GROK_CODE_XAI_API_KEY"
+
+          [models]
+          default = "${MODEL}"
+          EOF
+
       - name: List Grok models
         if: ${{ github.event.inputs.agent == 'grok' && env.USE_DOCKER == 'false' }}
         env:
