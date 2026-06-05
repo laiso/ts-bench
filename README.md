@@ -30,6 +30,8 @@ export XAI_API_KEY="xai-..."
 ts-bench --agent grok --model grok-build-0.1
 ```
 
+`grok-build-0.1` is the xAI API model id; ts-bench maps it to Grok CLI's `grok-build` model alias when invoking `grok`.
+
 Frozen baseline for reproducibility: tag [`v1-final`](https://github.com/laiso/ts-bench/releases/tag/v1-final)
 
 ### v2 — SWE-Lancer

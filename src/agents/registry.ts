@@ -20,6 +20,18 @@ export interface AgentDefinition {
     buildArgs(config: AgentConfig, instructions: string, fileList?: FileList): string[];
 }
 
+const GROK_CLI_MODEL_ALIASES: Record<string, string> = {
+    'grok-build-0.1': 'grok-build',
+    'grok-code-fast': 'grok-build',
+    'grok-code-fast-1': 'grok-build',
+    'grok-code-fast-1-0825': 'grok-build'
+};
+
+function resolveGrokCliModel(model: string | undefined): string | undefined {
+    if (!model) return undefined;
+    return GROK_CLI_MODEL_ALIASES[model] ?? model;
+}
+
 export const AGENT_REGISTRY = {
     claude: {
         defaultProvider: 'anthropic' as ProviderType,
@@ -375,18 +387,23 @@ export const AGENT_REGISTRY = {
                 throw new Error(`Unsupported provider for Grok Build: ${provider}`);
             }
 
+            const apiKey = requireEnv('XAI_API_KEY', 'Missing XAI_API_KEY for Grok Build (xAI) agent');
+
             return {
-                XAI_API_KEY: requireEnv('XAI_API_KEY', 'Missing XAI_API_KEY for Grok Build (xAI) agent')
+                XAI_API_KEY: apiKey,
+                GROK_CODE_XAI_API_KEY: apiKey
             };
         },
         buildArgs(config: AgentConfig, instructions: string): string[] {
+            const cliModel = resolveGrokCliModel(config.model);
+
             return [
                 'bash',
                 config.agentScriptPath,
                 'grok',
                 '-p',
                 instructions,
-                ...(config.model ? ['-m', config.model] : [])
+                ...(cliModel ? ['-m', cliModel] : [])
             ];
         }
     },

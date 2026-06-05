@@ -155,6 +155,24 @@ describe('GenericAgentBuilder via registry', () => {
             expect(command.args).toContain('-p');
             expect(command.args).toContain('-m');
             expect(command.env?.XAI_API_KEY).toBe('test-xai-key');
+            expect(command.env?.GROK_CODE_XAI_API_KEY).toBe('test-xai-key');
+        } finally {
+            if (origKey === undefined) delete process.env.XAI_API_KEY;
+            else process.env.XAI_API_KEY = origKey;
+        }
+    });
+
+    it('grok: maps API model ids to Grok CLI model aliases', async () => {
+        const origKey = process.env.XAI_API_KEY;
+        process.env.XAI_API_KEY = 'test-xai-key';
+        try {
+            const builder = new GenericAgentBuilder(
+                { ...BASE_CONFIG, model: 'grok-build-0.1' },
+                AGENT_REGISTRY.grok
+            );
+            const command = await builder.buildCommand('instructions');
+            expect(command.args).toContain('-m');
+            expect(command.args[command.args.indexOf('-m') + 1]).toBe('grok-build');
         } finally {
             if (origKey === undefined) delete process.env.XAI_API_KEY;
             else process.env.XAI_API_KEY = origKey;

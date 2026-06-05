@@ -155,6 +155,7 @@ bun src/index.ts --agent claude --provider openrouter --model <openrouter-model-
 - Default provider for `--agent grok` is `xai`
 - Recommended model from xAI Build docs: `grok-build-0.1`
 - The runner uses Grok's headless prompt mode: `grok -p <prompt>`
+- `grok-build-0.1` is passed through ts-bench as the result model id, and mapped to Grok CLI's `grok-build` model alias when invoking `grok`.
 
 Example:
 
