@@ -48,6 +48,8 @@ For the first v2 snapshot, I used a 5-task default set with a total listed rewar
 
 These rewards are not used as the benchmark score. They are used as a rough signal that these are non-trivial real-world tasks.
 
+![SWE-Lancer task browser](../docs/articles/assets/ts-bench-v2/swelancer-task-browser.png)
+
 ---
 
 ## How v2 Works
@@ -83,6 +85,8 @@ The current v2 results are only an early snapshot. Models, agents, prompts, and 
 
 Still, the first run already shows why measuring real agent/model combinations is useful.
 
+![ts-bench v2 tier list](../docs/articles/assets/ts-bench-v2/tier-list.png)
+
 | Agent / Model | Tier | Solved | Time |
 |---|---:|---:|---:|
 | copilot / claude-sonnet-4.6 | A | 4/5 | 64.8 min |
@@ -103,6 +107,8 @@ A few observations stand out:
 - Small or cheaper models may look fine on simpler benchmarks but fail on realistic monorepo tasks.
 
 These are not final conclusions. They are reasons to keep measuring.
+
+![A per-agent result page showing task-level pass/fail details](../docs/articles/assets/ts-bench-v2/result-detail.png)
 
 ---
 

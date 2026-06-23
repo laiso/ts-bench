@@ -15,6 +15,9 @@
     pre { background: #111827; color: #e5e7eb; padding: 1rem; border-radius: 10px; overflow: auto; }
     pre code { background: transparent; padding: 0; }
     blockquote { margin: 1.5rem 0; padding: 1rem 1.25rem; border-left: 4px solid #2563eb; background: #eff6ff; }
+    figure { margin: 2rem 0; }
+    img { max-width: 100%; height: auto; border-radius: 10px; border: 1px solid #e5e7eb; }
+    figcaption { color: #6b7280; font-size: .9rem; margin-top: .45rem; text-align: center; }
     table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .95rem; }
     th, td { border: 1px solid #e5e7eb; padding: .55rem .7rem; text-align: left; }
     th { background: #f9fafb; }
@@ -24,7 +27,7 @@
       h2, footer { border-color:#273244; }
       code { background:#1f2937; }
       blockquote { background:#111827; }
-      th, td { border-color:#273244; }
+      img, th, td { border-color:#273244; }
       th { background:#111827; }
     }
   </style>
@@ -59,6 +62,7 @@
 <tr><td><code>20079</code></td><td>$2,000</td><td>Easy-Med</td></tr>
 </tbody></table>
 <p>These rewards are not used as the benchmark score. They are used as a rough signal that these are non-trivial real-world tasks.</p>
+<figure><img src="assets/ts-bench-v2/swelancer-task-browser.png" alt="SWE-Lancer task browser" loading="lazy"><figcaption>SWE-Lancer task browser</figcaption></figure>
 <hr>
 <h2>How v2 Works</h2>
 <p><code>ts-bench v2</code> runs SWE-Lancer tasks inside Docker.</p>
@@ -82,6 +86,7 @@
 <h2>April 2026 Snapshot</h2>
 <p>The current v2 results are only an early snapshot. Models, agents, prompts, and the evaluation code will continue to change.</p>
 <p>Still, the first run already shows why measuring real agent/model combinations is useful.</p>
+<figure><img src="assets/ts-bench-v2/tier-list.png" alt="ts-bench v2 tier list" loading="lazy"><figcaption>ts-bench v2 tier list</figcaption></figure>
 <table><thead><tr><th>Agent / Model</th><th>Tier</th><th>Solved</th><th>Time</th></tr></thead><tbody>
 <tr><td>copilot / claude-sonnet-4.6</td><td>A</td><td>4/5</td><td>64.8 min</td></tr>
 <tr><td>claude / claude-sonnet-4-6</td><td>B</td><td>3/5</td><td>48.1 min</td></tr>
@@ -101,6 +106,7 @@
 <li>Small or cheaper models may look fine on simpler benchmarks but fail on realistic monorepo tasks.</li>
 </ul>
 <p>These are not final conclusions. They are reasons to keep measuring.</p>
+<figure><img src="assets/ts-bench-v2/result-detail.png" alt="A per-agent result page showing task-level pass/fail details" loading="lazy"><figcaption>A per-agent result page showing task-level pass/fail details</figcaption></figure>
 <hr>
 <h2>Why Tiers Instead of a Single Ranking?</h2>
 <p>A small number of tasks is too noisy for a precise ranking. One task can move a model up or down.</p>
