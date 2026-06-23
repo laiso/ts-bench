@@ -28,6 +28,8 @@ Frozen baseline for reproducibility: tag [`v1-final`](https://github.com/laiso/t
 
 Real-world tasks from a large monorepo (Expensify). Requires Docker.
 
+Read the introduction: [ts-bench v2: Benchmarking Coding Agents on Real TypeScript Monorepo Tasks](articles/ts-bench-v2-coding-agent-benchmark.md)
+
 ```bash
 ./scripts/setup-v2-env.sh                               # one-time setup
 ts-bench --dataset v2 --task <id> --agent claude ...    # run
@@ -38,6 +40,8 @@ ts-bench --dataset v2 --task <id> --agent claude ...    # run
 Workflow runs: [v1](.github/workflows/benchmark.yml) · [v2](.github/workflows/benchmark-v2.yml) · [Releases](https://github.com/laiso/ts-bench/releases)
 
 Task browser: `bun run build:swelancer-pages` then open `docs/swelancer-tasks/`. See [`docs/README.md`](docs/README.md).
+
+Article: [ts-bench v2 introduction](https://laiso.github.io/ts-bench/articles/ts-bench-v2-coding-agent-benchmark.html)
 
 ## Docs
 

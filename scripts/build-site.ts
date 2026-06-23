@@ -78,6 +78,7 @@ function buildBody(data: LeaderboardData): string {
 
   <footer>
     <a href="https://github.com/laiso/ts-bench">GitHub</a> &middot;
+    <a href="articles/ts-bench-v2-coding-agent-benchmark.html">v2 Article</a> &middot;
     <a href="swelancer-tasks/">Task Browser</a> &middot;
     <a href="auth/">Subscription Auth</a> &middot;
     Powered by <a href="https://github.com/laiso/ts-bench">ts-bench</a>

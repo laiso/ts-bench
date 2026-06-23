@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ts-bench v2: Benchmarking Coding Agents on Real TypeScript Monorepo Tasks</title>
+  <meta name="description" content="An introduction to ts-bench v2, a benchmark for coding agents on real SWE-Lancer TypeScript monorepo tasks.">
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.65; max-width: 880px; margin: 0 auto; padding: 40px 20px; color: #1f2937; background: #fff; }
+    h1 { font-size: 2.2rem; line-height: 1.18; margin-bottom: 1rem; }
+    h2 { margin-top: 2.4rem; border-top: 1px solid #e5e7eb; padding-top: 1.4rem; }
+    a { color: #2563eb; }
+    code { background: #f3f4f6; padding: .12em .3em; border-radius: 4px; }
+    pre { background: #111827; color: #e5e7eb; padding: 1rem; border-radius: 10px; overflow: auto; }
+    pre code { background: transparent; padding: 0; }
+    blockquote { margin: 1.5rem 0; padding: 1rem 1.25rem; border-left: 4px solid #2563eb; background: #eff6ff; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .95rem; }
+    th, td { border: 1px solid #e5e7eb; padding: .55rem .7rem; text-align: left; }
+    th { background: #f9fafb; }
+    footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: .95rem; }
+    @media (prefers-color-scheme: dark) {
+      body { color:#e5e7eb; background:#0b1020; }
+      h2, footer { border-color:#273244; }
+      code { background:#1f2937; }
+      blockquote { background:#111827; }
+      th, td { border-color:#273244; }
+      th { background:#111827; }
+    }
+  </style>
+</head>
+<body>
+  <p><a href="../">← Back to ts-bench results</a></p>
+<h1>ts-bench v2: Benchmarking Coding Agents on Real TypeScript Monorepo Tasks</h1>
+<p><code>ts-bench</code> is a benchmark CLI for comparing AI coding agents on TypeScript workloads.</p>
+<p>Version 1 used small, self-contained Exercism TypeScript exercises. That was useful at first, but modern coding models and agents have largely outgrown that level of difficulty. Many top systems can now solve those tasks perfectly, which makes the benchmark less useful for comparison.</p>
+<p><code>ts-bench v2</code> moves to a harder target: real-world SWE-Lancer tasks from Expensify, a large React Native / TypeScript monorepo.</p>
+<p>The goal is not to produce a definitive universal leaderboard. The goal is more practical:</p>
+<blockquote>Measure the actual agent/model combinations people use in daily development — Claude Code, Codex CLI, Copilot CLI, Gemini CLI, opencode, and others — on realistic TypeScript tasks.</blockquote>
+<hr>
+<h2>Agent Harness vs. Evaluation Harness</h2>
+<p>In this project, I use two different meanings of “harness.”</p>
+<p>An <strong>agent harness</strong> is the runtime that sends prompts to an LLM, calls tools, edits files, and runs commands. Examples include Claude Code, Codex CLI, Copilot CLI, Nano Code, and opencode.</p>
+<p>An <strong>evaluation harness</strong> is the system that defines tasks, prepares the environment, runs the agent, executes tests, and aggregates results.</p>
+<p><code>ts-bench</code> is an evaluation harness. It lets you swap different agent harnesses and compare them under the same task setup.</p>
+<p>This distinction matters because model performance and agent-harness performance are not the same thing. The same model can behave differently depending on the tool loop, prompt, file context, authentication method, and execution environment around it.</p>
+<hr>
+<h2>Why v2?</h2>
+<p>The original v1 benchmark was based on Exercism TypeScript exercises. These are small programming tasks with clear tests. They are easy to run and useful for early comparisons, but they eventually became too easy.</p>
+<p>This is not unique to <code>ts-bench</code>. Other benchmarks based on small programming exercises have also faced saturation. Once many systems reach perfect or near-perfect scores, the benchmark can no longer separate practical differences between agents.</p>
+<p>For v2, <code>ts-bench</code> uses SWE-Lancer tasks instead.</p>
+<p>SWE-Lancer is based on real software-engineering tasks from Expensify. The public offline IC SWE Diamond set contains 198 tasks. These tasks are closer to the kind of work coding agents are actually used for: fixing UI behavior, validation logic, chat interactions, markdown rendering, focus handling, and other application-level issues in a large codebase.</p>
+<p>For the first v2 snapshot, I used a 5-task default set with a total listed reward of $20,000.</p>
+<table><thead><tr><th>Task ID</th><th>Reward</th><th>Difficulty</th></tr></thead><tbody>
+<tr><td><code>14958</code></td><td>$8,000</td><td>Hard</td></tr>
+<tr><td><code>15815_1</code></td><td>$4,000</td><td>Medium</td></tr>
+<tr><td><code>15193</code></td><td>$4,000</td><td>Medium</td></tr>
+<tr><td><code>14268</code></td><td>$2,000</td><td>Easy-Med</td></tr>
+<tr><td><code>20079</code></td><td>$2,000</td><td>Easy-Med</td></tr>
+</tbody></table>
+<p>These rewards are not used as the benchmark score. They are used as a rough signal that these are non-trivial real-world tasks.</p>
+<hr>
+<h2>How v2 Works</h2>
+<p><code>ts-bench v2</code> runs SWE-Lancer tasks inside Docker.</p>
+<p>At a high level, each run does the following:</p>
+<ol>
+<li>1. Start the SWE-Lancer environment.</li>
+<li>2. Apply the task’s <code>bug_reintroduce.patch</code> to create the broken starting state.</li>
+<li>3. Run the selected coding agent against the task.</li>
+<li>4. Run the official test harness.</li>
+<li>5. Store the result as JSON and publish it to the results site.</li>
+</ol>
+<p>A typical command looks like this:</p>
+<pre><code>bun src/index.ts \
+  --dataset v2 \
+  --docker \
+  --tasks 14958,15815_1,15193,14268,20079 \
+  --agent codex \
+  --model gpt-5.4</code></pre>
+<p>The important design goal is reproducibility. I want users to be able to run the benchmark with their own accounts, subscriptions, API keys, models, and agent configurations — not just read a static leaderboard produced by someone else.</p>
+<hr>
+<h2>April 2026 Snapshot</h2>
+<p>The current v2 results are only an early snapshot. Models, agents, prompts, and the evaluation code will continue to change.</p>
+<p>Still, the first run already shows why measuring real agent/model combinations is useful.</p>
+<table><thead><tr><th>Agent / Model</th><th>Tier</th><th>Solved</th><th>Time</th></tr></thead><tbody>
+<tr><td>copilot / claude-sonnet-4.6</td><td>A</td><td>4/5</td><td>64.8 min</td></tr>
+<tr><td>claude / claude-sonnet-4-6</td><td>B</td><td>3/5</td><td>48.1 min</td></tr>
+<tr><td>codex / gpt-5.4</td><td>B</td><td>3/5</td><td>26.2 min</td></tr>
+<tr><td>gemini / gemini-3.1-pro-preview</td><td>B</td><td>3/5</td><td>70.6 min</td></tr>
+<tr><td>copilot / claude-opus-4.6</td><td>C</td><td>2/5</td><td>67.6 min</td></tr>
+<tr><td>gemini / gemini-2.5-flash</td><td>C</td><td>2/5</td><td>18.8 min</td></tr>
+<tr><td>claude / claude-haiku-4-5</td><td>D</td><td>1/5</td><td>34.4 min</td></tr>
+<tr><td>claude / claude-opus-4-6</td><td>D</td><td>1/5</td><td>31.2 min</td></tr>
+<tr><td>gemini / gemini-3-flash-preview</td><td>D</td><td>1/5</td><td>53.4 min</td></tr>
+<tr><td>codex / gpt-5.4-mini</td><td>F</td><td>0/5</td><td>28.1 min</td></tr>
+</tbody></table>
+<p>A few observations stand out:</p>
+<ul>
+<li>A more expensive model is not always better on this task set.</li>
+<li>The same model can perform differently depending on the agent harness around it.</li>
+<li>Small or cheaper models may look fine on simpler benchmarks but fail on realistic monorepo tasks.</li>
+</ul>
+<p>These are not final conclusions. They are reasons to keep measuring.</p>
+<hr>
+<h2>Why Tiers Instead of a Single Ranking?</h2>
+<p>A small number of tasks is too noisy for a precise ranking. One task can move a model up or down.</p>
+<p>For practical use, tiers are more useful than exact rank order. I mostly want to know whether an agent/model combination is:</p>
+<ul>
+<li>clearly usable,</li>
+<li>borderline,</li>
+<li>or not yet reliable for this kind of work.</li>
+</ul>
+<p>The long-term goal is to increase the sample size and report more stable tier distributions.</p>
+<hr>
+<h2>Why This Costs Money</h2>
+<p>v2 is much more expensive to run than v1.</p>
+<p>The benchmark now involves:</p>
+<ul>
+<li>a large Docker-based application environment,</li>
+<li>browser and network replay tests,</li>
+<li>multiple coding-agent CLIs,</li>
+<li>frontier models,</li>
+<li>subscription-based authentication,</li>
+<li>CI compute,</li>
+<li>and potentially 198 SWE-Lancer tasks.</li>
+</ul>
+<p>Even the small 5-task default set takes tens of minutes per agent/model combination. Expanding the benchmark to more tasks, more agents, and more models makes the cost grow quickly.</p>
+<p>Some of the next engineering tasks are also about reducing this cost:</p>
+<ul>
+<li>reusing one environment across multiple agent runs,</li>
+<li>improving Docker and provisioning overhead,</li>
+<li>expanding from the 5-task default set toward the full 198-task IC SWE Diamond pool,</li>
+<li>improving result collection, token/cost tracking, and failure analysis.</li>
+</ul>
+<hr>
+<h2>Support the Project</h2>
+<p><code>ts-bench v2</code> is an ongoing project. I want to keep updating the leaderboard, add more agents and models, and increase the number of tasks so the results become more useful.</p>
+<p>If you find this work useful, please consider sponsoring it.</p>
+<ul>
+<li><strong>GitHub Sponsors</strong>: directly supports benchmark development and runs. Sponsors may get early access to benchmark data and draft analysis through a private repository.</li>
+<li><strong>Paid blog subscription</strong>: will be used for monthly benchmark analysis, raw data, and reproduction notes.</li>
+</ul>
+<p>👉 Sponsor the project: <a href="https://github.com/sponsors/laiso">https://github.com/sponsors/laiso</a></p>
+<p>Related links:</p>
+<ul>
+<li>Repository: <a href="https://github.com/laiso/ts-bench">https://github.com/laiso/ts-bench</a></li>
+<li>Results: <a href="https://laiso.github.io/ts-bench/">https://laiso.github.io/ts-bench/</a></li>
+<li>Task browser: <a href="https://laiso.github.io/ts-bench/swelancer-tasks/">https://laiso.github.io/ts-bench/swelancer-tasks/</a></li>
+<li>Japanese article: <a href="https://blog.lai.so/ts-bench-v2/">https://blog.lai.so/ts-bench-v2/</a></li>
+</ul>
+  <footer>
+    <a href="https://github.com/laiso/ts-bench">GitHub</a> ·
+    <a href="../">Results</a> ·
+    <a href="../swelancer-tasks/">Task Browser</a> ·
+    <a href="https://github.com/sponsors/laiso">Sponsor</a>
+  </footer>
+</body>
+</html>
