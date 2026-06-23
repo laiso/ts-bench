@@ -184,6 +184,13 @@ case "$AGENT" in
     ensure_node_cli "gemini" "@google/gemini-cli"
     exec gemini "$@"
     ;;
+  grok)
+    if ! command -v "grok" >/dev/null 2>&1; then
+      echo "[run-agent] Installing Grok Build CLI" >&2
+      curl -fsSL https://x.ai/cli/install.sh | bash
+    fi
+    exec grok "$@"
+    ;;
   qwen)
     ensure_node_cli "qwen" "@qwen-code/qwen-code"
     exec qwen "$@"

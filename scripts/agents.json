@@ -5,6 +5,7 @@
   "codex":     { "bin": "codex",        "method": "npm",      "package": "@openai/codex" },
   "copilot":   { "bin": "copilot",      "method": "npm",      "package": "@github/copilot" },
   "gemini":    { "bin": "gemini",       "method": "npm",      "package": "@google/gemini-cli" },
+  "grok":      { "bin": "grok",         "method": "curl",     "url": "https://x.ai/cli/install.sh" },
   "opencode":  { "bin": "opencode",     "method": "npm",      "package": "opencode-ai" },
   "qwen":      { "bin": "qwen",         "method": "npm",      "package": "@qwen-code/qwen-code" },
   "cursor":    { "bin": "cursor-agent", "method": "curl",     "url": "https://cursor.com/install" },

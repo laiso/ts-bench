@@ -6,6 +6,7 @@ Benchmark CLI for comparing AI coding agents on TypeScript workloads. Run an age
 bun install
 bun link          # installs the `ts-bench` command globally
 ts-bench --agent claude --model <model>
+ts-bench --agent grok --model grok-build-0.1
 ```
 
 `ts-bench --help` for all options.
@@ -21,6 +22,15 @@ ts-bench --agent claude --model <model>
 ```
 
 Omit `--model` to use the agent's default model.
+
+Run Grok Build with an xAI API key:
+
+```bash
+export XAI_API_KEY="xai-..."
+ts-bench --agent grok --model grok-build-0.1
+```
+
+In GitHub Actions, ts-bench writes a Grok custom model config so the Grok CLI uses the requested xAI API model id.
 
 Frozen baseline for reproducibility: tag [`v1-final`](https://github.com/laiso/ts-bench/releases/tag/v1-final)
 

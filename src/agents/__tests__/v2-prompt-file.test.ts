@@ -41,6 +41,7 @@ describe('v2 Docker: all agents use mounted prompt file', () => {
             env: [['OPENAI_API_KEY', 'x']]
         },
         { name: 'gemini', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.gemini), env: [['GEMINI_API_KEY', 'x']] },
+        { name: 'grok', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.grok), env: [['XAI_API_KEY', 'x']] },
         { name: 'goose', builder: new GenericAgentBuilder({ ...baseV2, provider: 'anthropic' }, AGENT_REGISTRY.goose), env: [['ANTHROPIC_API_KEY', 'x']] },
         { name: 'opencode', builder: new GenericAgentBuilder({ ...baseV2, provider: 'openai' }, AGENT_REGISTRY.opencode), env: [['OPENAI_API_KEY', 'x']] },
         {
