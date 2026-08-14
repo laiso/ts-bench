@@ -80,6 +80,11 @@ describe('VersionDetector', () => {
             const detector = makeDetector({ exitCode: 0, stdout: 'grok 0.1.0', stderr: '' });
             expect(await detector.detectAgentVersion('grok')).toBe('0.1.0');
         });
+
+        it('parses agy version from stdout', async () => {
+            const detector = makeDetector({ exitCode: 0, stdout: '1.1.13', stderr: '' });
+            expect(await detector.detectAgentVersion('agy')).toBe('1.1.13');
+        });
     });
 
     describe('detectAgentVersion – stderr fallback', () => {

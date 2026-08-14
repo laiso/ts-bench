@@ -109,6 +109,8 @@ export class VersionDetector {
                 return ['dsh', '--version'];
             case 'grok':
                 return ['grok', '--version'];
+            case 'agy':
+                return ['agy', '--version'];
             default:
                 throw new Error(`Unknown agent: ${agent}`);
         }

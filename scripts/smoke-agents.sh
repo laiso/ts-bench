@@ -10,6 +10,7 @@ AGENTS=(
   codex
   gemini
   grok
+  agy
   opencode
   qwen
   aider

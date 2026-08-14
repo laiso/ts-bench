@@ -9,6 +9,7 @@ describe('agentDisplayName', () => {
         expect(agentDisplayName('aider')).toBe('Aider');
         expect(agentDisplayName('gemini')).toBe('Gemini CLI');
         expect(agentDisplayName('grok')).toBe('Grok Build');
+        expect(agentDisplayName('agy')).toBe('Antigravity CLI');
         expect(agentDisplayName('qwen')).toBe('Qwen Code');
         expect(agentDisplayName('cursor')).toBe('Cursor Agent');
         expect(agentDisplayName('copilot')).toBe('GitHub Copilot CLI');

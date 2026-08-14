@@ -126,6 +126,21 @@ case "$AGENT" in
     export PATH="${HOME}/.grok/bin:${PATH}"
     exec grok "$@"
     ;;
+  agy)
+    if ! command -v "agy" >/dev/null 2>&1; then
+      echo "[run-agent] Installing Antigravity CLI (agy)" >&2
+      curl -fsSL https://antigravity.google/cli/install.sh | bash
+    fi
+    # API-key mode: when a GEMINI_API_KEY is provided and the user has not
+    # configured their own settings, enable the direct Gemini backend
+    # (settings.json modelProvider "gemini"). Without a key, the CLI uses the
+    # cached Google Sign-In (OAuth) login instead.
+    if [ -n "${GEMINI_API_KEY:-}" ] && [ ! -f "${HOME}/.gemini/antigravity-cli/settings.json" ]; then
+      mkdir -p "${HOME}/.gemini/antigravity-cli"
+      printf '{"modelProvider": "gemini"}\n' > "${HOME}/.gemini/antigravity-cli/settings.json"
+    fi
+    exec agy "$@"
+    ;;
   kimi)
     if command -v "kimi" >/dev/null 2>&1; then
       exec kimi "$@"

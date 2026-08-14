@@ -32,6 +32,16 @@ ts-bench --agent grok --model grok-build-0.1
 
 In GitHub Actions, ts-bench writes a Grok custom model config so the Grok CLI uses the requested xAI API model id.
 
+Run Antigravity (agy) with a Gemini API key:
+
+```bash
+export GEMINI_API_KEY="AIza..."
+ts-bench --agent agy
+```
+
+agy runs in print mode; `run-agent.sh` enables the direct Gemini backend
+(`settings.json` `modelProvider: "gemini"`) when `GEMINI_API_KEY` is set.
+
 Frozen baseline for reproducibility: tag [`v1-final`](https://github.com/laiso/ts-bench/releases/tag/v1-final)
 
 ### v2 — SWE-Lancer
