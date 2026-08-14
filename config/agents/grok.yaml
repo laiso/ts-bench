@@ -1,0 +1,20 @@
+name: grok
+description: "xAI Grok Build CLI agent"
+defaultProvider: xai
+install:
+  method: curl
+  url: "https://x.ai/cli/install.sh"
+  bin: grok
+
+require:
+  - XAI_API_KEY
+
+env:
+  XAI_API_KEY: "${XAI_API_KEY}"
+  GROK_CODE_XAI_API_KEY: "${XAI_API_KEY}"
+
+command:
+  - grok
+  - -p
+  - "{instructions}"
+  - "{#model}-m {model}{/model}"

@@ -117,6 +117,13 @@ case "$AGENT" in
     ensure_node_cli "dsh" "@deepseek-ai/dsh"
     exec dsh "$@"
     ;;
+  grok)
+    if ! command -v "grok" >/dev/null 2>&1; then
+      echo "[run-agent] Installing Grok Build CLI" >&2
+      curl -fsSL https://x.ai/cli/install.sh | bash
+    fi
+    exec grok "$@"
+    ;;
   kimi)
     if command -v "kimi" >/dev/null 2>&1; then
       exec kimi "$@"

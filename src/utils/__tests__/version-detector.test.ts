@@ -75,6 +75,11 @@ describe('VersionDetector', () => {
             const detector = makeDetector({ exitCode: 0, stdout: '0.1.0-rc.6', stderr: '' });
             expect(await detector.detectAgentVersion('dns')).toBe('0.1.0-rc.6');
         });
+
+        it('parses grok version from stdout', async () => {
+            const detector = makeDetector({ exitCode: 0, stdout: 'grok 0.1.0', stderr: '' });
+            expect(await detector.detectAgentVersion('grok')).toBe('0.1.0');
+        });
     });
 
     describe('detectAgentVersion – stderr fallback', () => {

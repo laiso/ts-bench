@@ -48,6 +48,7 @@ describe('Agent Config Loader and Template Engine', () => {
         expect(registry.kimi).toBeDefined();
         expect(registry.qwen).toBeDefined();
         expect(registry.dns).toBeDefined();
+        expect(registry.grok).toBeDefined();
     });
 
     it('custom agent schema can be converted and executed', () => {
@@ -250,6 +251,52 @@ describe('dns (dsh headless) agent', () => {
         } finally {
             if (origKey !== undefined) process.env.DEEPSEEK_API_KEY = origKey;
             else delete process.env.DEEPSEEK_API_KEY;
+        }
+    });
+});
+
+describe('grok (Grok Build) agent', () => {
+    const config: AgentConfig = {
+        model: 'grok-build-0.1',
+        provider: 'xai',
+        containerName: 'container',
+        agentScriptPath: '/path/run-agent.sh'
+    };
+
+    it('builds the grok headless prompt command', () => {
+        const registry = loadAgentRegistryFromDir();
+        const args = registry.grok!.buildArgs(config, 'Fix the two-fer exercise');
+        expect(args).toEqual([
+            'bash',
+            '/path/run-agent.sh',
+            'grok',
+            '-p',
+            'Fix the two-fer exercise',
+            '-m',
+            'grok-build-0.1'
+        ]);
+    });
+
+    it('omits -m when no model is given', () => {
+        const registry = loadAgentRegistryFromDir();
+        const args = registry.grok!.buildArgs({ ...config, model: undefined }, 'task');
+        expect(args).toEqual(['bash', '/path/run-agent.sh', 'grok', '-p', 'task']);
+    });
+
+    it('forwards XAI_API_KEY as GROK_CODE_XAI_API_KEY and fails fast without it', () => {
+        const origKey = process.env.XAI_API_KEY;
+        try {
+            delete process.env.XAI_API_KEY;
+            const registry = loadAgentRegistryFromDir();
+            expect(() => registry.grok!.getEnv(config)).toThrow(/XAI_API_KEY/);
+
+            process.env.XAI_API_KEY = 'xai-test-key';
+            const env = registry.grok!.getEnv(config);
+            expect(env.XAI_API_KEY).toBe('xai-test-key');
+            expect(env.GROK_CODE_XAI_API_KEY).toBe('xai-test-key');
+        } finally {
+            if (origKey !== undefined) process.env.XAI_API_KEY = origKey;
+            else delete process.env.XAI_API_KEY;
         }
     });
 });
