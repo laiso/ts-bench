@@ -134,10 +134,16 @@ case "$AGENT" in
     # API-key mode: when a GEMINI_API_KEY is provided and the user has not
     # configured their own settings, enable the direct Gemini backend
     # (settings.json modelProvider "gemini"). Without a key, the CLI uses the
-    # cached Google Sign-In (OAuth) login instead.
+    # cached Google Sign-In (OAuth) login instead. The model comes from the
+    # AGY_MODEL env (ts-bench --model); agy's default model resolution falls
+    # back to a non-agentic model, so a stable default is written when unset.
     if [ -n "${GEMINI_API_KEY:-}" ] && [ ! -f "${HOME}/.gemini/antigravity-cli/settings.json" ]; then
       mkdir -p "${HOME}/.gemini/antigravity-cli"
-      printf '{"modelProvider": "gemini"}\n' > "${HOME}/.gemini/antigravity-cli/settings.json"
+      if [ -n "${AGY_MODEL:-}" ]; then
+        printf '{"modelProvider": "gemini", "model": "%s"}\n' "${AGY_MODEL}" > "${HOME}/.gemini/antigravity-cli/settings.json"
+      else
+        printf '{"modelProvider": "gemini", "model": "Gemini 3.1 Pro"}\n' > "${HOME}/.gemini/antigravity-cli/settings.json"
+      fi
     fi
     exec agy "$@"
     ;;

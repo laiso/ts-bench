@@ -174,8 +174,11 @@ Two authentication modes:
 
 - **API key (recommended for CI)**: export `GEMINI_API_KEY`. `run-agent.sh`
   then writes `~/.gemini/antigravity-cli/settings.json` with
-  `{"modelProvider": "gemini"}` (only when the file does not already exist) so
-  the CLI talks to the Gemini API directly, no sign-in needed.
+  `{"modelProvider": "gemini", "model": ...}` (only when the file does not
+  already exist) so the CLI talks to the Gemini API directly, no sign-in
+  needed. `--model` is forwarded via the `AGY_MODEL` env and written into
+  `settings.json`; when omitted, `"Gemini 3.1 Pro"` is used (agy's own
+  default resolution falls back to a non-agentic model).
 - **Google Sign-In (OAuth)**: run `agy` once interactively and complete the
   browser flow; credentials are cached locally for later headless runs.
 
@@ -185,9 +188,9 @@ Notes:
 
 - The Antigravity installer puts the binary in `~/.local/bin` (already on the
   `run-agent.sh` PATH).
-- `--model` is not passed through: agy's model ids are display names with
-  spaces (e.g. `"Gemini 3.1 Pro"`), which the arg template cannot preserve;
-  the CLI uses its default model.
+- agy's model ids are display names with spaces (e.g. `"Gemini 3.1 Pro"`),
+  which the argument template cannot pass; use `--model "Gemini 3.1 Pro"` and
+  it is written into `settings.json` via `AGY_MODEL`.
 - CI environments can use the API-key mode (the v1/v2 workflows forward
   `GEMINI_API_KEY`); the OAuth flow itself cannot run headless.
 

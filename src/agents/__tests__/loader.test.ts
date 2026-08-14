@@ -333,15 +333,17 @@ describe('agy (Antigravity CLI) agent', () => {
         ]);
     });
 
-    it('forwards GEMINI_API_KEY when set and requires nothing when absent', () => {
+    it('forwards GEMINI_API_KEY and the model as AGY_MODEL', () => {
         const origKey = process.env.GEMINI_API_KEY;
         try {
             delete process.env.GEMINI_API_KEY;
             const registry = loadAgentRegistryFromDir();
-            expect(registry.agy!.getEnv(config)).toEqual({});
+            expect(registry.agy!.getEnv({ ...config, model: undefined })).toEqual({});
 
             process.env.GEMINI_API_KEY = 'ai-test-key';
-            expect(registry.agy!.getEnv(config).GEMINI_API_KEY).toBe('ai-test-key');
+            const env = registry.agy!.getEnv(config);
+            expect(env.GEMINI_API_KEY).toBe('ai-test-key');
+            expect(env.AGY_MODEL).toBe('gemini-2.5-pro');
         } finally {
             if (origKey !== undefined) process.env.GEMINI_API_KEY = origKey;
             else delete process.env.GEMINI_API_KEY;

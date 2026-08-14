@@ -94,7 +94,7 @@ describe('GenericAgentBuilder via registry', () => {
             expect(command.args).toContain('--print');
             expect(command.args).toContain('--dangerously-skip-permissions');
             expect(command.args).not.toContain('--model');
-            expect(command.env).toEqual({});
+            expect(command.env).toEqual({ AGY_MODEL: 'test-model' });
         } finally {
             if (origKey === undefined) delete process.env.GEMINI_API_KEY;
             else process.env.GEMINI_API_KEY = origKey;
