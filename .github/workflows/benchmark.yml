@@ -81,7 +81,9 @@ jobs:
       - name: Setup Node (for corepack/yarn)
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # dsh (the dns agent CLI) requires Node >= 22.18 (Promise.withResolvers,
+          # node:module.stripTypeScriptTypes); 20 is no longer sufficient.
+          node-version: "24"
 
       - name: Enable corepack
         run: corepack enable
