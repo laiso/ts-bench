@@ -33,7 +33,7 @@ export class BenchmarkRunner {
 
         const useDocker = args.useDocker ?? true;
         const agentScriptPath = getAgentScriptPath(useDocker, args.dataset);
-        let agentVersion = args.version;
+        let agentVersion = args.version ?? args.agentVersion;
         if (!agentVersion) {
             console.log(`🔍 Detecting ${args.agent} version...`);
             const versionDetector = new VersionDetector();
@@ -73,6 +73,7 @@ export class BenchmarkRunner {
             verbose: args.verbose,
             useDocker,
             version: agentVersion,
+            agentVersion: args.agentVersion,
             showProgress: args.showProgress,
             timeout: exerciseTimeout,
             outputDir: args.outputDir,

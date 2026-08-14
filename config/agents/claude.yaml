@@ -1,0 +1,56 @@
+name: claude
+description: "Anthropic Claude Code CLI agent"
+defaultProvider: anthropic
+install:
+  method: mise
+  tool: npm:@anthropic-ai/claude-code
+  bin: claude
+
+providers:
+  anthropic:
+    env:
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-${DASHSCOPE_API_KEY}}"
+  dashscope:
+    require:
+      - DASHSCOPE_API_KEY
+    env:
+      ANTHROPIC_API_KEY: "${DASHSCOPE_API_KEY}"
+      ANTHROPIC_AUTH_TOKEN: "${DASHSCOPE_API_KEY}"
+      ANTHROPIC_BASE_URL: "${ANTHROPIC_BASE_URL:-https://dashscope-intl.aliyuncs.com/api/v2/apps/claude-code-proxy}"
+  deepseek:
+    require:
+      - DEEPSEEK_API_KEY
+    env:
+      ANTHROPIC_API_KEY: "${DEEPSEEK_API_KEY}"
+      ANTHROPIC_AUTH_TOKEN: "${DEEPSEEK_API_KEY}"
+      ANTHROPIC_BASE_URL: "https://api.deepseek.com/anthropic"
+  moonshot:
+    require:
+      - MOONSHOT_API_KEY
+    env:
+      ANTHROPIC_API_KEY: "${MOONSHOT_API_KEY}"
+      ANTHROPIC_AUTH_TOKEN: "${MOONSHOT_API_KEY}"
+      ANTHROPIC_BASE_URL: "https://api.moonshot.ai/anthropic"
+  zai:
+    require:
+      - ZAI_API_KEY
+    env:
+      ANTHROPIC_API_KEY: "${ZAI_API_KEY}"
+      ANTHROPIC_AUTH_TOKEN: "${ZAI_API_KEY}"
+      ANTHROPIC_BASE_URL: "https://api.z.ai/api/anthropic"
+  openrouter:
+    require:
+      - OPENROUTER_API_KEY
+    env:
+      ANTHROPIC_API_KEY: ""
+      ANTHROPIC_AUTH_TOKEN: "${OPENROUTER_API_KEY}"
+      ANTHROPIC_BASE_URL: "${ANTHROPIC_BASE_URL:-https://openrouter.ai/api}"
+
+command:
+  - claude
+  - --debug
+  - --verbose
+  - --dangerously-skip-permissions
+  - "{#model}--model {model}{/model}"
+  - -p
+  - "{instructions}"

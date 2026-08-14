@@ -19,4 +19,6 @@ export interface AgentConfig {
     dataset?: DatasetType;
     /** Current task id (e.g. v2 issue id); used for stable temp paths */
     exercise?: string;
+    /** Explicit tool version to install (from --agent-version) */
+    agentVersion?: string;
 }

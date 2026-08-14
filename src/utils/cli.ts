@@ -15,6 +15,8 @@ Basic Options:
   --model <model>        Model to use (omit to use the agent's default model)
   --provider <provider>  Provider (openai, anthropic, google, openrouter, dashscope, xai, deepseek, github, moonshot) [default: agent-specific; see AGENT_DEFAULT_PROVIDER]
   --version <version>    Agent version (e.g. 1.2.3) [default: agent-specific default]
+  --agent-config <path>  Load a custom agent definition (YAML/JSON) and register it
+  --agent-version <ver>  Pin the agent CLI tool version to install (mise-managed agents)
   --verbose              Show detailed output
   --list                 List available exercises (v1) or tasks (v2)
 
@@ -88,10 +90,32 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         ? process.argv[modelIndex + 1]!
         : undefined;
 
+    const agentConfigIndex = process.argv.indexOf('--agent-config');
+    let agentConfigPath = agentConfigIndex !== -1 && agentConfigIndex + 1 < process.argv.length
+        ? process.argv[agentConfigIndex + 1]!
+        : undefined;
+
     const agentIndex = process.argv.indexOf('--agent');
-    const agent = (agentIndex !== -1 && agentIndex + 1 < process.argv.length
+    let agent = (agentIndex !== -1 && agentIndex + 1 < process.argv.length
         ? process.argv[agentIndex + 1]!
-        : 'claude') as AgentType;
+        : undefined) as AgentType | undefined;
+
+    if (agentConfigPath) {
+        const { registerAgentFromFile } = await import('../agents/registry');
+        const registeredName = registerAgentFromFile(agentConfigPath);
+        if (!agent) {
+            agent = registeredName;
+        }
+    }
+
+    if (!agent) {
+        agent = 'claude';
+    }
+
+    const agentVersionIndex = process.argv.indexOf('--agent-version');
+    const agentVersion = agentVersionIndex !== -1 && agentVersionIndex + 1 < process.argv.length
+        ? process.argv[agentVersionIndex + 1]!
+        : undefined;
 
     const datasetIndex = process.argv.indexOf('--dataset');
     const dataset = (datasetIndex !== -1 && datasetIndex + 1 < process.argv.length
@@ -283,6 +307,8 @@ export async function parseCommandLineArgs(): Promise<CLIArgs> {
         skipLeaderboardRefresh,
         resultName,
         resultDir,
+        agentConfig: agentConfigPath,
+        agentVersion,
         version,
         showProgress,
         testOnly,

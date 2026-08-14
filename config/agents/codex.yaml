@@ -1,0 +1,29 @@
+name: codex
+description: "OpenAI Codex CLI agent"
+defaultProvider: openai
+install:
+  method: mise
+  tool: npm:@openai/codex
+  bin: codex
+
+providers:
+  openai:
+    env:
+      CODEX_API_KEY: "${CODEX_API_KEY:-${OPENAI_API_KEY}}"
+  openrouter:
+    require:
+      - OPENROUTER_API_KEY
+    env:
+      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY}"
+
+command:
+  - codex
+  - exec
+  - -c
+  - model_reasoning_effort=high
+  - -c
+  - "model_provider={provider}"
+  - --yolo
+  - --skip-git-repo-check
+  - "{#model}-m {model}{/model}"
+  - "{instructions}"

@@ -23,6 +23,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "csv-parse": "^6.1.0"
+    "csv-parse": "^6.1.0",
+    "yaml": "^2.9.0"
   }
 }

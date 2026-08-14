@@ -1,0 +1,19 @@
+name: vibe
+description: "Mistral Vibe AI agent"
+defaultProvider: mistral
+install:
+  method: pip
+  package: mistral-vibe
+  bin: vibe
+
+require:
+  - MISTRAL_API_KEY
+
+env:
+  MISTRAL_API_KEY: "${MISTRAL_API_KEY}"
+
+command:
+  - vibe
+  - --prompt
+  - "{instructions}"
+  - --auto-approve

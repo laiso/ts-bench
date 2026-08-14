@@ -32,25 +32,25 @@ describe('v2 Docker: all agents use mounted prompt file', () => {
     };
 
     const cases: { name: string; builder: GenericAgentBuilder; env: [string, string][] }[] = [
-        { name: 'claude', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.claude), env: [['ANTHROPIC_API_KEY', 'x']] },
-        { name: 'cursor', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.cursor), env: [['CURSOR_API_KEY', 'x']] },
-        { name: 'aider', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.aider), env: [['OPENAI_API_KEY', 'x']] },
+        { name: 'claude', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.claude!), env: [['ANTHROPIC_API_KEY', 'x']] },
+        { name: 'cursor', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.cursor!), env: [['CURSOR_API_KEY', 'x']] },
+        { name: 'aider', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.aider!), env: [['OPENAI_API_KEY', 'x']] },
         {
             name: 'codex',
-            builder: new GenericAgentBuilder({ ...baseV2, provider: 'openai' }, AGENT_REGISTRY.codex),
+            builder: new GenericAgentBuilder({ ...baseV2, provider: 'openai' }, AGENT_REGISTRY.codex!),
             env: [['OPENAI_API_KEY', 'x']]
         },
-        { name: 'gemini', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.gemini), env: [['GEMINI_API_KEY', 'x']] },
-        { name: 'goose', builder: new GenericAgentBuilder({ ...baseV2, provider: 'anthropic' }, AGENT_REGISTRY.goose), env: [['ANTHROPIC_API_KEY', 'x']] },
-        { name: 'opencode', builder: new GenericAgentBuilder({ ...baseV2, provider: 'openai' }, AGENT_REGISTRY.opencode), env: [['OPENAI_API_KEY', 'x']] },
+        { name: 'gemini', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.gemini!), env: [['GEMINI_API_KEY', 'x']] },
+        { name: 'goose', builder: new GenericAgentBuilder({ ...baseV2, provider: 'anthropic' }, AGENT_REGISTRY.goose!), env: [['ANTHROPIC_API_KEY', 'x']] },
+        { name: 'opencode', builder: new GenericAgentBuilder({ ...baseV2, provider: 'openai' }, AGENT_REGISTRY.opencode!), env: [['OPENAI_API_KEY', 'x']] },
         {
             name: 'qwen',
-            builder: new GenericAgentBuilder({ ...baseV2, provider: 'dashscope' }, AGENT_REGISTRY.qwen),
+            builder: new GenericAgentBuilder({ ...baseV2, provider: 'dashscope' }, AGENT_REGISTRY.qwen!),
             env: [['DASHSCOPE_API_KEY', 'x']]
         },
-        { name: 'copilot', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.copilot), env: [['COPILOT_GITHUB_TOKEN', 'x']] },
-        { name: 'vibe', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.vibe), env: [['MISTRAL_API_KEY', 'x']] },
-        { name: 'kimi', builder: new GenericAgentBuilder({ ...baseV2, provider: 'moonshot' }, AGENT_REGISTRY.kimi), env: [['KIMI_API_KEY', 'x']] }
+        { name: 'copilot', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.copilot!), env: [['COPILOT_GITHUB_TOKEN', 'x']] },
+        { name: 'vibe', builder: new GenericAgentBuilder(baseV2, AGENT_REGISTRY.vibe!), env: [['MISTRAL_API_KEY', 'x']] },
+        { name: 'kimi', builder: new GenericAgentBuilder({ ...baseV2, provider: 'moonshot' }, AGENT_REGISTRY.kimi!), env: [['KIMI_API_KEY', 'x']] }
     ];
 
     const body = '## Step (parens)\n`code` --- "quotes"';
