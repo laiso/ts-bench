@@ -70,6 +70,11 @@ describe('VersionDetector', () => {
             const detector = makeDetector({ exitCode: 0, stdout: '1.0.0', stderr: '' });
             expect(await detector.detectAgentVersion('kimi')).toBe('1.0.0');
         });
+
+        it('parses dsh version from stdout', async () => {
+            const detector = makeDetector({ exitCode: 0, stdout: '0.1.0-rc.6', stderr: '' });
+            expect(await detector.detectAgentVersion('dns')).toBe('0.1.0-rc.6');
+        });
     });
 
     describe('detectAgentVersion – stderr fallback', () => {

@@ -1,0 +1,19 @@
+name: dns
+description: "DeepSeek Harness headless agent (dsh) — one-shot task runner"
+defaultProvider: deepseek
+install:
+  method: npm
+  package: "@deepseek-ai/dsh"
+  bin: dsh
+
+require:
+  - DEEPSEEK_API_KEY
+
+env:
+  DEEPSEEK_API_KEY: "${DEEPSEEK_API_KEY}"
+
+command:
+  - dsh
+  - --profile
+  - headless
+  - "{instructions}"

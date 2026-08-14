@@ -44,7 +44,7 @@ function restoreEnvKeys(originals: Record<string, string | undefined>): void {
 
 describe('AGENT_REGISTRY', () => {
     it('has entries for all known agents', () => {
-        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'gemini', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi'];
+        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'gemini', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi', 'dns'];
         for (const agent of agents) {
             expect(AGENT_REGISTRY[agent]).toBeDefined();
         }

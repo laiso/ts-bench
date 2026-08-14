@@ -113,6 +113,10 @@ case "$AGENT" in
     ensure_node_cli "copilot" "@github/copilot"
     exec copilot "$@"
     ;;
+  dsh | dns)
+    ensure_node_cli "dsh" "@deepseek-ai/dsh"
+    exec dsh "$@"
+    ;;
   kimi)
     if command -v "kimi" >/dev/null 2>&1; then
       exec kimi "$@"
