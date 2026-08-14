@@ -126,7 +126,8 @@ jobs:
               ;;
             grok)
               curl -fsSL https://x.ai/cli/install.sh | bash
-              echo "PATH=$HOME/.local/bin:$PATH" >> "$GITHUB_ENV"
+              # The x.ai installer puts the binary in ~/.grok/bin, not ~/.local/bin
+              echo "PATH=$HOME/.grok/bin:$PATH" >> "$GITHUB_ENV"
               ;;
             qwen)
               npm install -g @qwen-code/qwen-code

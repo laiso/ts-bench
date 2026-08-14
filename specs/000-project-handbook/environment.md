@@ -153,8 +153,10 @@ bun src/index.ts --agent claude --provider openrouter --model <openrouter-model-
 
 - Required env: `XAI_API_KEY`
 - Default provider for `--agent grok` is `xai`
+- `--provider` is ignored for grok: the Grok CLI always talks to `api.x.ai/v1`
 - Recommended model from xAI Build docs: `grok-build-0.1`
 - The runner uses Grok's headless prompt mode: `grok -p <prompt>`
+- The x.ai installer puts the binary in `~/.grok/bin`; `run-agent.sh` adds it to `PATH`
 - GitHub Actions writes a Grok custom model config so the Grok CLI uses the requested xAI API model id.
 
 Example:

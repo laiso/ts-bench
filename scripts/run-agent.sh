@@ -122,6 +122,8 @@ case "$AGENT" in
       echo "[run-agent] Installing Grok Build CLI" >&2
       curl -fsSL https://x.ai/cli/install.sh | bash
     fi
+    # The x.ai installer puts the binary in ~/.grok/bin, which is not on PATH
+    export PATH="${HOME}/.grok/bin:${PATH}"
     exec grok "$@"
     ;;
   kimi)
