@@ -142,7 +142,7 @@ case "$AGENT" in
       if [ -n "${AGY_MODEL:-}" ]; then
         printf '{"modelProvider": "gemini", "model": "%s"}\n' "${AGY_MODEL}" > "${HOME}/.gemini/antigravity-cli/settings.json"
       else
-        printf '{"modelProvider": "gemini", "model": "Gemini 3.1 Pro"}\n' > "${HOME}/.gemini/antigravity-cli/settings.json"
+        printf '{"modelProvider": "gemini", "model": "Gemini 3.7 Flash (High)"}\n' > "${HOME}/.gemini/antigravity-cli/settings.json"
       fi
     fi
     exec agy "$@"
