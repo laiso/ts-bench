@@ -105,6 +105,8 @@ export class VersionDetector {
                 return ['vibe', '--help'];
             case 'kimi':
                 return ['kimi', '--version'];
+            case 'dns':
+                return ['dsh', '--version'];
             default:
                 throw new Error(`Unknown agent: ${agent}`);
         }
@@ -161,6 +163,9 @@ export class VersionDetector {
                 return this.extractGenericVersion(cleanOutput);
             case 'kimi':
                 return this.extractGenericVersion(cleanOutput);
+            case 'dns':
+                // dsh --version prints the bare package version, e.g. "0.1.0-rc.6"
+                return cleanOutput.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/)?.[0] ?? this.extractGenericVersion(cleanOutput);
             
             default:
                 return this.extractGenericVersion(cleanOutput);

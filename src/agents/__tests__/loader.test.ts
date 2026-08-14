@@ -47,6 +47,7 @@ describe('Agent Config Loader and Template Engine', () => {
         expect(registry.vibe).toBeDefined();
         expect(registry.kimi).toBeDefined();
         expect(registry.qwen).toBeDefined();
+        expect(registry.dns).toBeDefined();
     });
 
     it('custom agent schema can be converted and executed', () => {
@@ -213,5 +214,42 @@ describe('Kimi --config generation', () => {
         expect(parsed.models['kimi-k2'].max_context_size).toBe(262144);
         expect(args).toContain('--model');
         expect(args).toContain('kimi-k2');
+    });
+});
+
+describe('dns (dsh headless) agent', () => {
+    const config: AgentConfig = {
+        model: undefined,
+        provider: 'deepseek',
+        containerName: 'container',
+        agentScriptPath: '/path/run-agent.sh'
+    };
+
+    it('builds the dsh headless command with the task as the positional argument', () => {
+        const registry = loadAgentRegistryFromDir();
+        const args = registry.dns!.buildArgs(config, 'Fix the two-fer exercise');
+        expect(args).toEqual([
+            'bash',
+            '/path/run-agent.sh',
+            'dsh',
+            '--profile',
+            'headless',
+            'Fix the two-fer exercise'
+        ]);
+    });
+
+    it('forwards DEEPSEEK_API_KEY and fails fast without it', () => {
+        const origKey = process.env.DEEPSEEK_API_KEY;
+        try {
+            delete process.env.DEEPSEEK_API_KEY;
+            const registry = loadAgentRegistryFromDir();
+            expect(() => registry.dns!.getEnv(config)).toThrow(/DEEPSEEK_API_KEY/);
+
+            process.env.DEEPSEEK_API_KEY = 'sk-test-key';
+            expect(registry.dns!.getEnv(config).DEEPSEEK_API_KEY).toBe('sk-test-key');
+        } finally {
+            if (origKey !== undefined) process.env.DEEPSEEK_API_KEY = origKey;
+            else delete process.env.DEEPSEEK_API_KEY;
+        }
     });
 });
