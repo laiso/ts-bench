@@ -1,0 +1,21 @@
+name: cursor
+description: "Cursor CLI Agent"
+defaultProvider: openai
+install:
+  method: curl
+  url: "https://cursor.com/install"
+  bin: cursor-agent
+
+require:
+  - CURSOR_API_KEY
+
+env:
+  CURSOR_API_KEY: "${CURSOR_API_KEY}"
+
+command:
+  - cursor-agent
+  - --yolo
+  - "{#model}--model {model}{/model}"
+  - -p
+  - "{instructions}"
+  - "{sourceFiles}"

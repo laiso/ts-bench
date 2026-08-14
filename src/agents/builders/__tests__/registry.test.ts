@@ -72,7 +72,7 @@ describe('GenericAgentBuilder via registry', () => {
         const origKey = process.env.GEMINI_API_KEY;
         process.env.GEMINI_API_KEY = 'test-gemini-key';
         try {
-            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.gemini);
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.gemini!);
             const command = await builder.buildCommand('instructions');
             expect(command.args[0]).toBe('bash');
             expect(command.args[1]).toBe(SCRIPT_PATH);
@@ -88,7 +88,7 @@ describe('GenericAgentBuilder via registry', () => {
         const origToken = process.env.COPILOT_GITHUB_TOKEN;
         process.env.COPILOT_GITHUB_TOKEN = 'test-copilot-token';
         try {
-            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.copilot);
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.copilot!);
             const command = await builder.buildCommand('instructions');
             expect(command.args[2]).toBe('copilot');
             expect(command.env?.COPILOT_ALLOW_ALL).toBe('1');
@@ -107,7 +107,7 @@ describe('GenericAgentBuilder via registry', () => {
         delete process.env.GITHUB_TOKEN;
         try {
             const localConfig = { ...BASE_CONFIG, useDocker: false };
-            const builder = new GenericAgentBuilder(localConfig, AGENT_REGISTRY.copilot);
+            const builder = new GenericAgentBuilder(localConfig, AGENT_REGISTRY.copilot!);
             const command = await builder.buildCommand('instructions');
             expect(command.env?.COPILOT_GITHUB_TOKEN).toBeUndefined();
         } finally {
@@ -120,7 +120,7 @@ describe('GenericAgentBuilder via registry', () => {
         const origKey = process.env.MISTRAL_API_KEY;
         process.env.MISTRAL_API_KEY = 'test-mistral-key';
         try {
-            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.vibe);
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.vibe!);
             const command = await builder.buildCommand('instructions');
             expect(command.args[2]).toBe('vibe');
             expect(command.env?.MISTRAL_API_KEY).toBe('test-mistral-key');
@@ -134,7 +134,7 @@ describe('GenericAgentBuilder via registry', () => {
         const origKey = process.env.OPENAI_API_KEY;
         process.env.OPENAI_API_KEY = 'test-oa-key';
         try {
-            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.codex);
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.codex!);
             const command = await builder.buildCommand('instructions');
             expect(command.args[2]).toBe('codex');
             expect(command.args).toContain('model_reasoning_effort=high');
@@ -149,7 +149,7 @@ describe('GenericAgentBuilder via registry', () => {
         const origKey = process.env.OPENAI_API_KEY;
         process.env.OPENAI_API_KEY = 'test-oa-key';
         try {
-            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.aider);
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.aider!);
             const command = await builder.buildCommand('instructions', {
                 sourceFiles: ['app.ts'],
                 testFiles: ['app.test.ts']
@@ -173,7 +173,7 @@ describe('claude: provider branching', () => {
 
     it('anthropic (default): uses ANTHROPIC_API_KEY', async () => {
         process.env.ANTHROPIC_API_KEY = 'anthropic-key';
-        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.args.slice(0, 3)).toEqual(['bash', SCRIPT_PATH, 'claude']);
         expect(command.args).toContain('--model');
@@ -183,7 +183,7 @@ describe('claude: provider branching', () => {
 
     it('dashscope: maps DASHSCOPE_API_KEY to ANTHROPIC_* vars and sets default dashscope base URL', async () => {
         process.env.DASHSCOPE_API_KEY = 'dashscope-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'dashscope' }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'dashscope' }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.ANTHROPIC_API_KEY).toBe('dashscope-key');
         expect(command.env?.ANTHROPIC_AUTH_TOKEN).toBe('dashscope-key');
@@ -196,14 +196,14 @@ describe('claude: provider branching', () => {
     it('dashscope: respects ANTHROPIC_BASE_URL env override', async () => {
         process.env.DASHSCOPE_API_KEY = 'dashscope-key';
         process.env.ANTHROPIC_BASE_URL = 'https://custom.example.com';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'dashscope' }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'dashscope' }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.ANTHROPIC_BASE_URL).toBe('https://custom.example.com');
     });
 
     it('deepseek: maps DEEPSEEK_API_KEY to ANTHROPIC_* vars with deepseek base URL', async () => {
         process.env.DEEPSEEK_API_KEY = 'deepseek-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'deepseek' }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'deepseek' }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.ANTHROPIC_API_KEY).toBe('deepseek-key');
         expect(command.env?.ANTHROPIC_AUTH_TOKEN).toBe('deepseek-key');
@@ -213,7 +213,7 @@ describe('claude: provider branching', () => {
 
     it('moonshot: maps MOONSHOT_API_KEY to ANTHROPIC_* vars with moonshot base URL', async () => {
         process.env.MOONSHOT_API_KEY = 'moonshot-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'moonshot' }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'moonshot' }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.ANTHROPIC_API_KEY).toBe('moonshot-key');
         expect(command.env?.ANTHROPIC_AUTH_TOKEN).toBe('moonshot-key');
@@ -223,7 +223,7 @@ describe('claude: provider branching', () => {
 
     it('zai: maps ZAI_API_KEY to ANTHROPIC_* vars with zai base URL', async () => {
         process.env.ZAI_API_KEY = 'zai-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'zai' }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'zai' }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.ANTHROPIC_API_KEY).toBe('zai-key');
         expect(command.env?.ANTHROPIC_AUTH_TOKEN).toBe('zai-key');
@@ -233,7 +233,7 @@ describe('claude: provider branching', () => {
 
     it('openrouter: sets ANTHROPIC_API_KEY="" and ANTHROPIC_AUTH_TOKEN=key with openrouter base URL', async () => {
         process.env.OPENROUTER_API_KEY = 'router-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openrouter' }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openrouter' }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.ANTHROPIC_API_KEY).toBe('');
         expect(command.env?.ANTHROPIC_AUTH_TOKEN).toBe('router-key');
@@ -244,21 +244,21 @@ describe('claude: provider branching', () => {
     it('openrouter: respects ANTHROPIC_BASE_URL env override', async () => {
         process.env.OPENROUTER_API_KEY = 'router-key';
         process.env.ANTHROPIC_BASE_URL = 'https://proxy.example.com';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openrouter' }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openrouter' }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.ANTHROPIC_BASE_URL).toBe('https://proxy.example.com');
     });
 
     it('sets IS_SANDBOX=1 when useDocker is true', async () => {
         process.env.ANTHROPIC_API_KEY = 'test-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.IS_SANDBOX).toBe('1');
     });
 
     it('does not set IS_SANDBOX when useDocker is false', async () => {
         process.env.ANTHROPIC_API_KEY = 'test-key';
-        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.IS_SANDBOX).toBeUndefined();
     });
@@ -267,7 +267,7 @@ describe('claude: provider branching', () => {
         process.env.ANTHROPIC_API_KEY = 'test-key';
         const builder = new GenericAgentBuilder(
             { ...BASE_CONFIG, dataset: 'v2', useDocker: true, exercise: '12345_1' },
-            AGENT_REGISTRY.claude
+            AGENT_REGISTRY.claude!
         );
         const command = await builder.buildCommand('## Instructions\n\nDo the thing');
         expect(command.promptFileHostPath).toMatch(/\.agent-prompts\/12345_1\.txt$/);
@@ -287,20 +287,20 @@ describe('claude: subscription auth', () => {
 
     it('does not throw when auth cache exists and no API key is set', async () => {
         seedAuthCache('claude');
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('test');
         expect(command.env?.ANTHROPIC_API_KEY).toBeUndefined();
     });
 
     it('throws when neither API key nor auth cache exists', async () => {
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude!);
         await expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth claude/);
     });
 
     it('uses API key when set (takes priority over auth cache)', async () => {
         process.env.ANTHROPIC_API_KEY = 'test-key';
         seedAuthCache('claude');
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.claude!);
         const command = await builder.buildCommand('test');
         expect(command.env?.ANTHROPIC_API_KEY).toBe('test-key');
     });
@@ -315,20 +315,20 @@ describe('gemini: subscription auth', () => {
 
     it('does not throw when auth cache exists and no API key is set', async () => {
         seedAuthCache('gemini');
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.gemini);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.gemini!);
         const command = await builder.buildCommand('test');
         expect(command.env?.GEMINI_API_KEY).toBeUndefined();
     });
 
     it('throws when neither API key nor auth cache exists', async () => {
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.gemini);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.gemini!);
         await expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth gemini/);
     });
 
     it('uses API key when set (takes priority over auth cache)', async () => {
         process.env.GEMINI_API_KEY = 'test-key';
         seedAuthCache('gemini');
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.gemini);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.gemini!);
         const command = await builder.buildCommand('test');
         expect(command.env?.GEMINI_API_KEY).toBe('test-key');
     });
@@ -343,20 +343,20 @@ describe('codex: subscription auth', () => {
 
     it('does not throw when auth cache exists and no API key is set', async () => {
         seedAuthCache('codex');
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.codex);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.codex!);
         const command = await builder.buildCommand('test');
         expect(command.env?.CODEX_API_KEY).toBeUndefined();
     });
 
     it('throws when neither API key nor auth cache exists', async () => {
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.codex);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.codex!);
         await expect(builder.buildCommand('test')).rejects.toThrow(/--setup-auth codex/);
     });
 
     it('uses API key when set (takes priority over auth cache)', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         seedAuthCache('codex');
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.codex);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, useDocker: true }, AGENT_REGISTRY.codex!);
         const command = await builder.buildCommand('test');
         expect(command.env?.CODEX_API_KEY).toBe('test-key');
     });
@@ -371,31 +371,31 @@ describe('opencode: provider branching', () => {
 
     it('openai (default): buildArgs has opencode/run/-m and uses OPENAI_API_KEY', async () => {
         process.env.OPENAI_API_KEY = 'openai-key';
-        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
         expect(command.args.slice(0, 3)).toEqual(['bash', SCRIPT_PATH, 'opencode']);
         expect(command.args).toContain('run');
         expect(command.args).toContain('-m');
-        expect(command.env).toEqual({ OPENAI_API_KEY: 'openai-key' });
+        expect(command.env).toEqual({ OPENAI_API_KEY: 'openai-key', AGENT_TOOL: 'npm:opencode-ai' });
     });
 
     it('openrouter: sets OPENROUTER_API_KEY', async () => {
         process.env.OPENROUTER_API_KEY = 'router-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openrouter' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openrouter' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
-        expect(command.env).toEqual({ OPENROUTER_API_KEY: 'router-key' });
+        expect(command.env).toEqual({ OPENROUTER_API_KEY: 'router-key', AGENT_TOOL: 'npm:opencode-ai' });
     });
 
     it('google: prefers GOOGLE_GENERATIVE_AI_API_KEY', async () => {
         process.env.GOOGLE_GENERATIVE_AI_API_KEY = 'gen-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'google' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'google' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
-        expect(command.env).toEqual({ GOOGLE_GENERATIVE_AI_API_KEY: 'gen-key' });
+        expect(command.env).toEqual({ GOOGLE_GENERATIVE_AI_API_KEY: 'gen-key', AGENT_TOOL: 'npm:opencode-ai' });
     });
 
     it('google: falls back to GOOGLE_API_KEY and sets GOOGLE_GENERATIVE_AI_API_KEY alias', async () => {
         process.env.GOOGLE_API_KEY = 'legacy-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'google' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'google' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
         expect(command.env?.GOOGLE_GENERATIVE_AI_API_KEY).toBe('legacy-key');
         expect(command.env?.GOOGLE_API_KEY).toBe('legacy-key');
@@ -403,28 +403,28 @@ describe('opencode: provider branching', () => {
 
     it('xai: sets XAI_API_KEY', async () => {
         process.env.XAI_API_KEY = 'xai-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'xai' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'xai' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
-        expect(command.env).toEqual({ XAI_API_KEY: 'xai-key' });
+        expect(command.env).toEqual({ XAI_API_KEY: 'xai-key', AGENT_TOOL: 'npm:opencode-ai' });
     });
 
     it('dashscope: sets DASHSCOPE_API_KEY', async () => {
         process.env.DASHSCOPE_API_KEY = 'dashscope-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'dashscope' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'dashscope' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
-        expect(command.env).toEqual({ DASHSCOPE_API_KEY: 'dashscope-key' });
+        expect(command.env).toEqual({ DASHSCOPE_API_KEY: 'dashscope-key', AGENT_TOOL: 'npm:opencode-ai' });
     });
 
     it('deepseek: sets DEEPSEEK_API_KEY', async () => {
         process.env.DEEPSEEK_API_KEY = 'deepseek-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'deepseek' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'deepseek' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
-        expect(command.env).toEqual({ DEEPSEEK_API_KEY: 'deepseek-key' });
+        expect(command.env).toEqual({ DEEPSEEK_API_KEY: 'deepseek-key', AGENT_TOOL: 'npm:opencode-ai' });
     });
 
     it('model is prefixed with provider when no slash in model name', async () => {
         process.env.OPENAI_API_KEY = 'openai-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openai', model: 'gpt-4o' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openai', model: 'gpt-4o' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
         const mIdx = command.args.indexOf('-m');
         expect(command.args[mIdx + 1]).toBe('openai/gpt-4o');
@@ -432,7 +432,7 @@ describe('opencode: provider branching', () => {
 
     it('model is not re-prefixed when it already contains a slash', async () => {
         process.env.OPENAI_API_KEY = 'openai-key';
-        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openai', model: 'openai/gpt-4o' }, AGENT_REGISTRY.opencode);
+        const builder = new GenericAgentBuilder({ ...BASE_CONFIG, provider: 'openai', model: 'openai/gpt-4o' }, AGENT_REGISTRY.opencode!);
         const command = await builder.buildCommand('instructions');
         const mIdx = command.args.indexOf('-m');
         expect(command.args[mIdx + 1]).toBe('openai/gpt-4o');

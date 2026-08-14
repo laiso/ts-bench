@@ -1,0 +1,21 @@
+name: copilot
+description: "GitHub Copilot CLI agent"
+defaultProvider: openai
+install:
+  method: mise
+  tool: npm:@github/copilot
+  bin: copilot
+
+env:
+  COPILOT_ALLOW_ALL: "1"
+  COPILOT_MODEL: "{model}"
+  COPILOT_GITHUB_TOKEN: "${COPILOT_GITHUB_TOKEN:-${GITHUB_TOKEN}}"
+
+command:
+  - copilot
+  - --allow-all-tools
+  - --no-color
+  - --add-dir
+  - .
+  - -p
+  - "{instructions}"

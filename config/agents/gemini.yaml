@@ -1,0 +1,23 @@
+name: gemini
+description: "Google Gemini CLI agent"
+defaultProvider: google
+install:
+  method: mise
+  tool: npm:@google/gemini-cli
+  bin: gemini
+
+env:
+  GEMINI_CLI_TRUST_WORKSPACE: "true"
+
+providers:
+  google:
+    env:
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-${GOOGLE_API_KEY}}"
+
+command:
+  - gemini
+  - --skip-trust
+  - "{#model}--model {model}{/model}"
+  - -y
+  - -p
+  - "{instructions}"

@@ -1,0 +1,43 @@
+name: qwen
+description: "Qwen Code CLI agent"
+defaultProvider: dashscope
+install:
+  method: mise
+  tool: npm:@qwen-code/qwen-code
+  bin: qwen
+
+env:
+  GEMINI_API_KEY: ""
+  GOOGLE_API_KEY: ""
+  GOOGLE_GENAI_USE_GCA: ""
+  GOOGLE_GENAI_USE_VERTEXAI: ""
+
+providers:
+  dashscope:
+    require:
+      - DASHSCOPE_API_KEY
+    env:
+      OPENAI_BASE_URL: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+      OPENAI_API_KEY: "${DASHSCOPE_API_KEY}"
+      OPENAI_MODEL: "{model}"
+  openai:
+    require:
+      - OPENAI_API_KEY
+    env:
+      OPENAI_BASE_URL: "https://api.openai.com/v1"
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      OPENAI_MODEL: "{model}"
+  openrouter:
+    require:
+      - OPENROUTER_API_KEY
+    env:
+      OPENAI_BASE_URL: "https://openrouter.ai/api/v1"
+      OPENAI_API_KEY: "${OPENROUTER_API_KEY}"
+      OPENAI_MODEL: "{model}"
+
+command:
+  - qwen
+  - -y
+  - "{#model}-m {model}{/model}"
+  - -p
+  - "{instructions}"

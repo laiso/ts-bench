@@ -40,6 +40,8 @@ export interface BenchmarkConfig {
     useDocker?: boolean;
     dataset?: DatasetType;
     version?: string;
+    /** Explicit tool version to install (from --agent-version) */
+    agentVersion?: string;
     showProgress?: boolean;
     timeout?: number; // seconds
     outputDir?: string;
@@ -73,6 +75,8 @@ export interface CLIArgs {
     skipLeaderboardRefresh?: boolean;
     resultName?: string;
     resultDir?: string;
+    agentConfig?: string;
+    agentVersion?: string;
     version?: string;
     showProgress?: boolean;
     testOnly?: boolean;

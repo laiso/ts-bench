@@ -17,7 +17,8 @@ export class AgentFactory {
             agentScriptPath,
             useDocker: config.useDocker,
             dataset: config.dataset,
-            exercise
+            exercise,
+            agentVersion: config.agentVersion
         };
 
         const definition = AGENT_REGISTRY[config.agent as keyof typeof AGENT_REGISTRY];

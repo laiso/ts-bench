@@ -1,0 +1,52 @@
+name: opencode
+description: "OpenCode AI agent"
+defaultProvider: openai
+install:
+  method: mise
+  tool: npm:opencode-ai
+  bin: opencode
+
+providers:
+  openai:
+    require:
+      - OPENAI_API_KEY
+    env:
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+  anthropic:
+    require:
+      - ANTHROPIC_API_KEY
+    env:
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
+  google:
+    require:
+      - [GOOGLE_GENERATIVE_AI_API_KEY, GOOGLE_API_KEY, GEMINI_API_KEY]
+    env:
+      GOOGLE_GENERATIVE_AI_API_KEY: "${GOOGLE_GENERATIVE_AI_API_KEY:-${GOOGLE_API_KEY:-${GEMINI_API_KEY}}}"
+      GOOGLE_API_KEY: "${GOOGLE_API_KEY:-${GEMINI_API_KEY}}"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-${GOOGLE_API_KEY}}"
+  openrouter:
+    require:
+      - OPENROUTER_API_KEY
+    env:
+      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY}"
+  dashscope:
+    require:
+      - DASHSCOPE_API_KEY
+    env:
+      DASHSCOPE_API_KEY: "${DASHSCOPE_API_KEY}"
+  deepseek:
+    require:
+      - DEEPSEEK_API_KEY
+    env:
+      DEEPSEEK_API_KEY: "${DEEPSEEK_API_KEY}"
+  xai:
+    require:
+      - XAI_API_KEY
+    env:
+      XAI_API_KEY: "${XAI_API_KEY}"
+
+command:
+  - opencode
+  - run
+  - "{#model}-m {model}{/model}"
+  - "{instructions}"

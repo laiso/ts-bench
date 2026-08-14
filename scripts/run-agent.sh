@@ -24,9 +24,17 @@ shift || true
 export NVM_DIR="/root/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# Set npm prefix after nvm is loaded to avoid nvm prefix guardrails
 export npm_config_prefix="${CLI_PREFIX}"
 export NPM_CONFIG_PREFIX="${CLI_PREFIX}"
+
+ensure_mise() {
+  if command -v mise >/dev/null 2>&1; then
+    return 0
+  fi
+  echo "[run-agent] Installing mise (mise-en-place)..." >&2
+  curl -fsSL https://mise.run | sh
+  export PATH="${HOME}/.local/bin:${PATH}"
+}
 
 ensure_node_cli() {
   local bin_name="$1"
@@ -57,93 +65,6 @@ ensure_node_cli() {
 
   echo "[run-agent] Installing ${bin_name} (package: ${package_name})" >&2
   npm install -g --prefix "$CLI_PREFIX" "$package_name" >&2
-}
-
-# Resolve the directory containing this script so agents.json can be found
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-AGENTS_JSON="${SCRIPT_DIR}/agents.json"
-
-# If jq is available and agents.json exists, attempt data-driven install for unknown agents
-install_from_registry() {
-  local agent_name="$1"
-  if ! command -v jq >/dev/null 2>&1 || [[ ! -f "$AGENTS_JSON" ]]; then
-    return 1
-  fi
-
-  local method bin package url cmd_prefix python_ver
-  method=$(jq -r --arg a "$agent_name" '.[$a].method // empty' "$AGENTS_JSON")
-  if [[ -z "$method" ]]; then
-    return 1
-  fi
-
-  bin=$(jq -r --arg a "$agent_name" '.[$a].bin' "$AGENTS_JSON")
-
-  case "$method" in
-    npm)
-      package=$(jq -r --arg a "$agent_name" '.[$a].package' "$AGENTS_JSON")
-      ensure_node_cli "$bin" "$package"
-      ;;
-    curl)
-      if ! command -v "$bin" >/dev/null 2>&1; then
-        url=$(jq -r --arg a "$agent_name" '.[$a].url' "$AGENTS_JSON")
-        cmd_prefix=$(jq -r --arg a "$agent_name" '.[$a].cmdPrefix // empty' "$AGENTS_JSON")
-        echo "[run-agent] Installing ${bin} via curl" >&2
-        # Only allow simple KEY=VALUE env var prefixes (no arbitrary commands)
-        if [[ -n "$cmd_prefix" ]] && [[ "$cmd_prefix" =~ ^[A-Z_][A-Z0-9_]*=[^[:space:]]*$ ]]; then
-          env "$cmd_prefix" curl -fsSL "$url" | bash
-        else
-          curl -fsSL "$url" | bash
-        fi
-      fi
-      ;;
-    pip)
-      if ! command -v "$bin" >/dev/null 2>&1; then
-        package=$(jq -r --arg a "$agent_name" '.[$a].package' "$AGENTS_JSON")
-        echo "[run-agent] Installing ${bin} via pip" >&2
-        pip install "$package"
-      fi
-      ;;
-    uv_tool)
-      if command -v "$bin" >/dev/null 2>&1; then
-        return 0
-      fi
-      package=$(jq -r --arg a "$agent_name" '.[$a].package' "$AGENTS_JSON")
-      if command -v uv >/dev/null 2>&1; then
-        python_ver=$(jq -r --arg a "$agent_name" '.[$a].python // empty' "$AGENTS_JSON")
-        if [[ -n "$python_ver" ]]; then
-          uv tool install --python "$python_ver" "$package"
-        else
-          uv tool install "$package"
-        fi
-      else
-        url=$(jq -r --arg a "$agent_name" '.[$a].url // empty' "$AGENTS_JSON")
-        if [[ -n "$url" ]]; then
-          echo "[run-agent] Installing ${bin} via official installer" >&2
-          curl -LsSf "$url" | bash
-        else
-          echo "[run-agent] uv not found and no fallback URL for ${bin}. Please install manually." >&2
-          return 1
-        fi
-      fi
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-}
-
-# Return the binary name for an agent from agents.json, or the agent key if not found.
-get_agent_bin() {
-  local agent_name="$1"
-  local bin
-  if command -v jq >/dev/null 2>&1 && [[ -f "$AGENTS_JSON" ]]; then
-    bin=$(jq -r --arg a "$agent_name" '.[$a].bin // empty' "$AGENTS_JSON")
-    if [[ -n "$bin" ]]; then
-      echo "$bin"
-      return 0
-    fi
-  fi
-  echo "$agent_name"
 }
 
 case "$AGENT" in
@@ -214,15 +135,18 @@ case "$AGENT" in
     exec vibe "$@"
     ;;
   *)
-    # Try data-driven install from agents.json registry, then fall back to
-    # running the binary directly if it is already installed.
-    if install_from_registry "$AGENT"; then
-      exec "$(get_agent_bin "$AGENT")" "$@"
-    elif command -v "$AGENT" >/dev/null 2>&1; then
+    # Custom agent execution
+    if command -v "$AGENT" >/dev/null 2>&1; then
       exec "$AGENT" "$@"
+    elif [[ -n "${AGENT_TOOL:-}" ]]; then
+      ensure_mise
+      echo "[run-agent] Installing tool ${AGENT_TOOL} via mise..." >&2
+      mise use -g "${AGENT_TOOL}"
+      # mise installs outside PATH; run through `mise exec` so the binary resolves
+      exec mise exec -- "$AGENT" "$@"
     else
-      echo "[run-agent] Unsupported agent '${AGENT}'. Please install the CLI manually." >&2
+      echo "[run-agent] Agent '${AGENT}' not found. Please ensure it is installed." >&2
       exit 1
     fi
     ;;
- esac
+esac

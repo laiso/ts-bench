@@ -1,0 +1,33 @@
+name: aider
+description: "Aider AI pair programmer"
+defaultProvider: openai
+install:
+  method: curl
+  url: "https://aider.chat/install.sh"
+  bin: aider
+
+require:
+  - [OPENAI_API_KEY, ANTHROPIC_API_KEY, GOOGLE_API_KEY, GEMINI_API_KEY]
+
+env:
+  AIDER_GIT: "false"
+  AIDER_AUTO_COMMITS: "false"
+  AIDER_SHOW_RELEASE_NOTES: "false"
+  AIDER_SKIP_SANITY_CHECK_REPO: "true"
+  AIDER_CHAT_HISTORY_FILE: "/dev/null"
+  AIDER_INPUT_HISTORY_FILE: "/dev/null"
+  OPENAI_API_KEY: "${OPENAI_API_KEY}"
+  ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
+  GOOGLE_API_KEY: "${GOOGLE_API_KEY:-${GEMINI_API_KEY}}"
+  GEMINI_API_KEY: "${GEMINI_API_KEY:-${GOOGLE_API_KEY}}"
+
+command:
+  - aider
+  - --yes-always
+  - --no-auto-commits
+  - --no-check-update
+  - "{#model}--model {model}{/model}"
+  - "--file {sourceFiles:-*.ts}"
+  - "--read {testFiles:-*.test.ts}"
+  - --message
+  - "{instructions}"
