@@ -18,3 +18,5 @@ command:
   - -p
   - "{instructions}"
   - "{#model}-m {model}{/model}"
+  - --permission-mode
+  - bypassPermissions

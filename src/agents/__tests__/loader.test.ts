@@ -273,14 +273,24 @@ describe('grok (Grok Build) agent', () => {
             '-p',
             'Fix the two-fer exercise',
             '-m',
-            'grok-build-0.1'
+            'grok-build-0.1',
+            '--permission-mode',
+            'bypassPermissions'
         ]);
     });
 
     it('omits -m when no model is given', () => {
         const registry = loadAgentRegistryFromDir();
         const args = registry.grok!.buildArgs({ ...config, model: undefined }, 'task');
-        expect(args).toEqual(['bash', '/path/run-agent.sh', 'grok', '-p', 'task']);
+        expect(args).toEqual([
+            'bash',
+            '/path/run-agent.sh',
+            'grok',
+            '-p',
+            'task',
+            '--permission-mode',
+            'bypassPermissions'
+        ]);
     });
 
     it('forwards XAI_API_KEY as GROK_CODE_XAI_API_KEY and fails fast without it', () => {
