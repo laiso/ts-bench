@@ -107,6 +107,8 @@ export class VersionDetector {
                 return ['kimi', '--version'];
             case 'dns':
                 return ['dsh', '--version'];
+            case 'grok':
+                return ['grok', '--version'];
             default:
                 throw new Error(`Unknown agent: ${agent}`);
         }
@@ -166,6 +168,10 @@ export class VersionDetector {
             case 'dns':
                 // dsh --version prints the bare package version, e.g. "0.1.0-rc.6"
                 return cleanOutput.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/)?.[0] ?? this.extractGenericVersion(cleanOutput);
+            case 'grok':
+                // Grok output: "grok 0.1.0" or "0.1.0"
+                const grokMatch = cleanOutput.match(/(?:grok\s+)?(\d+\.\d+\.\d+)/i);
+                return grokMatch && grokMatch[1] ? grokMatch[1] : this.extractGenericVersion(cleanOutput);
             
             default:
                 return this.extractGenericVersion(cleanOutput);
