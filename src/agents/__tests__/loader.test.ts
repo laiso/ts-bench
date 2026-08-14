@@ -49,6 +49,7 @@ describe('Agent Config Loader and Template Engine', () => {
         expect(registry.qwen).toBeDefined();
         expect(registry.dns).toBeDefined();
         expect(registry.grok).toBeDefined();
+        expect(registry.agy).toBeDefined();
     });
 
     it('custom agent schema can be converted and executed', () => {
@@ -307,6 +308,45 @@ describe('grok (Grok Build) agent', () => {
         } finally {
             if (origKey !== undefined) process.env.XAI_API_KEY = origKey;
             else delete process.env.XAI_API_KEY;
+        }
+    });
+});
+
+describe('agy (Antigravity CLI) agent', () => {
+    const config: AgentConfig = {
+        model: 'gemini-2.5-pro',
+        provider: 'google',
+        containerName: 'container',
+        agentScriptPath: '/path/run-agent.sh'
+    };
+
+    it('builds the agy print command (model flag is not passed through)', () => {
+        const registry = loadAgentRegistryFromDir();
+        const args = registry.agy!.buildArgs(config, 'Fix the two-fer exercise');
+        expect(args).toEqual([
+            'bash',
+            '/path/run-agent.sh',
+            'agy',
+            '--print',
+            'Fix the two-fer exercise',
+            '--dangerously-skip-permissions'
+        ]);
+    });
+
+    it('forwards GEMINI_API_KEY and the model as AGY_MODEL', () => {
+        const origKey = process.env.GEMINI_API_KEY;
+        try {
+            delete process.env.GEMINI_API_KEY;
+            const registry = loadAgentRegistryFromDir();
+            expect(registry.agy!.getEnv({ ...config, model: undefined })).toEqual({});
+
+            process.env.GEMINI_API_KEY = 'ai-test-key';
+            const env = registry.agy!.getEnv(config);
+            expect(env.GEMINI_API_KEY).toBe('ai-test-key');
+            expect(env.AGY_MODEL).toBe('gemini-2.5-pro');
+        } finally {
+            if (origKey !== undefined) process.env.GEMINI_API_KEY = origKey;
+            else delete process.env.GEMINI_API_KEY;
         }
     });
 });

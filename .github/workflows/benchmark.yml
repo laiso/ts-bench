@@ -13,6 +13,7 @@ on:
           - codex
           - gemini
           - grok
+          - agy
           - opencode
           - goose
           - qwen
@@ -129,6 +130,11 @@ jobs:
               # The x.ai installer puts the binary in ~/.grok/bin, not ~/.local/bin
               echo "PATH=$HOME/.grok/bin:$PATH" >> "$GITHUB_ENV"
               ;;
+            agy)
+              curl -fsSL https://antigravity.google/cli/install.sh | bash
+              # The Antigravity installer puts the binary in ~/.local/bin
+              echo "PATH=$HOME/.local/bin:$PATH" >> "$GITHUB_ENV"
+              ;;
             qwen)
               npm install -g @qwen-code/qwen-code
               ;;
@@ -205,6 +211,7 @@ jobs:
             codex)    cmd="codex --version" ;;
             gemini)   cmd=gemini ;;
             grok)     cmd=grok ;;
+            agy)      cmd=agy ;;
             opencode) cmd=opencode ;;
             qwen)     cmd=qwen ;;
             cursor)   cmd=cursor-agent ;;

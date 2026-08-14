@@ -21,6 +21,7 @@ export function agentDisplayName(slug: string): string {
         case 'aider': return 'Aider';
         case 'gemini': return 'Gemini CLI';
         case 'grok': return 'Grok Build';
+        case 'agy': return 'Antigravity CLI';
         case 'qwen': return 'Qwen Code';
         case 'cursor': return 'Cursor Agent';
         case 'copilot': return 'GitHub Copilot CLI';

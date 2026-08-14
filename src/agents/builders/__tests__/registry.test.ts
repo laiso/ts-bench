@@ -44,7 +44,7 @@ function restoreEnvKeys(originals: Record<string, string | undefined>): void {
 
 describe('AGENT_REGISTRY', () => {
     it('has entries for all known agents', () => {
-        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'gemini', 'grok', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi', 'dns'];
+        const agents: AgentType[] = ['claude', 'goose', 'aider', 'codex', 'copilot', 'gemini', 'grok', 'opencode', 'qwen', 'cursor', 'vibe', 'kimi', 'dns', 'agy'];
         for (const agent of agents) {
             expect(AGENT_REGISTRY[agent]).toBeDefined();
         }
@@ -78,6 +78,23 @@ describe('GenericAgentBuilder via registry', () => {
             expect(command.args[1]).toBe(SCRIPT_PATH);
             expect(command.args[2]).toBe('gemini');
             expect(command.env?.GEMINI_API_KEY).toBe('test-gemini-key');
+        } finally {
+            if (origKey === undefined) delete process.env.GEMINI_API_KEY;
+            else process.env.GEMINI_API_KEY = origKey;
+        }
+    });
+
+    it('agy: uses print mode and skips permissions', async () => {
+        const origKey = process.env.GEMINI_API_KEY;
+        delete process.env.GEMINI_API_KEY;
+        try {
+            const builder = new GenericAgentBuilder(BASE_CONFIG, AGENT_REGISTRY.agy!);
+            const command = await builder.buildCommand('instructions');
+            expect(command.args.slice(0, 3)).toEqual(['bash', SCRIPT_PATH, 'agy']);
+            expect(command.args).toContain('--print');
+            expect(command.args).toContain('--dangerously-skip-permissions');
+            expect(command.args).not.toContain('--model');
+            expect(command.env).toEqual({ AGY_MODEL: 'test-model' });
         } finally {
             if (origKey === undefined) delete process.env.GEMINI_API_KEY;
             else process.env.GEMINI_API_KEY = origKey;

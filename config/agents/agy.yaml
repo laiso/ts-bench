@@ -1,0 +1,24 @@
+name: agy
+description: "Google Antigravity CLI (agy)"
+defaultProvider: google
+install:
+  method: curl
+  url: "https://antigravity.google/cli/install.sh"
+  bin: agy
+
+# API-key mode (GEMINI_API_KEY + settings.json modelProvider "gemini") is
+# enabled by run-agent.sh; without a key the CLI falls back to its cached
+# Google Sign-In (OAuth) login. The model is forwarded as AGY_MODEL because
+# agy's model ids contain spaces ("Gemini 3.1 Pro") that the arg template
+# cannot pass; run-agent.sh writes it into settings.json.
+env:
+  GEMINI_API_KEY: "${GEMINI_API_KEY}"
+  AGY_MODEL: "{model}"
+
+command:
+  - agy
+  - --print
+  - "{instructions}"
+  - --dangerously-skip-permissions
+  # Note: no {#model} passthrough — agy's model ids are display names with
+  # spaces (e.g. "Gemini 3.1 Pro"), which the arg template would split.

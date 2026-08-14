@@ -27,6 +27,7 @@ on:
           - codex
           - gemini
           - grok
+          - agy
           - opencode
           - goose
           - qwen

@@ -72,6 +72,7 @@ Examples:
   ts-bench --agent goose --model gemini --save-result
   ts-bench --agent kimi --provider moonshot --model kimi-k2.5 --save-result
   ts-bench --agent grok --model grok-build-0.1 --save-result
+  ts-bench --agent agy --save-result
   bun src/index.ts --print-instructions --   acronym      # v1: show instructions for one exercise
   bun src/index.ts --setup-auth claude                    # authenticate Claude inside Docker
 
